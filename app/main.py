@@ -1,10 +1,11 @@
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Request, Response, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 
 from app.config import settings
+from app import database
 from app.database import init_db
 from app.routes import ideas, stashes, ai, stats, audio, compliance, books, auth
 
