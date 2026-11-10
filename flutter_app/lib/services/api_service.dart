@@ -302,4 +302,63 @@ class ApiService {
       return false;
     }
   }
+
+  // --- SOCIAL LEARNING & SHARED STASHES ---
+
+  static Future<List<Map<String, dynamic>>> fetchPublicStashes({String? search}) async {
+    try {
+      final uri = Uri.parse('$baseUrl/api/stashes/public').replace(queryParameters: {
+        if (search != null && search.isNotEmpty) 'search': search,
+      });
+      final headers = await _getHeaders();
+      final res = await http.get(uri, headers: headers).timeout(const Duration(seconds: 4));
+      if (res.statusCode == 200) {
+        final List list = jsonDecode(res.body);
+        return list.map((e) => Map<String, dynamic>.from(e)).toList();
+      }
+    } catch (_) {}
+    return [];
+  }
+
+  static Future<Map<String, dynamic>?> fetchSharedStash(String shareSlugOrId) async {
+    try {
+      final headers = await _getHeaders();
+      final res = await http.get(
+        Uri.parse('$baseUrl/api/stashes/share/$shareSlugOrId'),
+        headers: headers,
+      ).timeout(const Duration(seconds: 4));
+      if (res.statusCode == 200) {
+        return jsonDecode(res.body);
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  static Future<bool> publishStash(String stashId, {bool isPublic = true}) async {
+    try {
+      final headers = await _getHeaders();
+      final res = await http.post(
+        Uri.parse('$baseUrl/api/stashes/$stashId/publish'),
+        headers: headers,
+        body: jsonEncode({'is_public': isPublic}),
+      ).timeout(const Duration(seconds: 4));
+      return res.statusCode == 200;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  static Future<Map<String, dynamic>?> cloneStash(String stashId) async {
+    try {
+      final headers = await _getHeaders();
+      final res = await http.post(
+        Uri.parse('$baseUrl/api/stashes/$stashId/clone'),
+        headers: headers,
+      ).timeout(const Duration(seconds: 4));
+      if (res.statusCode == 200) {
+        return jsonDecode(res.body);
+      }
+    } catch (_) {}
+    return null;
+  }
 }

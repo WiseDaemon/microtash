@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/idea.dart';
 import '../services/api_service.dart';
+import '../services/notification_service.dart';
 import 'stress_test_screen.dart';
 
 class WorkoutScreen extends StatefulWidget {
@@ -25,12 +26,78 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   Future<void> _loadDueCards() async {
     setState(() => _isLoading = true);
     final due = await ApiService.fetchDueLeitner();
+    if (due.isNotEmpty) {
+      NotificationService.checkDueCardsAndNotify(due.length);
+    }
     setState(() {
       _dueIdeas = due;
       _isLoading = false;
       _currentIndex = 0;
       _isFlipped = false;
     });
+  }
+
+  void _showNotificationDialog() async {
+    bool enabled = await NotificationService.isReminderEnabled();
+    if (!mounted) return;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1E293B),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (dCtx, setDState) {
+            return Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF10B981).withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(Icons.notifications_active, color: Color(0xFF10B981), size: 24),
+                      ),
+                      const SizedBox(width: 12),
+                      const Text(
+                        'Daily Recall Reminder',
+                        style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Receive a gentle daily notification when your Leitner cards become due. Retain concepts in 3 minutes of active recall.',
+                    style: TextStyle(color: Colors.white70, fontSize: 13, height: 1.4),
+                  ),
+                  const SizedBox(height: 20),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Daily Workout Notification (9:00 AM)', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600)),
+                    subtitle: Text(enabled ? 'Enabled • Channel: microstash_recall' : 'Disabled', style: TextStyle(color: enabled ? const Color(0xFF10B981) : Colors.white38, fontSize: 12)),
+                    value: enabled,
+                    activeColor: const Color(0xFF10B981),
+                    onChanged: (val) async {
+                      await NotificationService.setReminderEnabled(val);
+                      setDState(() => enabled = val);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   Future<void> _reviewCard(int grade) async {
@@ -114,6 +181,11 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications_active_outlined, color: Color(0xFF10B981), size: 20),
+            tooltip: 'Daily Recall Reminders',
+            onPressed: _showNotificationDialog,
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: Center(

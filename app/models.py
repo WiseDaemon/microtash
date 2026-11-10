@@ -44,15 +44,28 @@ class StashBase(BaseModel):
     description: str
     icon: str = "sparkles"
     color: str = "indigo"
+    is_public: bool = False
+    owner_user_id: Optional[str] = "community"
+    share_slug: Optional[str] = None
+    clone_count: int = 0
 
-class StashCreate(StashBase):
-    pass
+class StashCreate(BaseModel):
+    title: str
+    description: str
+    icon: str = "sparkles"
+    color: str = "indigo"
+    is_public: bool = False
 
 class Stash(StashBase):
     id: str
     created_at: str
     idea_ids: List[str] = Field(default_factory=list)
     ideas_count: int = 0
+
+class SharedStashDetail(Stash):
+    ideas: List[Idea] = Field(default_factory=list)
+    owner_username: Optional[str] = "community"
+    share_url: Optional[str] = None
 
 class Book(BaseModel):
     id: str = Field(..., description="Canonical slug e.g. atomic-habits")

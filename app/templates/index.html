@@ -467,19 +467,84 @@
     </section>
 
     <!-- ===================================================================== -->
-    <!-- TAB 4: MY STASHES & CURATED COLLECTIONS                               -->
+    <!-- TAB 4: MY STASHES & CURATED COLLECTIONS (SOCIAL LEARNING)               -->
     <!-- ===================================================================== -->
     <section id="tab-stashes-content" class="hidden flex-1 px-5 pt-4 space-y-4">
       <div class="flex items-center justify-between">
-        <h2 class="text-lg font-headline font-bold text-white">Curated Stashes</h2>
-        <button onclick="openCreateStashModal()" class="px-3 py-1.5 rounded-full bg-primary/20 text-primary border border-primary/40 text-xs font-bold hover:bg-primary/30 transition">
-          + New Stash
+        <div>
+          <h2 class="text-lg font-headline font-bold text-white">Curated Stashes</h2>
+          <p class="text-[11px] text-on-surface-variant font-medium">Community shared decks & personal collections</p>
+        </div>
+        <button onclick="openCreateStashModal()" class="px-3 py-1.5 rounded-full bg-primary/20 text-primary border border-primary/40 text-xs font-bold hover:bg-primary/30 transition flex items-center gap-1 shadow-sm">
+          <span class="material-symbols-outlined text-[15px]">add</span>
+          <span>New Stash</span>
         </button>
       </div>
-      <div id="stashes-grid-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+      <!-- Social Learning Filter Tabs -->
+      <div class="flex items-center gap-2 border-b border-outline-variant/30 pb-2">
+        <button id="btn-stash-scope-my" onclick="switchStashScope('my')" class="px-3.5 py-1.5 rounded-full text-xs font-headline font-bold bg-primary text-surface-container-lowest transition flex items-center gap-1.5 shadow-sm">
+          <span class="material-symbols-outlined text-[15px]">folder_special</span>
+          <span>My Stashes</span>
+        </button>
+        <button id="btn-stash-scope-public" onclick="switchStashScope('public')" class="px-3.5 py-1.5 rounded-full text-xs font-headline font-bold bg-surface-container-high text-on-surface-variant hover:text-white transition flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[15px]">public</span>
+          <span>Community Shared Stashes 🌐</span>
+        </button>
+      </div>
+
+      <!-- Main Stashes Grid -->
+      <div id="stashes-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <!-- Dynamically rendered -->
       </div>
+      <div id="stashes-grid-container" class="hidden"></div>
+
+      <!-- Stash Detail View (When a stash is opened) -->
+      <div id="stash-detail-view" class="hidden space-y-4">
+        <div class="flex items-center justify-between">
+          <button onclick="closeStashDetail()" class="text-xs text-primary hover:underline flex items-center gap-1 font-bold">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            <span>Back to Stashes</span>
+          </button>
+          <div id="stash-detail-actions" class="flex items-center gap-2">
+            <!-- Share, Clone, Publish buttons dynamically injected -->
+          </div>
+        </div>
+        <div id="stash-detail-content" class="space-y-4"></div>
+      </div>
     </section>
+
+    <!-- CREATE NEW STASH MODAL -->
+    <div id="create-stash-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+      <div class="bg-surface-container border border-outline-variant/60 rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+        <button onclick="closeCreateStashModal()" class="absolute top-4 right-4 p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant hover:text-white transition">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+        <h3 class="text-lg font-headline font-bold text-white mb-1">Create New Stash</h3>
+        <p class="text-xs text-on-surface-variant mb-4">Curate your favorite mental models into a focused theme.</p>
+        
+        <form onsubmit="handleCreateStashSubmit(event)" class="space-y-3.5">
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Stash Title</label>
+            <input type="text" id="new-stash-title" required placeholder="e.g. Founder Mental Models" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Description</label>
+            <textarea id="new-stash-desc" rows="2" placeholder="What core decision frameworks are in this collection?" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary"></textarea>
+          </div>
+          <div class="flex items-center gap-2 pt-1">
+            <input type="checkbox" id="new-stash-public" class="rounded border-outline-variant text-primary focus:ring-0">
+            <label for="new-stash-public" class="text-xs text-white font-medium cursor-pointer">
+              Publish to Community (allow other learners to discover and clone)
+            </label>
+          </div>
+          <button type="submit" class="w-full py-2.5 mt-3 rounded-xl bg-primary hover:bg-primary-hover text-surface-container-lowest font-headline font-bold text-xs tracking-wide shadow-md transition flex items-center justify-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px]">folder</span>
+            <span>Create Stash</span>
+          </button>
+        </form>
+      </div>
+    </div>
 
     <!-- ===================================================================== -->
     <!-- TAB 5: AI STASHIFIER & WEB DECONSTRUCTOR                              -->
@@ -960,6 +1025,7 @@
 
   <!-- Core JavaScript Controllers -->
   <script src="/static/js/auth.js?v=1.0"></script>
+  <script src="/static/js/social.js?v=1.0"></script>
   <script src="/static/js/app.js?v=4.0"></script>
   <script src="/static/js/swipe.js?v=4.0"></script>
   <script src="/static/js/audio.js?v=4.0"></script>

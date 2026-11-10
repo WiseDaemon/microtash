@@ -63,6 +63,22 @@ def home(request: Request):
         }
     )
 
+@app.get("/share/stash/{share_slug}")
+def view_shared_stash(share_slug: str, request: Request):
+    stash = database.get_stash_by_id(share_slug)
+    if not stash:
+        raise HTTPException(status_code=404, detail="Shared stash not found")
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={
+            "app_name": settings.APP_NAME,
+            "tagline": settings.APP_TAGLINE,
+            "shared_stash_slug": share_slug,
+            "shared_stash_title": stash["title"]
+        }
+    )
+
 
 # =========================================================================
 # GOOGLE STITCH UI SHOWCASE ROUTES

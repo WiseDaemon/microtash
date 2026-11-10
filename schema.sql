@@ -49,7 +49,11 @@ CREATE TABLE IF NOT EXISTS stashes (
     description TEXT NOT NULL,                      -- Overview description of the collection
     icon TEXT DEFAULT 'sparkles',                   -- Lucide icon name (e.g., 'book-open', 'brain')
     color TEXT DEFAULT 'indigo',                     -- Theme accent color
-    created_at TEXT NOT NULL                        -- ISO 8601 creation timestamp
+    created_at TEXT NOT NULL,                       -- ISO 8601 creation timestamp
+    is_public INTEGER DEFAULT 0,                    -- Social learning: 1 if shared publicly with community
+    owner_user_id TEXT DEFAULT 'community',         -- User account that created/curated this stash
+    share_slug TEXT UNIQUE,                         -- Canonical vanity slug for direct share link
+    clone_count INTEGER DEFAULT 0                   -- Number of other learners who saved/cloned this stash
 );
 
 

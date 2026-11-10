@@ -151,9 +151,34 @@ def init_db():
         description TEXT NOT NULL,
         icon TEXT DEFAULT 'sparkles',
         color TEXT DEFAULT 'indigo',
-        created_at TEXT NOT NULL
+        created_at TEXT NOT NULL,
+        is_public INTEGER DEFAULT 0,
+        owner_user_id TEXT DEFAULT 'community',
+        share_slug TEXT UNIQUE,
+        clone_count INTEGER DEFAULT 0
     );
     """)
+
+    # Ensure schema upgrades for stashes table
+    for col, col_type in [
+        ("is_public", "INTEGER DEFAULT 0"),
+        ("owner_user_id", "TEXT DEFAULT 'community'"),
+        ("share_slug", "TEXT"),
+        ("clone_count", "INTEGER DEFAULT 0")
+    ]:
+        try:
+            cursor.execute(f"ALTER TABLE stashes ADD COLUMN {col} {col_type};")
+        except Exception:
+            pass
+
+    # Backfill default public status and share_slugs for existing stashes
+    cursor.execute("""
+        UPDATE stashes 
+        SET is_public = 1,
+            share_slug = id
+        WHERE share_slug IS NULL OR share_slug = ''
+    """)
+    conn.commit()
 
     # 4. Stash-Idea join table
     cursor.execute("""
@@ -483,10 +508,13 @@ def update_idea_details(idea_id: str, detailed_explanation: str, example: str, v
 
 # --- Stash Operations ---
 
-def get_stashes() -> List[Stash]:
+def get_stashes(owner_user_id: Optional[str] = None) -> List[Stash]:
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM stashes ORDER BY rowid ASC")
+    if owner_user_id:
+        cursor.execute("SELECT * FROM stashes WHERE owner_user_id = ? OR owner_user_id = 'community' ORDER BY rowid ASC", (owner_user_id,))
+    else:
+        cursor.execute("SELECT * FROM stashes ORDER BY rowid ASC")
     rows = cursor.fetchall()
     stashes = []
     for r in rows:
@@ -500,6 +528,10 @@ def get_stashes() -> List[Stash]:
             icon=r["icon"],
             color=r["color"],
             created_at=r["created_at"],
+            is_public=bool(r["is_public"] if "is_public" in r.keys() else 0),
+            owner_user_id=r["owner_user_id"] if "owner_user_id" in r.keys() else "community",
+            share_slug=r["share_slug"] if "share_slug" in r.keys() else stash_id,
+            clone_count=r["clone_count"] if "clone_count" in r.keys() else 0,
             idea_ids=idea_ids,
             ideas_count=len(idea_ids)
         ))
@@ -509,21 +541,30 @@ def get_stashes() -> List[Stash]:
 def get_stash_by_id(stash_id: str) -> Optional[Dict[str, Any]]:
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM stashes WHERE id = ?", (stash_id,))
+    cursor.execute("SELECT * FROM stashes WHERE id = ? OR share_slug = ?", (stash_id, stash_id))
     row = cursor.fetchone()
     if not row:
         conn.close()
         return None
 
+    actual_id = row["id"]
     cursor.execute("""
         SELECT i.* FROM ideas i
         JOIN stash_ideas si ON i.id = si.idea_id
         WHERE si.stash_id = ?
         ORDER BY si.added_at DESC
-    """, (stash_id,))
+    """, (actual_id,))
     idea_rows = cursor.fetchall()
     ideas = [row_to_idea(ir) for ir in idea_rows]
     
+    owner_username = "community"
+    owner_id = row["owner_user_id"] if "owner_user_id" in row.keys() else "community"
+    if owner_id and owner_id != "community":
+        cursor.execute("SELECT username FROM users WHERE id = ?", (owner_id,))
+        u = cursor.fetchone()
+        if u:
+            owner_username = u["username"]
+
     stash_data = {
         "id": row["id"],
         "title": row["title"],
@@ -531,21 +572,34 @@ def get_stash_by_id(stash_id: str) -> Optional[Dict[str, Any]]:
         "icon": row["icon"],
         "color": row["color"],
         "created_at": row["created_at"],
+        "is_public": bool(row["is_public"] if "is_public" in row.keys() else 0),
+        "owner_user_id": owner_id,
+        "owner_username": owner_username,
+        "share_slug": row["share_slug"] if "share_slug" in row.keys() else row["id"],
+        "clone_count": row["clone_count"] if "clone_count" in row.keys() else 0,
         "ideas": ideas,
         "ideas_count": len(ideas)
     }
     conn.close()
     return stash_data
 
-def create_stash(title: str, description: str, icon: str = "sparkles", color: str = "indigo") -> Stash:
+def create_stash(
+    title: str,
+    description: str,
+    icon: str = "sparkles",
+    color: str = "indigo",
+    owner_user_id: str = "community",
+    is_public: bool = False
+) -> Stash:
     conn = get_connection()
     cursor = conn.cursor()
     stash_id = f"stash_{uuid.uuid4().hex[:8]}"
+    slug = f"{slugify(title)}-{uuid.uuid4().hex[:6]}"
     created_at = datetime.utcnow().isoformat()
     cursor.execute("""
-        INSERT INTO stashes (id, title, description, icon, color, created_at)
-        VALUES (?, ?, ?, ?, ?, ?)
-    """, (stash_id, title, description, icon, color, created_at))
+        INSERT INTO stashes (id, title, description, icon, color, created_at, is_public, owner_user_id, share_slug, clone_count)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
+    """, (stash_id, title, description, icon, color, created_at, 1 if is_public else 0, owner_user_id, slug))
     conn.commit()
     conn.close()
     return Stash(
@@ -555,9 +609,94 @@ def create_stash(title: str, description: str, icon: str = "sparkles", color: st
         icon=icon,
         color=color,
         created_at=created_at,
+        is_public=is_public,
+        owner_user_id=owner_user_id,
+        share_slug=slug,
+        clone_count=0,
         idea_ids=[],
         ideas_count=0
     )
+
+def publish_stash(stash_id: str, is_public: bool = True) -> Optional[Dict[str, Any]]:
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM stashes WHERE id = ? OR share_slug = ?", (stash_id, stash_id))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        return None
+
+    actual_id = row["id"]
+    slug = row["share_slug"] if row["share_slug"] else f"{slugify(row['title'])}-{uuid.uuid4().hex[:6]}"
+    cursor.execute("""
+        UPDATE stashes 
+        SET is_public = ?, share_slug = ? 
+        WHERE id = ?
+    """, (1 if is_public else 0, slug, actual_id))
+    conn.commit()
+    conn.close()
+    return get_stash_by_id(actual_id)
+
+def list_public_stashes(search: Optional[str] = None) -> List[Stash]:
+    conn = get_connection()
+    cursor = conn.cursor()
+    query = "SELECT * FROM stashes WHERE is_public = 1"
+    params = []
+    if search:
+        search_pattern = f"%{search.lower()}%"
+        query += " AND (LOWER(title) LIKE ? OR LOWER(description) LIKE ?)"
+        params.extend([search_pattern, search_pattern])
+    query += " ORDER BY clone_count DESC, created_at DESC"
+    cursor.execute(query, params)
+    rows = cursor.fetchall()
+    stashes = []
+    for r in rows:
+        stash_id = r["id"]
+        cursor.execute("SELECT idea_id FROM stash_ideas WHERE stash_id = ?", (stash_id,))
+        idea_ids = [row["idea_id"] for row in cursor.fetchall()]
+        stashes.append(Stash(
+            id=stash_id,
+            title=r["title"],
+            description=r["description"],
+            icon=r["icon"],
+            color=r["color"],
+            created_at=r["created_at"],
+            is_public=True,
+            owner_user_id=r["owner_user_id"] if "owner_user_id" in r.keys() else "community",
+            share_slug=r["share_slug"] if "share_slug" in r.keys() else stash_id,
+            clone_count=r["clone_count"] if "clone_count" in r.keys() else 0,
+            idea_ids=idea_ids,
+            ideas_count=len(idea_ids)
+        ))
+    conn.close()
+    return stashes
+
+def clone_stash(stash_id_or_slug: str, new_owner_id: str = "community") -> Optional[Dict[str, Any]]:
+    orig = get_stash_by_id(stash_id_or_slug)
+    if not orig:
+        return None
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE stashes SET clone_count = clone_count + 1 WHERE id = ?", (orig["id"],))
+    conn.commit()
+    conn.close()
+
+    new_title = f"{orig['title']} (My Stash)"
+    new_desc = f"Cloned from @{orig.get('owner_username', 'community')}: {orig['description']}"
+    new_stash = create_stash(
+        title=new_title,
+        description=new_desc,
+        icon=orig["icon"],
+        color=orig["color"],
+        owner_user_id=new_owner_id,
+        is_public=False
+    )
+
+    for idea in orig.get("ideas", []):
+        add_idea_to_stash(new_stash.id, idea.id)
+
+    return get_stash_by_id(new_stash.id)
 
 def add_idea_to_stash(stash_id: str, idea_id: str) -> bool:
     conn = get_connection()

@@ -311,6 +311,90 @@ def test_user_accounts_and_sessions():
     assert res_demo.status_code == 200, "Demo user should log in successfully"
     print("      [OK] Seeded demo user (demo@microstash.app) verified.")
 
+def test_social_learning_and_notifications():
+    print("[TEST 10/10] Verifying Social Learning, Shared Stashes & Mobile Notifications...")
+    import uuid
+    deck_title = f"Billionaire Frameworks {uuid.uuid4().hex[:4]}"
+    
+    # 1. Create a personal stash
+    res_create = client.post("/api/stashes", json={
+        "title": deck_title,
+        "description": "High leverage mental frameworks for strategic decisions",
+        "icon": "brain",
+        "color": "indigo",
+        "is_public": False
+    })
+    assert res_create.status_code == 200
+    stash = res_create.json()
+    stash_id = stash["id"]
+    print(f"      [OK] Personal stash created: '{deck_title}' (id: {stash_id})")
+
+    # 2. Add an idea to the stash
+    res_add = client.post(f"/api/stashes/{stash_id}/ideas", json={"idea_id": "munger-inversion"})
+    assert res_add.status_code == 200
+    print("      [OK] Added mental model 'munger-inversion' to the stash.")
+
+    # 3. Publish to Community library
+    res_pub = client.post(f"/api/stashes/{stash_id}/publish", json={"is_public": True})
+    assert res_pub.status_code == 200
+    pub_data = res_pub.json()
+    assert pub_data["is_public"] is True
+    share_slug = pub_data["share_slug"]
+    assert len(share_slug) > 0
+    print(f"      [OK] Stash published to Community. Direct share slug: {share_slug}")
+
+    # 4. Access shared stash via public endpoint (no login required)
+    res_share = client.get(f"/api/stashes/share/{share_slug}")
+    assert res_share.status_code == 200
+    shared_detail = res_share.json()
+    assert shared_detail["title"] == deck_title
+    assert len(shared_detail["ideas"]) >= 1
+    print("      [OK] Public social share endpoint (/api/stashes/share/{slug}) returned complete deck.")
+
+    # 5. List community public stashes
+    res_public_list = client.get("/api/stashes/public")
+    assert res_public_list.status_code == 200
+    public_stashes = res_public_list.json()
+    assert any(s["id"] == stash_id or s["share_slug"] == share_slug for s in public_stashes)
+    print(f"      [OK] Verified community public gallery contains {len(public_stashes)} shared stashes.")
+
+    # 6. Web direct share route (/share/stash/{slug})
+    res_web_share = client.get(f"/share/stash/{share_slug}")
+    assert res_web_share.status_code == 200
+    assert "text/html" in res_web_share.headers["content-type"]
+    print("      [OK] Direct web share route (/share/stash/{slug}) returned 200 HTML.")
+
+    # 7. Clone shared stash to learner's personal library
+    res_clone = client.post(f"/api/stashes/{stash_id}/clone")
+    assert res_clone.status_code == 200
+    clone_data = res_clone.json()
+    assert clone_data["status"] == "ok"
+    cloned_stash = clone_data["cloned_stash"]
+    assert "Copy" in cloned_stash["title"] or "My Stash" in cloned_stash["title"]
+    assert len(cloned_stash["ideas"]) >= 1
+
+    # Verify original stash clone_count incremented
+    res_orig = client.get(f"/api/stashes/{stash_id}")
+    assert res_orig.status_code == 200
+    assert res_orig.json()["clone_count"] >= 1
+    print(f"      [OK] Stash successfully cloned into user library with verified clone metrics.")
+
+    # 8. Mobile Notification Service verification
+    notif_file = Path("flutter_app/lib/services/notification_service.dart")
+    assert notif_file.exists(), "NotificationService must exist in Flutter project"
+    notif_content = notif_file.read_text(encoding="utf-8")
+    assert "scheduleDailyWorkoutReminder" in notif_content
+    assert "checkDueCardsAndNotify" in notif_content
+    assert "isReminderEnabled" in notif_content
+    print("      [OK] Flutter NotificationService (scheduleDailyWorkoutReminder, checkDueCardsAndNotify) verified.")
+
+    # 9. Mobile Workout Screen notification trigger verification
+    workout_file = Path("flutter_app/lib/screens/workout_screen.dart")
+    assert workout_file.exists()
+    workout_content = workout_file.read_text(encoding="utf-8")
+    assert "NotificationService.checkDueCardsAndNotify" in workout_content
+    print("      [OK] Flutter WorkoutScreen notification triggers verified.")
+
 if __name__ == "__main__":
     print("====================================================================")
     print("  [*] MICROSTASH AUTOMATED VERIFICATION TEST SUITE [*]")
@@ -325,8 +409,9 @@ if __name__ == "__main__":
         test_flutter_scaffold()
         test_universal_book_cache()
         test_user_accounts_and_sessions()
+        test_social_learning_and_notifications()
         print("====================================================================")
-        print("  [SUCCESS] ALL 9/9 TEST SUITES PASSED FLAWLESSLY! [SUCCESS]")
+        print("  [SUCCESS] ALL 10/10 TEST SUITES PASSED FLAWLESSLY! [SUCCESS]")
         print("====================================================================")
     except Exception as e:
         print(f"\n[ERROR] TEST FAILED: {e}")
