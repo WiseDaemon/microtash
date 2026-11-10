@@ -2359,3 +2359,216 @@ window.closeOnboardingQuiz = closeOnboardingQuiz;
 window.selectQuizBlindspot = selectQuizBlindspot;
 window.selectQuizContext = selectQuizContext;
 window.applyQuizWorkoutAndClose = applyQuizWorkoutAndClose;
+
+// =========================================================================
+// GOOGLE STITCH UI ENGINE EXTENSIONS & LIVE BINDINGS
+// =========================================================================
+
+function updateStitchHeroCard() {
+  const ideas = window.state.ideas;
+  if (!ideas || !ideas.length) return;
+  const idea = ideas[window.state.currentIdeaIndex] || ideas[0];
+  if (!idea) return;
+
+  const topicBadge = document.getElementById("card-topic-badge");
+  if (topicBadge) topicBadge.textContent = idea.topic.toUpperCase();
+
+  const readTime = document.getElementById("card-read-time");
+  if (readTime) readTime.textContent = `${idea.read_time_mins || 1} min read`;
+
+  const titleEl = document.getElementById("card-title");
+  if (titleEl) titleEl.textContent = idea.title;
+
+  const authorEl = document.getElementById("card-author");
+  if (authorEl) authorEl.textContent = idea.author;
+
+  const initialsEl = document.getElementById("card-avatar-initials");
+  if (initialsEl && idea.author) {
+    const parts = idea.author.split(" ");
+    initialsEl.textContent = parts.length > 1 ? (parts[0][0] + parts[1][0]).toUpperCase() : idea.author.slice(0, 2).toUpperCase();
+  }
+
+  const oneLinerEl = document.getElementById("card-one-liner");
+  if (oneLinerEl) oneLinerEl.textContent = `"${idea.one_liner}"`;
+
+  const leitnerText = document.getElementById("card-leitner-box-text");
+  if (leitnerText) leitnerText.textContent = `Box ${idea.leitner_box || 1}`;
+
+  const likeCount = document.getElementById("card-like-count");
+  if (likeCount) likeCount.textContent = idea.likes || 0;
+
+  const likeIcon = document.getElementById("card-like-icon");
+  if (likeIcon) {
+    likeIcon.textContent = idea.is_liked ? "favorite" : "favorite_border";
+    likeIcon.className = idea.is_liked ? "material-symbols-outlined text-[18px] text-rose-500" : "material-symbols-outlined text-[18px]";
+  }
+
+  const saveBtn = document.getElementById("card-btn-save");
+  if (saveBtn) {
+    saveBtn.innerHTML = `<span class="material-symbols-outlined text-[18px] ${idea.is_saved ? 'text-primary' : ''}">${idea.is_saved ? 'bookmark' : 'bookmark_border'}</span>`;
+  }
+
+  // Render diagram in Stitch container
+  const diagContainer = document.getElementById("card-diagram-container");
+  if (diagContainer) {
+    renderIdeaVisualDiagram(idea, "card-diagram-container");
+  }
+}
+
+function triggerCurrentCardStressTest() {
+  const ideas = window.state.ideas;
+  if (!ideas || !ideas.length) return;
+  const idea = ideas[window.state.currentIdeaIndex] || ideas[0];
+  if (idea) openStressTestModal(idea.id);
+}
+
+async function toggleLikeCurrentCard() {
+  const ideas = window.state.ideas;
+  if (!ideas || !ideas.length) return;
+  const idea = ideas[window.state.currentIdeaIndex];
+  if (!idea) return;
+
+  try {
+    const res = await fetch(`/api/ideas/${idea.id}/like`, { method: "POST" });
+    if (res.ok) {
+      const updated = await res.json();
+      idea.is_liked = updated.is_liked;
+      idea.likes = updated.likes;
+      updateStitchHeroCard();
+    }
+  } catch (err) {
+    console.error("Like error:", err);
+  }
+}
+
+async function toggleSaveCurrentCard() {
+  const ideas = window.state.ideas;
+  if (!ideas || !ideas.length) return;
+  const idea = ideas[window.state.currentIdeaIndex];
+  if (!idea) return;
+
+  try {
+    const res = await fetch(`/api/ideas/${idea.id}/save`, { method: "POST" });
+    if (res.ok) {
+      const updated = await res.json();
+      idea.is_saved = updated.is_saved;
+      idea.saved_count = updated.saved_count;
+      updateStitchHeroCard();
+    }
+  } catch (err) {
+    console.error("Save error:", err);
+  }
+}
+
+function playCurrentCardAudio() {
+  const ideas = window.state.ideas;
+  if (!ideas || !ideas.length) return;
+  const idea = ideas[window.state.currentIdeaIndex];
+  if (!idea) return;
+  
+  if (typeof playAudioForIdea === 'function') {
+    playAudioForIdea(idea.id);
+  } else {
+    // Web Speech API fallback
+    const utter = new SpeechSynthesisUtterance(`${idea.title}. By ${idea.author}. ${idea.one_liner}. ${idea.summary}`);
+    window.speechSynthesis.speak(utter);
+  }
+}
+
+// Workout screen logic
+let currentWorkoutIndex = 0;
+let isWorkoutCardFlipped = false;
+
+function renderWorkoutCard() {
+  const ideas = window.state.ideas || [];
+  if (!ideas.length) return;
+  const idea = ideas[currentWorkoutIndex % ideas.length];
+  if (!idea) return;
+
+  const topicEl = document.getElementById("workout-card-topic");
+  if (topicEl) topicEl.textContent = idea.topic.toUpperCase();
+
+  const titleEl = document.getElementById("workout-card-title");
+  if (titleEl) titleEl.textContent = idea.title;
+
+  const bodyEl = document.getElementById("workout-card-body");
+  if (bodyEl) {
+    bodyEl.textContent = isWorkoutCardFlipped ? (idea.detailed_explanation || idea.summary) : `"${idea.one_liner}"`;
+  }
+
+  const statusEl = document.getElementById("workout-card-flip-status");
+  if (statusEl) statusEl.textContent = isWorkoutCardFlipped ? "MODEL REVEALED" : "TAP TO REVEAL";
+}
+
+function flipWorkoutCard() {
+  isWorkoutCardFlipped = !isWorkoutCardFlipped;
+  renderWorkoutCard();
+}
+
+async function gradeWorkoutCard(grade) {
+  const ideas = window.state.ideas || [];
+  if (!ideas.length) return;
+  const idea = ideas[currentWorkoutIndex % ideas.length];
+  if (!idea) return;
+
+  try {
+    await fetch(`/api/ideas/${idea.id}/leitner-review`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ grade: grade })
+    });
+  } catch (e) {}
+
+  currentWorkoutIndex++;
+  isWorkoutCardFlipped = false;
+  renderWorkoutCard();
+  loadStats();
+}
+
+// Hook into updateSwipeCardDisplay
+const originalUpdateSwipe = updateSwipeCardDisplay;
+updateSwipeCardDisplay = function() {
+  originalUpdateSwipe();
+  updateStitchHeroCard();
+  renderWorkoutCard();
+};
+
+// Stitch tab switcher
+const origSwitchTab = switchTab;
+switchTab = function(tabId) {
+  origSwitchTab(tabId);
+  
+  // Also update stitch tab contents
+  const swipeTab = document.getElementById("tab-swipe-content");
+  const leitnerTab = document.getElementById("tab-leitner-content");
+  const feedTab = document.getElementById("tab-feed-content");
+  const stashesTab = document.getElementById("tab-stashes-content");
+  const aiTab = document.getElementById("tab-ai-content");
+
+  if (swipeTab) swipeTab.classList.toggle("hidden", tabId !== "swipe");
+  if (leitnerTab) leitnerTab.classList.toggle("hidden", tabId !== "leitner");
+  if (feedTab) feedTab.classList.toggle("hidden", tabId !== "feed");
+  if (stashesTab) stashesTab.classList.toggle("hidden", tabId !== "stashes");
+  if (aiTab) aiTab.classList.toggle("hidden", tabId !== "ai");
+
+  // Stitch bottom nav active state
+  ["swipe", "leitner", "feed", "stashes", "ai"].forEach(t => {
+    const btn = document.getElementById(`stitch-nav-${t}`);
+    if (btn) {
+      if (t === tabId) {
+        btn.className = "flex flex-col items-center justify-center bg-primary/15 text-primary rounded-full px-4 py-1.5 shadow-[0_0_12px_rgba(78,222,163,0.25)] transition";
+      } else {
+        btn.className = "flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition px-3 py-1.5";
+      }
+    }
+  });
+
+  if (tabId === "leitner") renderWorkoutCard();
+};
+
+window.triggerCurrentCardStressTest = triggerCurrentCardStressTest;
+window.toggleLikeCurrentCard = toggleLikeCurrentCard;
+window.toggleSaveCurrentCard = toggleSaveCurrentCard;
+window.playCurrentCardAudio = playCurrentCardAudio;
+window.flipWorkoutCard = flipWorkoutCard;
+window.gradeWorkoutCard = gradeWorkoutCard;
