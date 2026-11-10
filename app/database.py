@@ -135,6 +135,14 @@ def init_db():
         except Exception:
             pass
 
+    # Ensure all books have a valid copyright attribution notice
+    cursor.execute("""
+        UPDATE books 
+        SET copyright_notice = 'Transformative educational commentary & mental model summary of ''' || title || ''' by ' || author || '. All original book trademarks, copyrights, and intellectual property belong to the respective author and publisher under Fair Use.'
+        WHERE copyright_notice IS NULL OR copyright_notice = ''
+    """)
+    conn.commit()
+
     # 3. Stashes table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS stashes (
@@ -764,27 +772,39 @@ def find_scanned_book(query: str) -> Optional[Dict[str, Any]]:
     norm_q = normalize_book_title(clean_q)
     slug_q = slugify(clean_q)
 
+    def _return_book(r):
+        if not r:
+            conn.close()
+            return None
+        d = dict(r)
+        if not d.get("copyright_notice"):
+            d["copyright_notice"] = generate_copyright_attribution(d.get("title", ""), d.get("author", "Curated Thinker"), d.get("publisher", "Original Publication"))
+            try:
+                cursor.execute("UPDATE books SET copyright_notice = ? WHERE id = ?", (d["copyright_notice"], d["id"]))
+                conn.commit()
+            except Exception:
+                pass
+        conn.close()
+        return d
+
     # 1. Exact slug match
     cursor.execute("SELECT * FROM books WHERE id = ?", (slug_q,))
     row = cursor.fetchone()
     if row:
-        conn.close()
-        return dict(row)
+        return _return_book(row)
 
     # 2. Normalized title match
     if norm_q:
         cursor.execute("SELECT * FROM books WHERE normalized_title = ?", (norm_q,))
         row = cursor.fetchone()
         if row:
-            conn.close()
-            return dict(row)
+            return _return_book(row)
 
     # 3. Case-insensitive exact title
     cursor.execute("SELECT * FROM books WHERE LOWER(title) = LOWER(?)", (clean_q,))
     row = cursor.fetchone()
     if row:
-        conn.close()
-        return dict(row)
+        return _return_book(row)
 
     # 4. Normalized containment
     if norm_q and len(norm_q) >= 4:
@@ -797,8 +817,7 @@ def find_scanned_book(query: str) -> Optional[Dict[str, Any]]:
         """, (f"%{norm_q}%", norm_q))
         row = cursor.fetchone()
         if row:
-            conn.close()
-            return dict(row)
+            return _return_book(row)
 
     # 5. Fallback check directly in ideas table
     cursor.execute("""
@@ -827,8 +846,7 @@ def find_scanned_book(query: str) -> Optional[Dict[str, Any]]:
 
         cursor.execute("SELECT * FROM books WHERE id = ?", (b_slug,))
         new_row = cursor.fetchone()
-        conn.close()
-        return dict(new_row) if new_row else None
+        return _return_book(new_row)
 
     conn.close()
     return None
@@ -876,11 +894,18 @@ def register_scanned_book(
 
     if existing_book:
         book_id = existing_book["id"]
+        cursor.execute("""
+            UPDATE books 
+            SET copyright_notice = COALESCE(copyright_notice, ?),
+                publisher = CASE WHEN publisher IS NULL OR publisher = 'Original Publication' THEN ? ELSE publisher END
+            WHERE id = ?
+        """, (c_notice, publisher, book_id))
+        conn.commit()
     else:
         book_id = slug
         cursor.execute("""
             INSERT INTO books (id, title, normalized_title, author, publisher, copyright_notice, description, cover_url, topic, ideas_count, scanned_by_user, scanned_at, scan_status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'completed')
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'completed')
         """, (book_id, clean_title, norm, clean_author, publisher, c_notice, description, cover_url, topic, len(ideas_list), scanned_by, now_iso))
         conn.commit()
 
@@ -973,8 +998,19 @@ def get_book_by_slug(slug_or_id: str) -> Optional[Dict[str, Any]]:
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM books WHERE id = ? OR normalized_title = ?", (slug_or_id, normalize_book_title(slug_or_id)))
     row = cursor.fetchone()
+    if not row:
+        conn.close()
+        return None
+    d = dict(row)
+    if not d.get("copyright_notice"):
+        d["copyright_notice"] = generate_copyright_attribution(d.get("title", ""), d.get("author", "Curated Thinker"), d.get("publisher", "Original Publication"))
+        try:
+            cursor.execute("UPDATE books SET copyright_notice = ? WHERE id = ?", (d["copyright_notice"], d["id"]))
+            conn.commit()
+        except Exception:
+            pass
     conn.close()
-    return dict(row) if row else None
+    return d
 
 
 # --- User Accounts & Session Operations ---

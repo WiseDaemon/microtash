@@ -45,6 +45,13 @@ def get_book_detail(book_slug: str):
         if not book:
             raise HTTPException(status_code=404, detail="Book not found in community library")
 
+    if not book.get("copyright_notice"):
+        book["copyright_notice"] = database.generate_copyright_attribution(
+            book.get("title", ""),
+            book.get("author", "Curated Thinker"),
+            book.get("publisher", "Original Publication")
+        )
+
     ideas = database.get_book_ideas(book["id"], book["title"])
     stashes = database.get_stashes()
     matching_stash = next((s for s in stashes if book["title"].lower() in s.title.lower() or s.id == f"stash_{book['id']}"), None)
