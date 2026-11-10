@@ -6,7 +6,7 @@ from pathlib import Path
 
 from app.config import settings
 from app.database import init_db
-from app.routes import ideas, stashes, ai, stats, audio, compliance
+from app.routes import ideas, stashes, ai, stats, audio, compliance, books
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -36,6 +36,7 @@ templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 # Include API routes
 app.include_router(ideas.router)
+app.include_router(books.router)
 app.include_router(stashes.router)
 app.include_router(ai.router)
 app.include_router(stats.router)

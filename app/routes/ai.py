@@ -43,22 +43,50 @@ def auto_fetch_info(payload: AutoFetchRequest):
 @router.post("/auto-fetch-and-generate")
 def auto_fetch_and_generate(payload: AutoFetchAndGenerateRequest):
     """
-    1-Click Auto-Generation:
-    1. Fetches descriptions and summaries from the web for the book/author/idea.
-    2. Synthesizes atomic microlearning Deepstash cards via NVIDIA NIM / Gemini.
+    Universal Global Cache + 1-Click Auto-Generation:
+    1. Checks the Global Microstash Library FIRST:
+       If ANY user has previously requested this book, returns its cards immediately
+       with 0s scan time, 0 API tokens, and 0 external calls.
+    2. If not found in cache, fetches web descriptions & synthesizes atomic cards via AI.
+    3. Permanently indexes the book in the canonical books registry and ideas database
+       so that every future user in the community gets instant 0ms access without re-scanning.
     """
     if not payload.query.strip():
         raise HTTPException(status_code=400, detail="Query cannot be empty")
 
+    # Step 1: Universal Global Cache Lookup
+    existing_book = database.find_scanned_book(payload.query)
+    if existing_book:
+        cached_ideas = database.get_book_ideas(existing_book["id"], existing_book["title"])
+        if cached_ideas and len(cached_ideas) > 0:
+            stashes = database.get_stashes()
+            matching_stash = next((s for s in stashes if existing_book["title"].lower() in s.title.lower() or s.id == f"stash_{existing_book['id']}"), None)
+            return {
+                "status": "ok",
+                "cached": True,
+                "global_library_hit": True,
+                "book": existing_book,
+                "resolved_title": existing_book["title"],
+                "resolved_author": existing_book["author"],
+                "web_info": {
+                    "resolved_title": existing_book["title"],
+                    "resolved_author": existing_book["author"],
+                    "description": existing_book.get("description", ""),
+                },
+                "stash_id": matching_stash.id if matching_stash else None,
+                "ideas": cached_ideas,
+                "count": len(cached_ideas),
+                "message": f"Retrieved from Global Microstash Knowledge Base — 0s scan time! Available to all users without re-scanning."
+            }
+
+    # Step 2: Not yet in Global Library - Auto-fetch from web and synthesize via AI
     try:
-        # Step 1: Auto-fetch description from the web
         web_info = auto_fetch_web_info(payload.query)
         description_text = web_info.get("description", "")
         resolved_title = web_info.get("resolved_title", payload.query)
         resolved_author = web_info.get("resolved_author", "Curated Thinker")
 
-        # Step 2: Feed auto-fetched web text to AI synthesis engine
-        ideas = extract_ideas_from_content(
+        raw_ideas = extract_ideas_from_content(
             input_text=description_text,
             source_title=resolved_title,
             author=resolved_author,
@@ -67,11 +95,27 @@ def auto_fetch_and_generate(payload: AutoFetchAndGenerateRequest):
             num_ideas=payload.num_ideas if payload.num_ideas is not None else 0
         )
 
+        # Step 3: Register globally for all users so it never needs to be scanned twice
+        registered = database.register_scanned_book(
+            title=resolved_title,
+            author=resolved_author,
+            description=description_text,
+            topic=payload.topic or "Mental Models",
+            ideas_list=raw_ideas,
+            scanned_by="community"
+        )
+
         return {
             "status": "ok",
+            "cached": False,
+            "global_library_hit": False,
+            "globally_registered": True,
+            "book": registered["book"],
+            "stash_id": registered["stash_id"],
             "web_info": web_info,
-            "ideas": ideas,
-            "count": len(ideas)
+            "ideas": registered["ideas"],
+            "count": len(registered["ideas"]),
+            "message": "Successfully synthesized and permanently added to Global Microstash Knowledge Base for all users."
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Auto-fetch and generation failed: {str(e)}")
@@ -113,35 +157,34 @@ def save_extracted_batch(payload: SaveExtractedBatch):
 @router.post("/save-as-book-stash")
 def save_as_book_stash(payload: SaveAsBookStashRequest):
     """
-    Creates a dedicated new Stash named after the book and saves all ideas into it.
+    Creates a dedicated new Stash named after the book, saves all ideas,
+    and registers the book into the canonical books table so all users can access it.
     """
     clean_title = payload.book_title.strip() or "Curated Book"
-    stash_title = f"{clean_title} — Complete Book"
-    description = f"Complete microlearning collection of all core ideas, chapters, and mental models from {clean_title} by {payload.author}."
-    
-    # 1. Create the new stash
-    stash = database.create_stash(
-        title=stash_title,
-        description=description,
-        icon=payload.icon or "book-open",
-        color=payload.color or "indigo"
-    )
+    clean_author = (payload.author or "Curated Thinker").strip()
+    topic = "Mental Models"
+    if payload.ideas and payload.ideas[0].get("topic"):
+        topic = payload.ideas[0]["topic"]
 
-    # 2. Save each idea and assign to the new stash
-    created_ideas = []
-    for item in payload.ideas:
-        idea = database.create_idea(item)
-        database.add_idea_to_stash(stash.id, idea.id)
-        created_ideas.append(idea)
+    # Register into global book registry
+    reg_result = database.register_scanned_book(
+        title=clean_title,
+        author=clean_author,
+        description=f"Complete microlearning collection of all core ideas, chapters, and mental models from {clean_title} by {clean_author}.",
+        topic=topic,
+        ideas_list=payload.ideas,
+        scanned_by="community"
+    )
 
     return {
         "status": "ok",
-        "stash_id": stash.id,
-        "stash_title": stash_title,
-        "saved_count": len(created_ideas),
-        "ideas": created_ideas
+        "stash_id": reg_result["stash_id"],
+        "stash_title": f"{clean_title} — Complete Book",
+        "book": reg_result["book"],
+        "saved_count": reg_result["count"],
+        "ideas": reg_result["ideas"],
+        "globally_available": True
     }
-
 
 @router.get("/stress-test/{idea_id}")
 def get_socratic_stress_test(idea_id: str):

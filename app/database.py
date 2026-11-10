@@ -2,11 +2,32 @@ import os
 import sqlite3
 import json
 import uuid
+import re
 from datetime import datetime, date, timedelta
 from typing import List, Optional, Dict, Any
 from app.config import settings
-from app.models import Idea, Stash, UserProgress
+from app.models import Idea, Stash, UserProgress, Book
 from app.seed_data import DEFAULT_IDEAS, DEFAULT_STASHES
+
+def normalize_book_title(title: str) -> str:
+    """
+    Normalizes a book title for robust, fuzzy matching.
+    Removes all punctuation, spaces, accents/casing.
+    Handles subtitles: e.g. 'Atomic Habits: Tiny Changes...' -> matches 'atomichabits'
+    """
+    if not title:
+        return ""
+    primary = title.split(":")[0].split(" - ")[0].strip()
+    norm = re.sub(r'[^a-z0-9]', '', primary.lower())
+    return norm if norm else re.sub(r'[^a-z0-9]', '', title.lower())
+
+def slugify(text: str) -> str:
+    """Converts a title or string to a URL-safe canonical slug."""
+    if not text:
+        return "untitled"
+    primary = text.split(":")[0].split(" - ")[0].strip()
+    s = re.sub(r'[^a-z0-9]+', '-', primary.lower()).strip('-')
+    return s or re.sub(r'[^a-z0-9]+', '-', text.lower()).strip('-') or "untitled"
 
 def get_connection():
     os.makedirs(os.path.dirname(settings.DB_PATH), exist_ok=True)
@@ -21,7 +42,7 @@ def init_db():
     conn = get_connection()
     cursor = conn.cursor()
     
-    # Ideas table
+    # 1. Ideas table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS ideas (
         id TEXT PRIMARY KEY,
@@ -35,6 +56,7 @@ def init_db():
         action_item TEXT,
         author TEXT NOT NULL,
         source TEXT NOT NULL,
+        source_slug TEXT,
         topic TEXT NOT NULL,
         tags TEXT NOT NULL, -- JSON array
         read_time_mins INTEGER DEFAULT 1,
@@ -46,37 +68,45 @@ def init_db():
         leitner_box INTEGER DEFAULT 1,
         next_review_date TEXT,
         last_reviewed_date TEXT,
+        dilemma_cache TEXT,
         created_at TEXT NOT NULL
     );
     """)
 
     # Ensure schema upgrades for existing DB files
-    try:
-        cursor.execute("ALTER TABLE ideas ADD COLUMN detailed_explanation TEXT")
-    except Exception:
-        pass
-    try:
-        cursor.execute("ALTER TABLE ideas ADD COLUMN example TEXT")
-    except Exception:
-        pass
-    try:
-        cursor.execute("ALTER TABLE ideas ADD COLUMN visual_diagram TEXT")
-    except Exception:
-        pass
-    try:
-        cursor.execute("ALTER TABLE ideas ADD COLUMN leitner_box INTEGER DEFAULT 1")
-    except Exception:
-        pass
-    try:
-        cursor.execute("ALTER TABLE ideas ADD COLUMN next_review_date TEXT")
-    except Exception:
-        pass
-    try:
-        cursor.execute("ALTER TABLE ideas ADD COLUMN last_reviewed_date TEXT")
-    except Exception:
-        pass
+    for col, col_type in [
+        ("detailed_explanation", "TEXT"),
+        ("example", "TEXT"),
+        ("visual_diagram", "TEXT"),
+        ("source_slug", "TEXT"),
+        ("leitner_box", "INTEGER DEFAULT 1"),
+        ("next_review_date", "TEXT"),
+        ("last_reviewed_date", "TEXT"),
+        ("dilemma_cache", "TEXT")
+    ]:
+        try:
+            cursor.execute(f"ALTER TABLE ideas ADD COLUMN {col} {col_type};")
+        except Exception:
+            pass
 
-    # Stashes table
+    # 2. Canonical Books Registry (Universal Global Book & Idea Cache)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS books (
+        id TEXT PRIMARY KEY,                       -- canonical slug: e.g. "atomic-habits"
+        title TEXT NOT NULL,                      -- original title: "Atomic Habits"
+        normalized_title TEXT NOT NULL UNIQUE,    -- stripped/lower: "atomichabits"
+        author TEXT NOT NULL,                     -- "James Clear"
+        description TEXT,                         -- overview/summary
+        cover_url TEXT,                           -- cover image or placeholder
+        topic TEXT DEFAULT 'Mental Models',
+        ideas_count INTEGER DEFAULT 0,
+        scanned_by_user TEXT DEFAULT 'community', -- user account or 'community'
+        scanned_at TEXT NOT NULL,
+        scan_status TEXT DEFAULT 'completed'
+    );
+    """)
+
+    # 3. Stashes table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS stashes (
         id TEXT PRIMARY KEY,
@@ -88,7 +118,7 @@ def init_db():
     );
     """)
 
-    # Stash-Idea join table
+    # 4. Stash-Idea join table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS stash_ideas (
         stash_id TEXT NOT NULL,
@@ -100,7 +130,7 @@ def init_db():
     );
     """)
 
-    # User progress & gamification table
+    # 5. User progress & gamification table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS user_progress (
         id INTEGER PRIMARY KEY CHECK (id = 1),
@@ -111,7 +141,7 @@ def init_db():
     );
     """)
 
-    # Ideas read history log
+    # 6. Ideas read history log
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS read_history (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -124,6 +154,8 @@ def init_db():
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_ideas_topic ON ideas(topic);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_ideas_leitner ON ideas(next_review_date, leitner_box);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_ideas_created ON ideas(created_at DESC);")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_ideas_source_slug ON ideas(source_slug);")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_books_norm_title ON books(normalized_title);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_stash_ideas_stash ON stash_ideas(stash_id);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_stash_ideas_idea ON stash_ideas(idea_id);")
 
@@ -149,9 +181,9 @@ def init_db():
         for i in DEFAULT_IDEAS:
             cursor.execute("""
                 UPDATE ideas
-                SET detailed_explanation = ?, example = ?, visual_diagram = ?
-                WHERE id = ? AND (detailed_explanation IS NULL OR detailed_explanation = '' OR example IS NULL OR example = '' OR visual_diagram IS NULL OR visual_diagram = '')
-            """, (i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""), i["id"]))
+                SET detailed_explanation = ?, example = ?, visual_diagram = ?, source_slug = ?
+                WHERE id = ? AND (detailed_explanation IS NULL OR detailed_explanation = '' OR example IS NULL OR example = '' OR visual_diagram IS NULL OR visual_diagram = '' OR source_slug IS NULL OR source_slug = '')
+            """, (i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""), slugify(i["source"]), i["id"]))
         conn.commit()
 
         # Backfill any remaining ideas that lack visual diagrams
@@ -168,13 +200,30 @@ def init_db():
         today_iso = date.today().isoformat()
         cursor.execute("UPDATE ideas SET next_review_date = ? WHERE next_review_date IS NULL OR next_review_date = ''", (today_iso,))
         cursor.execute("UPDATE ideas SET leitner_box = 1 WHERE leitner_box IS NULL OR leitner_box < 1")
-    try:
-        cursor.execute("ALTER TABLE ideas ADD COLUMN dilemma_cache TEXT;")
         conn.commit()
-    except Exception:
-        pass
 
-        conn.commit()
+    # Backfill books registry from all existing ideas
+    cursor.execute("SELECT DISTINCT source, author, topic FROM ideas WHERE source IS NOT NULL AND source != ''")
+    distinct_sources = cursor.fetchall()
+    now_iso = datetime.utcnow().isoformat()
+    for row in distinct_sources:
+        src = row["source"].strip()
+        auth = row["author"].strip() if row["author"] else "Curated Thinker"
+        top = row["topic"] or "Mental Models"
+        slug = slugify(src)
+        norm = normalize_book_title(src)
+        if not norm:
+            continue
+        cursor.execute("SELECT COUNT(*) FROM ideas WHERE LOWER(source) = LOWER(?)", (src,))
+        cnt = cursor.fetchone()[0]
+        # Stamp source_slug on matching ideas
+        cursor.execute("UPDATE ideas SET source_slug = ? WHERE (source_slug IS NULL OR source_slug = '') AND LOWER(source) = LOWER(?)", (slug, src))
+        # Insert book if not exists
+        cursor.execute("""
+            INSERT OR IGNORE INTO books (id, title, normalized_title, author, topic, ideas_count, scanned_by_user, scanned_at, scan_status)
+            VALUES (?, ?, ?, ?, ?, ?, 'community', ?, 'completed')
+        """, (slug, src, norm, auth, top, cnt, now_iso))
+    conn.commit()
 
     conn.close()
 
@@ -191,24 +240,19 @@ def seed_data(conn):
 
     # Seed ideas
     for i in DEFAULT_IDEAS:
+        src_slug = slugify(i["source"])
         cursor.execute("""
             INSERT OR IGNORE INTO ideas (
-                id, title, one_liner, summary, detailed_explanation, example, visual_diagram, quote, action_item, author, source, topic,
+                id, title, one_liner, summary, detailed_explanation, example, visual_diagram, quote, action_item, author, source, source_slug, topic,
                 tags, read_time_mins, color_theme, likes, saved_count, is_liked, is_saved, created_at
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?)
         """, (
             i["id"], i["title"], i["one_liner"], i["summary"],
             i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""),
-            i.get("quote", ""), i.get("action_item", ""), i["author"], i["source"], i["topic"],
+            i.get("quote", ""), i.get("action_item", ""), i["author"], i["source"], src_slug, i["topic"],
             json.dumps(i.get("tags", [])), i.get("read_time_mins", 1),
             i.get("color_theme", "indigo"), i.get("likes", 0), i.get("saved_count", 0), now_str
         ))
-        # Update existing records with detailed_explanation, example & visual_diagram if empty
-        cursor.execute("""
-            UPDATE ideas
-            SET detailed_explanation = ?, example = ?, visual_diagram = ?
-            WHERE id = ? AND (detailed_explanation IS NULL OR detailed_explanation = '' OR visual_diagram IS NULL OR visual_diagram = '')
-        """, (i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""), i["id"]))
 
         # Assign to appropriate default stashes
         if i["topic"] == "Mental Models":
@@ -269,17 +313,20 @@ def create_idea(data: Dict[str, Any]) -> Idea:
     idea_id = data.get("id") or f"idea_{uuid.uuid4().hex[:8]}"
     created_at = datetime.utcnow().isoformat()
     tags_json = json.dumps(data.get("tags", []))
+    source_slug = data.get("source_slug") or slugify(data.get("source", ""))
+    dilemma_cache = data.get("dilemma_cache")
     
     cursor.execute("""
         INSERT INTO ideas (
-            id, title, one_liner, summary, detailed_explanation, example, visual_diagram, quote, action_item, author, source, topic,
-            tags, read_time_mins, color_theme, likes, saved_count, is_liked, is_saved, created_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, ?)
+            id, title, one_liner, summary, detailed_explanation, example, visual_diagram, quote, action_item, author, source, source_slug, topic,
+            tags, read_time_mins, color_theme, likes, saved_count, is_liked, is_saved, dilemma_cache, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, ?, ?)
     """, (
         idea_id, data["title"], data["one_liner"], data["summary"],
         data.get("detailed_explanation", ""), data.get("example", ""), data.get("visual_diagram", ""),
-        data.get("quote"), data.get("action_item"), data["author"], data["source"], data.get("topic", "General"),
-        tags_json, data.get("read_time_mins", 1), data.get("color_theme", "indigo"), created_at
+        data.get("quote"), data.get("action_item"), data["author"], data["source"], source_slug, data.get("topic", "General"),
+        tags_json, data.get("read_time_mins", 1), data.get("color_theme", "indigo"),
+        dilemma_cache, created_at
     ))
     conn.commit()
     conn.close()
@@ -494,7 +541,6 @@ def record_idea_read(idea_id: str) -> UserProgress:
     doomscroll_mins = row["doomscroll_mins_saved"] + 4
 
     if last_date != today_str:
-        # Check if yesterday was active
         if last_date:
             try:
                 last_d = date.fromisoformat(last_date)
@@ -519,38 +565,40 @@ def record_idea_read(idea_id: str) -> UserProgress:
     return get_user_progress()
 
 def row_to_idea(row) -> Idea:
+    row_dict = dict(row)
     tags = []
-    if row["tags"]:
+    if row_dict.get("tags"):
         try:
-            tags = json.loads(row["tags"])
+            tags = json.loads(row_dict["tags"])
         except Exception:
-            tags = [t.strip() for t in row["tags"].split(",") if t.strip()]
+            tags = [t.strip() for t in row_dict["tags"].split(",") if t.strip()]
 
     return Idea(
-        id=row["id"],
-        title=row["title"],
-        one_liner=row["one_liner"],
-        summary=row["summary"],
-        detailed_explanation=dict(row).get("detailed_explanation") or "",
-        example=dict(row).get("example") or "",
-        visual_diagram=dict(row).get("visual_diagram") or "",
-        quote=row["quote"] or "",
-        action_item=row["action_item"] or "",
-        author=row["author"],
-        source=row["source"],
-        topic=row["topic"],
+        id=row_dict["id"],
+        title=row_dict["title"],
+        one_liner=row_dict["one_liner"],
+        summary=row_dict["summary"],
+        detailed_explanation=row_dict.get("detailed_explanation") or "",
+        example=row_dict.get("example") or "",
+        visual_diagram=row_dict.get("visual_diagram") or "",
+        quote=row_dict.get("quote") or "",
+        action_item=row_dict.get("action_item") or "",
+        author=row_dict["author"],
+        source=row_dict["source"],
+        source_slug=row_dict.get("source_slug"),
+        topic=row_dict["topic"],
         tags=tags,
-        read_time_mins=row["read_time_mins"] or 1,
-        color_theme=row["color_theme"] or "indigo",
-        likes=row["likes"] or 0,
-        saved_count=row["saved_count"] or 0,
-        is_liked=bool(row["is_liked"]),
-        is_saved=bool(row["is_saved"]),
-        leitner_box=dict(row).get("leitner_box") or 1,
-        next_review_date=dict(row).get("next_review_date"),
-        last_reviewed_date=dict(row).get("last_reviewed_date"),
-        created_at=row["created_at"],
-        dilemma_cache=dict(row).get("dilemma_cache")
+        read_time_mins=row_dict.get("read_time_mins") or 1,
+        color_theme=row_dict.get("color_theme") or "indigo",
+        likes=row_dict.get("likes") or 0,
+        saved_count=row_dict.get("saved_count") or 0,
+        is_liked=bool(row_dict.get("is_liked")),
+        is_saved=bool(row_dict.get("is_saved")),
+        leitner_box=row_dict.get("leitner_box") or 1,
+        next_review_date=row_dict.get("next_review_date"),
+        last_reviewed_date=row_dict.get("last_reviewed_date"),
+        created_at=row_dict["created_at"],
+        dilemma_cache=row_dict.get("dilemma_cache")
     )
 
 # --- Leitner Spaced Repetition Engine ---
@@ -571,7 +619,7 @@ def get_due_leitner_ideas(limit: int = 20) -> List[Idea]:
     conn.close()
     return ideas
 
-def record_leitner_review(idea_id: str, grade: str) -> Optional[Idea]:
+def record_leitner_review(idea_id: str, grade: Any) -> Optional[Idea]:
     """
     Grades an active recall review and schedules the next review date using Leitner intervals:
     Box 1: 1 day, Box 2: 3 days, Box 3: 7 days, Box 4: 14 days, Box 5: 30 days.
@@ -601,7 +649,6 @@ def record_leitner_review(idea_id: str, grade: str) -> Optional[Idea]:
         new_box = min(5, current_box + 1)
         days_ahead = intervals.get(new_box, 3)
 
-    from datetime import timedelta
     next_review = (today + timedelta(days=days_ahead)).isoformat()
 
     cursor.execute("""
@@ -610,7 +657,6 @@ def record_leitner_review(idea_id: str, grade: str) -> Optional[Idea]:
         WHERE id = ?
     """, (new_box, next_review, today_iso, idea_id))
 
-    # Update daily streak & cards reviewed count
     cursor.execute("""
         UPDATE user_progress
         SET ideas_read_count = ideas_read_count + 1,
@@ -628,3 +674,245 @@ def update_idea_dilemma(idea_id: str, dilemma_json: str):
     cursor.execute("UPDATE ideas SET dilemma_cache = ? WHERE id = ?", (dilemma_json, idea_id))
     conn.commit()
     conn.close()
+
+# --- Universal Global Book & Idea Cache ---
+
+def find_scanned_book(query: str) -> Optional[Dict[str, Any]]:
+    """
+    Finds a globally scanned book matching the query using multiple fuzzy/normalized strategies:
+    1. Direct canonical slug match (e.g. 'atomic-habits')
+    2. Normalized title match (e.g. 'atomichabits')
+    3. Case-insensitive exact or prefix match on title
+    4. Substring containment in normalized title or query
+    5. Direct fallback lookup in ideas table and auto-registration
+    """
+    if not query or not query.strip():
+        return None
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    clean_q = query.strip()
+    norm_q = normalize_book_title(clean_q)
+    slug_q = slugify(clean_q)
+
+    # 1. Exact slug match
+    cursor.execute("SELECT * FROM books WHERE id = ?", (slug_q,))
+    row = cursor.fetchone()
+    if row:
+        conn.close()
+        return dict(row)
+
+    # 2. Normalized title match
+    if norm_q:
+        cursor.execute("SELECT * FROM books WHERE normalized_title = ?", (norm_q,))
+        row = cursor.fetchone()
+        if row:
+            conn.close()
+            return dict(row)
+
+    # 3. Case-insensitive exact title
+    cursor.execute("SELECT * FROM books WHERE LOWER(title) = LOWER(?)", (clean_q,))
+    row = cursor.fetchone()
+    if row:
+        conn.close()
+        return dict(row)
+
+    # 4. Normalized containment
+    if norm_q and len(norm_q) >= 4:
+        cursor.execute("""
+            SELECT * FROM books 
+            WHERE normalized_title LIKE ? 
+               OR ? LIKE '%' || normalized_title || '%'
+            ORDER BY ideas_count DESC
+            LIMIT 1
+        """, (f"%{norm_q}%", norm_q))
+        row = cursor.fetchone()
+        if row:
+            conn.close()
+            return dict(row)
+
+    # 5. Fallback check directly in ideas table
+    cursor.execute("""
+        SELECT source, author, topic, COUNT(*) as cnt 
+        FROM ideas 
+        WHERE LOWER(source) = LOWER(?) OR LOWER(source) LIKE ?
+        GROUP BY source
+        ORDER BY cnt DESC
+        LIMIT 1
+    """, (clean_q, f"%{clean_q.lower()}%"))
+    idea_match = cursor.fetchone()
+    if idea_match:
+        src = idea_match["source"]
+        auth = idea_match["author"] or "Curated Thinker"
+        top = idea_match["topic"] or "Mental Models"
+        cnt = idea_match["cnt"]
+        b_slug = slugify(src)
+        b_norm = normalize_book_title(src)
+
+        cursor.execute("""
+            INSERT OR IGNORE INTO books (id, title, normalized_title, author, topic, ideas_count, scanned_by_user, scanned_at, scan_status)
+            VALUES (?, ?, ?, ?, ?, ?, 'community', ?, 'completed')
+        """, (b_slug, src, b_norm, auth, top, cnt, datetime.utcnow().isoformat()))
+        conn.commit()
+
+        cursor.execute("SELECT * FROM books WHERE id = ?", (b_slug,))
+        new_row = cursor.fetchone()
+        conn.close()
+        return dict(new_row) if new_row else None
+
+    conn.close()
+    return None
+
+def get_book_ideas(source_slug: str, source_title: str = "") -> List[Idea]:
+    """
+    Returns all pre-decomposed idea cards for a given book slug or title.
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT * FROM ideas 
+        WHERE source_slug = ? 
+           OR (LOWER(source) = LOWER(?) AND ? != '')
+        ORDER BY created_at ASC
+    """, (source_slug, source_title, source_title))
+    rows = cursor.fetchall()
+    ideas = [row_to_idea(r) for r in rows]
+    conn.close()
+    return ideas
+
+def register_scanned_book(
+    title: str,
+    author: str,
+    description: str = "",
+    topic: str = "Mental Models",
+    ideas_list: List[Dict[str, Any]] = None,
+    scanned_by: str = "community",
+    cover_url: Optional[str] = None
+) -> Dict[str, Any]:
+    """
+    Registers a newly scanned book into the Global Knowledge Base.
+    Saves all generated cards in `ideas` stamped with `source_slug`,
+    creates or finds a canonical public Stash for the book,
+    and indexes the book in `books` so no user ever needs to scan it again.
+    """
+    if not title or not title.strip():
+        raise ValueError("Book title is required")
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    clean_title = title.strip()
+    slug = slugify(clean_title)
+    norm = normalize_book_title(clean_title)
+    clean_author = author.strip() if author else "Curated Thinker"
+    now_iso = datetime.utcnow().isoformat()
+    ideas_list = ideas_list or []
+
+    # 1. Check if book already exists in books table
+    cursor.execute("SELECT * FROM books WHERE id = ? OR normalized_title = ?", (slug, norm))
+    existing_book = cursor.fetchone()
+
+    if existing_book:
+        book_id = existing_book["id"]
+    else:
+        book_id = slug
+        cursor.execute("""
+            INSERT INTO books (id, title, normalized_title, author, description, cover_url, topic, ideas_count, scanned_by_user, scanned_at, scan_status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'completed')
+        """, (book_id, clean_title, norm, clean_author, description, cover_url, topic, len(ideas_list), scanned_by, now_iso))
+        conn.commit()
+
+    conn.close()
+
+    # 2. Find or create public book stash
+    stashes = get_stashes()
+    stash_title = f"{clean_title} — Complete Book"
+    matching_stash = next((s for s in stashes if s.title.lower() == stash_title.lower() or s.id == f"stash_{slug}"), None)
+
+    if not matching_stash:
+        stash = create_stash(
+            title=stash_title,
+            description=f"Complete microlearning collection of all core mental models and ideas from '{clean_title}' by {clean_author}.",
+            icon="book-open",
+            color="indigo"
+        )
+        stash_id = stash.id
+    else:
+        stash_id = matching_stash.id
+
+    # 3. Save any ideas that aren't already saved
+    created_or_found_ideas = []
+    for item in ideas_list:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT id FROM ideas 
+            WHERE LOWER(title) = LOWER(?) AND (source_slug = ? OR LOWER(source) = LOWER(?))
+        """, (item["title"], slug, clean_title))
+        existing_idea = cursor.fetchone()
+        conn.close()
+
+        if existing_idea:
+            idea = get_idea_by_id(existing_idea["id"])
+        else:
+            item_data = dict(item)
+            item_data["source"] = clean_title
+            item_data["author"] = clean_author
+            item_data["source_slug"] = slug
+            if not item_data.get("topic"):
+                item_data["topic"] = topic
+            idea = create_idea(item_data)
+
+        if idea:
+            add_idea_to_stash(stash_id, idea.id)
+            created_or_found_ideas.append(idea)
+
+    # 4. Update count in books table
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE books SET ideas_count = ? WHERE id = ?", (len(created_or_found_ideas), book_id))
+    conn.commit()
+
+    cursor.execute("SELECT * FROM books WHERE id = ?", (book_id,))
+    final_book = dict(cursor.fetchone())
+    conn.close()
+
+    return {
+        "book": final_book,
+        "stash_id": stash_id,
+        "ideas": created_or_found_ideas,
+        "count": len(created_or_found_ideas)
+    }
+
+def list_scanned_books(topic: Optional[str] = None, search: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Returns all globally scanned and indexed books in the community library."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    query = "SELECT * FROM books WHERE 1=1"
+    params = []
+
+    if topic and topic.lower() != "all":
+        query += " AND LOWER(topic) = LOWER(?)"
+        params.append(topic)
+
+    if search:
+        search_pattern = f"%{search.lower()}%"
+        query += " AND (LOWER(title) LIKE ? OR LOWER(author) LIKE ? OR LOWER(description) LIKE ?)"
+        params.extend([search_pattern] * 3)
+
+    query += " ORDER BY ideas_count DESC, scanned_at DESC"
+    cursor.execute(query, params)
+    rows = cursor.fetchall()
+    books = [dict(r) for r in rows]
+    conn.close()
+    return books
+
+def get_book_by_slug(slug_or_id: str) -> Optional[Dict[str, Any]]:
+    """Retrieves a single scanned book along with its idea count."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM books WHERE id = ? OR normalized_title = ?", (slug_or_id, normalize_book_title(slug_or_id)))
+    row = cursor.fetchone()
+    conn.close()
+    return dict(row) if row else None

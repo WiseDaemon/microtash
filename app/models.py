@@ -13,6 +13,7 @@ class IdeaBase(BaseModel):
     action_item: Optional[str] = Field(None, description="Practical 'Try it today' action step")
     author: str = Field(..., description="Original thinker, author, or speaker")
     source: str = Field(..., description="Book title, article, or podcast name")
+    source_slug: Optional[str] = Field(None, description="Canonical slug of the source book/work")
     topic: str = Field("Mental Models", description="Primary category/topic")
     tags: List[str] = Field(default_factory=list, description="Sub-topics or keywords")
     read_time_mins: int = Field(1, description="Estimated microlearning read time in minutes")
@@ -50,6 +51,23 @@ class Stash(StashBase):
     created_at: str
     idea_ids: List[str] = Field(default_factory=list)
     ideas_count: int = 0
+
+class Book(BaseModel):
+    id: str = Field(..., description="Canonical slug e.g. atomic-habits")
+    title: str
+    normalized_title: str
+    author: str
+    description: Optional[str] = None
+    cover_url: Optional[str] = None
+    topic: Optional[str] = "Mental Models"
+    ideas_count: int = 0
+    scanned_by_user: Optional[str] = "community"
+    scanned_at: str
+    scan_status: str = "completed"
+
+class BookDetail(Book):
+    ideas: List[Idea] = Field(default_factory=list)
+    stash_id: Optional[str] = None
 
 class ExtractionRequest(BaseModel):
     input_text: str = Field(..., description="Text, article excerpt, transcript, or topic to summarize")

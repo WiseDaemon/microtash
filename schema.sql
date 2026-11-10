@@ -1,6 +1,6 @@
 -- ============================================================================
 -- MICROSTASH DATABASE SCHEMA SPECIFICATION
--- Applicable schema for Microlearning Idea Cards, Metadata, Stashes & Leitner Spaced Repetition
+-- Applicable schema for Microlearning Idea Cards, Metadata, Stashes, Global Book Cache & Leitner Spaced Repetition
 -- Compatible with SQLite 3.35+, PostgreSQL 12+, and Supabase
 -- ============================================================================
 
@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS ideas (
     action_item TEXT,                               -- Actionable rule or asymmetric behavior change
     author TEXT NOT NULL,                           -- Thinker / Creator / Author name
     source TEXT NOT NULL,                           -- Book title, paper, or foundational origin
+    source_slug TEXT,                               -- Canonical normalized book slug (e.g. 'atomic-habits')
     topic TEXT NOT NULL,                            -- Category (e.g. Mental Models, Productivity, Stoicism)
     tags TEXT NOT NULL,                             -- JSON array of keyword tags: '["learning", "cognition"]'
     read_time_mins INTEGER DEFAULT 1,               -- Estimated reading time in minutes
@@ -28,6 +29,7 @@ CREATE TABLE IF NOT EXISTS ideas (
     leitner_box INTEGER DEFAULT 1,                  -- Spaced repetition level (1: 1d, 2: 3d, 3: 7d, 4: 14d, 5: 30d)
     next_review_date TEXT,                          -- ISO 8601 date (YYYY-MM-DD) for next active recall session
     last_reviewed_date TEXT,                      -- ISO 8601 date (YYYY-MM-DD) of last review
+    dilemma_cache TEXT,                             -- Pre-computed Socratic dilemmas JSON
     created_at TEXT NOT NULL                        -- ISO 8601 creation timestamp
 );
 
@@ -35,6 +37,7 @@ CREATE TABLE IF NOT EXISTS ideas (
 CREATE INDEX IF NOT EXISTS idx_ideas_topic ON ideas(topic);
 CREATE INDEX IF NOT EXISTS idx_ideas_leitner ON ideas(next_review_date, leitner_box);
 CREATE INDEX IF NOT EXISTS idx_ideas_created ON ideas(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_ideas_source_slug ON ideas(source_slug);
 
 
 -- 2. STASHES (Curated Idea Decks & Thematic Stashes)
@@ -80,3 +83,22 @@ CREATE TABLE IF NOT EXISTS read_history (
 );
 
 CREATE INDEX IF NOT EXISTS idx_read_history_date ON read_history(read_date);
+
+
+-- 6. BOOKS (Canonical Global Scanned Books & Shared Universal Cache)
+-- When ANY user requests a book, its decomposed cards are persisted here globally for ALL users.
+CREATE TABLE IF NOT EXISTS books (
+    id TEXT PRIMARY KEY,                             -- Normalized slug, e.g. 'atomic-habits'
+    title TEXT NOT NULL,                             -- Canonical title, e.g. 'Atomic Habits'
+    normalized_title TEXT NOT NULL UNIQUE,           -- Search key (lowercase, no punctuation): 'atomichabits'
+    author TEXT NOT NULL,                            -- e.g. 'James Clear'
+    description TEXT,                                -- Book overview / thesis summary
+    cover_url TEXT,                                  -- Book cover art / thumbnail
+    topic TEXT DEFAULT 'Productivity',               -- Primary category
+    ideas_count INTEGER DEFAULT 0,                   -- Number of decomposed cards
+    scanned_by_user TEXT DEFAULT 'community',        -- Original requester
+    scanned_at TEXT NOT NULL,                        -- ISO 8601 timestamp
+    scan_status TEXT DEFAULT 'completed'             -- 'completed', 'scanning', 'failed'
+);
+
+CREATE INDEX IF NOT EXISTS idx_books_norm_title ON books(normalized_title);

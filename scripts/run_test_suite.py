@@ -1,7 +1,7 @@
 """
 Comprehensive Automated Test Suite for Microstash
 Tests Database, FastAPI Routes, AI Socratic Stress-Test, Leitner Spaced Repetition,
-Compliance Endpoints, Static Files, and Flutter Assets.
+Compliance Endpoints, Static Files, Flutter Assets, and Universal Global Book Cache.
 """
 import sys
 import os
@@ -19,16 +19,18 @@ from app.config import settings
 client = TestClient(app)
 
 def test_database_and_seed():
-    print("[1/7] Testing database initialization & seed...")
+    print("[1/8] Testing database initialization & seed...")
     database.init_db()
     ideas = database.get_ideas()
     assert len(ideas) >= 15, f"Expected at least 15 seeded ideas, got {len(ideas)}"
     stashes = database.get_stashes()
     assert len(stashes) >= 4, f"Expected at least 4 seeded stashes, got {len(stashes)}"
-    print(f"      [OK] Database seeded with {len(ideas)} mental models and {len(stashes)} stashes.")
+    books = database.list_scanned_books()
+    assert len(books) >= 5, f"Expected at least 5 registered books in global library, got {len(books)}"
+    print(f"      [OK] Database seeded with {len(ideas)} mental models, {len(stashes)} stashes, and {len(books)} global books.")
 
 def test_core_web_routes():
-    print("[2/7] Testing web routes & branding...")
+    print("[2/8] Testing web routes & branding...")
     # Home Page
     res = client.get("/")
     assert res.status_code == 200, f"Expected 200 on /, got {res.status_code}"
@@ -49,7 +51,7 @@ def test_core_web_routes():
     print("      [OK] Google Play mandatory /privacy and /terms pages verified.")
 
 def test_ideas_api():
-    print("[3/7] Testing Ideas API...")
+    print("[3/8] Testing Ideas API...")
     res = client.get("/api/ideas")
     assert res.status_code == 200
     data = res.json()
@@ -77,7 +79,7 @@ def test_ideas_api():
     print(f"      [OK] Ideas API, filtering, likes, saves, and read history operational.")
 
 def test_socratic_stress_test():
-    print("[4/7] Testing Socratic Stress-Test AI endpoint...")
+    print("[4/8] Testing Socratic Stress-Test AI endpoint...")
     ideas = database.get_ideas()
     test_idea = ideas[0]
     
@@ -97,7 +99,7 @@ def test_socratic_stress_test():
     print(f"           - Options count: {len(st['options'])}")
 
 def test_leitner_spaced_repetition():
-    print("[5/7] Testing Leitner Spaced Repetition engine...")
+    print("[5/8] Testing Leitner Spaced Repetition engine...")
     ideas = database.get_ideas()
     test_idea = ideas[0]
     
@@ -126,21 +128,19 @@ def test_leitner_spaced_repetition():
     print(f"      [OK] Leitner review progression (Box 1 -> Box 2 -> Box 4) and intervals verified.")
 
 def test_compliance_and_static_assets():
-    print("[6/7] Testing static assets & Google Play compliance endpoints...")
-    # Static CSS & JS
+    print("[6/8] Testing static assets & Google Play compliance endpoints...")
     for asset in ["/static/css/style.css", "/static/js/app.js", "/static/js/audio.js", "/static/js/share.js", "/static/js/swipe.js"]:
         res_asset = client.get(asset)
         assert res_asset.status_code == 200, f"Static asset {asset} failed with {res_asset.status_code}"
     print("      [OK] All CSS, swipe engine, audio, and share static assets returned 200.")
 
-    # Account Deletion Compliance Endpoint
     res_del = client.post("/api/user/delete-account")
     assert res_del.status_code == 200
     assert res_del.json()["status"] == "ok"
     print("      [OK] Google Play mandatory account/data purge endpoint (/api/user/delete-account) verified.")
 
 def test_flutter_scaffold():
-    print("[7/7] Testing Flutter Android project files...")
+    print("[7/8] Testing Flutter Android project files...")
     flutter_dir = PROJECT_DIR / "flutter_app"
     assert (flutter_dir / "pubspec.yaml").exists(), "pubspec.yaml missing"
     assert (flutter_dir / "android" / "app" / "src" / "main" / "AndroidManifest.xml").exists(), "AndroidManifest.xml missing"
@@ -151,11 +151,75 @@ def test_flutter_scaffold():
     assert (flutter_dir / "lib" / "screens" / "workout_screen.dart").exists(), "workout_screen.dart missing"
     assert (flutter_dir / "lib" / "screens" / "stress_test_screen.dart").exists(), "stress_test_screen.dart missing"
     
-    # Check Android Manifest contains share target intent filter
     manifest_text = (flutter_dir / "android" / "app" / "src" / "main" / "AndroidManifest.xml").read_text(encoding="utf-8")
     assert "android.intent.action.SEND" in manifest_text, "Share target SEND action missing from AndroidManifest"
     assert "FOREGROUND_SERVICE_MEDIA_PLAYBACK" in manifest_text, "Audio playback permission missing"
     print("      [OK] Flutter Android mobile client verified (Material 3, Share target, Audio service).")
+
+def test_universal_book_cache():
+    print("[8/8] Testing Universal Global Book & Idea Cache (Zero Duplicate Scans)...")
+    
+    # 1. Verify /api/books listing
+    res_books = client.get("/api/books")
+    assert res_books.status_code == 200
+    books = res_books.json()
+    assert len(books) > 0, "Global book registry should not be empty"
+    print(f"      [OK] Found {len(books)} books already available to all users.")
+
+    # 2. Test cached book retrieval: 'Thinking, Fast and Slow'
+    res_cached = client.post("/api/ai/auto-fetch-and-generate", json={"query": "Thinking Fast and Slow"})
+    assert res_cached.status_code == 200
+    data_cached = res_cached.json()
+    assert data_cached.get("cached") is True, "Expected cached=True for existing book"
+    assert data_cached.get("global_library_hit") is True, "Expected global_library_hit=True"
+    assert len(data_cached.get("ideas", [])) > 0, "Expected idea cards in cached response"
+    print(f"      [OK] Instant 0s cache hit for 'Thinking Fast and Slow' (Cards: {len(data_cached['ideas'])}).")
+
+    # 3. Simulate User A scanning a brand new book into the library
+    new_book_title = "Antifragile: Things That Gain from Disorder"
+    sample_cards = [
+        {
+            "title": "Fragile vs Antifragile",
+            "one_liner": "Antifragility goes beyond resilience; it benefits from shocks.",
+            "summary": "Resilience resists shocks and stays the same; the antifragile gets better with volatility.",
+            "detailed_explanation": "Complex systems thrive when exposed to small, non-fatal stressors.",
+            "example": "Bones become denser when subject to resistance training.",
+            "visual_diagram": "graph TD\\n  A[Shock] -->|Fragile| B[Breaks]\\n  A -->|Antifragile| C[Strengthens]",
+            "author": "Nassim Nicholas Taleb",
+            "source": new_book_title,
+            "topic": "Mental Models",
+            "tags": ["Risk", "Decision Making"]
+        }
+    ]
+
+    res_user_a = client.post("/api/ai/save-as-book-stash", json={
+        "book_title": new_book_title,
+        "author": "Nassim Nicholas Taleb",
+        "ideas": sample_cards
+    })
+    assert res_user_a.status_code == 200
+    user_a_stash = res_user_a.json()
+    assert user_a_stash.get("globally_available") is True
+    print(f"      [OK] User A scanned '{new_book_title}' into the global registry.")
+
+    # 4. Simulate User B searching for the book with different punctuation/casing
+    res_user_b = client.post("/api/ai/auto-fetch-and-generate", json={
+        "query": "antifragile things that gain from disorder"
+    })
+    assert res_user_b.status_code == 200
+    data_user_b = res_user_b.json()
+    assert data_user_b.get("cached") is True, "User B should hit global cache (0s scan)"
+    assert data_user_b.get("global_library_hit") is True, "Expected global_library_hit=True for User B"
+    assert len(data_user_b.get("ideas", [])) >= 1, "User B should receive cards generated by User A"
+    print(f"      [OK] User B requested '{new_book_title}' and received instant 0s cache hit without re-scanning!")
+
+    # 5. Direct book lookup via /api/books/{slug}
+    res_book_detail = client.get("/api/books/antifragile")
+    assert res_book_detail.status_code == 200
+    detail = res_book_detail.json()
+    assert detail["title"] == new_book_title or "Antifragile" in detail["title"]
+    assert len(detail["ideas"]) >= 1
+    print(f"      [OK] Universal Library endpoint /api/books/antifragile verified.")
 
 if __name__ == "__main__":
     print("====================================================================")
@@ -169,8 +233,9 @@ if __name__ == "__main__":
         test_leitner_spaced_repetition()
         test_compliance_and_static_assets()
         test_flutter_scaffold()
+        test_universal_book_cache()
         print("====================================================================")
-        print("  [SUCCESS] ALL 7/7 TEST SUITES PASSED FLAWLESSLY! [SUCCESS]")
+        print("  [SUCCESS] ALL 8/8 TEST SUITES PASSED FLAWLESSLY! [SUCCESS]")
         print("====================================================================")
     except Exception as e:
         print(f"\n[ERROR] TEST FAILED: {e}")
