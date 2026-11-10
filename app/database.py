@@ -168,6 +168,12 @@ def init_db():
         today_iso = date.today().isoformat()
         cursor.execute("UPDATE ideas SET next_review_date = ? WHERE next_review_date IS NULL OR next_review_date = ''", (today_iso,))
         cursor.execute("UPDATE ideas SET leitner_box = 1 WHERE leitner_box IS NULL OR leitner_box < 1")
+    try:
+        cursor.execute("ALTER TABLE ideas ADD COLUMN dilemma_cache TEXT;")
+        conn.commit()
+    except Exception:
+        pass
+
         conn.commit()
 
     conn.close()
@@ -543,7 +549,8 @@ def row_to_idea(row) -> Idea:
         leitner_box=dict(row).get("leitner_box") or 1,
         next_review_date=dict(row).get("next_review_date"),
         last_reviewed_date=dict(row).get("last_reviewed_date"),
-        created_at=row["created_at"]
+        created_at=row["created_at"],
+        dilemma_cache=dict(row).get("dilemma_cache")
     )
 
 # --- Leitner Spaced Repetition Engine ---
@@ -614,3 +621,10 @@ def record_leitner_review(idea_id: str, grade: str) -> Optional[Idea]:
     conn.commit()
     conn.close()
     return get_idea_by_id(idea_id)
+
+def update_idea_dilemma(idea_id: str, dilemma_json: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE ideas SET dilemma_cache = ? WHERE id = ?", (dilemma_json, idea_id))
+    conn.commit()
+    conn.close()

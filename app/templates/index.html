@@ -781,6 +781,9 @@
             <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
             <span>Listen</span>
           </button>
+          <button onclick="exportCurrentToObsidian()" class="p-2 rounded-xl text-slate-400 hover:text-purple-400 hover:bg-slate-800 transition" title="Export to Obsidian / Notion (.md)">
+            <i data-lucide="download" class="w-4 h-4"></i>
+          </button>
           <button onclick="copyCurrentDeepDive()" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition" title="Copy complete concept to clipboard">
             <i data-lucide="copy" class="w-4 h-4"></i>
           </button>
@@ -793,6 +796,25 @@
       <!-- Scrollable Modal Body -->
       <div class="p-5 sm:p-7 overflow-y-auto space-y-6 text-slate-200 leading-relaxed scrollbar-thin">
         
+        <!-- Progressive Disclosure Micro-Slide Pager -->
+        <div class="flex items-center space-x-1.5 p-1 bg-slate-800/80 rounded-2xl border border-slate-700/80 mb-5 overflow-x-auto scrollbar-none">
+          <button onclick="switchDeepDiveSlide('mechanism')" id="tab-btn-mechanism" class="flex-1 min-w-[110px] py-1.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 bg-indigo-600 text-white shadow-sm">
+            <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+            <span>1. Mechanism</span>
+          </button>
+          <button onclick="switchDeepDiveSlide('example')" id="tab-btn-example" class="flex-1 min-w-[110px] py-1.5 px-3 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition flex items-center justify-center space-x-1.5">
+            <i data-lucide="briefcase" class="w-3.5 h-3.5"></i>
+            <span>2. Real Case</span>
+          </button>
+          <button onclick="switchDeepDiveSlide('boundary')" id="tab-btn-boundary" class="flex-1 min-w-[110px] py-1.5 px-3 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition flex items-center justify-center space-x-1.5">
+            <i data-lucide="alert-octagon" class="w-3.5 h-3.5"></i>
+            <span>3. Boundary Traps</span>
+          </button>
+          <button onclick="switchDeepDiveSlide('all')" id="tab-btn-all" class="py-1.5 px-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition flex items-center justify-center" title="Show all stacked">
+            <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
         <!-- Attribution & Title -->
         <div>
           <div class="flex items-center space-x-2 text-xs text-slate-400 mb-2">
@@ -809,6 +831,7 @@
           </p>
         </div>
 
+        <div id="slide-sec-mechanism" class="space-y-6">
         <!-- Section 1: Core Concept -->
         <div class="space-y-2">
           <div class="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-indigo-400">
@@ -1194,6 +1217,130 @@
         <button onclick="closeStressTestModal()" class="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition">
           Done
         </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: PERSONALIZED COGNITIVE BLINDSPOT DIAGNOSTIC QUIZ                   -->
+  <!-- ========================================================================= -->
+  <div id="onboarding-quiz-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-slate-900 border border-emerald-500/30 rounded-3xl max-w-xl w-full shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Quiz Header -->
+      <div class="p-5 sm:p-6 bg-gradient-to-r from-slate-900 via-emerald-950/30 to-slate-900 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 shadow-inner">
+            <i data-lucide="target" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-black tracking-wider uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Cognitive Diagnostic</span>
+            <h3 class="text-base sm:text-lg font-bold text-white">Find Your Decision Blindspot</h3>
+          </div>
+        </div>
+        <button onclick="closeOnboardingQuiz()" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Quiz Body: 3 Steps -->
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-5 text-sm">
+        
+        <!-- STEP 1: Primary Decision Friction -->
+        <div id="quiz-step-1" class="space-y-4">
+          <div>
+            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Step 1 of 2</span>
+            <h4 class="text-base font-bold text-white mt-1">What is your biggest decision-making friction right now?</h4>
+            <p class="text-xs text-slate-400">Select the friction you experience most frequently:</p>
+          </div>
+          <div class="space-y-2.5">
+            <button onclick="selectQuizBlindspot('analysis_paralysis')" class="w-full text-left p-3.5 rounded-2xl bg-slate-800/80 hover:bg-slate-750 border border-slate-700/80 hover:border-emerald-500/50 transition flex items-start space-x-3 group">
+              <span class="text-xl">🤯</span>
+              <div>
+                <p class="font-bold text-white text-xs sm:text-sm">Analysis Paralysis & Overthinking</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">Struggling to commit to choices; getting buried in endless research.</p>
+              </div>
+            </button>
+            <button onclick="selectQuizBlindspot('emotional_reactive')" class="w-full text-left p-3.5 rounded-2xl bg-slate-800/80 hover:bg-slate-750 border border-slate-700/80 hover:border-emerald-500/50 transition flex items-start space-x-3 group">
+              <span class="text-xl">⚡</span>
+              <div>
+                <p class="font-bold text-white text-xs sm:text-sm">Emotional & Reactive Impulsivity</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">Responding swiftly to immediate stress; forgetting long-term consequences.</p>
+              </div>
+            </button>
+            <button onclick="selectQuizBlindspot('execution_drag')" class="w-full text-left p-3.5 rounded-2xl bg-slate-800/80 hover:bg-slate-750 border border-slate-700/80 hover:border-emerald-500/50 transition flex items-start space-x-3 group">
+              <span class="text-xl">⏳</span>
+              <div>
+                <p class="font-bold text-white text-xs sm:text-sm">Execution Drag & Procrastination</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">Knowing what to do, but struggling to convert thoughts into daily momentum.</p>
+              </div>
+            </button>
+            <button onclick="selectQuizBlindspot('sunk_cost')" class="w-full text-left p-3.5 rounded-2xl bg-slate-800/80 hover:bg-slate-750 border border-slate-700/80 hover:border-emerald-500/50 transition flex items-start space-x-3 group">
+              <span class="text-xl">⚓</span>
+              <div>
+                <p class="font-bold text-white text-xs sm:text-sm">Sunk Cost & Ego Traps</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">Pouring more time/money into failing projects because of past investments.</p>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2: Operating Context -->
+        <div id="quiz-step-2" class="hidden space-y-4">
+          <div>
+            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Step 2 of 2</span>
+            <h4 class="text-base font-bold text-white mt-1">What is your primary operating battlefield?</h4>
+            <p class="text-xs text-slate-400">Where do you need the highest cognitive leverage?</p>
+          </div>
+          <div class="grid grid-cols-2 gap-2.5">
+            <button onclick="selectQuizContext('startups')" class="p-3.5 rounded-2xl bg-slate-800/80 hover:bg-slate-750 border border-slate-700/80 hover:border-emerald-500/50 text-left transition">
+              <span class="text-lg">🚀</span>
+              <p class="font-bold text-white text-xs mt-1">Founding & Startups</p>
+            </button>
+            <button onclick="selectQuizContext('engineering')" class="p-3.5 rounded-2xl bg-slate-800/80 hover:bg-slate-750 border border-slate-700/80 hover:border-emerald-500/50 text-left transition">
+              <span class="text-lg">💻</span>
+              <p class="font-bold text-white text-xs mt-1">Software & Tech</p>
+            </button>
+            <button onclick="selectQuizContext('investing')" class="p-3.5 rounded-2xl bg-slate-800/80 hover:bg-slate-750 border border-slate-700/80 hover:border-emerald-500/50 text-left transition">
+              <span class="text-lg">📈</span>
+              <p class="font-bold text-white text-xs mt-1">Investing & Capital</p>
+            </button>
+            <button onclick="selectQuizContext('habits')" class="p-3.5 rounded-2xl bg-slate-800/80 hover:bg-slate-750 border border-slate-700/80 hover:border-emerald-500/50 text-left transition">
+              <span class="text-lg">🧘</span>
+              <p class="font-bold text-white text-xs mt-1">Habits & Mindset</p>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Diagnostic Archetype Result -->
+        <div id="quiz-step-result" class="hidden space-y-5 text-center">
+          <div class="w-16 h-16 rounded-3xl bg-emerald-500/20 border border-emerald-500/40 mx-auto flex items-center justify-center text-3xl shadow-lg">
+            🎯
+          </div>
+          <div>
+            <span class="text-[10px] font-black tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Your Thinking Archetype</span>
+            <h3 id="quiz-archetype-title" class="text-xl sm:text-2xl font-black text-white mt-2">The First-Principles Strategist</h3>
+            <p id="quiz-archetype-desc" class="text-xs sm:text-sm text-slate-300 max-w-md mx-auto mt-2 leading-relaxed"></p>
+          </div>
+
+          <!-- Tailored Seed Deck Preview -->
+          <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-4 text-left">
+            <p class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center space-x-1.5">
+              <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+              <span>Your Tailored 3-Card Starter Deck</span>
+            </p>
+            <div id="quiz-recommended-cards" class="space-y-1.5 text-xs text-slate-200">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <button onclick="applyQuizWorkoutAndClose()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-sm tracking-wide shadow-lg transition">
+            🚀 Launch My Cognitive Workout
+          </button>
+        </div>
+
       </div>
 
     </div>

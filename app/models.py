@@ -16,6 +16,7 @@ class IdeaBase(BaseModel):
     topic: str = Field("Mental Models", description="Primary category/topic")
     tags: List[str] = Field(default_factory=list, description="Sub-topics or keywords")
     read_time_mins: int = Field(1, description="Estimated microlearning read time in minutes")
+    dilemma_cache: Optional[str] = Field(None, description="Pre-computed JSON string of Socratic dilemmas")
 
 class IdeaCreate(IdeaBase):
     pass

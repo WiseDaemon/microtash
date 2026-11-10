@@ -2177,3 +2177,185 @@ window.revealLeitnerAnswer = revealLeitnerAnswer;
 window.submitLeitnerGrade = submitLeitnerGrade;
 window.restartLeitnerPractice = restartLeitnerPractice;
 window.setDiagramViewMode = setDiagramViewMode;
+
+// =========================================================================
+// PROGRESSIVE DISCLOSURE SLIDE CONTROLLER (3-SLIDE MICRO-PAGER)
+// =========================================================================
+function switchDeepDiveSlide(slideKey) {
+  const secMechanism = document.getElementById("slide-sec-mechanism");
+  const secExample = document.getElementById("slide-sec-example");
+  const secBoundary = document.getElementById("slide-sec-boundary");
+
+  const btnMechanism = document.getElementById("tab-btn-mechanism");
+  const btnExample = document.getElementById("tab-btn-example");
+  const btnBoundary = document.getElementById("tab-btn-boundary");
+  const btnAll = document.getElementById("tab-btn-all");
+
+  const allBtns = [btnMechanism, btnExample, btnBoundary, btnAll];
+  allBtns.forEach(b => {
+    if (b) {
+      b.classList.remove("bg-indigo-600", "text-white", "shadow-sm");
+      b.classList.add("text-slate-400");
+    }
+  });
+
+  if (slideKey === 'all') {
+    if (secMechanism) secMechanism.classList.remove("hidden");
+    if (secExample) secExample.classList.remove("hidden");
+    if (secBoundary) secBoundary.classList.remove("hidden");
+    if (btnAll) {
+      btnAll.classList.add("bg-indigo-600", "text-white", "shadow-sm");
+      btnAll.classList.remove("text-slate-400");
+    }
+  } else if (slideKey === 'example') {
+    if (secMechanism) secMechanism.classList.add("hidden");
+    if (secExample) secExample.classList.remove("hidden");
+    if (secBoundary) secBoundary.classList.add("hidden");
+    if (btnExample) {
+      btnExample.classList.add("bg-indigo-600", "text-white", "shadow-sm");
+      btnExample.classList.remove("text-slate-400");
+    }
+  } else if (slideKey === 'boundary') {
+    if (secMechanism) secMechanism.classList.add("hidden");
+    if (secExample) secExample.classList.add("hidden");
+    if (secBoundary) secBoundary.classList.remove("hidden");
+    if (btnBoundary) {
+      btnBoundary.classList.add("bg-indigo-600", "text-white", "shadow-sm");
+      btnBoundary.classList.remove("text-slate-400");
+    }
+  } else {
+    // Default: mechanism
+    if (secMechanism) secMechanism.classList.remove("hidden");
+    if (secExample) secExample.classList.add("hidden");
+    if (secBoundary) secBoundary.classList.add("hidden");
+    if (btnMechanism) {
+      btnMechanism.classList.add("bg-indigo-600", "text-white", "shadow-sm");
+      btnMechanism.classList.remove("text-slate-400");
+    }
+  }
+}
+
+// =========================================================================
+// SECOND BRAIN EXPORTER (OBSIDIAN / NOTION MARKDOWN EXPORT)
+// =========================================================================
+async function exportCurrentToObsidian() {
+  if (!currentDeepDiveIdea || !currentDeepDiveIdea.id) return;
+  try {
+    const res = await fetch(`/api/ideas/${currentDeepDiveIdea.id}/export-markdown`);
+    if (!res.ok) throw new Error("Export failed");
+    const data = await res.json();
+    
+    // Copy to clipboard
+    await navigator.clipboard.writeText(data.markdown);
+    
+    // Provide visual feedback
+    const toast = document.createElement("div");
+    toast.className = "fixed bottom-8 right-8 z-50 px-4 py-3 rounded-2xl bg-purple-600 text-white font-bold text-xs shadow-2xl flex items-center space-x-2 animate-bounce";
+    toast.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i><span>Copied Obsidian / Notion Markdown!</span>`;
+    document.body.appendChild(toast);
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+    setTimeout(() => toast.remove(), 2500);
+  } catch (err) {
+    console.error("Markdown export error:", err);
+    alert("Could not export markdown. Copied standard text instead.");
+  }
+}
+
+// =========================================================================
+// COGNITIVE BLINDSPOT DIAGNOSTIC CONTROLLER
+// =========================================================================
+let userQuizProfile = {
+  blindspot: null,
+  context: null
+};
+
+function openOnboardingQuiz() {
+  const modal = document.getElementById("onboarding-quiz-modal");
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  document.getElementById("quiz-step-1").classList.remove("hidden");
+  document.getElementById("quiz-step-2").classList.add("hidden");
+  document.getElementById("quiz-step-result").classList.add("hidden");
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function closeOnboardingQuiz() {
+  const modal = document.getElementById("onboarding-quiz-modal");
+  if (modal) modal.classList.add("hidden");
+}
+
+function selectQuizBlindspot(type) {
+  userQuizProfile.blindspot = type;
+  document.getElementById("quiz-step-1").classList.add("hidden");
+  document.getElementById("quiz-step-2").classList.remove("hidden");
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function selectQuizContext(ctx) {
+  userQuizProfile.context = ctx;
+  document.getElementById("quiz-step-2").classList.add("hidden");
+  const resultStep = document.getElementById("quiz-step-result");
+  resultStep.classList.remove("hidden");
+
+  // Determine Archetype
+  let title = "The First-Principles Strategist";
+  let desc = "You thrive on deep logic but face decision friction when uncertainty clouds the horizon. Your tailored starter workout trains you to invert problems and isolate immutable constraints.";
+  let cards = [
+    { title: "First-Principles Thinking", topic: "Mental Models" },
+    { title: "The Inversion Principle", topic: "Strategy" },
+    { title: "Second-Order Thinking", topic: "Systems" }
+  ];
+
+  if (userQuizProfile.blindspot === "emotional_reactive") {
+    title = "The Stoic Sovereign";
+    desc = "You operate with intense passion and energy, but high-stress volatility can trigger first-order emotional reactions. Your starter workout focuses on radical emotional armor and asymmetric defense.";
+    cards = [
+      { title: "The Dichotomy of Control", topic: "Stoicism" },
+      { title: "The Obstacle is the Way", topic: "Stoicism" },
+      { title: "System 1 vs System 2 Thinking", topic: "Psychology" }
+    ];
+  } else if (userQuizProfile.blindspot === "execution_drag") {
+    title = "The Kinetic Executor";
+    desc = "You conceptualize brilliant plans, but daily friction drains execution velocity. Your starter workout wires rapid action habits and attention residue shields into your muscle memory.";
+    cards = [
+      { title: "The Two-Minute Rule", topic: "Productivity" },
+      { title: "Identity-Based Habits", topic: "Habits" },
+      { title: "Attention Residue", topic: "Focus" }
+    ];
+  } else if (userQuizProfile.blindspot === "sunk_cost") {
+    title = "The Asymmetric Antifragile";
+    desc = "You push hard into ambitious bets, but sometimes hold on to declining assets too long. Your starter workout trains strict alignment and skin in the game filters.";
+    cards = [
+      { title: "Skin in the Game", topic: "Governance" },
+      { title: "Loss Aversion & Sunk Cost", topic: "Psychology" },
+      { title: "The Circle of Competence", topic: "Investing" }
+    ];
+  }
+
+  document.getElementById("quiz-archetype-title").textContent = title;
+  document.getElementById("quiz-archetype-desc").textContent = desc;
+
+  const cardsContainer = document.getElementById("quiz-recommended-cards");
+  cardsContainer.innerHTML = cards.map(c => `
+    <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-700/60 flex items-center justify-between">
+      <span class="font-bold text-white text-xs">${c.title}</span>
+      <span class="text-[10px] uppercase font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">${c.topic}</span>
+    </div>
+  `).join("");
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function applyQuizWorkoutAndClose() {
+  closeOnboardingQuiz();
+  // Filter by daily workout
+  filterByTopic('leitner-workout');
+}
+
+window.switchDeepDiveSlide = switchDeepDiveSlide;
+window.exportCurrentToObsidian = exportCurrentToObsidian;
+window.openOnboardingQuiz = openOnboardingQuiz;
+window.closeOnboardingQuiz = closeOnboardingQuiz;
+window.selectQuizBlindspot = selectQuizBlindspot;
+window.selectQuizContext = selectQuizContext;
+window.applyQuizWorkoutAndClose = applyQuizWorkoutAndClose;

@@ -85,3 +85,77 @@ def get_or_generate_deep_dive(idea_id: str, force: bool = Query(False, descripti
             return updated
 
     return idea
+
+
+@router.get("/{idea_id}/export-markdown")
+def export_idea_markdown(idea_id: str):
+    """
+    Exports a single mental model in Obsidian/Notion compatible Markdown,
+    complete with YAML frontmatter, Mermaid diagram blocks, and callout quotes.
+    """
+    idea = database.get_idea_by_id(idea_id)
+    if not idea:
+        raise HTTPException(status_code=404, detail="Idea not found")
+
+    tag_str = ", ".join([f'"{t}"' for t in idea.tags]) if idea.tags else f'"{idea.topic}"'
+    
+    md = f"""---
+title: "{idea.title}"
+author: "{idea.author}"
+source: "{idea.source}"
+topic: "{idea.topic}"
+tags: [{tag_str}]
+leitner_box: {idea.leitner_box}
+created_at: "{idea.created_at}"
+type: "mental-model"
+---
+
+# {idea.title}
+
+> [!QUOTE] Core Intuition
+> **"{idea.one_liner}"** — *{idea.author}* ({idea.source})
+
+## 📌 Summary
+{idea.summary}
+
+## ⚙️ Core Mechanism & First Principles
+{idea.detailed_explanation or "Deconstruct problems into their foundational components."}
+
+## 📊 Visual System Architecture
+```mermaid
+{idea.visual_diagram or "graph TD\n  Input --> Process --> Output"}
+```
+
+## 🏢 Real-World Case Study
+{idea.example or "In high-stakes operational environments, teams implementing this principle preserved asymmetric upside."}
+
+## ⚡ Try It Today (Action Item)
+> [!TIP] Actionable Heuristic
+> {idea.action_item or "Identify one high-friction decision today and filter it through this framework."}
+"""
+    return {"status": "ok", "idea_id": idea.id, "filename": f"{idea.id}.md", "markdown": md}
+
+
+@router.get("/export/markdown-vault")
+def export_all_markdown_vault():
+    """
+    Exports all mental models as a concatenated Obsidian vault Markdown file.
+    """
+    ideas = database.get_ideas()
+    vault_md = "# Microstash — Personal Mental Model Vault\n\n"
+    vault_md += f"Exported: {len(ideas)} high-leverage frameworks and decision models.\n\n---\n\n"
+
+    for idea in ideas:
+        vault_md += f"## {idea.title}\n"
+        vault_md += f"**Thinker:** {idea.author} | **Source:** *{idea.source}* | **Topic:** `{idea.topic}`\n\n"
+        vault_md += f"> \"{idea.one_liner}\"\n\n"
+        vault_md += f"### Mechanism\n{idea.summary}\n\n"
+        if idea.visual_diagram:
+            vault_md += f"```mermaid\n{idea.visual_diagram}\n```\n\n"
+        if idea.example:
+            vault_md += f"### Case Study\n{idea.example}\n\n"
+        if idea.action_item:
+            vault_md += f"**Action Rule:** {idea.action_item}\n\n"
+        vault_md += "---\n\n"
+
+    return {"status": "ok", "total_count": len(ideas), "markdown": vault_md}

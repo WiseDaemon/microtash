@@ -146,13 +146,32 @@ def save_as_book_stash(payload: SaveAsBookStashRequest):
 @router.get("/stress-test/{idea_id}")
 def get_socratic_stress_test(idea_id: str):
     """
-    Synthesizes a realistic high-stakes scenario dilemma that tests the user's ability
+    Returns a realistic high-stakes scenario dilemma that tests the user's ability
     to correctly apply this specific mental model in real life.
+    Uses pre-cached instant dilemmas (<10ms) with dynamic AI fallback.
     """
+    import json
     idea = database.get_idea_by_id(idea_id)
     if not idea:
         raise HTTPException(status_code=404, detail="Idea card not found")
 
+    # 1. Check pre-cached dilemma bank for instant response
+    if getattr(idea, "dilemma_cache", None):
+        try:
+            cached = json.loads(idea.dilemma_cache)
+            if isinstance(cached, dict) and "scenario" in cached:
+                return {
+                    "status": "ok",
+                    "idea_id": idea.id,
+                    "idea_title": idea.title,
+                    "author": idea.author,
+                    "stress_test": cached,
+                    "cached": True
+                }
+        except Exception:
+            pass
+
+    # 2. Dynamic synthesis fallback
     from app.ai_service import generate_socratic_stress_test
     dilemma = generate_socratic_stress_test(
         title=idea.title,
@@ -161,10 +180,17 @@ def get_socratic_stress_test(idea_id: str):
         author=idea.author
     )
 
+    # Cache for future calls
+    try:
+        database.update_idea_dilemma(idea.id, json.dumps(dilemma))
+    except Exception:
+        pass
+
     return {
         "status": "ok",
         "idea_id": idea.id,
         "idea_title": idea.title,
         "author": idea.author,
-        "stress_test": dilemma
+        "stress_test": dilemma,
+        "cached": False
     }
