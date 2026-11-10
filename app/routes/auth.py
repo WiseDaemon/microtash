@@ -65,7 +65,12 @@ def login_user(payload: UserLoginRequest, response: Response):
     """
     Authenticates user with username or email, issues a JWT token, and registers an active session.
     """
-    login_id = payload.login.strip().lower()
+    login_id = (payload.login or payload.username_or_email or "").strip().lower()
+    if not login_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Username or email is required."
+        )
     user = database.get_user_by_email_or_username(login_id)
     if not user:
         raise HTTPException(

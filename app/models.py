@@ -100,7 +100,8 @@ class UserRegisterRequest(BaseModel):
     full_name: Optional[str] = Field("", description="Display name")
 
 class UserLoginRequest(BaseModel):
-    login: str = Field(..., description="Email address or username")
+    login: Optional[str] = Field(None, description="Email address or username")
+    username_or_email: Optional[str] = Field(None, description="Alternative key for login")
     password: str = Field(..., description="User password")
 
 class UserResponse(BaseModel):

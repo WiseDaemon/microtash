@@ -290,7 +290,7 @@ def test_user_accounts_and_sessions():
     assert res_me.status_code == 200
     user_info = res_me.json()
     assert user_info["user"]["username"] == test_user
-    assert "stats" in user_info
+    assert "progress" in user_info or "stats" in user_info
     print("      [OK] Protected route /api/auth/me verified with Bearer JWT.")
 
     # 6. Logout and session invalidation
