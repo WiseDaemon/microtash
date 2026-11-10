@@ -104,6 +104,14 @@
         </div>
 
         <div class="flex items-center gap-2">
+          <!-- User Auth / Profile Pill -->
+          <div id="auth-header-btn-container">
+            <button onclick="openAuthModal()" id="btn-header-login" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/20 border border-primary/40 text-xs font-bold text-primary hover:bg-primary/30 transition shadow-sm">
+              <span class="material-symbols-outlined text-[16px]">person</span>
+              <span id="header-user-label">Sign In</span>
+            </button>
+          </div>
+
           <!-- Blindspot Quiz Pill -->
           <button onclick="openOnboardingQuiz()" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high/80 border border-primary/40 text-xs font-bold text-primary hover:bg-primary/20 transition shadow-sm">
             <span class="material-symbols-outlined text-[16px]">target</span>
@@ -849,7 +857,109 @@
     </div>
   </div>
 
+  <!-- USER AUTHENTICATION & PROFILE MODAL -->
+  <div id="auth-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-surface-container border border-outline-variant/60 rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant hover:text-white transition">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+
+      <!-- VIEW 1: AUTH TABS (SIGN IN / CREATE ACCOUNT) -->
+      <div id="auth-view-tabs" class="space-y-4">
+        <!-- Tab Selectors -->
+        <div class="flex items-center gap-2 p-1 bg-surface-container-highest rounded-2xl">
+          <button id="auth-tab-login-btn" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-headline font-bold rounded-xl transition bg-primary text-surface-container-lowest">
+            Sign In
+          </button>
+          <button id="auth-tab-register-btn" onclick="switchAuthTab('register')" class="flex-1 py-2 text-xs font-headline font-bold rounded-xl text-on-surface-variant hover:text-white transition">
+            Create Account
+          </button>
+        </div>
+
+        <!-- Feedback Alert -->
+        <div id="auth-alert" class="hidden p-3 rounded-xl text-xs font-medium border"></div>
+
+        <!-- LOGIN FORM -->
+        <form id="form-auth-login" onsubmit="handleAuthLogin(event)" class="space-y-3.5">
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Email or Username</label>
+            <input type="text" id="login-identifier" required placeholder="demo@microstash.app or demo" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Password</label>
+            <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary">
+          </div>
+          <button type="submit" id="btn-submit-login" class="w-full py-2.5 mt-2 rounded-xl bg-primary hover:bg-primary-hover text-surface-container-lowest font-headline font-bold text-xs tracking-wide shadow-md transition flex items-center justify-center gap-2">
+            <span>Sign In to Microstash</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </button>
+          <div class="text-center pt-1">
+            <span class="text-[11px] text-on-surface-variant">Default test user: </span>
+            <code class="text-[10px] text-primary bg-primary/10 px-1.5 py-0.5 rounded">demo / demo1234</code>
+          </div>
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form id="form-auth-register" onsubmit="handleAuthRegister(event)" class="hidden space-y-3">
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Full Name</label>
+            <input type="text" id="reg-fullname" placeholder="Alex Rivers" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Username</label>
+            <input type="text" id="reg-username" required placeholder="alex_mind" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Email</label>
+            <input type="email" id="reg-email" required placeholder="alex@domain.com" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Password</label>
+            <input type="password" id="reg-password" required minlength="6" placeholder="At least 6 characters" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary">
+          </div>
+          <button type="submit" id="btn-submit-register" class="w-full py-2.5 mt-2 rounded-xl bg-secondary hover:bg-secondary/90 text-surface-container-lowest font-headline font-bold text-xs tracking-wide shadow-md transition flex items-center justify-center gap-2">
+            <span>Create Free Account</span>
+            <span class="material-symbols-outlined text-[16px]">how_to_reg</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- VIEW 2: LOGGED-IN PROFILE SUMMARY -->
+      <div id="auth-view-profile" class="hidden space-y-5 text-center">
+        <div class="w-16 h-16 rounded-full bg-primary/20 border-2 border-primary mx-auto flex items-center justify-center text-primary text-2xl font-bold font-headline shadow-lg" id="profile-avatar-initials">
+          U
+        </div>
+        <div>
+          <h3 id="profile-fullname" class="text-lg font-headline font-bold text-white">Alex Rivers</h3>
+          <p id="profile-username" class="text-xs text-primary font-mono font-medium">@alex_mind</p>
+          <p id="profile-email" class="text-[11px] text-on-surface-variant mt-0.5">alex@domain.com</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5 text-left">
+          <div class="p-3 rounded-2xl bg-surface-container-high border border-outline-variant/40">
+            <span class="text-[10px] uppercase font-bold text-on-surface-variant">Session Status</span>
+            <p class="text-xs font-bold text-secondary mt-0.5 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+              JWT Authenticated
+            </p>
+          </div>
+          <div class="p-3 rounded-2xl bg-surface-container-high border border-outline-variant/40">
+            <span class="text-[10px] uppercase font-bold text-on-surface-variant">Sync Scope</span>
+            <p class="text-xs font-bold text-tertiary mt-0.5">Universal Multi-User</p>
+          </div>
+        </div>
+
+        <button onclick="handleAuthLogout()" class="w-full py-2.5 rounded-xl bg-error/20 hover:bg-error/30 border border-error/40 text-error font-headline font-bold text-xs tracking-wide transition flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined text-[16px]">logout</span>
+          <span>Sign Out</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Core JavaScript Controllers -->
+  <script src="/static/js/auth.js?v=1.0"></script>
   <script src="/static/js/app.js?v=4.0"></script>
   <script src="/static/js/swipe.js?v=4.0"></script>
   <script src="/static/js/audio.js?v=4.0"></script>

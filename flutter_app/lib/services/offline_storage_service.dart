@@ -8,6 +8,32 @@ class OfflineStorageService {
   static const String _keyBooks = 'microstash_cached_books';
   static const String _keyDueLeitner = 'microstash_cached_due_leitner';
   static const String _keyPendingReviews = 'microstash_pending_reviews';
+  static const String _keyAuthToken = 'microstash_auth_token';
+
+  /// Saves the active user session JWT token
+  static Future<void> saveAuthToken(String token) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_keyAuthToken, token);
+    } catch (_) {}
+  }
+
+  /// Retrieves the active user session JWT token
+  static Future<String?> getAuthToken() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getString(_keyAuthToken);
+    } catch (_) {}
+    return null;
+  }
+
+  /// Clears stored authentication session token
+  static Future<void> clearAuthToken() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_keyAuthToken);
+    } catch (_) {}
+  }
 
   /// Saves ideas list permanently to disk
   static Future<void> saveIdeas(List<Idea> ideas) async {

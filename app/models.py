@@ -89,3 +89,34 @@ class UserProgress(BaseModel):
     doomscroll_mins_saved: int = 0
     stashes_count: int = 0
     favorites_count: int = 0
+
+
+# --- User Accounts & Session Models ---
+
+class UserRegisterRequest(BaseModel):
+    email: str = Field(..., description="Unique email address")
+    username: str = Field(..., description="Unique username identifier")
+    password: str = Field(..., min_length=6, description="Password (min 6 characters)")
+    full_name: Optional[str] = Field("", description="Display name")
+
+class UserLoginRequest(BaseModel):
+    login: str = Field(..., description="Email address or username")
+    password: str = Field(..., description="User password")
+
+class UserResponse(BaseModel):
+    id: str
+    email: str
+    username: str
+    full_name: Optional[str] = ""
+    created_at: str
+    is_active: bool = True
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    expires_at: str
+    user: UserResponse
+
+class UserProfileResponse(BaseModel):
+    user: UserResponse
+    progress: UserProgress

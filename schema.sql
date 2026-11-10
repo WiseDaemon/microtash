@@ -106,3 +106,32 @@ CREATE TABLE IF NOT EXISTS books (
 );
 
 CREATE INDEX IF NOT EXISTS idx_books_norm_title ON books(normalized_title);
+
+
+-- 7. USERS (User Accounts & Secure Credentials)
+CREATE TABLE IF NOT EXISTS users (
+    id TEXT PRIMARY KEY,                             -- Unique UUID (e.g. 'user_a1b2c3d4e5f6')
+    email TEXT NOT NULL UNIQUE,                      -- Lowercase user email
+    username TEXT NOT NULL UNIQUE,                   -- Handle/username
+    password_hash TEXT NOT NULL,                     -- PBKDF2-HMAC-SHA256 (100k rounds)
+    salt TEXT NOT NULL,                              -- Cryptographic random salt
+    full_name TEXT DEFAULT '',                       -- User display name
+    created_at TEXT NOT NULL,                        -- ISO 8601 creation timestamp
+    is_active INTEGER DEFAULT 1,                     -- Account active flag
+    is_verified INTEGER DEFAULT 1                    -- Verification flag
+);
+
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
+
+
+-- 8. USER_SESSIONS (JWT Active Session Registry)
+CREATE TABLE IF NOT EXISTS user_sessions (
+    token TEXT PRIMARY KEY,                          -- Active JWT session token
+    user_id TEXT NOT NULL,                           -- Foreign key to users(id)
+    created_at TEXT NOT NULL,                        -- Session creation timestamp
+    expires_at TEXT NOT NULL,                        -- Session expiration timestamp
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_sessions_user ON user_sessions(user_id);

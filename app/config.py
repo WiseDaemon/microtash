@@ -11,6 +11,11 @@ class Settings:
     HOST: str = os.getenv("HOST", "0.0.0.0")
     PORT: int = int(os.getenv("PORT", "8000"))
     
+    # Authentication & Session Security
+    JWT_SECRET: str = os.getenv("JWT_SECRET", "microstash_vault_jwt_secret_key_2026_super_secure_token")
+    JWT_ALGORITHM: str = "HS256"
+    JWT_EXPIRY_DAYS: int = int(os.getenv("JWT_EXPIRY_DAYS", "30"))
+    
     # API Keys
     NVIDIA_API_KEY: str = os.getenv("NVIDIA_API_KEY", "")
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")

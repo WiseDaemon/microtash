@@ -179,6 +179,32 @@ def init_db():
     );
     """)
 
+    # 7. Users table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id TEXT PRIMARY KEY,
+        email TEXT NOT NULL UNIQUE,
+        username TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL,
+        salt TEXT NOT NULL,
+        full_name TEXT DEFAULT '',
+        created_at TEXT NOT NULL,
+        is_active INTEGER DEFAULT 1,
+        is_verified INTEGER DEFAULT 1
+    );
+    """)
+
+    # 8. User sessions table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS user_sessions (
+        token TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        expires_at TEXT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
+    """)
+
     # Performance & Spaced Repetition Indices
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_ideas_topic ON ideas(topic);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_ideas_leitner ON ideas(next_review_date, leitner_box);")
@@ -187,8 +213,23 @@ def init_db():
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_books_norm_title ON books(normalized_title);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_stash_ideas_stash ON stash_ideas(stash_id);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_stash_ideas_idea ON stash_ideas(idea_id);")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_sessions_user ON user_sessions(user_id);")
 
     conn.commit()
+
+    # Seed default demo account if absent
+    cursor.execute("SELECT id FROM users LIMIT 1")
+    if not cursor.fetchone():
+        from app.auth import hash_password
+        p_hash, salt = hash_password("demo1234")
+        now_str = datetime.utcnow().isoformat()
+        cursor.execute("""
+            INSERT OR IGNORE INTO users (id, email, username, password_hash, salt, full_name, created_at, is_active, is_verified)
+            VALUES ('user_demo', 'demo@microstash.app', 'demo', ?, ?, 'Demo Thinker', ?, 1, 1)
+        """, (p_hash, salt, now_str))
+        conn.commit()
 
     # Initialize progress row if absent
     cursor.execute("SELECT id FROM user_progress WHERE id = 1")
@@ -934,3 +975,103 @@ def get_book_by_slug(slug_or_id: str) -> Optional[Dict[str, Any]]:
     row = cursor.fetchone()
     conn.close()
     return dict(row) if row else None
+
+
+# --- User Accounts & Session Operations ---
+
+def create_user(email: str, username: str, password: str, full_name: str = "") -> Dict[str, Any]:
+    from app.auth import hash_password
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    clean_email = email.strip().lower()
+    clean_username = username.strip().lower()
+    
+    cursor.execute("SELECT id FROM users WHERE LOWER(email) = ? OR LOWER(username) = ?", (clean_email, clean_username))
+    if cursor.fetchone():
+        conn.close()
+        raise ValueError("An account with this email or username already exists.")
+        
+    user_id = f"user_{uuid.uuid4().hex[:12]}"
+    pwd_hash, salt = hash_password(password)
+    now_iso = datetime.utcnow().isoformat()
+    
+    cursor.execute("""
+        INSERT INTO users (id, email, username, password_hash, salt, full_name, created_at, is_active, is_verified)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 1, 1)
+    """, (user_id, clean_email, clean_username, pwd_hash, salt, full_name.strip(), now_iso))
+    conn.commit()
+    conn.close()
+    
+    return {
+        "id": user_id,
+        "email": clean_email,
+        "username": clean_username,
+        "full_name": full_name.strip(),
+        "created_at": now_iso,
+        "is_active": True
+    }
+
+def get_user_by_email_or_username(identifier: str) -> Optional[Dict[str, Any]]:
+    conn = get_connection()
+    cursor = conn.cursor()
+    clean_id = identifier.strip().lower()
+    cursor.execute("""
+        SELECT * FROM users 
+        WHERE LOWER(email) = ? OR LOWER(username) = ?
+        LIMIT 1
+    """, (clean_id, clean_id))
+    row = cursor.fetchone()
+    conn.close()
+    return dict(row) if row else None
+
+def get_user_by_id(user_id: str) -> Optional[Dict[str, Any]]:
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+    row = cursor.fetchone()
+    conn.close()
+    return dict(row) if row else None
+
+def create_user_session(user_id: str, token: str, expires_at: datetime):
+    conn = get_connection()
+    cursor = conn.cursor()
+    now_iso = datetime.utcnow().isoformat()
+    exp_iso = expires_at.isoformat()
+    cursor.execute("""
+        INSERT OR REPLACE INTO user_sessions (token, user_id, created_at, expires_at)
+        VALUES (?, ?, ?, ?)
+    """, (token, user_id, now_iso, exp_iso))
+    conn.commit()
+    conn.close()
+
+def validate_session_token(token: str) -> Optional[Dict[str, Any]]:
+    conn = get_connection()
+    cursor = conn.cursor()
+    now_iso = datetime.utcnow().isoformat()
+    cursor.execute("""
+        SELECT s.token, s.expires_at, u.id, u.email, u.username, u.full_name, u.created_at, u.is_active
+        FROM user_sessions s
+        JOIN users u ON s.user_id = u.id
+        WHERE s.token = ? AND s.expires_at > ? AND u.is_active = 1
+        LIMIT 1
+    """, (token, now_iso))
+    row = cursor.fetchone()
+    conn.close()
+    return dict(row) if row else None
+
+def delete_user_session(token: str) -> bool:
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM user_sessions WHERE token = ?", (token,))
+    conn.commit()
+    conn.close()
+    return True
+
+def delete_all_user_sessions(user_id: str) -> bool:
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM user_sessions WHERE user_id = ?", (user_id,))
+    conn.commit()
+    conn.close()
+    return True

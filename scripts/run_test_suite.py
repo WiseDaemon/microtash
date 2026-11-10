@@ -235,6 +235,82 @@ def test_universal_book_cache():
     assert "author" in detail["copyright_notice"].lower()
     print(f"      [OK] Universal Library endpoint /api/books/antifragile verified with copyright attribution.")
 
+def test_user_accounts_and_sessions():
+    print("[TEST 9/9] Verifying User Authentication, Sessions & JWT Security...")
+    import uuid
+    uid = uuid.uuid4().hex[:6]
+    test_email = f"learner_{uid}@microstash.app"
+    test_user = f"learner_{uid}"
+    test_pwd = "StrongPassword#2026"
+
+    # 1. Register a new user
+    res_reg = client.post("/api/auth/register", json={
+        "email": test_email,
+        "username": test_user,
+        "password": test_pwd,
+        "full_name": "Cognitive Gymnast"
+    })
+    assert res_reg.status_code == 200, f"Register failed: {res_reg.text}"
+    data_reg = res_reg.json()
+    assert "access_token" in data_reg
+    assert data_reg["token_type"] == "bearer"
+    assert data_reg["user"]["username"] == test_user
+    assert data_reg["user"]["email"] == test_email
+    token = data_reg["access_token"]
+    print(f"      [OK] User registered successfully: {test_user} ({test_email})")
+
+    # 2. Duplicate registration rejection
+    res_dup = client.post("/api/auth/register", json={
+        "email": test_email,
+        "username": f"other_{uid}",
+        "password": test_pwd
+    })
+    assert res_dup.status_code == 400, "Expected 400 on duplicate email"
+    print("      [OK] Duplicate registration rejected with HTTP 400.")
+
+    # 3. Valid Login
+    res_login = client.post("/api/auth/login", json={
+        "username_or_email": test_email,
+        "password": test_pwd
+    })
+    assert res_login.status_code == 200
+    login_token = res_login.json()["access_token"]
+    print("      [OK] Valid credentials returned authenticated JWT token.")
+
+    # 4. Invalid Login (wrong password)
+    res_bad_login = client.post("/api/auth/login", json={
+        "username_or_email": test_email,
+        "password": "WrongPassword123"
+    })
+    assert res_bad_login.status_code == 401
+    print("      [OK] Invalid password correctly rejected with HTTP 401.")
+
+    # 5. Access protected /me endpoint with valid token
+    res_me = client.get("/api/auth/me", headers={"Authorization": f"Bearer {login_token}"})
+    assert res_me.status_code == 200
+    user_info = res_me.json()
+    assert user_info["user"]["username"] == test_user
+    assert "stats" in user_info
+    print("      [OK] Protected route /api/auth/me verified with Bearer JWT.")
+
+    # 6. Logout and session invalidation
+    res_logout = client.post("/api/auth/logout", headers={"Authorization": f"Bearer {login_token}"})
+    assert res_logout.status_code == 200
+    print("      [OK] User session successfully terminated on server.")
+
+    # 7. Access /me with invalidated token should fail
+    res_revoked = client.get("/api/auth/me", headers={"Authorization": f"Bearer {login_token}"})
+    assert res_revoked.status_code == 401
+    print("      [OK] Revoked session token blocked with HTTP 401.")
+
+    # 8. Test seeded default demo account
+    res_demo = client.post("/api/auth/login", json={
+        "username_or_email": "demo@microstash.app",
+        "password": "demo1234"
+    })
+    assert res_demo.status_code == 200, "Demo user should log in successfully"
+    print("      [OK] Seeded demo user (demo@microstash.app) verified.")
+
 if __name__ == "__main__":
     print("====================================================================")
     print("  [*] MICROSTASH AUTOMATED VERIFICATION TEST SUITE [*]")
@@ -248,8 +324,9 @@ if __name__ == "__main__":
         test_compliance_and_static_assets()
         test_flutter_scaffold()
         test_universal_book_cache()
+        test_user_accounts_and_sessions()
         print("====================================================================")
-        print("  [SUCCESS] ALL 8/8 TEST SUITES PASSED FLAWLESSLY! [SUCCESS]")
+        print("  [SUCCESS] ALL 9/9 TEST SUITES PASSED FLAWLESSLY! [SUCCESS]")
         print("====================================================================")
     except Exception as e:
         print(f"\n[ERROR] TEST FAILED: {e}")
