@@ -329,10 +329,13 @@ def test_social_learning_and_notifications():
     stash_id = stash["id"]
     print(f"      [OK] Personal stash created: '{deck_title}' (id: {stash_id})")
 
-    # 2. Add an idea to the stash
-    res_add = client.post(f"/api/stashes/{stash_id}/ideas", json={"idea_id": "munger-inversion"})
+    # 2. Add an actual idea to the stash
+    res_ideas = client.get("/api/ideas")
+    assert res_ideas.status_code == 200
+    first_idea_id = res_ideas.json()[0]["id"]
+    res_add = client.post(f"/api/stashes/{stash_id}/ideas", json={"idea_id": first_idea_id})
     assert res_add.status_code == 200
-    print("      [OK] Added mental model 'munger-inversion' to the stash.")
+    print(f"      [OK] Added mental model '{first_idea_id}' to the stash.")
 
     # 3. Publish to Community library
     res_pub = client.post(f"/api/stashes/{stash_id}/publish", json={"is_public": True})
