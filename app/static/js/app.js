@@ -2844,9 +2844,9 @@ window.closeBookDetailModal = closeBookDetailModal;
 // UNIFIED ACTION CONTROLLERS & LIVE BUTTON HANDLERS
 // =========================================================================
 
-// 1. Progressive Disclosure 3-Slide Deep Dive System
+// 1. Progressive Disclosure 4-Slide Deep Dive System
 function setDeepDiveSlide(slideNum) {
-  [1, 2, 3].forEach(n => {
+  [1, 2, 3, 4].forEach(n => {
     const slide = document.getElementById(`modal-slide-${n}`);
     const pill = document.getElementById(`pill-slide-${n}`);
     if (slide) {
@@ -2858,9 +2858,9 @@ function setDeepDiveSlide(slideNum) {
     }
     if (pill) {
       if (n === slideNum) {
-        pill.className = "flex-1 py-1.5 px-3 rounded-full text-[11px] font-bold text-primary bg-primary/20 border border-primary/50 transition text-center shadow-sm";
+        pill.className = "flex-1 min-w-[75px] py-1.5 px-2.5 rounded-full text-[11px] font-bold text-primary bg-primary/20 border border-primary/50 transition text-center shadow-sm flex items-center justify-center gap-1";
       } else {
-        pill.className = "flex-1 py-1.5 px-3 rounded-full text-[11px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant/30 transition text-center hover:text-white";
+        pill.className = "flex-1 min-w-[75px] py-1.5 px-2.5 rounded-full text-[11px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant/30 transition text-center hover:text-white flex items-center justify-center gap-1";
       }
     }
   });
@@ -2934,13 +2934,17 @@ async function openDeepDiveModal(ideaId = null) {
     }
   }
 
-  // Diagram rendering into modal
+  // Diagram rendering into modal Slide 1
   renderIdeaVisualDiagram(idea, 'modal-diagram-container');
 
   // Slide 2: Case Study
   const exampleEl = document.getElementById("modal-example");
   if (exampleEl) {
-    exampleEl.textContent = idea.example || "Practitioners apply this mental model systematically to navigate uncertainty and avoid irreversible failure modes.";
+    if (idea.example && idea.example.trim().length > 0) {
+      exampleEl.innerHTML = renderMarkdownDetailed(idea.example);
+    } else {
+      exampleEl.innerHTML = "<p class='leading-relaxed text-on-surface/90'>Practitioners apply this mental model systematically to navigate uncertainty and avoid irreversible failure modes.</p>";
+    }
   }
 
   // Slide 3: Action & Bounds
@@ -2951,7 +2955,33 @@ async function openDeepDiveModal(ideaId = null) {
 
   const actionEl = document.getElementById("modal-action-item") || document.getElementById("modal-action");
   if (actionEl) {
-    actionEl.textContent = idea.action_item || "Apply this model to one difficult decision today.";
+    if (idea.action_item && idea.action_item.trim().length > 0) {
+      actionEl.innerHTML = renderMarkdownDetailed(idea.action_item);
+    } else {
+      actionEl.innerHTML = "<p class='leading-relaxed text-primary'>Apply this model to one difficult decision today.</p>";
+    }
+  }
+
+  // Slide 4: Full Masterclass Treatise
+  const fullMechEl = document.getElementById("modal-full-mechanism");
+  if (fullMechEl) {
+    fullMechEl.innerHTML = renderMarkdownDetailed(idea.detailed_explanation || idea.summary);
+  }
+  renderIdeaVisualDiagram(idea, 'modal-full-diagram');
+
+  const fullExEl = document.getElementById("modal-full-example");
+  if (fullExEl) {
+    fullExEl.innerHTML = renderMarkdownDetailed(idea.example || "Historical case study context.");
+  }
+
+  const fullBoundEl = document.getElementById("modal-full-boundary");
+  if (fullBoundEl) {
+    fullBoundEl.textContent = idea.boundary || "Avoid dogmatic application when foundational axioms or systemic constraints are altered by sudden environmental shifts.";
+  }
+
+  const fullActEl = document.getElementById("modal-full-action");
+  if (fullActEl) {
+    fullActEl.innerHTML = renderMarkdownDetailed(idea.action_item || "Apply this model to one difficult decision today.");
   }
 
   const cNoticeEl = document.getElementById("modal-copyright-notice");

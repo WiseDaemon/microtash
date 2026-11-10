@@ -9,6 +9,7 @@ class IdeaBase(BaseModel):
     detailed_explanation: Optional[str] = Field(None, description="In-depth conceptual breakdown explaining how and why it works")
     example: Optional[str] = Field(None, description="Concrete real-world case study or story showing the concept in action")
     visual_diagram: Optional[str] = Field(None, description="Mermaid.js diagram syntax or conceptual visual architecture flow")
+    boundary: Optional[str] = Field(None, description="When NOT to apply the model / boundary failure conditions")
     quote: Optional[str] = Field(None, description="Inspiring quote or key takeaway statement")
     action_item: Optional[str] = Field(None, description="Practical 'Try it today' action step")
     author: str = Field(..., description="Original thinker, author, or speaker")

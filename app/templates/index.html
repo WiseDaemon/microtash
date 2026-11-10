@@ -750,16 +750,20 @@
         </div>
       </div>
 
-      <!-- 3-Slide Step Progress Pills -->
-      <div class="px-6 py-2.5 bg-surface-container-low border-b border-outline-variant/20 flex items-center justify-between gap-2">
-        <button onclick="setDeepDiveSlide(1)" id="pill-slide-1" class="flex-1 py-1.5 px-3 rounded-full text-[11px] font-bold text-primary bg-primary/20 border border-primary/50 transition text-center">
+      <!-- 4-Slide Step Progress Pills -->
+      <div class="px-5 py-2.5 bg-surface-container-low border-b border-outline-variant/20 flex items-center justify-between gap-1.5 overflow-x-auto custom-scrollbar select-none">
+        <button onclick="setDeepDiveSlide(1)" id="pill-slide-1" class="flex-1 min-w-[75px] py-1.5 px-2.5 rounded-full text-[11px] font-bold text-primary bg-primary/20 border border-primary/50 transition text-center shadow-sm">
           1. Mechanism
         </button>
-        <button onclick="setDeepDiveSlide(2)" id="pill-slide-2" class="flex-1 py-1.5 px-3 rounded-full text-[11px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant/30 transition text-center">
+        <button onclick="setDeepDiveSlide(2)" id="pill-slide-2" class="flex-1 min-w-[75px] py-1.5 px-2.5 rounded-full text-[11px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant/30 transition text-center hover:text-white">
           2. Case Study
         </button>
-        <button onclick="setDeepDiveSlide(3)" id="pill-slide-3" class="flex-1 py-1.5 px-3 rounded-full text-[11px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant/30 transition text-center">
-          3. Action & Bounds
+        <button onclick="setDeepDiveSlide(3)" id="pill-slide-3" class="flex-1 min-w-[75px] py-1.5 px-2.5 rounded-full text-[11px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant/30 transition text-center hover:text-white">
+          3. Bounds & Action
+        </button>
+        <button onclick="setDeepDiveSlide(4)" id="pill-slide-4" class="flex-1 min-w-[75px] py-1.5 px-2.5 rounded-full text-[11px] font-medium text-secondary bg-surface-container border border-secondary/30 transition text-center hover:text-white flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-[13px]">menu_book</span>
+          <span>Full Treatise</span>
         </button>
       </div>
 
@@ -768,32 +772,83 @@
         <h2 id="modal-title" class="text-2xl font-headline font-bold text-white">The Inversion Principle</h2>
         <p id="modal-one-liner" class="text-sm font-semibold text-primary italic"></p>
 
-        <!-- SLIDE 1 -->
+        <!-- SLIDE 1: MECHANISM & VISUAL ARCHITECTURE -->
         <div id="modal-slide-1" class="space-y-4">
           <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30">
-            <h4 class="text-xs font-bold text-secondary uppercase tracking-wider mb-2">First Principles Breakdown</h4>
+            <h4 class="text-xs font-bold text-secondary uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">psychology</span>
+              <span>First Principles Theoretical Breakdown</span>
+            </h4>
             <div id="modal-detailed-explanation" class="text-on-surface/90 space-y-2 leading-relaxed"></div>
           </div>
           <div id="modal-diagram-container" class="p-3 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/20 min-h-[140px] flex items-center justify-center"></div>
         </div>
 
-        <!-- SLIDE 2 -->
+        <!-- SLIDE 2: COMPREHENSIVE CASE STUDY -->
         <div id="modal-slide-2" class="hidden space-y-4">
           <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30">
-            <h4 class="text-xs font-bold text-tertiary uppercase tracking-wider mb-2">Real-World Case Study</h4>
-            <div id="modal-example" class="text-on-surface/90 leading-relaxed"></div>
+            <h4 class="text-xs font-bold text-tertiary uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">history_edu</span>
+              <span>In-Depth Historical & Industrial Case Study</span>
+            </h4>
+            <div id="modal-example" class="text-on-surface/90 space-y-2.5 leading-relaxed"></div>
           </div>
         </div>
 
-        <!-- SLIDE 3 -->
+        <!-- SLIDE 3: BOUNDS & ACTION PROTOCOL -->
         <div id="modal-slide-3" class="hidden space-y-4">
           <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30">
-            <h4 class="text-xs font-bold text-error uppercase tracking-wider mb-1">When NOT to Apply (Failure Boundary)</h4>
-            <p id="modal-boundary-text" class="text-on-surface/90 leading-relaxed">Avoid dogmatic application in pure chaotic environments with zero signal-to-noise ratio.</p>
+            <h4 class="text-xs font-bold text-error uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">dangerous</span>
+              <span>When NOT to Apply (Falsification Boundary)</span>
+            </h4>
+            <p id="modal-boundary-text" class="text-on-surface/90 leading-relaxed"></p>
           </div>
           <div class="p-4 rounded-2xl bg-primary/10 border border-primary/30">
-            <h4 class="text-xs font-bold text-primary uppercase tracking-wider mb-1">⚡ Try It Today (Action Item)</h4>
-            <p id="modal-action-item" class="text-primary font-medium"></p>
+            <h4 class="text-xs font-bold text-primary uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">task_alt</span>
+              <span>Operational Execution Protocol (Try It Today)</span>
+            </h4>
+            <div id="modal-action-item" class="text-primary font-medium leading-relaxed"></div>
+          </div>
+        </div>
+
+        <!-- SLIDE 4: FULL UNIFIED MASTERCLASS TREATISE -->
+        <div id="modal-slide-4" class="hidden space-y-5">
+          <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30 space-y-3">
+            <h4 class="text-xs font-bold text-secondary uppercase tracking-wider flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">psychology</span>
+              <span>1. Theoretical Foundations & First Principles</span>
+            </h4>
+            <div id="modal-full-mechanism" class="text-on-surface/90 space-y-2 leading-relaxed"></div>
+          </div>
+
+          <div class="p-3 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/20 min-h-[140px] flex items-center justify-center">
+            <div id="modal-full-diagram" class="w-full flex items-center justify-center"></div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30 space-y-2">
+            <h4 class="text-xs font-bold text-tertiary uppercase tracking-wider flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">history_edu</span>
+              <span>2. Real-World Case Study</span>
+            </h4>
+            <div id="modal-full-example" class="text-on-surface/90 space-y-2 leading-relaxed"></div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30">
+            <h4 class="text-xs font-bold text-error uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">dangerous</span>
+              <span>3. Boundary Conditions & Failure Modes</span>
+            </h4>
+            <p id="modal-full-boundary" class="text-on-surface/90 leading-relaxed"></p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-primary/10 border border-primary/30">
+            <h4 class="text-xs font-bold text-primary uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">task_alt</span>
+              <span>4. Executive Action Protocol</span>
+            </h4>
+            <div id="modal-full-action" class="text-primary font-medium leading-relaxed"></div>
           </div>
         </div>
 

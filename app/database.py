@@ -66,6 +66,7 @@ def init_db():
         detailed_explanation TEXT,
         example TEXT,
         visual_diagram TEXT,
+        boundary TEXT,
         quote TEXT,
         action_item TEXT,
         author TEXT NOT NULL,
@@ -94,6 +95,7 @@ def init_db():
         ("detailed_explanation", "TEXT"),
         ("example", "TEXT"),
         ("visual_diagram", "TEXT"),
+        ("boundary", "TEXT"),
         ("source_slug", "TEXT"),
         ("publisher", "TEXT DEFAULT 'Original Publication'"),
         ("copyright_notice", "TEXT"),
@@ -291,12 +293,13 @@ def init_db():
             if not row:
                 cursor.execute("""
                     INSERT INTO ideas (
-                        id, title, one_liner, summary, detailed_explanation, example, visual_diagram, quote, action_item, author, source, source_slug, publisher, copyright_notice, topic,
+                        id, title, one_liner, summary, detailed_explanation, example, visual_diagram, boundary, quote, action_item, author, source, source_slug, publisher, copyright_notice, topic,
                         tags, read_time_mins, color_theme, likes, saved_count, is_liked, is_saved, leitner_box, next_review_date, created_at
                     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 1, ?, ?)
                 """, (
                     i["id"], i["title"], i["one_liner"], i["summary"],
                     i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""),
+                    i.get("boundary", ""),
                     i.get("quote", ""), i.get("action_item", ""), i["author"], i["source"], src_slug,
                     i.get("publisher", "Original Publication"), c_notice, i["topic"],
                     json.dumps(i.get("tags", [])), i.get("read_time_mins", 1),
@@ -306,9 +309,9 @@ def init_db():
             else:
                 cursor.execute("""
                     UPDATE ideas
-                    SET detailed_explanation = ?, example = ?, visual_diagram = ?, source_slug = ?, copyright_notice = ?
-                    WHERE id = ? AND (detailed_explanation IS NULL OR detailed_explanation = '' OR example IS NULL OR example = '' OR visual_diagram IS NULL OR visual_diagram = '' OR source_slug IS NULL OR source_slug = '' OR copyright_notice IS NULL OR copyright_notice = '')
-                """, (i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""), src_slug, c_notice, i["id"]))
+                    SET detailed_explanation = ?, example = ?, visual_diagram = ?, boundary = ?, action_item = ?, source_slug = ?, copyright_notice = ?
+                    WHERE id = ?
+                """, (i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""), i.get("boundary", ""), i.get("action_item", ""), src_slug, c_notice, i["id"]))
         conn.commit()
 
         # Backfill any remaining ideas that lack visual diagrams
@@ -828,6 +831,7 @@ def row_to_idea(row) -> Idea:
         detailed_explanation=row_dict.get("detailed_explanation") or "",
         example=row_dict.get("example") or "",
         visual_diagram=row_dict.get("visual_diagram") or "",
+        boundary=row_dict.get("boundary") or "",
         quote=row_dict.get("quote") or "",
         action_item=row_dict.get("action_item") or "",
         author=row_dict["author"],
