@@ -3,7 +3,7 @@ from typing import List, Optional
 from app.models import Idea, IdeaCreate, LeitnerReviewRequest
 from app import database
 
-router = APIRouter()
+router = APIRouter(prefix="/api/ideas", tags=["Ideas"])
 
 @router.get("", response_model=List[Idea])
 def list_ideas(
@@ -60,9 +60,11 @@ def get_or_generate_deep_dive(idea_id: str, force: bool = Query(False, descripti
     if not idea:
         raise HTTPException(status_code=404, detail="Idea not found")
 
+    # If already cached with genuine depth and not forced, return cached
     if not force and idea.detailed_explanation and len(idea.detailed_explanation.strip()) >= 150 and idea.detailed_explanation.strip() != idea.summary.strip():
         return idea
 
+    # Synthesize authentic in-depth treatise and case study
     from app.ai_service import generate_concept_deep_dive
     res = generate_concept_deep_dive(
         title=idea.title,

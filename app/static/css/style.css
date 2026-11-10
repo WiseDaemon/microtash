@@ -1,0 +1,385 @@
+/* 3D Perspective & Flip Styles */
+.perspective {
+  perspective: 1200px;
+}
+
+.card-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.card-front {
+  transform: rotateY(0deg);
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+
+/* Swipe animations */
+.swipe-left {
+  transform: translateX(-150%) rotate(-25deg) !important;
+  opacity: 0;
+  transition: all 0.35s ease-out !important;
+}
+
+.swipe-right {
+  transform: translateX(150%) rotate(25deg) !important;
+  opacity: 0;
+  transition: all 0.35s ease-out !important;
+}
+
+/* Scrollbar styling */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom Light mode overrides */
+html:not(.dark) body {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+html:not(.dark) header {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-bottom-color: #e2e8f0;
+}
+
+html:not(.dark) .card-front,
+html:not(.dark) .card-back {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+html:not(.dark) #card-title {
+  color: #0f172a;
+}
+
+html:not(.dark) #card-summary {
+  color: #334155;
+}
+
+html:not(.dark) #card-author {
+  color: #1e293b;
+}
+
+html:not(.dark) .bg-slate-900 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .bg-slate-800 {
+  background-color: #f1f5f9 !important;
+  color: #1e293b !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .text-slate-300 {
+  color: #334155 !important;
+}
+
+html:not(.dark) .text-slate-400 {
+  color: #64748b !important;
+}
+
+
+/* ================================================= */
+/* Neural Audio Equalizer Wave Keyframes             */
+/* ================================================= */
+@keyframes musicBar1 {
+  0%, 100% { height: 4px; }
+  50% { height: 16px; }
+}
+@keyframes musicBar2 {
+  0%, 100% { height: 16px; }
+  50% { height: 6px; }
+}
+@keyframes musicBar3 {
+  0%, 100% { height: 8px; }
+  50% { height: 20px; }
+}
+@keyframes musicBar4 {
+  0%, 100% { height: 18px; }
+  50% { height: 5px; }
+}
+
+.animate-music-bar-1 { animation: musicBar1 0.8s ease-in-out infinite; }
+.animate-music-bar-2 { animation: musicBar2 0.7s ease-in-out infinite 0.15s; }
+.animate-music-bar-3 { animation: musicBar3 0.9s ease-in-out infinite 0.3s; }
+.animate-music-bar-4 { animation: musicBar4 0.75s ease-in-out infinite 0.1s; }
+
+/* ================================================= */
+/* Custom Thin Scrollbar                             */
+/* ================================================= */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 9999px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.4);
+  border-radius: 9999px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.7);
+}
+
+/* ================================================= */
+/* Category Badges & Ambient Visual Enhancements     */
+/* ================================================= */
+.badge-mental-models {
+  background: rgba(99, 102, 241, 0.18);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+.badge-productivity {
+  background: rgba(16, 185, 129, 0.18);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+.badge-stoicism {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+.badge-wealth {
+  background: rgba(20, 184, 166, 0.18);
+  color: #5eead4;
+  border: 1px solid rgba(20, 184, 166, 0.35);
+}
+.badge-psychology {
+  background: rgba(168, 85, 247, 0.18);
+  color: #d8b4fe;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+}
+.badge-tech {
+  background: rgba(14, 165, 233, 0.18);
+  color: #7dd3fc;
+  border: 1px solid rgba(14, 165, 233, 0.35);
+}
+.badge-health {
+  background: rgba(244, 63, 94, 0.18);
+  color: #fda4af;
+  border: 1px solid rgba(244, 63, 94, 0.35);
+}
+
+/* Category top-accent borders */
+.border-t-mental-models { border-top: 3px solid #6366f1; }
+.border-t-productivity { border-top: 3px solid #10b981; }
+.border-t-stoicism { border-top: 3px solid #f59e0b; }
+.border-t-wealth { border-top: 3px solid #14b8a6; }
+.border-t-psychology { border-top: 3px solid #a855f7; }
+.border-t-tech { border-top: 3px solid #0ea5e9; }
+.border-t-health { border-top: 3px solid #f43f5e; }
+
+/* Ambient Radial Glow on Cards */
+.card-ambient-glow {
+  position: absolute;
+  top: -20%;
+  right: -20%;
+  width: 280px;
+  height: 280px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, rgba(99, 102, 241, 0) 70%);
+  pointer-events: none;
+}
+
+/* ================================================= */
+/* Micro-Interactions, Shimmer & Modal Animations    */
+/* ================================================= */
+@keyframes modalIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-modal-in {
+  animation: modalIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes flamePulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.4)); }
+  50% { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.8)); }
+}
+
+.animate-flame {
+  animation: flamePulse 2s ease-in-out infinite;
+}
+
+/* Glassmorphism helpers */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.72) 0%, rgba(15, 23, 42, 0.88) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.glass-card:hover {
+  border-color: rgba(99, 102, 241, 0.45);
+  box-shadow: 0 16px 36px -10px rgba(99, 102, 241, 0.25);
+}
+
+/* Audio Scrubber Pulse */
+#audio-progress-container:hover #audio-progress-bar {
+  box-shadow: 0 0 12px rgba(129, 140, 248, 0.8);
+}
+
+/* Deep Dive Styled Markdown Elements */
+.deep-dive-section-heading {
+  margin-top: 1.1rem;
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #c7d2fe;
+}
+
+.deep-dive-bullet-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin-top: 0.35rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: #cbd5e1;
+}
+
+.deep-dive-bullet-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: #818cf8;
+  margin-top: 0.5rem;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px #6366f1;
+}
+
+/* ================================================= */
+/* Truly Interactive SVG Diagram & Node Inspector   */
+/* ================================================= */
+.interactive-svg-container {
+  position: relative;
+  overflow: hidden;
+  touch-action: pan-x pan-y;
+  cursor: grab;
+}
+.interactive-svg-container:active {
+  cursor: grabbing;
+}
+
+.interactive-svg-canvas {
+  transform-origin: center center;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Nodes in Mermaid SVGs */
+.mermaid .node,
+.mermaid g.node,
+.mermaid [class*="flowchart-"] {
+  cursor: pointer !important;
+  pointer-events: all !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease, opacity 0.2s ease !important;
+}
+
+.mermaid .node:hover,
+.mermaid g.node:hover {
+  filter: drop-shadow(0 0 12px rgba(129, 140, 248, 0.95)) brightness(1.2) !important;
+  transform: scale(1.04);
+}
+
+.mermaid .node.active-step-node,
+.mermaid g.node.active-step-node {
+  filter: drop-shadow(0 0 18px rgba(16, 185, 129, 1)) brightness(1.3) !important;
+  transform: scale(1.08);
+}
+
+.mermaid.focus-mode .node:not(.active-step-node):not(:hover),
+.mermaid.focus-mode g.node:not(.active-step-node):not(:hover) {
+  opacity: 0.4;
+  filter: grayscale(0.5);
+}
+
+/* Edges in Mermaid SVGs */
+.mermaid .edgePath path {
+  transition: stroke 0.3s ease, stroke-width 0.3s ease, filter 0.3s ease;
+}
+
+.mermaid .edgePath.active-step-edge path {
+  stroke: #34d399 !important;
+  stroke-width: 3.5px !important;
+  filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.9));
+}
+
+/* ==========================================================================
+   Leitner Active Recall Gym Styles
+   ========================================================================== */
+.leitner-card-enter {
+  animation: leitnerCardFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes leitnerCardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.grade-btn-hard:hover {
+  box-shadow: 0 0 20px rgba(244, 63, 94, 0.25);
+}
+
+.grade-btn-good:hover {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+}
+
+.grade-btn-easy:hover {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+}

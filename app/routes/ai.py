@@ -6,7 +6,7 @@ from app.ai_service import extract_ideas_from_content
 from app.web_fetcher import auto_fetch_web_info
 from app import database
 
-router = APIRouter()
+router = APIRouter(prefix="/api/ai", tags=["AI Extractor"])
 
 class SaveExtractedBatch(BaseModel):
     ideas: List[Dict[str, Any]]
@@ -30,6 +30,10 @@ class SaveAsBookStashRequest(BaseModel):
 
 @router.post("/auto-fetch")
 def auto_fetch_info(payload: AutoFetchRequest):
+    """
+    Auto-fetches description, author, and summaries from the live web
+    (via Firecrawl, Wikipedia, OpenLibrary) given just a book name, author, or idea.
+    """
     if not payload.query.strip():
         raise HTTPException(status_code=400, detail="Query cannot be empty")
     
@@ -38,15 +42,22 @@ def auto_fetch_info(payload: AutoFetchRequest):
 
 @router.post("/auto-fetch-and-generate")
 def auto_fetch_and_generate(payload: AutoFetchAndGenerateRequest):
+    """
+    1-Click Auto-Generation:
+    1. Fetches descriptions and summaries from the web for the book/author/idea.
+    2. Synthesizes atomic microlearning Deepstash cards via NVIDIA NIM / Gemini.
+    """
     if not payload.query.strip():
         raise HTTPException(status_code=400, detail="Query cannot be empty")
 
     try:
+        # Step 1: Auto-fetch description from the web
         web_info = auto_fetch_web_info(payload.query)
         description_text = web_info.get("description", "")
         resolved_title = web_info.get("resolved_title", payload.query)
         resolved_author = web_info.get("resolved_author", "Curated Thinker")
 
+        # Step 2: Feed auto-fetched web text to AI synthesis engine
         ideas = extract_ideas_from_content(
             input_text=description_text,
             source_title=resolved_title,
@@ -67,6 +78,10 @@ def auto_fetch_and_generate(payload: AutoFetchAndGenerateRequest):
 
 @router.post("/extract")
 def extract_microlearning(request: ExtractionRequest):
+    """
+    Deconstructs text, article URL, or book excerpt into atomic Deepstash idea cards.
+    Powered by NVIDIA NIM / Gemini APIs.
+    """
     if not request.input_text.strip():
         raise HTTPException(status_code=400, detail="Input text cannot be empty")
 
@@ -85,6 +100,7 @@ def extract_microlearning(request: ExtractionRequest):
 
 @router.post("/save-batch")
 def save_extracted_batch(payload: SaveExtractedBatch):
+    """Saves generated ideas into the database and optionally assigns them to a stash."""
     created_ideas = []
     for item in payload.ideas:
         idea = database.create_idea(item)
@@ -96,10 +112,14 @@ def save_extracted_batch(payload: SaveExtractedBatch):
 
 @router.post("/save-as-book-stash")
 def save_as_book_stash(payload: SaveAsBookStashRequest):
+    """
+    Creates a dedicated new Stash named after the book and saves all ideas into it.
+    """
     clean_title = payload.book_title.strip() or "Curated Book"
     stash_title = f"{clean_title} — Complete Book"
     description = f"Complete microlearning collection of all core ideas, chapters, and mental models from {clean_title} by {payload.author}."
     
+    # 1. Create the new stash
     stash = database.create_stash(
         title=stash_title,
         description=description,
@@ -107,6 +127,7 @@ def save_as_book_stash(payload: SaveAsBookStashRequest):
         color=payload.color or "indigo"
     )
 
+    # 2. Save each idea and assign to the new stash
     created_ideas = []
     for item in payload.ideas:
         idea = database.create_idea(item)

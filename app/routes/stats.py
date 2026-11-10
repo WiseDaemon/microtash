@@ -1,9 +1,9 @@
 from fastapi import APIRouter
-from app.database import get_user_progress
 from app.models import UserProgress
+from app import database
 
-router = APIRouter()
+router = APIRouter(prefix="/api/stats", tags=["Stats"])
 
 @router.get("", response_model=UserProgress)
-async def get_stats():
-    return get_user_progress()
+def get_user_stats():
+    return database.get_user_progress()

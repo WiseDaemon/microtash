@@ -3,7 +3,7 @@ from typing import List, Dict, Any
 from app.models import Stash, StashCreate
 from app import database
 
-router = APIRouter()
+router = APIRouter(prefix="/api/stashes", tags=["Stashes"])
 
 @router.get("", response_model=List[Stash])
 def list_stashes():

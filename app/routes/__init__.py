@@ -1,1 +1,1 @@
-# API route modules
+"""Routes package for Deepstash API"""

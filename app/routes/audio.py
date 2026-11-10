@@ -1,28 +1,25 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
-from pydantic import BaseModel
-from app.tts_service import get_or_create_audio
+from app import database
+from app.tts_service import generate_audio_for_idea
 
-router = APIRouter()
+router = APIRouter(prefix="/api/audio", tags=["Audio"])
 
-class TTSRequest(BaseModel):
-    idea_id: str
-    title: str
-    summary: str
-    author: str
+@router.get("/{idea_id}")
+async def get_audio_narration(idea_id: str):
+    idea = database.get_idea_by_id(idea_id)
+    if not idea:
+        raise HTTPException(status_code=404, detail="Idea not found")
 
-@router.post("/speak")
-async def speak_idea(req: TTSRequest):
-    filepath = await get_or_create_audio(req.idea_id, req.title, req.summary, req.author)
-    if not filepath:
-        raise HTTPException(status_code=500, detail="Could not generate neural audio")
-    return FileResponse(filepath, media_type="audio/mpeg", filename=f"{req.idea_id}.mp3")
+    # Construct spoken narrative: Headline, punchy hook, summary, action step
+    text_to_speak = f"{idea.title}. {idea.one_liner}. {idea.summary} "
+    if idea.action_item:
+        text_to_speak += f"Practical action step: {idea.action_item}. "
+    if idea.author:
+        text_to_speak += f"By {idea.author}."
 
-@router.get("/stream/{idea_id}")
-async def stream_idea_audio(idea_id: str):
-    from app.config import settings
-    import os
-    filepath = settings.AUDIO_DIR / f"{idea_id}.mp3"
-    if os.path.exists(filepath):
-        return FileResponse(str(filepath), media_type="audio/mpeg")
-    raise HTTPException(status_code=404, detail="Audio file not generated yet")
+    try:
+        audio_file = await generate_audio_for_idea(idea_id, text_to_speak)
+        return FileResponse(path=str(audio_file), media_type="audio/wav", filename=f"{idea_id}.wav")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"TTS error: {str(e)}")
