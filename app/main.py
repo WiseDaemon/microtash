@@ -7,7 +7,7 @@ from pathlib import Path
 from app.config import settings
 from app import database
 from app.database import init_db
-from app.routes import ideas, stashes, ai, stats, audio, compliance, books, auth
+from app.routes import ideas, stashes, ai, stats, audio, compliance, books, auth, substack
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -44,6 +44,7 @@ app.include_router(stats.router)
 app.include_router(audio.router)
 app.include_router(compliance.router)
 app.include_router(auth.router)
+app.include_router(substack.router)
 
 @app.on_event("startup")
 def on_startup():

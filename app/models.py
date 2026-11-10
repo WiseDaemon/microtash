@@ -135,3 +135,66 @@ class TokenResponse(BaseModel):
 class UserProfileResponse(BaseModel):
     user: UserResponse
     progress: UserProgress
+
+
+# =========================================================================
+# SUBSTACK ECOSYSTEM MODELS (Notes, Subscriptions, Restacks & Discussions)
+# =========================================================================
+
+class SubstackNote(BaseModel):
+    id: str
+    author_name: str
+    author_handle: str
+    author_avatar: Optional[str] = None
+    content: str
+    referenced_idea_id: Optional[str] = None
+    referenced_idea_title: Optional[str] = None
+    referenced_idea_quote: Optional[str] = None
+    referenced_idea_author: Optional[str] = None
+    restack_comment: Optional[str] = None
+    likes_count: int = 0
+    restacks_count: int = 0
+    is_liked: bool = False
+    created_at: str
+
+class NoteCreateRequest(BaseModel):
+    content: str = Field(..., description="Text content of the Substack note")
+    referenced_idea_id: Optional[str] = Field(None, description="Optional mental model ID to quote/embed")
+    restack_comment: Optional[str] = Field(None, description="Accompanying thought if restacking")
+    author_name: Optional[str] = Field("Anonymous Thinker", description="Display name")
+    author_handle: Optional[str] = Field("thinker", description="User handle")
+
+class IdeaRestackRequest(BaseModel):
+    comment: str = Field("", description="Personal commentary accompanying the restack")
+    author_name: Optional[str] = Field("Curated Thinker", description="Display name")
+    author_handle: Optional[str] = Field("curator", description="User handle")
+
+class SubstackComment(BaseModel):
+    id: str
+    idea_id: str
+    user_id: Optional[str] = "community"
+    user_name: str
+    user_avatar: Optional[str] = None
+    comment_text: str
+    likes_count: int = 0
+    created_at: str
+    parent_comment_id: Optional[str] = None
+
+class CommentCreateRequest(BaseModel):
+    comment_text: str = Field(..., description="High-signal commentary or practical takeaway")
+    user_name: Optional[str] = Field("Curated Reader", description="User display name")
+    parent_comment_id: Optional[str] = Field(None, description="Parent comment ID for threaded replies")
+
+class SubscriptionRequest(BaseModel):
+    target_type: str = Field("author", description="'author' or 'publication'")
+    target_name: str = Field(..., description="Name of the thinker or publication")
+    target_handle: Optional[str] = Field(None, description="Handle or slug")
+
+class Subscription(BaseModel):
+    id: str
+    user_id: str
+    target_type: str
+    target_name: str
+    target_handle: Optional[str] = None
+    created_at: str
+

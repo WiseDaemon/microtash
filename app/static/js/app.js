@@ -2540,30 +2540,36 @@ switchTab = function(tabId) {
   
   // Also update stitch tab contents
   const swipeTab = document.getElementById("tab-swipe-content");
+  const notesTab = document.getElementById("tab-notes-content");
   const leitnerTab = document.getElementById("tab-leitner-content");
   const feedTab = document.getElementById("tab-feed-content");
   const stashesTab = document.getElementById("tab-stashes-content");
   const aiTab = document.getElementById("tab-ai-content");
 
   if (swipeTab) swipeTab.classList.toggle("hidden", tabId !== "swipe");
+  if (notesTab) notesTab.classList.toggle("hidden", tabId !== "notes");
   if (leitnerTab) leitnerTab.classList.toggle("hidden", tabId !== "leitner");
   if (feedTab) feedTab.classList.toggle("hidden", tabId !== "feed");
   if (stashesTab) stashesTab.classList.toggle("hidden", tabId !== "stashes");
   if (aiTab) aiTab.classList.toggle("hidden", tabId !== "ai");
 
   // Stitch bottom nav active state
-  ["swipe", "leitner", "feed", "stashes", "ai"].forEach(t => {
+  ["swipe", "notes", "leitner", "feed", "stashes", "ai"].forEach(t => {
     const btn = document.getElementById(`stitch-nav-${t}`);
     if (btn) {
       if (t === tabId) {
-        btn.className = "flex flex-col items-center justify-center bg-primary/15 text-primary rounded-full px-4 py-1.5 shadow-[0_0_12px_rgba(78,222,163,0.25)] transition";
+        btn.className = "flex flex-col items-center justify-center bg-primary/15 text-primary rounded-full px-3 py-1 shadow-[0_0_12px_rgba(78,222,163,0.25)] transition";
       } else {
-        btn.className = "flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition px-3 py-1.5";
+        btn.className = "flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition px-2.5 py-1";
       }
     }
   });
 
   if (tabId === "leitner") renderWorkoutCard();
+  if (tabId === "notes") {
+    if (window.loadSubstackNotes) window.loadSubstackNotes();
+    if (window.loadPublicationsCarousel) window.loadPublicationsCarousel();
+  }
 };
 
 window.triggerCurrentCardStressTest = triggerCurrentCardStressTest;
@@ -2846,7 +2852,7 @@ window.closeBookDetailModal = closeBookDetailModal;
 
 // 1. Progressive Disclosure 4-Slide Deep Dive System
 function setDeepDiveSlide(slideNum) {
-  [1, 2, 3, 4].forEach(n => {
+  [1, 2, 3, 4, 5].forEach(n => {
     const slide = document.getElementById(`modal-slide-${n}`);
     const pill = document.getElementById(`pill-slide-${n}`);
     if (slide) {
@@ -2858,9 +2864,17 @@ function setDeepDiveSlide(slideNum) {
     }
     if (pill) {
       if (n === slideNum) {
-        pill.className = "flex-1 min-w-[75px] py-1.5 px-2.5 rounded-full text-[11px] font-bold text-primary bg-primary/20 border border-primary/50 transition text-center shadow-sm flex items-center justify-center gap-1";
+        if (n === 5) {
+          pill.className = "flex-1 min-w-[75px] py-1.5 px-2 rounded-full text-[11px] font-bold text-white bg-[#ff6719] border border-[#ff6719] transition text-center shadow-md flex items-center justify-center gap-1";
+        } else {
+          pill.className = "flex-1 min-w-[70px] py-1.5 px-2 rounded-full text-[11px] font-bold text-primary bg-primary/20 border border-primary/50 transition text-center shadow-sm flex items-center justify-center gap-1";
+        }
       } else {
-        pill.className = "flex-1 min-w-[75px] py-1.5 px-2.5 rounded-full text-[11px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant/30 transition text-center hover:text-white flex items-center justify-center gap-1";
+        if (n === 5) {
+          pill.className = "flex-1 min-w-[75px] py-1.5 px-2 rounded-full text-[11px] font-bold text-[#ff6719] bg-[#ff6719]/15 border border-[#ff6719]/40 transition text-center hover:bg-[#ff6719]/25 flex items-center justify-center gap-1";
+        } else {
+          pill.className = "flex-1 min-w-[70px] py-1.5 px-2 rounded-full text-[11px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant/30 transition text-center hover:text-white flex items-center justify-center gap-1";
+        }
       }
     }
   });
@@ -2982,6 +2996,36 @@ async function openDeepDiveModal(ideaId = null) {
   const fullActEl = document.getElementById("modal-full-action");
   if (fullActEl) {
     fullActEl.innerHTML = renderMarkdownDetailed(idea.action_item || "Apply this model to one difficult decision today.");
+  }
+
+  // Slide 5: Substack Reader & Publication Mode Population
+  const readerTitleEl = document.getElementById("reader-title");
+  if (readerTitleEl) readerTitleEl.textContent = idea.title;
+
+  const readerAuthorEl = document.getElementById("reader-author");
+  if (readerAuthorEl) readerAuthorEl.textContent = idea.author;
+
+  const readerSourceEl = document.getElementById("reader-source");
+  if (readerSourceEl) readerSourceEl.textContent = idea.source;
+
+  const readerTimeEl = document.getElementById("reader-time");
+  if (readerTimeEl) readerTimeEl.textContent = `${idea.read_time_mins || 3} min read`;
+
+  const readerPullquoteEl = document.getElementById("reader-pullquote");
+  if (readerPullquoteEl) readerPullquoteEl.textContent = `“${(idea.quote || idea.one_liner).replace(/^[“"]|[”"]$/g, '')}”`;
+
+  const readerDetailedEl = document.getElementById("reader-detailed");
+  if (readerDetailedEl) readerDetailedEl.innerHTML = renderMarkdownDetailed(idea.detailed_explanation || idea.summary);
+
+  const readerExampleEl = document.getElementById("reader-example");
+  if (readerExampleEl) readerExampleEl.innerHTML = renderMarkdownDetailed(idea.example || "Empirical case analysis.");
+
+  const readerBoundaryEl = document.getElementById("reader-boundary");
+  if (readerBoundaryEl) readerBoundaryEl.textContent = idea.boundary || "Apply with critical discernment.";
+
+  // Load Substack Community Discussions for this Idea
+  if (window.loadIdeaComments) {
+    window.loadIdeaComments(idea.id);
   }
 
   const cNoticeEl = document.getElementById("modal-copyright-notice");

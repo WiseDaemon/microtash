@@ -6,7 +6,7 @@ import re
 from datetime import datetime, date, timedelta
 from typing import List, Optional, Dict, Any
 from app.config import settings
-from app.models import Idea, Stash, UserProgress, Book
+from app.models import Idea, Stash, UserProgress, Book, SubstackNote, SubstackComment, Subscription
 from app.seed_data import DEFAULT_IDEAS, DEFAULT_STASHES
 
 def generate_copyright_attribution(title: str, author: str, publisher: str = "") -> str:
@@ -240,6 +240,54 @@ def init_db():
     );
     """)
 
+    # 9. Substack Notes (Short-form stream & restacks)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS substack_notes (
+        id TEXT PRIMARY KEY,
+        author_name TEXT NOT NULL,
+        author_handle TEXT NOT NULL,
+        author_avatar TEXT,
+        content TEXT NOT NULL,
+        referenced_idea_id TEXT,
+        referenced_idea_title TEXT,
+        referenced_idea_quote TEXT,
+        referenced_idea_author TEXT,
+        restack_comment TEXT,
+        likes_count INTEGER DEFAULT 0,
+        restacks_count INTEGER DEFAULT 0,
+        created_at TEXT NOT NULL,
+        is_liked INTEGER DEFAULT 0
+    );
+    """)
+
+    # 10. Substack Comments / Threaded Discussions
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS substack_comments (
+        id TEXT PRIMARY KEY,
+        idea_id TEXT NOT NULL,
+        user_id TEXT DEFAULT 'community',
+        user_name TEXT NOT NULL,
+        user_avatar TEXT,
+        comment_text TEXT NOT NULL,
+        likes_count INTEGER DEFAULT 0,
+        created_at TEXT NOT NULL,
+        parent_comment_id TEXT
+    );
+    """)
+
+    # 11. Substack Subscriptions
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS substack_subscriptions (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        target_type TEXT NOT NULL,
+        target_name TEXT NOT NULL,
+        target_handle TEXT,
+        created_at TEXT NOT NULL,
+        UNIQUE(user_id, target_name)
+    );
+    """)
+
     # Performance & Spaced Repetition Indices
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_ideas_topic ON ideas(topic);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_ideas_leitner ON ideas(next_review_date, leitner_box);")
@@ -251,6 +299,9 @@ def init_db():
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_sessions_user ON user_sessions(user_id);")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_notes_created ON substack_notes(created_at DESC);")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_comments_idea ON substack_comments(idea_id, created_at DESC);")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_subs_user ON substack_subscriptions(user_id);")
 
     conn.commit()
 
@@ -358,6 +409,11 @@ def init_db():
             VALUES (?, ?, ?, ?, 'Original Publication', ?, ?, ?, 'community', ?, 'completed')
         """, (slug, src, norm, auth, c_notice, top, cnt, now_iso))
     conn.commit()
+
+    # Seed default Substack Notes & Discussions if empty
+    cursor.execute("SELECT COUNT(*) FROM substack_notes")
+    if cursor.fetchone()[0] == 0:
+        seed_substack_defaults(conn)
 
     conn.close()
 
@@ -1275,3 +1331,296 @@ def delete_all_user_sessions(user_id: str) -> bool:
     conn.commit()
     conn.close()
     return True
+
+
+# =========================================================================
+# SUBSTACK ECOSYSTEM (Notes, Subscriptions, Restacks & Discussions)
+# =========================================================================
+
+def seed_substack_defaults(conn):
+    cursor = conn.cursor()
+    now_iso = datetime.utcnow().isoformat()
+    yesterday_iso = (datetime.utcnow() - timedelta(hours=4)).isoformat()
+    two_days_ago_iso = (datetime.utcnow() - timedelta(days=1)).isoformat()
+    three_days_ago_iso = (datetime.utcnow() - timedelta(days=2)).isoformat()
+
+    default_notes = [
+        {
+            "id": "note_1",
+            "author_name": "Shane Parrish",
+            "author_handle": "farnamstreet",
+            "author_avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80",
+            "content": "The best mental models are the ones you deploy when you are angry, exhausted, or pressured. Inversion is trivial on a whiteboard; it takes immense character to ask 'How could this blow up in my face?' when the entire room is cheering.",
+            "referenced_idea_id": "idea_inversion",
+            "referenced_idea_title": "The Inversion Principle",
+            "referenced_idea_quote": "Invert, always invert: Turn a situation or problem upside down. What happens if all our assumptions are wrong?",
+            "referenced_idea_author": "Charlie Munger",
+            "restack_comment": "Restacking Munger's foundational heuristic for our weekly executive review.",
+            "likes_count": 84,
+            "restacks_count": 29,
+            "created_at": now_iso
+        },
+        {
+            "id": "note_2",
+            "author_name": "Nassim Nicholas Taleb",
+            "author_handle": "nntaleb",
+            "author_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80",
+            "content": "A system that requires geniuses to operate safely is a fragile disaster waiting to detonate. Robustness comes from removing exposure to ruin, not from hoping people become smarter.",
+            "referenced_idea_id": "idea_antifragility",
+            "referenced_idea_title": "The Antifragile Principle",
+            "referenced_idea_quote": "Antifragility is beyond resilience or robustness. The resilient resists shocks and stays the same; the antifragile gets better.",
+            "referenced_idea_author": "Nassim Nicholas Taleb",
+            "restack_comment": "Notice how nature uses convex optionality: errors are cheap, discoveries are 100x.",
+            "likes_count": 142,
+            "restacks_count": 56,
+            "created_at": yesterday_iso
+        },
+        {
+            "id": "note_3",
+            "author_name": "James Clear",
+            "author_handle": "jamesclear",
+            "author_avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80",
+            "content": "You do not rise to the level of your goals. You fall to the level of your systems. When motivation fails—and it always does—your habit architecture is the only thing standing between progress and decay.",
+            "referenced_idea_id": "idea_identity_habits",
+            "referenced_idea_title": "Identity-Based Habits",
+            "referenced_idea_quote": "Every action you take is a vote for the type of person you wish to become.",
+            "referenced_idea_author": "James Clear",
+            "restack_comment": "Cast a vote today. Just one small action.",
+            "likes_count": 218,
+            "restacks_count": 78,
+            "created_at": two_days_ago_iso
+        },
+        {
+            "id": "note_4",
+            "author_name": "Morgan Housel",
+            "author_handle": "morganhousel",
+            "author_avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=120&q=80",
+            "content": "Rich is what you spend to signal status to strangers. Wealth is the options you preserve that no one ever sees. The greatest dividend money pays is the ability to control your time.",
+            "referenced_idea_id": "idea_rich_vs_wealthy",
+            "referenced_idea_title": "Rich vs. Wealthy",
+            "referenced_idea_quote": "Spending money to show people how much money you have is the fastest way to have less money. Wealth is what you don't see.",
+            "referenced_idea_author": "Morgan Housel",
+            "restack_comment": None,
+            "likes_count": 175,
+            "restacks_count": 63,
+            "created_at": three_days_ago_iso
+        }
+    ]
+
+    for n in default_notes:
+        cursor.execute("""
+            INSERT OR IGNORE INTO substack_notes (
+                id, author_name, author_handle, author_avatar, content,
+                referenced_idea_id, referenced_idea_title, referenced_idea_quote, referenced_idea_author,
+                restack_comment, likes_count, restacks_count, created_at, is_liked
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
+        """, (
+            n["id"], n["author_name"], n["author_handle"], n["author_avatar"], n["content"],
+            n.get("referenced_idea_id"), n.get("referenced_idea_title"), n.get("referenced_idea_quote"), n.get("referenced_idea_author"),
+            n.get("restack_comment"), n["likes_count"], n["restacks_count"], n["created_at"]
+        ))
+
+    default_comments = [
+        {
+            "id": "comm_1",
+            "idea_id": "idea_inversion",
+            "user_name": "Elena Rostova",
+            "user_avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=120&q=80",
+            "comment_text": "We applied Inversion to our Q3 SaaS roadmap. Instead of asking 'What features will double customer retention?', we asked 'What bugs and confusing UI steps make trial users rage-quit within 48 hours?' Fixing those 4 friction points cut our churn by 32% with zero new code.",
+            "likes_count": 19,
+            "created_at": now_iso
+        },
+        {
+            "id": "comm_2",
+            "idea_id": "idea_inversion",
+            "user_name": "David Chen",
+            "user_avatar": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&q=80",
+            "comment_text": "The Munger meteorology example is gold. In trading, the best risk managers don't hunt 10x wins first; they systematically eliminate positions where leverage can trigger a margin call.",
+            "likes_count": 11,
+            "created_at": yesterday_iso
+        },
+        {
+            "id": "comm_3",
+            "idea_id": "idea_two_minute_rule",
+            "user_name": "Marcus Vance",
+            "user_avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80",
+            "comment_text": "The psychological trick is giving yourself honest permission to stop at 2 minutes. Once your subconscious trusts that you aren't running a bait-and-switch, task paralysis disappears.",
+            "likes_count": 14,
+            "created_at": two_days_ago_iso
+        }
+    ]
+
+    for c in default_comments:
+        cursor.execute("""
+            INSERT OR IGNORE INTO substack_comments (
+                id, idea_id, user_name, user_avatar, comment_text, likes_count, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (
+            c["id"], c["idea_id"], c["user_name"], c["user_avatar"], c["comment_text"], c["likes_count"], c["created_at"]
+        ))
+
+    # Seed default subscriptions for demo user
+    cursor.execute("""
+        INSERT OR IGNORE INTO substack_subscriptions (id, user_id, target_type, target_name, target_handle, created_at)
+        VALUES 
+        ('sub_1', 'user_demo', 'publication', 'The Mental Model Review', 'mental-models', ?),
+        ('sub_2', 'user_demo', 'author', 'Charlie Munger', 'munger', ?),
+        ('sub_3', 'user_demo', 'author', 'Nassim Nicholas Taleb', 'nntaleb', ?)
+    """, (now_iso, now_iso, now_iso))
+
+    conn.commit()
+
+def get_substack_notes(limit: int = 50) -> List[SubstackNote]:
+    conn = get_connection()
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM substack_notes ORDER BY created_at DESC LIMIT ?", (limit,))
+    rows = cursor.fetchall()
+    conn.close()
+    return [SubstackNote(**dict(r)) for r in rows]
+
+def create_substack_note(data: Dict[str, Any]) -> SubstackNote:
+    conn = get_connection()
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    note_id = data.get("id") or f"note_{uuid.uuid4().hex[:8]}"
+    now_iso = datetime.utcnow().isoformat()
+    avatar = data.get("author_avatar") or f"https://api.dicebear.com/7.x/initials/svg?seed={data.get('author_name', 'T').replace(' ', '')}"
+    cursor.execute("""
+        INSERT INTO substack_notes (
+            id, author_name, author_handle, author_avatar, content,
+            referenced_idea_id, referenced_idea_title, referenced_idea_quote, referenced_idea_author,
+            restack_comment, likes_count, restacks_count, created_at, is_liked
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?, 0)
+    """, (
+        note_id, data.get("author_name", "Anonymous Thinker"), data.get("author_handle", "thinker"),
+        avatar, data["content"], data.get("referenced_idea_id"),
+        data.get("referenced_idea_title"), data.get("referenced_idea_quote"), data.get("referenced_idea_author"),
+        data.get("restack_comment"), now_iso
+    ))
+    conn.commit()
+    cursor.execute("SELECT * FROM substack_notes WHERE id = ?", (note_id,))
+    row = cursor.fetchone()
+    conn.close()
+    return SubstackNote(**dict(row))
+
+def toggle_like_substack_note(note_id: str) -> Optional[SubstackNote]:
+    conn = get_connection()
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("SELECT is_liked, likes_count FROM substack_notes WHERE id = ?", (note_id,))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        return None
+    new_liked = 0 if row["is_liked"] else 1
+    new_count = max(0, row["likes_count"] + (1 if new_liked else -1))
+    cursor.execute("UPDATE substack_notes SET is_liked = ?, likes_count = ? WHERE id = ?", (new_liked, new_count, note_id))
+    conn.commit()
+    cursor.execute("SELECT * FROM substack_notes WHERE id = ?", (note_id,))
+    updated_row = cursor.fetchone()
+    conn.close()
+    return SubstackNote(**dict(updated_row))
+
+def restack_idea_to_notes(idea_id: str, comment: str, author_name: str = "Curated Thinker", author_handle: str = "thinker") -> Optional[SubstackNote]:
+    idea = get_idea_by_id(idea_id)
+    if not idea:
+        return None
+    note_data = {
+        "content": f"Restacked '{idea.title}' by {idea.author}",
+        "author_name": author_name,
+        "author_handle": author_handle,
+        "referenced_idea_id": idea.id,
+        "referenced_idea_title": idea.title,
+        "referenced_idea_quote": idea.quote or idea.one_liner,
+        "referenced_idea_author": idea.author,
+        "restack_comment": comment.strip() if comment else None
+    }
+    return create_substack_note(note_data)
+
+def get_comments_for_idea(idea_id: str) -> List[SubstackComment]:
+    conn = get_connection()
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM substack_comments WHERE idea_id = ? ORDER BY created_at DESC", (idea_id,))
+    rows = cursor.fetchall()
+    conn.close()
+    return [SubstackComment(**dict(r)) for r in rows]
+
+def create_substack_comment(idea_id: str, user_name: str, comment_text: str, user_id: str = "community", parent_id: Optional[str] = None) -> SubstackComment:
+    conn = get_connection()
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    comm_id = f"comm_{uuid.uuid4().hex[:8]}"
+    now_iso = datetime.utcnow().isoformat()
+    avatar = f"https://api.dicebear.com/7.x/initials/svg?seed={user_name.replace(' ', '')}"
+    cursor.execute("""
+        INSERT INTO substack_comments (
+            id, idea_id, user_id, user_name, user_avatar, comment_text, likes_count, created_at, parent_comment_id
+        ) VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?)
+    """, (comm_id, idea_id, user_id, user_name, avatar, comment_text, now_iso, parent_id))
+    conn.commit()
+    cursor.execute("SELECT * FROM substack_comments WHERE id = ?", (comm_id,))
+    row = cursor.fetchone()
+    conn.close()
+    return SubstackComment(**dict(row))
+
+def toggle_substack_subscription(user_id: str, target_name: str, target_type: str = "author", target_handle: Optional[str] = None) -> Dict[str, Any]:
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM substack_subscriptions WHERE user_id = ? AND target_name = ?", (user_id, target_name))
+    row = cursor.fetchone()
+    if row:
+        cursor.execute("DELETE FROM substack_subscriptions WHERE id = ?", (row[0],))
+        is_sub = False
+    else:
+        sub_id = f"sub_{uuid.uuid4().hex[:8]}"
+        now_iso = datetime.utcnow().isoformat()
+        cursor.execute("""
+            INSERT INTO substack_subscriptions (id, user_id, target_type, target_name, target_handle, created_at)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (sub_id, user_id, target_type, target_name, target_handle or slugify(target_name), now_iso))
+        is_sub = True
+    conn.commit()
+    cursor.execute("SELECT COUNT(*) FROM substack_subscriptions WHERE target_name = ?", (target_name,))
+    sub_count = cursor.fetchone()[0]
+    conn.close()
+    return {"subscribed": is_sub, "target_name": target_name, "subscriber_count": sub_count + 120}
+
+def get_user_substack_subscriptions(user_id: str) -> List[Subscription]:
+    conn = get_connection()
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM substack_subscriptions WHERE user_id = ? ORDER BY created_at DESC", (user_id,))
+    rows = cursor.fetchall()
+    conn.close()
+    return [Subscription(**dict(r)) for r in rows]
+
+def get_substack_publications() -> List[Dict[str, Any]]:
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT DISTINCT author, COUNT(*) as card_count FROM ideas GROUP BY author ORDER BY card_count DESC LIMIT 6")
+    authors = cursor.fetchall()
+    conn.close()
+
+    pubs = [
+        {
+            "name": "The Mental Model Review",
+            "handle": "mental-models",
+            "type": "publication",
+            "description": "Weekly masterclass treatises on first principles, systems dynamics, and cognitive biases.",
+            "subscribers": "14.2k",
+            "avatar": "psychology"
+        }
+    ]
+    for auth, cnt in authors:
+        pubs.append({
+            "name": auth,
+            "handle": slugify(auth),
+            "type": "author",
+            "description": f"Curated masterclasses and mental model treatises from {auth}.",
+            "subscribers": f"{cnt * 340 + 1200}",
+            "avatar": "edit_note"
+        })
+    return pubs
+
