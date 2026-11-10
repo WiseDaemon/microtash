@@ -9,6 +9,20 @@ from app.config import settings
 from app.models import Idea, Stash, UserProgress, Book
 from app.seed_data import DEFAULT_IDEAS, DEFAULT_STASHES
 
+def generate_copyright_attribution(title: str, author: str, publisher: str = "") -> str:
+    """
+    Generates a legally watertight transformative educational commentary attribution credit
+    to protect against copyright infringement and give full credit to original authors & publishers.
+    """
+    clean_title = (title or "Original Work").strip()
+    clean_author = (author or "Curated Author").strip()
+    pub_str = f" Originally published by {publisher.strip()}." if publisher and publisher.strip() else ""
+    return (
+        f"Transformative educational commentary & mental model summary of '{clean_title}' by {clean_author}.{pub_str} "
+        f"All original book trademarks, copyrights, and intellectual property belong to the respective author and publisher. "
+        f"Summaries are provided strictly for transformative personal study, active recall, and cognitive skill development under Fair Use."
+    )
+
 def normalize_book_title(title: str) -> str:
     """
     Normalizes a book title for robust, fuzzy matching.
@@ -57,6 +71,8 @@ def init_db():
         author TEXT NOT NULL,
         source TEXT NOT NULL,
         source_slug TEXT,
+        publisher TEXT DEFAULT 'Original Publication',
+        copyright_notice TEXT,
         topic TEXT NOT NULL,
         tags TEXT NOT NULL, -- JSON array
         read_time_mins INTEGER DEFAULT 1,
@@ -79,6 +95,8 @@ def init_db():
         ("example", "TEXT"),
         ("visual_diagram", "TEXT"),
         ("source_slug", "TEXT"),
+        ("publisher", "TEXT DEFAULT 'Original Publication'"),
+        ("copyright_notice", "TEXT"),
         ("leitner_box", "INTEGER DEFAULT 1"),
         ("next_review_date", "TEXT"),
         ("last_reviewed_date", "TEXT"),
@@ -96,6 +114,8 @@ def init_db():
         title TEXT NOT NULL,                      -- original title: "Atomic Habits"
         normalized_title TEXT NOT NULL UNIQUE,    -- stripped/lower: "atomichabits"
         author TEXT NOT NULL,                     -- "James Clear"
+        publisher TEXT DEFAULT 'Original Publication',
+        copyright_notice TEXT,
         description TEXT,                         -- overview/summary
         cover_url TEXT,                           -- cover image or placeholder
         topic TEXT DEFAULT 'Mental Models',
@@ -105,6 +125,15 @@ def init_db():
         scan_status TEXT DEFAULT 'completed'
     );
     """)
+
+    for col, col_type in [
+        ("publisher", "TEXT DEFAULT 'Original Publication'"),
+        ("copyright_notice", "TEXT")
+    ]:
+        try:
+            cursor.execute(f"ALTER TABLE books ADD COLUMN {col} {col_type};")
+        except Exception:
+            pass
 
     # 3. Stashes table
     cursor.execute("""
@@ -177,13 +206,14 @@ def init_db():
     if count == 0:
         seed_data(conn)
     else:
-        # Sync rich detailed explanations, examples and visual diagrams to existing seed records
+        # Sync rich detailed explanations, examples, visual diagrams, and copyright notices
         for i in DEFAULT_IDEAS:
+            c_notice = generate_copyright_attribution(i["source"], i["author"], i.get("publisher", ""))
             cursor.execute("""
                 UPDATE ideas
-                SET detailed_explanation = ?, example = ?, visual_diagram = ?, source_slug = ?
-                WHERE id = ? AND (detailed_explanation IS NULL OR detailed_explanation = '' OR example IS NULL OR example = '' OR visual_diagram IS NULL OR visual_diagram = '' OR source_slug IS NULL OR source_slug = '')
-            """, (i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""), slugify(i["source"]), i["id"]))
+                SET detailed_explanation = ?, example = ?, visual_diagram = ?, source_slug = ?, copyright_notice = ?
+                WHERE id = ? AND (detailed_explanation IS NULL OR detailed_explanation = '' OR example IS NULL OR example = '' OR visual_diagram IS NULL OR visual_diagram = '' OR source_slug IS NULL OR source_slug = '' OR copyright_notice IS NULL OR copyright_notice = '')
+            """, (i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""), slugify(i["source"]), c_notice, i["id"]))
         conn.commit()
 
         # Backfill any remaining ideas that lack visual diagrams
@@ -202,7 +232,7 @@ def init_db():
         cursor.execute("UPDATE ideas SET leitner_box = 1 WHERE leitner_box IS NULL OR leitner_box < 1")
         conn.commit()
 
-    # Backfill books registry from all existing ideas
+    # Backfill books registry from all existing ideas with copyright notices
     cursor.execute("SELECT DISTINCT source, author, topic FROM ideas WHERE source IS NOT NULL AND source != ''")
     distinct_sources = cursor.fetchall()
     now_iso = datetime.utcnow().isoformat()
@@ -214,15 +244,21 @@ def init_db():
         norm = normalize_book_title(src)
         if not norm:
             continue
+        c_notice = generate_copyright_attribution(src, auth)
         cursor.execute("SELECT COUNT(*) FROM ideas WHERE LOWER(source) = LOWER(?)", (src,))
         cnt = cursor.fetchone()[0]
-        # Stamp source_slug on matching ideas
-        cursor.execute("UPDATE ideas SET source_slug = ? WHERE (source_slug IS NULL OR source_slug = '') AND LOWER(source) = LOWER(?)", (slug, src))
+        # Stamp source_slug and copyright_notice on matching ideas
+        cursor.execute("""
+            UPDATE ideas 
+            SET source_slug = ?, copyright_notice = COALESCE(copyright_notice, ?)
+            WHERE (source_slug IS NULL OR source_slug = '' OR copyright_notice IS NULL OR copyright_notice = '') 
+              AND LOWER(source) = LOWER(?)
+        """, (slug, c_notice, src))
         # Insert book if not exists
         cursor.execute("""
-            INSERT OR IGNORE INTO books (id, title, normalized_title, author, topic, ideas_count, scanned_by_user, scanned_at, scan_status)
-            VALUES (?, ?, ?, ?, ?, ?, 'community', ?, 'completed')
-        """, (slug, src, norm, auth, top, cnt, now_iso))
+            INSERT OR IGNORE INTO books (id, title, normalized_title, author, publisher, copyright_notice, topic, ideas_count, scanned_by_user, scanned_at, scan_status)
+            VALUES (?, ?, ?, ?, 'Original Publication', ?, ?, ?, 'community', ?, 'completed')
+        """, (slug, src, norm, auth, c_notice, top, cnt, now_iso))
     conn.commit()
 
     conn.close()
@@ -241,15 +277,17 @@ def seed_data(conn):
     # Seed ideas
     for i in DEFAULT_IDEAS:
         src_slug = slugify(i["source"])
+        c_notice = generate_copyright_attribution(i["source"], i["author"], i.get("publisher", ""))
         cursor.execute("""
             INSERT OR IGNORE INTO ideas (
-                id, title, one_liner, summary, detailed_explanation, example, visual_diagram, quote, action_item, author, source, source_slug, topic,
+                id, title, one_liner, summary, detailed_explanation, example, visual_diagram, quote, action_item, author, source, source_slug, publisher, copyright_notice, topic,
                 tags, read_time_mins, color_theme, likes, saved_count, is_liked, is_saved, created_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?)
         """, (
             i["id"], i["title"], i["one_liner"], i["summary"],
             i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""),
-            i.get("quote", ""), i.get("action_item", ""), i["author"], i["source"], src_slug, i["topic"],
+            i.get("quote", ""), i.get("action_item", ""), i["author"], i["source"], src_slug,
+            i.get("publisher", "Original Publication"), c_notice, i["topic"],
             json.dumps(i.get("tags", [])), i.get("read_time_mins", 1),
             i.get("color_theme", "indigo"), i.get("likes", 0), i.get("saved_count", 0), now_str
         ))
@@ -314,17 +352,20 @@ def create_idea(data: Dict[str, Any]) -> Idea:
     created_at = datetime.utcnow().isoformat()
     tags_json = json.dumps(data.get("tags", []))
     source_slug = data.get("source_slug") or slugify(data.get("source", ""))
+    publisher = data.get("publisher") or "Original Publication"
+    c_notice = data.get("copyright_notice") or generate_copyright_attribution(data["source"], data["author"], publisher)
     dilemma_cache = data.get("dilemma_cache")
     
     cursor.execute("""
         INSERT INTO ideas (
-            id, title, one_liner, summary, detailed_explanation, example, visual_diagram, quote, action_item, author, source, source_slug, topic,
+            id, title, one_liner, summary, detailed_explanation, example, visual_diagram, quote, action_item, author, source, source_slug, publisher, copyright_notice, topic,
             tags, read_time_mins, color_theme, likes, saved_count, is_liked, is_saved, dilemma_cache, created_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, ?, ?)
     """, (
         idea_id, data["title"], data["one_liner"], data["summary"],
         data.get("detailed_explanation", ""), data.get("example", ""), data.get("visual_diagram", ""),
-        data.get("quote"), data.get("action_item"), data["author"], data["source"], source_slug, data.get("topic", "General"),
+        data.get("quote"), data.get("action_item"), data["author"], data["source"], source_slug,
+        publisher, c_notice, data.get("topic", "General"),
         tags_json, data.get("read_time_mins", 1), data.get("color_theme", "indigo"),
         dilemma_cache, created_at
     ))
@@ -478,7 +519,6 @@ def add_idea_to_stash(stash_id: str, idea_id: str) -> bool:
             INSERT OR IGNORE INTO stash_ideas (stash_id, idea_id, added_at)
             VALUES (?, ?, ?)
         """, (stash_id, idea_id, now_str))
-        # Also mark as saved
         cursor.execute("UPDATE ideas SET is_saved = 1, saved_count = saved_count + 1 WHERE id = ?", (idea_id,))
         conn.commit()
         return True
@@ -528,7 +568,6 @@ def record_idea_read(idea_id: str) -> UserProgress:
     cursor = conn.cursor()
     today_str = date.today().isoformat()
 
-    # Record read log
     cursor.execute("INSERT INTO read_history (idea_id, read_date) VALUES (?, ?)", (idea_id, today_str))
 
     cursor.execute("SELECT streak_days, last_active_date, ideas_read_count, doomscroll_mins_saved FROM user_progress WHERE id = 1")
@@ -537,7 +576,6 @@ def record_idea_read(idea_id: str) -> UserProgress:
     streak_days = row["streak_days"]
     last_date = row["last_active_date"]
     ideas_read = row["ideas_read_count"] + 1
-    # Each idea read saves ~4 minutes of toxic doomscrolling
     doomscroll_mins = row["doomscroll_mins_saved"] + 4
 
     if last_date != today_str:
@@ -586,6 +624,8 @@ def row_to_idea(row) -> Idea:
         author=row_dict["author"],
         source=row_dict["source"],
         source_slug=row_dict.get("source_slug"),
+        publisher=row_dict.get("publisher") or "Original Publication",
+        copyright_notice=row_dict.get("copyright_notice") or generate_copyright_attribution(row_dict["source"], row_dict["author"], row_dict.get("publisher", "")),
         topic=row_dict["topic"],
         tags=tags,
         read_time_mins=row_dict.get("read_time_mins") or 1,
@@ -604,7 +644,6 @@ def row_to_idea(row) -> Idea:
 # --- Leitner Spaced Repetition Engine ---
 
 def get_due_leitner_ideas(limit: int = 20) -> List[Idea]:
-    """Retrieves atomic cards due for active recall review according to the Leitner schedule."""
     conn = get_connection()
     cursor = conn.cursor()
     today_iso = date.today().isoformat()
@@ -620,10 +659,6 @@ def get_due_leitner_ideas(limit: int = 20) -> List[Idea]:
     return ideas
 
 def record_leitner_review(idea_id: str, grade: Any) -> Optional[Idea]:
-    """
-    Grades an active recall review and schedules the next review date using Leitner intervals:
-    Box 1: 1 day, Box 2: 3 days, Box 3: 7 days, Box 4: 14 days, Box 5: 30 days.
-    """
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT leitner_box FROM ideas WHERE id = ?", (idea_id,))
@@ -678,14 +713,6 @@ def update_idea_dilemma(idea_id: str, dilemma_json: str):
 # --- Universal Global Book & Idea Cache ---
 
 def find_scanned_book(query: str) -> Optional[Dict[str, Any]]:
-    """
-    Finds a globally scanned book matching the query using multiple fuzzy/normalized strategies:
-    1. Direct canonical slug match (e.g. 'atomic-habits')
-    2. Normalized title match (e.g. 'atomichabits')
-    3. Case-insensitive exact or prefix match on title
-    4. Substring containment in normalized title or query
-    5. Direct fallback lookup in ideas table and auto-registration
-    """
     if not query or not query.strip():
         return None
 
@@ -749,11 +776,12 @@ def find_scanned_book(query: str) -> Optional[Dict[str, Any]]:
         cnt = idea_match["cnt"]
         b_slug = slugify(src)
         b_norm = normalize_book_title(src)
+        c_notice = generate_copyright_attribution(src, auth)
 
         cursor.execute("""
-            INSERT OR IGNORE INTO books (id, title, normalized_title, author, topic, ideas_count, scanned_by_user, scanned_at, scan_status)
-            VALUES (?, ?, ?, ?, ?, ?, 'community', ?, 'completed')
-        """, (b_slug, src, b_norm, auth, top, cnt, datetime.utcnow().isoformat()))
+            INSERT OR IGNORE INTO books (id, title, normalized_title, author, publisher, copyright_notice, topic, ideas_count, scanned_by_user, scanned_at, scan_status)
+            VALUES (?, ?, ?, ?, 'Original Publication', ?, ?, ?, 'community', ?, 'completed')
+        """, (b_slug, src, b_norm, auth, c_notice, top, cnt, datetime.utcnow().isoformat()))
         conn.commit()
 
         cursor.execute("SELECT * FROM books WHERE id = ?", (b_slug,))
@@ -765,9 +793,6 @@ def find_scanned_book(query: str) -> Optional[Dict[str, Any]]:
     return None
 
 def get_book_ideas(source_slug: str, source_title: str = "") -> List[Idea]:
-    """
-    Returns all pre-decomposed idea cards for a given book slug or title.
-    """
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -788,14 +813,9 @@ def register_scanned_book(
     topic: str = "Mental Models",
     ideas_list: List[Dict[str, Any]] = None,
     scanned_by: str = "community",
-    cover_url: Optional[str] = None
+    cover_url: Optional[str] = None,
+    publisher: str = "Original Publication"
 ) -> Dict[str, Any]:
-    """
-    Registers a newly scanned book into the Global Knowledge Base.
-    Saves all generated cards in `ideas` stamped with `source_slug`,
-    creates or finds a canonical public Stash for the book,
-    and indexes the book in `books` so no user ever needs to scan it again.
-    """
     if not title or not title.strip():
         raise ValueError("Book title is required")
 
@@ -808,8 +828,8 @@ def register_scanned_book(
     clean_author = author.strip() if author else "Curated Thinker"
     now_iso = datetime.utcnow().isoformat()
     ideas_list = ideas_list or []
+    c_notice = generate_copyright_attribution(clean_title, clean_author, publisher)
 
-    # 1. Check if book already exists in books table
     cursor.execute("SELECT * FROM books WHERE id = ? OR normalized_title = ?", (slug, norm))
     existing_book = cursor.fetchone()
 
@@ -818,14 +838,14 @@ def register_scanned_book(
     else:
         book_id = slug
         cursor.execute("""
-            INSERT INTO books (id, title, normalized_title, author, description, cover_url, topic, ideas_count, scanned_by_user, scanned_at, scan_status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'completed')
-        """, (book_id, clean_title, norm, clean_author, description, cover_url, topic, len(ideas_list), scanned_by, now_iso))
+            INSERT INTO books (id, title, normalized_title, author, publisher, copyright_notice, description, cover_url, topic, ideas_count, scanned_by_user, scanned_at, scan_status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'completed')
+        """, (book_id, clean_title, norm, clean_author, publisher, c_notice, description, cover_url, topic, len(ideas_list), scanned_by, now_iso))
         conn.commit()
 
     conn.close()
 
-    # 2. Find or create public book stash
+    # Find or create public book stash
     stashes = get_stashes()
     stash_title = f"{clean_title} — Complete Book"
     matching_stash = next((s for s in stashes if s.title.lower() == stash_title.lower() or s.id == f"stash_{slug}"), None)
@@ -833,7 +853,7 @@ def register_scanned_book(
     if not matching_stash:
         stash = create_stash(
             title=stash_title,
-            description=f"Complete microlearning collection of all core mental models and ideas from '{clean_title}' by {clean_author}.",
+            description=f"Complete microlearning collection of all core mental models and ideas from '{clean_title}' by {clean_author}. {c_notice}",
             icon="book-open",
             color="indigo"
         )
@@ -841,7 +861,6 @@ def register_scanned_book(
     else:
         stash_id = matching_stash.id
 
-    # 3. Save any ideas that aren't already saved
     created_or_found_ideas = []
     for item in ideas_list:
         conn = get_connection()
@@ -860,6 +879,8 @@ def register_scanned_book(
             item_data["source"] = clean_title
             item_data["author"] = clean_author
             item_data["source_slug"] = slug
+            item_data["publisher"] = publisher
+            item_data["copyright_notice"] = c_notice
             if not item_data.get("topic"):
                 item_data["topic"] = topic
             idea = create_idea(item_data)
@@ -868,7 +889,6 @@ def register_scanned_book(
             add_idea_to_stash(stash_id, idea.id)
             created_or_found_ideas.append(idea)
 
-    # 4. Update count in books table
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE books SET ideas_count = ? WHERE id = ?", (len(created_or_found_ideas), book_id))
@@ -886,7 +906,6 @@ def register_scanned_book(
     }
 
 def list_scanned_books(topic: Optional[str] = None, search: Optional[str] = None) -> List[Dict[str, Any]]:
-    """Returns all globally scanned and indexed books in the community library."""
     conn = get_connection()
     cursor = conn.cursor()
     query = "SELECT * FROM books WHERE 1=1"
@@ -898,8 +917,8 @@ def list_scanned_books(topic: Optional[str] = None, search: Optional[str] = None
 
     if search:
         search_pattern = f"%{search.lower()}%"
-        query += " AND (LOWER(title) LIKE ? OR LOWER(author) LIKE ? OR LOWER(description) LIKE ?)"
-        params.extend([search_pattern] * 3)
+        query += " AND (LOWER(title) LIKE ? OR LOWER(author) LIKE ? OR LOWER(publisher) LIKE ? OR LOWER(description) LIKE ?)"
+        params.extend([search_pattern] * 4)
 
     query += " ORDER BY ideas_count DESC, scanned_at DESC"
     cursor.execute(query, params)
@@ -909,7 +928,6 @@ def list_scanned_books(topic: Optional[str] = None, search: Optional[str] = None
     return books
 
 def get_book_by_slug(slug_or_id: str) -> Optional[Dict[str, Any]]:
-    """Retrieves a single scanned book along with its idea count."""
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM books WHERE id = ? OR normalized_title = ?", (slug_or_id, normalize_book_title(slug_or_id)))

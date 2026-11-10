@@ -1,100 +1,92 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en" class="dark">
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>{{ app_name }} — The Mental Model Gym</title>
+  
+  <!-- Obsidian Kinetic Design System & Web Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
 
-  <!-- Google Stitch: Obsidian Kinetic Fonts & Material Symbols -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <!-- Tailwind CSS & Mermaid.js -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 
-  <!-- Tailwind CSS with Obsidian Kinetic Design System Config -->
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <script>
     tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
           colors: {
-            "background": "#0b1326",
+            // Obsidian Kinetic Color Tokens
             "surface": "#0b1326",
+            "surface-container-lowest": "#060e20",
+            "surface-container-low": "#131b2e",
             "surface-container": "#171f33",
             "surface-container-high": "#222a3d",
-            "surface-container-low": "#131b2e",
-            "surface-container-lowest": "#060e20",
-            "surface-container-highest": "#2d3449",
-            "primary": "#4edea3",
-            "primary-container": "#10b981",
-            "on-primary-container": "#002113",
-            "secondary": "#ffb95f",
-            "secondary-container": "#ee9800",
+            "surface-container-highest": "#2d3448",
             "on-surface": "#dae2fd",
-            "on-surface-variant": "#bbcabf",
-            "outline": "#86948a",
-            "outline-variant": "#3c4a42",
-            "tertiary": "#7bd0ff",
+            "on-surface-variant": "#c1c9be",
+            "primary": "#4edea3",
+            "primary-container": "#005234",
+            "on-primary-container": "#6ffbbe",
+            "secondary": "#ffb95f",
+            "secondary-container": "#653e00",
+            "tertiary": "#d0bcff",
+            "outline": "#8b9389",
+            "outline-variant": "#414941",
             "error": "#ffb4ab",
-            "error-container": "#93000a"
           },
           fontFamily: {
-            sans: ["Inter", "sans-serif"],
-            headline: ["Plus Jakarta Sans", "sans-serif"]
+            headline: ["'Plus Jakarta Sans'", "sans-serif"],
+            body: ["'Inter'", "sans-serif"],
+            mono: ["'JetBrains Mono'", "monospace"],
           }
         }
       }
     };
+    mermaid.initialize({ startOnLoad: false, theme: 'dark', themeVariables: { darkMode: true, background: '#0b1326' } });
   </script>
 
-  <!-- Lucide Icons & Mermaid.js -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-
   <style>
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-      display: inline-block;
-      vertical-align: middle;
-      line-height: 1;
+    /* Custom styling for Obsidian Kinetic & Android Sidecar Frame */
+    body {
+      background-color: #060e20;
+      color: #dae2fd;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
-    .custom-scrollbar::-webkit-scrollbar { display: none; }
-    .custom-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    @keyframes bar-wave {
-      0%, 100% { height: 6px; }
-      50% { height: 18px; }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
     }
-    @keyframes pulse-subtle {
-      0%, 100% { opacity: 0.9; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.97); }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #414941;
+      border-radius: 9999px;
     }
-    .pulse-glow { animation: pulse-subtle 3s ease-in-out infinite; }
     .tactile-glass {
       background: rgba(23, 31, 51, 0.75);
       backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
   </style>
 </head>
+<body class="min-h-screen flex flex-col items-center justify-start p-0 sm:py-6 sm:px-4">
 
-<body class="bg-surface-container-lowest text-on-surface antialiased min-h-screen flex justify-center selection:bg-primary selection:text-surface-container-lowest">
-
-  <!-- Mobile Simulator Frame / Desktop Adaptive Container -->
-  <div class="relative w-full max-w-[460px] md:max-w-4xl min-h-screen bg-surface flex flex-col shadow-2xl overflow-x-hidden pb-24 md:border-x md:border-outline-variant/20">
-
-    <!-- Ambient Radial Atmospheric Lighting (Stitch Signature) -->
-    <div class="pointer-events-none absolute -top-12 -left-20 w-80 h-80 rounded-full bg-primary/10 blur-[90px]"></div>
-    <div class="pointer-events-none absolute top-96 -right-24 w-80 h-80 rounded-full bg-secondary/10 blur-[100px]"></div>
-
-    <!-- 1. ANDROID STATUS BAR SIMULATOR -->
-    <div class="relative z-30 flex justify-between items-center px-6 pt-3 pb-1 select-none text-on-surface-variant text-xs">
-      <span class="font-bold tracking-tight text-on-surface" id="live-clock">9:41</span>
-      <div class="flex items-center space-x-2">
-        <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
-        <span class="material-symbols-outlined text-[16px]">wifi</span>
-        <span class="material-symbols-outlined text-[16px]">signal_cellular_alt</span>
-        <span class="text-[11px] font-semibold text-on-surface ml-0.5">100%</span>
-        <span class="material-symbols-outlined text-[16px] text-primary">battery_charging_full</span>
+  <!-- Mobile Device Canvas Wrapper -->
+  <div class="w-full max-w-[460px] md:max-w-4xl min-h-screen sm:min-h-[880px] bg-surface flex flex-col relative sm:rounded-[36px] sm:border sm:border-outline-variant/40 shadow-2xl overflow-hidden pb-24">
+    
+    <!-- 1. ANDROID STATUS BAR (Pixel Style) -->
+    <div class="px-6 pt-3 pb-1 flex justify-between items-center text-xs text-on-surface-variant select-none z-50">
+      <span id="live-clock" class="font-headline font-bold text-white text-[13px]">09:41</span>
+      <div class="flex items-center gap-1.5 text-on-surface-variant">
+        <span class="material-symbols-outlined text-[15px]">wifi</span>
+        <span class="material-symbols-outlined text-[15px]">signal_cellular_4_bar</span>
+        <span class="material-symbols-outlined text-[16px] text-primary">battery_full</span>
       </div>
     </div>
 
@@ -127,8 +119,29 @@
       </div>
     </header>
 
+    <!-- GLOBAL INSTANT BOOK & MODEL SEARCH BAR -->
+    <div class="px-5 pt-3 pb-1 relative z-30">
+      <div class="relative flex items-center">
+        <span class="material-symbols-outlined absolute left-3.5 text-primary text-[18px]">search</span>
+        <input 
+          type="text" 
+          id="global-book-search-input" 
+          oninput="handleGlobalBookSearch(this.value)"
+          placeholder="Search 18+ models & global books (e.g. Atomic Habits, Thinking Fast)..." 
+          class="w-full bg-surface-container-high/80 border border-outline-variant/40 rounded-full pl-10 pr-10 py-2 text-xs text-white placeholder-on-surface-variant/60 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-inner"
+        />
+        <button id="global-search-clear" onclick="clearGlobalSearch()" class="hidden absolute right-3 text-on-surface-variant hover:text-white">
+          <span class="material-symbols-outlined text-[16px]">close</span>
+        </button>
+      </div>
+      <!-- Autocomplete Dropdown -->
+      <div id="global-search-autocomplete" class="hidden absolute left-5 right-5 mt-1.5 bg-surface-container border border-outline-variant/60 rounded-2xl shadow-2xl p-2 z-50 max-h-80 overflow-y-auto custom-scrollbar">
+        <!-- Autocomplete items populated via JS -->
+      </div>
+    </div>
+
     <!-- 3. DAILY HABIT & GAMIFICATION PILLS ROW -->
-    <section class="px-5 pt-3.5 pb-2.5 flex items-center gap-2.5 overflow-x-auto custom-scrollbar select-none z-10">
+    <section class="px-5 pt-2.5 pb-2.5 flex items-center gap-2.5 overflow-x-auto custom-scrollbar select-none z-10">
       <!-- Streak Pill -->
       <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high/70 border border-secondary/40 shadow-sm flex-shrink-0">
         <span class="material-symbols-outlined text-[16px] text-secondary" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
@@ -232,6 +245,7 @@
               </div>
               <span class="text-xs text-on-surface-variant">
                 Attributed to <span id="card-author" class="text-on-surface font-semibold">Charlie Munger</span>
+                <span id="card-source-citation" class="text-on-surface-variant/70 text-[11px] block sm:inline sm:ml-1">• Poor Charlie's Almanack</span>
               </span>
             </div>
           </div>
@@ -257,46 +271,32 @@
               </button>
             </div>
             
-            <div id="card-diagram-container" class="min-h-[120px] flex items-center justify-center p-2 rounded-xl bg-surface-container-lowest/60 text-xs text-on-surface-variant">
-              <!-- Rendered dynamically via Mermaid.js or SVG -->
+            <div id="card-diagram-box" class="w-full min-h-[140px] flex items-center justify-center overflow-x-auto custom-scrollbar p-2 rounded-xl bg-surface-container-lowest/80 border border-outline-variant/20 text-xs">
+              <!-- Rendered via Mermaid.js or SVG -->
             </div>
           </div>
 
-          <!-- Floating Neural Audio Player Bar -->
-          <div class="p-2 sm:p-2.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-md border border-white/10 flex items-center justify-between shadow-md mb-4">
-            <div class="flex items-center gap-2.5 pl-2">
-              <button onclick="playCurrentCardAudio()" id="btn-audio-play" class="w-8 h-8 rounded-full bg-primary text-surface-container-lowest flex items-center justify-center shadow-[0_0_12px_rgba(78,222,163,0.4)] active:scale-95 transition">
-                <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
-              </button>
-              <div>
-                <div class="text-xs font-semibold text-on-surface flex items-center gap-1">
-                  <span>Neural Narration</span>
-                  <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-                </div>
-                <div id="audio-time-label" class="text-[10px] text-on-surface-variant">45-second micro-briefing</div>
+          <!-- Action Bar: Audio Pill & Socratic Challenge Button -->
+          <div class="flex items-center gap-3 pt-2">
+            <!-- Neural Waveform Audio Pill -->
+            <button onclick="toggleCardAudio()" id="btn-card-audio" class="flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-surface-container border border-outline-variant/40 hover:border-primary/50 text-xs font-semibold text-on-surface transition active:scale-95 shadow-sm">
+              <span class="material-symbols-outlined text-primary text-[18px]" id="audio-icon">volume_up</span>
+              <div class="flex items-center gap-0.5 h-3" id="audio-waveform">
+                <span class="w-0.5 h-2 bg-primary/70 rounded-full"></span>
+                <span class="w-0.5 h-3 bg-primary rounded-full"></span>
+                <span class="w-0.5 h-1.5 bg-primary/60 rounded-full"></span>
+                <span class="w-0.5 h-2.5 bg-primary/80 rounded-full"></span>
               </div>
-            </div>
-            <!-- Animated Waveform simulation -->
-            <div id="waveform-bars" class="flex items-center gap-1 pr-3 h-5">
-              <span class="w-1 bg-primary rounded-full h-2 animate-[bar-wave_1.2s_ease-in-out_infinite]"></span>
-              <span class="w-1 bg-primary rounded-full h-4 animate-[bar-wave_1s_ease-in-out_infinite_0.1s]"></span>
-              <span class="w-1 bg-secondary rounded-full h-5 animate-[bar-wave_0.9s_ease-in-out_infinite_0.3s]"></span>
-              <span class="w-1 bg-primary rounded-full h-3 animate-[bar-wave_1.1s_ease-in-out_infinite_0.15s]"></span>
-              <span class="w-1 bg-outline-variant rounded-full h-2"></span>
-            </div>
-          </div>
+              <span class="text-[11px] text-on-surface-variant font-mono" id="audio-label">Listen</span>
+            </button>
 
-          <!-- Card Action Metrics & High-Impact Socratic CTA -->
-          <div class="pt-2 flex items-center justify-between gap-3 border-t border-outline-variant/30">
-            <!-- Secondary Likes / Saves -->
-            <div class="flex items-center gap-3">
-              <button onclick="toggleLikeCurrentCard()" class="flex items-center gap-1 text-on-surface-variant hover:text-rose-400 transition active:scale-90 text-xs font-semibold">
-                <span id="card-like-icon" class="material-symbols-outlined text-[18px]">favorite_border</span>
-                <span id="card-like-count">342</span>
+            <!-- Export to Obsidian Markdown -->
+            <div class="flex items-center gap-1.5">
+              <button onclick="exportCurrentCardMarkdown()" class="w-9 h-9 rounded-full bg-surface-container border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-white transition" title="Export Obsidian Markdown">
+                <span class="material-symbols-outlined text-[18px]">download</span>
               </button>
-              <button onclick="openDeepDiveModal()" class="flex items-center gap-1 text-on-surface-variant hover:text-tertiary transition text-xs font-semibold" title="Progressive 3-Slide Deep Dive">
+              <button onclick="openDeepDiveModal()" class="w-9 h-9 rounded-full bg-surface-container border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-tertiary transition" title="Progressive 3-Slide Deep Dive">
                 <span class="material-symbols-outlined text-[18px]">menu_book</span>
-                <span>Deepen</span>
               </button>
             </div>
 
@@ -306,6 +306,14 @@
               <span>Stress-Test Me</span>
               <span class="text-[9px] px-1.5 py-0.2 rounded-full bg-on-primary-container/20 font-bold">+10 XP</span>
             </button>
+          </div>
+
+          <!-- Transformative Fair Use Educational Credit -->
+          <div class="mt-3 pt-2 border-t border-outline-variant/20 flex items-start gap-1.5 text-on-surface-variant/40">
+            <span class="material-symbols-outlined text-[13px] text-primary/70 flex-shrink-0 mt-0.5">verified</span>
+            <p id="card-attribution" class="text-[9px] leading-tight italic">
+              Transformative educational commentary & mental model summary based on original publications. All rights belong to respective authors & publishers under Fair Use.
+            </p>
           </div>
 
         </article>
@@ -410,15 +418,43 @@
     </section>
 
     <!-- ===================================================================== -->
-    <!-- TAB 3: MICRO-FEED GRID                                                -->
+    <!-- TAB 3: GLOBAL BOOKS & COMMUNITY LIBRARY                               -->
     <!-- ===================================================================== -->
-    <section id="tab-feed-content" class="hidden flex-1 px-5 pt-4 space-y-4">
-      <div class="flex items-center justify-between">
-        <h2 class="text-lg font-headline font-bold text-white">Mental Model Library</h2>
-        <span id="feed-count-badge" class="text-xs text-on-surface-variant font-medium">18 Models</span>
+    <section id="tab-feed-content" class="hidden flex-1 px-5 pt-4 space-y-6">
+      
+      <!-- Community Bookshelf Header -->
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[20px]">menu_book</span>
+            <h2 class="text-lg font-headline font-bold text-white">Global Bookshelf</h2>
+          </div>
+          <span id="books-count-badge" class="px-2.5 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/30 text-[10px] font-bold">
+            0 Books Cached
+          </span>
+        </div>
+        <p class="text-xs text-on-surface-variant">
+          Books requested by community members are permanently indexed here with <span class="text-primary font-bold">0s scan time</span> for everyone.
+        </p>
       </div>
-      <div id="feed-grid-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <!-- Dynamically rendered via app.js -->
+
+      <!-- Books Horizontal Shelf -->
+      <div id="books-shelf-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <!-- Rendered via app.js -->
+      </div>
+
+      <!-- Individual Mental Models Divider & Section -->
+      <div class="pt-2 border-t border-outline-variant/30">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-headline font-bold text-white flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary text-[18px]">psychology</span>
+            <span>All Deconstructed Mental Models</span>
+          </h3>
+          <span id="feed-count-badge" class="text-xs text-on-surface-variant font-medium">18 Models</span>
+        </div>
+        <div id="feed-grid-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <!-- Dynamically rendered via app.js -->
+        </div>
       </div>
     </section>
 
@@ -478,19 +514,19 @@
       <!-- Nav 1: Feed (Active) -->
       <button onclick="switchTab('swipe')" id="stitch-nav-swipe" class="flex flex-col items-center justify-center bg-primary/15 text-primary rounded-full px-4 py-1.5 shadow-[0_0_12px_rgba(78,222,163,0.25)] transition">
         <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">explore</span>
-        <span class="text-[10px] font-headline font-bold">Feed</span>
+        <span class="text-[10px] font-headline font-bold">Gym Feed</span>
       </button>
 
-      <!-- Nav 2: Workout -->
+      <!-- Nav 2: Bookshelf / Library -->
+      <button onclick="switchTab('feed')" id="stitch-nav-feed" class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition px-3 py-1.5">
+        <span class="material-symbols-outlined text-[20px]">menu_book</span>
+        <span class="text-[10px] font-headline font-medium">Books</span>
+      </button>
+
+      <!-- Nav 3: Workout -->
       <button onclick="switchTab('leitner')" id="stitch-nav-leitner" class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition px-3 py-1.5">
         <span class="material-symbols-outlined text-[20px]">fitness_center</span>
         <span class="text-[10px] font-headline font-medium">Workout</span>
-      </button>
-
-      <!-- Nav 3: Library Grid -->
-      <button onclick="switchTab('feed')" id="stitch-nav-feed" class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition px-3 py-1.5">
-        <span class="material-symbols-outlined text-[20px]">grid_view</span>
-        <span class="text-[10px] font-headline font-medium">Library</span>
       </button>
 
       <!-- Nav 4: Stashes -->
@@ -512,6 +548,60 @@
   </div>
 
   <!-- ========================================================================= -->
+  <!-- MODAL: GLOBAL BOOK DETAILS & DECOMPOSED CARDS VIEW                        -->
+  <!-- ========================================================================= -->
+  <div id="book-detail-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-surface border border-primary/40 rounded-3xl max-w-2xl w-full shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Modal Header -->
+      <div class="p-5 bg-gradient-to-r from-surface via-surface-container to-surface border-b border-outline-variant/30 flex items-start justify-between">
+        <div class="flex items-start gap-3.5">
+          <div class="w-12 h-16 rounded-xl bg-primary/20 border border-primary/40 flex items-center justify-center text-primary flex-shrink-0 shadow-inner">
+            <span class="material-symbols-outlined text-[28px]">menu_book</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="book-modal-topic" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/30">
+                TOPIC
+              </span>
+              <span id="book-modal-ideas-count" class="text-xs text-secondary font-bold flex items-center gap-1">
+                <span class="material-symbols-outlined text-[13px]">flash_on</span>
+                <span>0 Models</span>
+              </span>
+            </div>
+            <h2 id="book-modal-title" class="text-xl sm:text-2xl font-headline font-bold text-white mt-1">Book Title</h2>
+            <p id="book-modal-author-pub" class="text-xs text-on-surface-variant font-medium mt-0.5">Author • Publisher</p>
+          </div>
+        </div>
+        <button onclick="closeBookDetailModal()" class="w-8 h-8 rounded-full bg-surface-container border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-white transition">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+
+      <!-- Transformative Fair-Use Copyright & Attribution Banner -->
+      <div class="px-5 py-3 bg-surface-container-lowest border-b border-outline-variant/20 flex items-start gap-2.5">
+        <span class="material-symbols-outlined text-[16px] text-primary mt-0.5 flex-shrink-0">verified</span>
+        <p id="book-modal-copyright-notice" class="text-[10px] text-on-surface-variant/80 leading-relaxed italic">
+          Transformative educational commentary & mental model summary based on original publication. All original copyrights remain with the author and publisher.
+        </p>
+      </div>
+
+      <!-- Modal Body: Cards List -->
+      <div id="book-modal-cards-list" class="p-5 sm:p-6 overflow-y-auto space-y-3.5 custom-scrollbar flex-1">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 bg-surface-container border-t border-outline-variant/30 flex items-center justify-between">
+        <span class="text-xs text-on-surface-variant">Cached for 0s instantaneous scan across all users.</span>
+        <button onclick="closeBookDetailModal()" class="px-5 py-2 rounded-full bg-primary text-surface-container-lowest font-headline font-bold text-xs shadow-md">
+          Close Library View
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
   <!-- MODAL: GOOGLE STITCH SOCRATIC DILEMMA ARENA (SCREEN 2)                    -->
   <!-- ========================================================================= -->
   <div id="stress-test-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
@@ -519,13 +609,13 @@
       
       <!-- Modal Header -->
       <div class="p-5 bg-gradient-to-r from-surface via-surface-container to-surface border-b border-outline-variant/30 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-secondary/20 border border-secondary/40 flex items-center justify-center text-secondary shadow-inner">
-            <span class="material-symbols-outlined text-[22px]">bolt</span>
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-secondary/20 border border-secondary/40 flex items-center justify-center text-secondary">
+            <span class="material-symbols-outlined text-[18px]">bolt</span>
           </div>
           <div>
-            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary/20 text-secondary border border-secondary/30">Socratic Dilemma Arena</span>
-            <h3 id="stress-test-title" class="text-base font-headline font-bold text-white line-clamp-1">Mental Model Challenge</h3>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-secondary">Socratic Arena</span>
+            <h3 class="text-sm font-headline font-bold text-white">Pressure-Test Your Intuition</h3>
           </div>
         </div>
         <button onclick="closeStressTestModal()" class="w-8 h-8 rounded-full bg-surface-container border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-white transition">
@@ -534,60 +624,32 @@
       </div>
 
       <!-- Modal Body -->
-      <div class="p-5 sm:p-6 overflow-y-auto space-y-4 text-xs sm:text-sm">
-        
-        <!-- Loading Spinner -->
-        <div id="stress-test-loading" class="py-12 flex flex-col items-center justify-center space-y-3">
-          <div class="w-10 h-10 border-4 border-secondary/20 border-t-secondary rounded-full animate-spin"></div>
-          <p class="text-xs text-secondary/80 font-medium">Loading instant Socratic dilemma...</p>
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-4 text-xs sm:text-sm custom-scrollbar flex-1">
+        <div class="p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/30 leading-relaxed text-on-surface/90">
+          <p class="text-[10px] font-bold text-secondary uppercase mb-1">Scenario Dilemma</p>
+          <div id="stress-scenario" class="italic">Synthesizing high-stakes dilemma...</div>
         </div>
 
-        <!-- Content Area -->
-        <div id="stress-test-content" class="hidden space-y-4">
-          <!-- High-Stakes Scenario Box -->
-          <div class="bg-surface-container-high/80 border border-outline-variant/40 rounded-2xl p-4 sm:p-5 relative">
-            <div class="flex items-center gap-1.5 text-xs font-bold text-secondary mb-2">
-              <span class="material-symbols-outlined text-[16px]">warning</span>
-              <span>High-Stakes Decision Scenario</span>
-            </div>
-            <p id="stress-test-scenario" class="text-on-surface leading-relaxed text-xs sm:text-sm"></p>
-          </div>
-
-          <!-- Question -->
-          <div>
-            <h4 id="stress-test-question" class="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2.5">What is your first-principles move?</h4>
-            <div id="stress-test-options" class="space-y-2"></div>
-          </div>
-
-          <!-- Diagnostic Feedback -->
-          <div id="stress-test-feedback-box" class="hidden rounded-2xl p-4 border transition-all">
-            <div id="stress-test-feedback-header" class="flex items-center gap-1.5 text-xs font-bold mb-1"></div>
-            <p id="stress-test-feedback-text" class="text-xs text-on-surface leading-relaxed"></p>
-          </div>
-
-          <!-- First-Principles Heuristic Anchor -->
-          <div id="stress-test-takeaway-box" class="hidden bg-primary/10 border border-primary/40 rounded-2xl p-3.5">
-            <div class="flex items-center gap-1.5 text-xs font-bold text-primary mb-1">
-              <span class="material-symbols-outlined text-[16px]">verified</span>
-              <span>First-Principles Heuristic</span>
-            </div>
-            <p id="stress-test-takeaway-text" class="text-xs text-primary/90 font-medium"></p>
-          </div>
+        <div>
+          <p id="stress-question" class="font-headline font-bold text-white text-sm mb-3">Which response correctly applies the model?</p>
+          <div id="stress-options" class="space-y-2"></div>
         </div>
 
+        <!-- Feedback Box -->
+        <div id="stress-feedback-box" class="hidden p-4 rounded-2xl border leading-relaxed">
+          <div class="flex items-center gap-2 font-bold mb-1" id="stress-feedback-title"></div>
+          <div id="stress-feedback-explanation" class="text-xs opacity-90"></div>
+          <div id="stress-first-principles" class="mt-2 pt-2 border-t border-white/10 text-[11px] text-primary font-semibold"></div>
+        </div>
       </div>
 
       <!-- Modal Footer -->
-      <div class="p-4 bg-surface-container/60 border-t border-outline-variant/30 flex items-center justify-between">
-        <button onclick="regenerateStressTest()" class="text-xs font-semibold text-secondary hover:underline flex items-center gap-1">
-          <span class="material-symbols-outlined text-[16px]">refresh</span>
-          <span>New Dilemma</span>
-        </button>
+      <div class="p-4 bg-surface-container border-t border-outline-variant/30 flex items-center justify-between">
+        <span class="text-xs text-on-surface-variant">Tap choice to verify mental model</span>
         <button onclick="closeStressTestModal()" class="px-5 py-2 rounded-full bg-primary text-surface-container-lowest font-headline font-bold text-xs transition shadow-md">
           Done
         </button>
       </div>
-
     </div>
   </div>
 
@@ -595,19 +657,19 @@
   <!-- MODAL: PROGRESSIVE DISCLOSURE 3-SLIDE DEEP DIVE                           -->
   <!-- ========================================================================= -->
   <div id="deep-dive-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-    <div class="bg-surface border border-outline-variant/40 rounded-3xl max-w-2xl w-full shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
+    <div class="bg-surface border border-outline-variant/50 rounded-3xl max-w-2xl w-full shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-in fade-in zoom-in-95 duration-200">
       
       <!-- Modal Header -->
-      <div class="p-5 border-b border-outline-variant/30 flex items-center justify-between bg-surface-container/50">
+      <div class="p-5 bg-gradient-to-r from-surface via-surface-container to-surface border-b border-outline-variant/30 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <span id="modal-topic" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/30">
-            Mental Models
+            STRATEGY
           </span>
-          <span id="modal-author-source" class="text-xs text-on-surface-variant">Charlie Munger</span>
+          <span id="modal-author-source" class="text-xs text-on-surface-variant">Charlie Munger • Poor Charlie's Almanack</span>
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="exportCurrentToObsidian()" class="p-2 rounded-full bg-surface-container text-tertiary hover:bg-tertiary/20 transition" title="Export to Obsidian / Notion (.md)">
-            <span class="material-symbols-outlined text-[18px]">download</span>
+          <button onclick="exportCurrentCardMarkdown()" class="w-8 h-8 rounded-full bg-surface-container border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-white transition" title="Export Markdown">
+            <span class="material-symbols-outlined text-[16px]">download</span>
           </button>
           <button onclick="closeDeepDiveModal()" class="w-8 h-8 rounded-full bg-surface-container border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-white transition">
             <span class="material-symbols-outlined text-[18px]">close</span>
@@ -615,56 +677,59 @@
         </div>
       </div>
 
-      <!-- Progressive Slide Switcher -->
-      <div class="px-5 pt-4">
-        <div class="flex items-center space-x-1.5 p-1 bg-surface-container rounded-2xl border border-outline-variant/30">
-          <button onclick="switchDeepDiveSlide('mechanism')" id="tab-btn-mechanism" class="flex-1 py-1.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 bg-primary text-surface-container-lowest">
-            <span>1. Mechanism</span>
-          </button>
-          <button onclick="switchDeepDiveSlide('example')" id="tab-btn-example" class="flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold text-on-surface-variant hover:text-white transition flex items-center justify-center gap-1">
-            <span>2. Real Case</span>
-          </button>
-          <button onclick="switchDeepDiveSlide('boundary')" id="tab-btn-boundary" class="flex-1 py-1.5 px-3 rounded-xl text-xs font-semibold text-on-surface-variant hover:text-white transition flex items-center justify-center gap-1">
-            <span>3. Boundary Traps</span>
-          </button>
-          <button onclick="switchDeepDiveSlide('all')" id="tab-btn-all" class="py-1.5 px-2 rounded-xl text-xs font-semibold text-on-surface-variant hover:text-white transition" title="Show all stacked">
-            <span class="material-symbols-outlined text-[16px]">layers</span>
-          </button>
-        </div>
+      <!-- 3-Slide Step Progress Pills -->
+      <div class="px-6 py-2.5 bg-surface-container-low border-b border-outline-variant/20 flex items-center justify-between gap-2">
+        <button onclick="setDeepDiveSlide(1)" id="pill-slide-1" class="flex-1 py-1.5 px-3 rounded-full text-[11px] font-bold text-primary bg-primary/20 border border-primary/50 transition text-center">
+          1. Mechanism
+        </button>
+        <button onclick="setDeepDiveSlide(2)" id="pill-slide-2" class="flex-1 py-1.5 px-3 rounded-full text-[11px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant/30 transition text-center">
+          2. Case Study
+        </button>
+        <button onclick="setDeepDiveSlide(3)" id="pill-slide-3" class="flex-1 py-1.5 px-3 rounded-full text-[11px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant/30 transition text-center">
+          3. Action & Bounds
+        </button>
       </div>
 
-      <!-- Slide Body -->
-      <div class="p-5 sm:p-7 overflow-y-auto space-y-5 text-on-surface text-xs sm:text-sm leading-relaxed">
+      <!-- Modal Body -->
+      <div class="p-6 overflow-y-auto space-y-4 text-xs sm:text-sm custom-scrollbar flex-1">
         <h2 id="modal-title" class="text-2xl font-headline font-bold text-white">The Inversion Principle</h2>
         <p id="modal-one-liner" class="text-sm font-semibold text-primary italic"></p>
 
-        <!-- Slide 1: Mechanism -->
-        <div id="slide-sec-mechanism" class="space-y-4">
-          <div class="p-4 rounded-2xl bg-surface-container-high/60 border border-outline-variant/30">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-primary mb-2">First Principles Mechanics</h4>
+        <!-- SLIDE 1 -->
+        <div id="modal-slide-1" class="space-y-4">
+          <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30">
+            <h4 class="text-xs font-bold text-secondary uppercase tracking-wider mb-2">First Principles Breakdown</h4>
             <div id="modal-detailed-explanation" class="text-on-surface/90 space-y-2 leading-relaxed"></div>
           </div>
           <div id="modal-diagram-container" class="p-3 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/20 min-h-[140px] flex items-center justify-center"></div>
         </div>
 
-        <!-- Slide 2: Case Study -->
-        <div id="slide-sec-example" class="hidden space-y-4">
-          <div class="p-4 rounded-2xl bg-surface-container-high/60 border border-outline-variant/30">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-secondary mb-2">Real-World Case Study</h4>
+        <!-- SLIDE 2 -->
+        <div id="modal-slide-2" class="hidden space-y-4">
+          <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30">
+            <h4 class="text-xs font-bold text-tertiary uppercase tracking-wider mb-2">Real-World Case Study</h4>
             <div id="modal-example" class="text-on-surface/90 leading-relaxed"></div>
           </div>
         </div>
 
-        <!-- Slide 3: Boundary Traps -->
-        <div id="slide-sec-boundary" class="hidden space-y-4">
-          <div class="p-4 rounded-2xl bg-rose-950/20 border border-rose-500/30">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-rose-300 mb-2">When It Fails (Boundary Traps)</h4>
+        <!-- SLIDE 3 -->
+        <div id="modal-slide-3" class="hidden space-y-4">
+          <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30">
+            <h4 class="text-xs font-bold text-error uppercase tracking-wider mb-1">When NOT to Apply (Failure Boundary)</h4>
             <p id="modal-boundary-text" class="text-on-surface/90 leading-relaxed">Avoid dogmatic application in pure chaotic environments with zero signal-to-noise ratio.</p>
           </div>
           <div class="p-4 rounded-2xl bg-primary/10 border border-primary/30">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-primary mb-1">Try It Today (Action Item)</h4>
+            <h4 class="text-xs font-bold text-primary uppercase tracking-wider mb-1">⚡ Try It Today (Action Item)</h4>
             <p id="modal-action-item" class="text-primary font-medium"></p>
           </div>
+        </div>
+
+        <!-- Author, Publisher & Transformative Copyright Credit Footer -->
+        <div class="pt-3 border-t border-outline-variant/20 flex items-start gap-2 text-on-surface-variant/50 text-[10px]">
+          <span class="material-symbols-outlined text-[14px] text-primary/70 flex-shrink-0 mt-0.5">verified</span>
+          <p id="modal-copyright-notice" class="italic leading-normal">
+            Transformative educational commentary & mental model summary based on original publication. All original copyrights remain with the author and publisher.
+          </p>
         </div>
       </div>
 
@@ -785,13 +850,12 @@
   </div>
 
   <!-- Core JavaScript Controllers -->
-  <script src="/static/js/app.js?v=3.0"></script>
-  <script src="/static/js/swipe.js?v=3.0"></script>
-  <script src="/static/js/audio.js?v=3.0"></script>
-  <script src="/static/js/share.js?v=3.0"></script>
+  <script src="/static/js/app.js?v=4.0"></script>
+  <script src="/static/js/swipe.js?v=4.0"></script>
+  <script src="/static/js/audio.js?v=4.0"></script>
+  <script src="/static/js/share.js?v=4.0"></script>
 
   <script>
-    // Live clock update
     function updateClock() {
       const now = new Date();
       const el = document.getElementById("live-clock");

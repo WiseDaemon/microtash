@@ -14,6 +14,8 @@ class IdeaBase(BaseModel):
     author: str = Field(..., description="Original thinker, author, or speaker")
     source: str = Field(..., description="Book title, article, or podcast name")
     source_slug: Optional[str] = Field(None, description="Canonical slug of the source book/work")
+    publisher: Optional[str] = Field(None, description="Original book publisher or publication venue")
+    copyright_notice: Optional[str] = Field(None, description="Transformative educational commentary & author copyright credit notice")
     topic: str = Field("Mental Models", description="Primary category/topic")
     tags: List[str] = Field(default_factory=list, description="Sub-topics or keywords")
     read_time_mins: int = Field(1, description="Estimated microlearning read time in minutes")
@@ -57,6 +59,8 @@ class Book(BaseModel):
     title: str
     normalized_title: str
     author: str
+    publisher: Optional[str] = "Original Publication"
+    copyright_notice: Optional[str] = None
     description: Optional[str] = None
     cover_url: Optional[str] = None
     topic: Optional[str] = "Mental Models"
@@ -73,6 +77,7 @@ class ExtractionRequest(BaseModel):
     input_text: str = Field(..., description="Text, article excerpt, transcript, or topic to summarize")
     source_title: Optional[str] = Field("Unknown Source", description="Title or book name")
     author: Optional[str] = Field("Unknown Author", description="Author or speaker")
+    publisher: Optional[str] = Field(None, description="Book publisher or original publication")
     topic: Optional[str] = Field("Mental Models", description="Category tag")
     provider: Optional[str] = Field("gemini", description="'gemini' or 'nvidia'")
     num_ideas: Optional[int] = Field(0, description="0 for all ideas in book, or specific count")

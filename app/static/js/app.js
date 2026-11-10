@@ -2572,3 +2572,269 @@ window.toggleSaveCurrentCard = toggleSaveCurrentCard;
 window.playCurrentCardAudio = playCurrentCardAudio;
 window.flipWorkoutCard = flipWorkoutCard;
 window.gradeWorkoutCard = gradeWorkoutCard;
+
+
+// =========================================================================
+// UNIVERSAL GLOBAL BOOK CACHE & COMMUNITY LIBRARY CONTROLLER
+// =========================================================================
+
+let globalBooksCache = [];
+let bookSearchDebounce = null;
+
+async function loadGlobalBooks() {
+  try {
+    const res = await fetch('/api/books');
+    if (!res.ok) return;
+    const books = await res.json();
+    globalBooksCache = books;
+    renderGlobalBooksShelf(books);
+
+    const badge = document.getElementById("books-count-badge");
+    if (badge) badge.textContent = `${books.length} Books Cached`;
+  } catch (e) {
+    console.error("Failed to load global books:", e);
+  }
+}
+
+function renderGlobalBooksShelf(books) {
+  const container = document.getElementById("books-shelf-container");
+  if (!container) return;
+
+  if (!books || !books.length) {
+    container.innerHTML = `
+      <div class="col-span-full p-6 rounded-2xl bg-surface-container-high/40 border border-outline-variant/30 text-center">
+        <span class="material-symbols-outlined text-outline text-[32px] mb-1">menu_book</span>
+        <p class="text-xs text-on-surface-variant">No books registered yet. Use the search bar to scan any book into the global cache!</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = books.map(book => {
+    return `
+      <div onclick="openBookDetailModal('${book.id}')" class="cursor-pointer tactile-glass p-4 rounded-2xl border border-outline-variant/30 hover:border-primary/50 transition-all duration-200 flex items-start gap-3.5 group shadow-lg">
+        <div class="w-12 h-16 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary flex-shrink-0 group-hover:scale-105 transition-transform shadow-inner">
+          <span class="material-symbols-outlined text-[24px]">menu_book</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between gap-1 mb-1">
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-surface-container-highest text-primary">
+              ${book.topic || 'Mental Models'}
+            </span>
+            <span class="text-[10px] text-secondary font-bold flex items-center gap-0.5">
+              <span class="material-symbols-outlined text-[12px]">flash_on</span>
+              ${book.ideas_count || 0} models
+            </span>
+          </div>
+          <h4 class="text-xs sm:text-sm font-headline font-bold text-white group-hover:text-primary transition-colors truncate">
+            ${book.title}
+          </h4>
+          <p class="text-[11px] text-on-surface-variant truncate mt-0.5">
+            By ${book.author} • <span class="text-on-surface-variant/70">${book.publisher || 'Original Publication'}</span>
+          </p>
+          <div class="mt-2 flex items-center gap-1 text-[10px] text-primary/80 font-semibold">
+            <span>⚡ Instant Global Cache</span>
+            <span class="material-symbols-outlined text-[13px]">arrow_forward</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function handleGlobalBookSearch(val) {
+  const query = (val || "").trim();
+  const clearBtn = document.getElementById("global-search-clear");
+  const dropdown = document.getElementById("global-search-autocomplete");
+  if (!dropdown) return;
+
+  if (clearBtn) clearBtn.classList.toggle("hidden", !query);
+
+  if (!query) {
+    dropdown.classList.add("hidden");
+    dropdown.innerHTML = "";
+    return;
+  }
+
+  clearTimeout(bookSearchDebounce);
+  bookSearchDebounce = setTimeout(async () => {
+    try {
+      const res = await fetch(`/api/books?search=${encodeURIComponent(query)}`);
+      const books = await res.json();
+      
+      const localMatches = (window.state.ideas || []).filter(i => 
+        i.title.toLowerCase().includes(query.toLowerCase()) || 
+        i.author.toLowerCase().includes(query.toLowerCase()) || 
+        i.source.toLowerCase().includes(query.toLowerCase())
+      ).slice(0, 4);
+
+      if (!books.length && !localMatches.length) {
+        dropdown.innerHTML = `
+          <div class="p-3 text-center">
+            <p class="text-xs text-on-surface-variant">No cached books found for "${query}".</p>
+            <button onclick="requestNewBookScan('${query.replace(/'/g, "\\'")}')" class="mt-2 px-3 py-1.5 rounded-full bg-primary/20 text-primary border border-primary/40 text-[11px] font-bold hover:bg-primary/30 transition">
+              ✨ Scan & Add to Global Library
+            </button>
+          </div>
+        `;
+        dropdown.classList.remove("hidden");
+        return;
+      }
+
+      let html = '';
+      if (books.length) {
+        html += `<div class="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">Globally Cached Books</div>`;
+        html += books.map(b => `
+          <div onclick="openBookDetailModal('${b.id}'); clearGlobalSearch();" class="p-2.5 rounded-xl hover:bg-surface-container-high cursor-pointer transition flex items-center justify-between gap-2 border-b border-outline-variant/20 last:border-0">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="material-symbols-outlined text-primary text-[18px]">menu_book</span>
+              <div class="truncate">
+                <p class="text-xs font-bold text-white truncate">${b.title}</p>
+                <p class="text-[10px] text-on-surface-variant truncate">${b.author} • ${b.publisher || 'Original Publication'}</p>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/30 text-[9px] font-bold flex-shrink-0">
+              ⚡ 0s Scan (${b.ideas_count})
+            </span>
+          </div>
+        `).join('');
+      }
+
+      if (localMatches.length) {
+        html += `<div class="px-2 pt-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-secondary">Matching Mental Models</div>`;
+        html += localMatches.map(m => `
+          <div onclick="jumpToSwipeCard('${m.id}'); clearGlobalSearch();" class="p-2.5 rounded-xl hover:bg-surface-container-high cursor-pointer transition flex items-center justify-between gap-2 border-b border-outline-variant/20 last:border-0">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="material-symbols-outlined text-secondary text-[18px]">psychology</span>
+              <div class="truncate">
+                <p class="text-xs font-bold text-white truncate">${m.title}</p>
+                <p class="text-[10px] text-on-surface-variant truncate">${m.author} • ${m.source}</p>
+              </div>
+            </div>
+            <span class="text-[10px] text-primary font-bold">Study →</span>
+          </div>
+        `).join('');
+      }
+
+      dropdown.innerHTML = html;
+      dropdown.classList.remove("hidden");
+    } catch (e) {
+      console.error("Search error:", e);
+    }
+  }, 180);
+}
+
+function clearGlobalSearch() {
+  const input = document.getElementById("global-book-search-input");
+  if (input) input.value = "";
+  const clearBtn = document.getElementById("global-search-clear");
+  if (clearBtn) clearBtn.classList.add("hidden");
+  const dropdown = document.getElementById("global-search-autocomplete");
+  if (dropdown) {
+    dropdown.classList.add("hidden");
+    dropdown.innerHTML = "";
+  }
+}
+
+async function requestNewBookScan(bookTitle) {
+  clearGlobalSearch();
+  switchTab('ai');
+  const textarea = document.getElementById("ai-input-text");
+  if (textarea) {
+    textarea.value = `Extract all core chapters, decision frameworks, and mental models from the book: ${bookTitle}`;
+    runAiExtraction();
+  }
+}
+
+async function openBookDetailModal(bookSlug) {
+  const modal = document.getElementById("book-detail-modal");
+  if (!modal) return;
+
+  try {
+    const res = await fetch(`/api/books/${bookSlug}`);
+    if (!res.ok) return;
+    const book = await res.json();
+
+    document.getElementById("book-modal-title").textContent = book.title;
+    document.getElementById("book-modal-author-pub").textContent = `By ${book.author} • Published by ${book.publisher || 'Original Publication'}`;
+    document.getElementById("book-modal-topic").textContent = (book.topic || 'Mental Models').toUpperCase();
+    document.getElementById("book-modal-ideas-count").innerHTML = `<span class="material-symbols-outlined text-[13px]">flash_on</span><span>${(book.ideas || []).length} Models</span>`;
+    
+    const cNotice = book.copyright_notice || `Transformative educational commentary & mental model summary of '${book.title}' by ${book.author}. All original copyrights remain with the author and publisher.`;
+    document.getElementById("book-modal-copyright-notice").textContent = cNotice;
+
+    const cardsList = document.getElementById("book-modal-cards-list");
+    if (cardsList) {
+      if (!book.ideas || !book.ideas.length) {
+        cardsList.innerHTML = `<p class="text-xs text-on-surface-variant text-center py-6">No cards found for this book.</p>`;
+      } else {
+        cardsList.innerHTML = book.ideas.map((card, idx) => `
+          <div class="p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold uppercase text-primary tracking-wider">Model #${idx + 1}</span>
+              <button onclick="openStressTestModal('${card.id}')" class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary/15 text-secondary border border-secondary/30 text-[10px] font-bold hover:bg-secondary/25 transition">
+                <span class="material-symbols-outlined text-[13px]">bolt</span>
+                <span>Stress-Test</span>
+              </button>
+            </div>
+            <h4 class="text-base font-headline font-bold text-white">${card.title}</h4>
+            <p class="text-xs text-primary italic font-semibold">"${card.one_liner}"</p>
+            <p class="text-xs text-on-surface/90 leading-relaxed">${card.summary}</p>
+            <div class="pt-1 flex items-center justify-between text-[11px] text-on-surface-variant/70 border-t border-outline-variant/20 mt-2">
+              <span>${card.read_time_mins || 1} min read</span>
+              <button onclick="jumpToSwipeCard('${card.id}'); closeBookDetailModal();" class="text-primary hover:underline font-bold">
+                Study in Swipe Gym →
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    modal.classList.remove("hidden");
+  } catch (e) {
+    console.error("Failed to load book details:", e);
+  }
+}
+
+function closeBookDetailModal() {
+  const modal = document.getElementById("book-detail-modal");
+  if (modal) modal.classList.add("hidden");
+}
+
+// Hook loadGlobalBooks on init
+document.addEventListener("DOMContentLoaded", () => {
+  loadGlobalBooks();
+});
+
+// Update Stitch Hero Card with publisher attribution
+const prevStitchUpdate = updateStitchHeroCard;
+updateStitchHeroCard = function() {
+  if (typeof prevStitchUpdate === 'function') prevStitchUpdate();
+  const ideas = window.state.ideas;
+  if (!ideas || !ideas.length) return;
+  const idea = ideas[window.state.currentIdeaIndex] || ideas[0];
+  if (!idea) return;
+
+  const citeEl = document.getElementById("card-source-citation");
+  if (citeEl) {
+    citeEl.textContent = `• ${idea.source} (${idea.publisher || 'Original Publication'})`;
+  }
+
+  const attribEl = document.getElementById("card-attribution");
+  if (attribEl) {
+    attribEl.textContent = idea.copyright_notice || `Transformative educational commentary & mental model summary of '${idea.source}' by ${idea.author}. All original copyrights remain with the author and publisher under Fair Use.`;
+  }
+
+  const modalNotice = document.getElementById("modal-copyright-notice");
+  if (modalNotice) {
+    modalNotice.textContent = idea.copyright_notice || `Transformative educational commentary & mental model summary of '${idea.source}' by ${idea.author}. All original copyrights remain with the author and publisher under Fair Use.`;
+  }
+};
+
+window.loadGlobalBooks = loadGlobalBooks;
+window.handleGlobalBookSearch = handleGlobalBookSearch;
+window.clearGlobalSearch = clearGlobalSearch;
+window.requestNewBookScan = requestNewBookScan;
+window.openBookDetailModal = openBookDetailModal;
+window.closeBookDetailModal = closeBookDetailModal;

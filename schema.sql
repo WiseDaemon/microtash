@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS ideas (
     author TEXT NOT NULL,                           -- Thinker / Creator / Author name
     source TEXT NOT NULL,                           -- Book title, paper, or foundational origin
     source_slug TEXT,                               -- Canonical normalized book slug (e.g. 'atomic-habits')
+    publisher TEXT DEFAULT 'Original Publication',  -- Original book publisher / imprint
+    copyright_notice TEXT,                          -- Transformative educational commentary & author copyright credit notice
     topic TEXT NOT NULL,                            -- Category (e.g. Mental Models, Productivity, Stoicism)
     tags TEXT NOT NULL,                             -- JSON array of keyword tags: '["learning", "cognition"]'
     read_time_mins INTEGER DEFAULT 1,               -- Estimated reading time in minutes
@@ -92,6 +94,8 @@ CREATE TABLE IF NOT EXISTS books (
     title TEXT NOT NULL,                             -- Canonical title, e.g. 'Atomic Habits'
     normalized_title TEXT NOT NULL UNIQUE,           -- Search key (lowercase, no punctuation): 'atomichabits'
     author TEXT NOT NULL,                            -- e.g. 'James Clear'
+    publisher TEXT DEFAULT 'Original Publication',   -- Original publisher/imprint for full copyright attribution
+    copyright_notice TEXT,                           -- Transformative educational commentary notice
     description TEXT,                                -- Book overview / thesis summary
     cover_url TEXT,                                  -- Book cover art / thumbnail
     topic TEXT DEFAULT 'Productivity',               -- Primary category

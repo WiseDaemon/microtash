@@ -20,18 +20,20 @@ class AutoFetchAndGenerateRequest(BaseModel):
     provider: Optional[str] = Field("gemini", description="'gemini' or 'nvidia'")
     num_ideas: Optional[int] = Field(0, description="0 for ALL ideas in the book, or positive integer for specific count")
     topic: Optional[str] = Field("Mental Models", description="Preferred category/topic")
+    publisher: Optional[str] = Field("Original Publication", description="Original book publisher or imprint")
 
 class SaveAsBookStashRequest(BaseModel):
     ideas: List[Dict[str, Any]]
     book_title: str
     author: Optional[str] = "Curated Author"
+    publisher: Optional[str] = "Original Publication"
     color: Optional[str] = "indigo"
     icon: Optional[str] = "book-open"
 
 @router.post("/auto-fetch")
 def auto_fetch_info(payload: AutoFetchRequest):
     """
-    Auto-fetches description, author, and summaries from the live web
+    Auto-fetches description, author, publisher and summaries from the live web
     (via Firecrawl, Wikipedia, OpenLibrary) given just a book name, author, or idea.
     """
     if not payload.query.strip():
@@ -41,6 +43,7 @@ def auto_fetch_info(payload: AutoFetchRequest):
     return {"status": "ok", "web_info": web_info}
 
 @router.post("/auto-fetch-and-generate")
+@router.post("/autofetch-extract")
 def auto_fetch_and_generate(payload: AutoFetchAndGenerateRequest):
     """
     Universal Global Cache + 1-Click Auto-Generation:
@@ -49,7 +52,8 @@ def auto_fetch_and_generate(payload: AutoFetchAndGenerateRequest):
        with 0s scan time, 0 API tokens, and 0 external calls.
     2. If not found in cache, fetches web descriptions & synthesizes atomic cards via AI.
     3. Permanently indexes the book in the canonical books registry and ideas database
-       so that every future user in the community gets instant 0ms access without re-scanning.
+       with full transformative educational copyright attribution so that every future user
+       in the community gets instant 0ms access without re-scanning.
     """
     if not payload.query.strip():
         raise HTTPException(status_code=400, detail="Query cannot be empty")
@@ -68,6 +72,8 @@ def auto_fetch_and_generate(payload: AutoFetchAndGenerateRequest):
                 "book": existing_book,
                 "resolved_title": existing_book["title"],
                 "resolved_author": existing_book["author"],
+                "publisher": existing_book.get("publisher", "Original Publication"),
+                "copyright_notice": existing_book.get("copyright_notice") or database.generate_copyright_attribution(existing_book["title"], existing_book["author"], existing_book.get("publisher", "")),
                 "web_info": {
                     "resolved_title": existing_book["title"],
                     "resolved_author": existing_book["author"],
@@ -85,6 +91,7 @@ def auto_fetch_and_generate(payload: AutoFetchAndGenerateRequest):
         description_text = web_info.get("description", "")
         resolved_title = web_info.get("resolved_title", payload.query)
         resolved_author = web_info.get("resolved_author", "Curated Thinker")
+        publisher = payload.publisher or "Original Publication"
 
         raw_ideas = extract_ideas_from_content(
             input_text=description_text,
@@ -102,7 +109,8 @@ def auto_fetch_and_generate(payload: AutoFetchAndGenerateRequest):
             description=description_text,
             topic=payload.topic or "Mental Models",
             ideas_list=raw_ideas,
-            scanned_by="community"
+            scanned_by="community",
+            publisher=publisher
         )
 
         return {
@@ -162,6 +170,7 @@ def save_as_book_stash(payload: SaveAsBookStashRequest):
     """
     clean_title = payload.book_title.strip() or "Curated Book"
     clean_author = (payload.author or "Curated Thinker").strip()
+    publisher = (payload.publisher or "Original Publication").strip()
     topic = "Mental Models"
     if payload.ideas and payload.ideas[0].get("topic"):
         topic = payload.ideas[0]["topic"]
@@ -173,7 +182,8 @@ def save_as_book_stash(payload: SaveAsBookStashRequest):
         description=f"Complete microlearning collection of all core ideas, chapters, and mental models from {clean_title} by {clean_author}.",
         topic=topic,
         ideas_list=payload.ideas,
-        scanned_by="community"
+        scanned_by="community",
+        publisher=publisher
     )
 
     return {

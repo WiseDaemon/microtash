@@ -10,6 +10,9 @@ class Idea {
   final String? actionItem;
   final String author;
   final String source;
+  final String? sourceSlug;
+  final String publisher;
+  final String copyrightNotice;
   final String topic;
   final List<String> tags;
   final int readTimeMins;
@@ -33,6 +36,9 @@ class Idea {
     this.actionItem,
     required this.author,
     required this.source,
+    this.sourceSlug,
+    this.publisher = 'Original Publication',
+    required this.copyrightNotice,
     required this.topic,
     required this.tags,
     this.readTimeMins = 1,
@@ -46,6 +52,12 @@ class Idea {
   });
 
   factory Idea.fromJson(Map<String, dynamic> json) {
+    final author = json['author'] ?? 'Thinker';
+    final source = json['source'] ?? 'Book';
+    final publisher = json['publisher'] ?? 'Original Publication';
+    final notice = json['copyright_notice'] ??
+        'Transformative educational commentary & mental model summary based on "$source" by $author. All original book copyrights belong to the respective author and publisher.';
+
     return Idea(
       id: json['id']?.toString() ?? '',
       title: json['title'] ?? 'Mental Model',
@@ -56,8 +68,11 @@ class Idea {
       visualDiagram: json['visual_diagram'],
       quote: json['quote'],
       actionItem: json['action_item'],
-      author: json['author'] ?? 'Thinker',
-      source: json['source'] ?? 'Book',
+      author: author,
+      source: source,
+      sourceSlug: json['source_slug'],
+      publisher: publisher,
+      copyrightNotice: notice,
       topic: json['topic'] ?? 'Mental Models',
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
       readTimeMins: json['read_time_mins'] ?? 1,
@@ -69,5 +84,34 @@ class Idea {
       leitnerBox: json['leitner_box'] ?? 1,
       nextReviewDate: json['next_review_date'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'one_liner': oneLiner,
+      'summary': summary,
+      'detailed_explanation': detailedExplanation,
+      'example': example,
+      'visual_diagram': visualDiagram,
+      'quote': quote,
+      'action_item': actionItem,
+      'author': author,
+      'source': source,
+      'source_slug': sourceSlug,
+      'publisher': publisher,
+      'copyright_notice': copyrightNotice,
+      'topic': topic,
+      'tags': tags,
+      'read_time_mins': readTimeMins,
+      'color_theme': colorTheme,
+      'likes': likes,
+      'saved_count': savedCount,
+      'is_liked': isLiked,
+      'is_saved': isSaved,
+      'leitner_box': leitnerBox,
+      'next_review_date': nextReviewDate,
+    };
   }
 }

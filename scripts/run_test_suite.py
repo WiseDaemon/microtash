@@ -1,7 +1,7 @@
 """
 Comprehensive Automated Test Suite for Microstash
 Tests Database, FastAPI Routes, AI Socratic Stress-Test, Leitner Spaced Repetition,
-Compliance Endpoints, Static Files, Flutter Assets, and Universal Global Book Cache.
+Compliance Endpoints, Static Files, Flutter Mobile App, and Universal Global Book Cache.
 """
 import sys
 import os
@@ -39,7 +39,8 @@ def test_core_web_routes():
     assert "Mental Model Gym" in html or "Stop hoarding ideas" in html, "New branding missing"
     assert "stress-test-modal" in html, "Socratic stress-test modal missing from HTML"
     assert "Daily Workout" in html, "Leitner Daily Workout chip missing from HTML"
-    print("      [OK] Home page loaded with correct 'Mental Model Gym' branding and modals.")
+    assert "Global Bookshelf" in html or "global-book-search-input" in html, "Global book search missing from HTML"
+    print("      [OK] Home page loaded with correct 'Mental Model Gym' branding, global search, and modals.")
 
     # Privacy & Terms
     res_priv = client.get("/privacy")
@@ -59,6 +60,8 @@ def test_ideas_api():
     first_idea = data[0]
     assert "id" in first_idea and "title" in first_idea and "one_liner" in first_idea
     assert "visual_diagram" in first_idea, "visual_diagram field missing from idea"
+    assert "copyright_notice" in first_idea, "copyright_notice field missing from idea"
+    assert "author" in first_idea["copyright_notice"].lower(), "Author not credited in copyright notice"
     
     # Filter by topic
     res_topic = client.get("/api/ideas?topic=Mental Models")
@@ -76,7 +79,7 @@ def test_ideas_api():
     res_read = client.post(f"/api/ideas/{idea_id}/read")
     assert res_read.status_code == 200
     assert res_read.json()["status"] == "ok"
-    print(f"      [OK] Ideas API, filtering, likes, saves, and read history operational.")
+    print(f"      [OK] Ideas API, filtering, author/publisher credits, likes, saves, and read history operational.")
 
 def test_socratic_stress_test():
     print("[4/8] Testing Socratic Stress-Test AI endpoint...")
@@ -146,18 +149,21 @@ def test_flutter_scaffold():
     assert (flutter_dir / "android" / "app" / "src" / "main" / "AndroidManifest.xml").exists(), "AndroidManifest.xml missing"
     assert (flutter_dir / "lib" / "main.dart").exists(), "main.dart missing"
     assert (flutter_dir / "lib" / "models" / "idea.dart").exists(), "idea.dart model missing"
+    assert (flutter_dir / "lib" / "models" / "book.dart").exists(), "book.dart model missing"
     assert (flutter_dir / "lib" / "services" / "api_service.dart").exists(), "api_service.dart missing"
+    assert (flutter_dir / "lib" / "services" / "notification_service.dart").exists(), "notification_service.dart missing"
     assert (flutter_dir / "lib" / "screens" / "feed_screen.dart").exists(), "feed_screen.dart missing"
+    assert (flutter_dir / "lib" / "screens" / "discover_screen.dart").exists(), "discover_screen.dart missing"
     assert (flutter_dir / "lib" / "screens" / "workout_screen.dart").exists(), "workout_screen.dart missing"
     assert (flutter_dir / "lib" / "screens" / "stress_test_screen.dart").exists(), "stress_test_screen.dart missing"
     
     manifest_text = (flutter_dir / "android" / "app" / "src" / "main" / "AndroidManifest.xml").read_text(encoding="utf-8")
     assert "android.intent.action.SEND" in manifest_text, "Share target SEND action missing from AndroidManifest"
     assert "FOREGROUND_SERVICE_MEDIA_PLAYBACK" in manifest_text, "Audio playback permission missing"
-    print("      [OK] Flutter Android mobile client verified (Material 3, Share target, Audio service).")
+    print("      [OK] Flutter Android mobile client verified (Discover screen, Material 3, Share target, Audio service).")
 
 def test_universal_book_cache():
-    print("[8/8] Testing Universal Global Book & Idea Cache (Zero Duplicate Scans)...")
+    print("[8/8] Testing Universal Global Book & Idea Cache (Zero Duplicate Scans & Author Attribution)...")
     
     # 1. Verify /api/books listing
     res_books = client.get("/api/books")
@@ -173,9 +179,10 @@ def test_universal_book_cache():
     assert data_cached.get("cached") is True, "Expected cached=True for existing book"
     assert data_cached.get("global_library_hit") is True, "Expected global_library_hit=True"
     assert len(data_cached.get("ideas", [])) > 0, "Expected idea cards in cached response"
+    assert "copyright_notice" in data_cached, "Copyright notice missing from auto-fetch response"
     print(f"      [OK] Instant 0s cache hit for 'Thinking Fast and Slow' (Cards: {len(data_cached['ideas'])}).")
 
-    # 3. Simulate User A scanning a brand new book into the library
+    # 3. Simulate User A scanning a brand new book into the library with publisher credit
     new_book_title = "Antifragile: Things That Gain from Disorder"
     sample_cards = [
         {
@@ -187,6 +194,7 @@ def test_universal_book_cache():
             "visual_diagram": "graph TD\\n  A[Shock] -->|Fragile| B[Breaks]\\n  A -->|Antifragile| C[Strengthens]",
             "author": "Nassim Nicholas Taleb",
             "source": new_book_title,
+            "publisher": "Random House",
             "topic": "Mental Models",
             "tags": ["Risk", "Decision Making"]
         }
@@ -195,6 +203,7 @@ def test_universal_book_cache():
     res_user_a = client.post("/api/ai/save-as-book-stash", json={
         "book_title": new_book_title,
         "author": "Nassim Nicholas Taleb",
+        "publisher": "Random House",
         "ideas": sample_cards
     })
     assert res_user_a.status_code == 200
@@ -219,7 +228,9 @@ def test_universal_book_cache():
     detail = res_book_detail.json()
     assert detail["title"] == new_book_title or "Antifragile" in detail["title"]
     assert len(detail["ideas"]) >= 1
-    print(f"      [OK] Universal Library endpoint /api/books/antifragile verified.")
+    assert "copyright_notice" in detail and detail["copyright_notice"] is not None
+    assert "author" in detail["copyright_notice"].lower()
+    print(f"      [OK] Universal Library endpoint /api/books/antifragile verified with copyright attribution.")
 
 if __name__ == "__main__":
     print("====================================================================")

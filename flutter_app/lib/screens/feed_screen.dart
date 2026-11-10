@@ -23,7 +23,7 @@ class _FeedScreenState extends State<FeedScreen> {
     'Stoicism',
     'Wealth',
     'Psychology',
-    'Tech'
+    'Strategy'
   ];
 
   @override
@@ -167,10 +167,25 @@ class _FeedScreenState extends State<FeedScreen> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text('— ${idea.author}', style: const TextStyle(color: Colors.white54, fontSize: 12, fontStyle: FontStyle.italic)),
+                                      Expanded(
+                                        child: Text(
+                                          '— ${idea.author} • ${idea.source}',
+                                          style: const TextStyle(color: Colors.white54, fontSize: 11, fontStyle: FontStyle.italic),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
                                       ElevatedButton.icon(
                                         onPressed: () {
-                                          Navigator.push(context, MaterialPageRoute(builder: (_) => StressTestScreen(idea: idea)));
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) => StressTestScreen(
+                                                ideaId: idea.id,
+                                                ideaTitle: idea.title,
+                                                author: idea.author,
+                                              ),
+                                            ),
+                                          );
                                         },
                                         icon: const Icon(Icons.bolt, size: 16, color: Color(0xFFF59E0B)),
                                         label: const Text('Stress-Test', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
@@ -185,6 +200,14 @@ class _FeedScreenState extends State<FeedScreen> {
                                         ),
                                       ),
                                     ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  // Transformative Fair Use Educational Credit
+                                  Text(
+                                    idea.copyrightNotice,
+                                    style: TextStyle(color: Colors.white.withOpacity(0.35), fontSize: 9, fontStyle: FontStyle.italic),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
