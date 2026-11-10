@@ -371,6 +371,10 @@
 
         <!-- Topic Pill Filters -->
         <div class="flex items-center space-x-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none" id="topic-filters-container">
+          <button onclick="filterByTopic('leitner-workout')" class="topic-pill px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500 hover:text-slate-900 transition flex items-center space-x-1.5 shadow-sm">
+            <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>⚡ Daily Workout</span>
+          </button>
           <button onclick="filterByTopic('All')" class="topic-pill px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-indigo-600 text-white">All</button>
           <button onclick="filterByTopic('Mental Models')" class="topic-pill px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60">Mental Models</button>
           <button onclick="filterByTopic('Productivity')" class="topic-pill px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60">Productivity</button>

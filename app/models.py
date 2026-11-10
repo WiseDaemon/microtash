@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List, Optional, Any, Union
 from datetime import datetime
 
 class IdeaBase(BaseModel):
@@ -33,7 +33,7 @@ class Idea(IdeaBase):
     last_reviewed_date: Optional[str] = None
 
 class LeitnerReviewRequest(BaseModel):
-    grade: str = Field("good", description="'hard', 'good', or 'easy'")
+    grade: Any = Field("good", description="'hard', 'good', 'easy' or 1-5")
 
 class StashBase(BaseModel):
     title: str

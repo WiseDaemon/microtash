@@ -582,15 +582,15 @@ def record_leitner_review(idea_id: str, grade: str) -> Optional[Idea]:
     today_iso = today.isoformat()
 
     intervals = {1: 1, 2: 3, 3: 7, 4: 14, 5: 30}
-    grade_lower = (grade or "good").lower()
+    grade_str = str(grade or "good").strip().lower()
 
-    if grade_lower == "hard":
+    if grade_str in ("hard", "1", "2"):
         new_box = 1
         days_ahead = 1
-    elif grade_lower == "easy":
+    elif grade_str in ("easy", "5"):
         new_box = min(5, current_box + 2)
         days_ahead = intervals.get(new_box, 14)
-    else:  # good
+    else:  # good, 3, 4
         new_box = min(5, current_box + 1)
         days_ahead = intervals.get(new_box, 3)
 
