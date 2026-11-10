@@ -2838,3 +2838,436 @@ window.clearGlobalSearch = clearGlobalSearch;
 window.requestNewBookScan = requestNewBookScan;
 window.openBookDetailModal = openBookDetailModal;
 window.closeBookDetailModal = closeBookDetailModal;
+
+
+// =========================================================================
+// UNIFIED ACTION CONTROLLERS & LIVE BUTTON HANDLERS
+// =========================================================================
+
+// 1. Progressive Disclosure 3-Slide Deep Dive System
+function setDeepDiveSlide(slideNum) {
+  [1, 2, 3].forEach(n => {
+    const slide = document.getElementById(`modal-slide-${n}`);
+    const pill = document.getElementById(`pill-slide-${n}`);
+    if (slide) {
+      if (n === slideNum) {
+        slide.classList.remove("hidden");
+      } else {
+        slide.classList.add("hidden");
+      }
+    }
+    if (pill) {
+      if (n === slideNum) {
+        pill.className = "flex-1 py-1.5 px-3 rounded-full text-[11px] font-bold text-primary bg-primary/20 border border-primary/50 transition text-center shadow-sm";
+      } else {
+        pill.className = "flex-1 py-1.5 px-3 rounded-full text-[11px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant/30 transition text-center hover:text-white";
+      }
+    }
+  });
+}
+
+function closeDeepDiveModal() {
+  const modal = document.getElementById("deep-dive-modal");
+  if (modal) {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  }
+}
+
+async function openDeepDiveModal(ideaId = null) {
+  let idea = null;
+  if (ideaId !== null && ideaId !== undefined) {
+    idea = (window.state.ideas || []).find(i => String(i.id) === String(ideaId));
+    if (!idea && lastExtractedIdeas && lastExtractedIdeas.length) {
+      if (typeof ideaId === 'number' || (!isNaN(Number(ideaId)) && Number(ideaId) < lastExtractedIdeas.length)) {
+        idea = lastExtractedIdeas[Number(ideaId)];
+      } else {
+        idea = lastExtractedIdeas.find(i => String(i.id) === String(ideaId));
+      }
+    }
+    if (!idea) {
+      try {
+        const res = await fetch(`/api/ideas/${ideaId}`);
+        if (res.ok) idea = await res.json();
+      } catch (e) {
+        console.warn("Could not fetch idea detail:", e);
+      }
+    }
+  }
+
+  if (!idea) {
+    idea = (window.state.ideas || [])[window.state.currentIdeaIndex];
+  }
+
+  if (!idea) return;
+  currentDeepDiveIdea = idea;
+
+  const modal = document.getElementById("deep-dive-modal");
+  if (!modal) return;
+  modal.dataset.ideaId = idea.id || '';
+
+  const topicEl = document.getElementById("modal-topic");
+  if (topicEl) {
+    topicEl.textContent = (idea.topic || "Mental Model").toUpperCase();
+    topicEl.className = "px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/30";
+  }
+
+  const authorSourceEl = document.getElementById("modal-author-source");
+  if (authorSourceEl) {
+    const pub = idea.publisher ? ` • ${idea.publisher}` : '';
+    authorSourceEl.textContent = `${idea.author} • ${idea.source}${pub}`;
+  }
+
+  const titleEl = document.getElementById("modal-title");
+  if (titleEl) titleEl.textContent = idea.title;
+
+  const oneLinerEl = document.getElementById("modal-one-liner");
+  if (oneLinerEl) oneLinerEl.textContent = `"${idea.one_liner}"`;
+
+  // Slide 1: Mechanism & Detailed Explanation
+  const detailedEl = document.getElementById("modal-detailed-explanation") || document.getElementById("modal-detailed");
+  if (detailedEl) {
+    if (idea.detailed_explanation && idea.detailed_explanation.trim().length > 0) {
+      detailedEl.innerHTML = renderMarkdownDetailed(idea.detailed_explanation);
+    } else {
+      detailedEl.innerHTML = `<p class="leading-relaxed text-on-surface/90">${idea.summary}</p>`;
+    }
+  }
+
+  // Diagram rendering into modal
+  renderIdeaVisualDiagram(idea, 'modal-diagram-container');
+
+  // Slide 2: Case Study
+  const exampleEl = document.getElementById("modal-example");
+  if (exampleEl) {
+    exampleEl.textContent = idea.example || "Practitioners apply this mental model systematically to navigate uncertainty and avoid irreversible failure modes.";
+  }
+
+  // Slide 3: Action & Bounds
+  const boundaryEl = document.getElementById("modal-boundary-text");
+  if (boundaryEl) {
+    boundaryEl.textContent = idea.boundary || "Avoid dogmatic application when foundational axioms or systemic constraints are altered by sudden environmental shifts.";
+  }
+
+  const actionEl = document.getElementById("modal-action-item") || document.getElementById("modal-action");
+  if (actionEl) {
+    actionEl.textContent = idea.action_item || "Apply this model to one difficult decision today.";
+  }
+
+  const cNoticeEl = document.getElementById("modal-copyright-notice");
+  if (cNoticeEl) {
+    cNoticeEl.textContent = idea.copyright_notice || `Transformative educational commentary & mental model summary of '${idea.source}' by ${idea.author}. All original copyrights remain with the author and publisher under Fair Use.`;
+  }
+
+  // Reset to Slide 1
+  setDeepDiveSlide(1);
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+}
+
+// 2. Socratic Dilemma Stress-Test Modal
+function closeStressTestModal() {
+  const modal = document.getElementById("stress-test-modal");
+  if (modal) {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  }
+}
+
+async function openStressTestModal(ideaId = null) {
+  let idea = null;
+  if (ideaId) {
+    idea = (window.state.ideas || []).find(i => String(i.id) === String(ideaId));
+    if (!idea) {
+      try {
+        const res = await fetch(`/api/ideas/${ideaId}`);
+        if (res.ok) idea = await res.json();
+      } catch (e) {}
+    }
+  }
+  if (!idea) {
+    idea = (window.state.ideas || [])[window.state.currentIdeaIndex];
+  }
+  if (!idea) return;
+
+  const modal = document.getElementById("stress-test-modal");
+  if (!modal) return;
+
+  const scenarioEl = document.getElementById("stress-scenario");
+  const questionEl = document.getElementById("stress-question");
+  const optionsEl = document.getElementById("stress-options");
+  const feedbackBox = document.getElementById("stress-feedback-box");
+
+  if (feedbackBox) feedbackBox.classList.add("hidden");
+  if (scenarioEl) scenarioEl.textContent = `Synthesizing high-stakes dilemma for '${idea.title}'...`;
+  if (questionEl) questionEl.textContent = "Which response correctly applies the model?";
+  if (optionsEl) optionsEl.innerHTML = `<div class="py-4 text-center text-xs text-on-surface-variant animate-pulse">Generating scenario choices...</div>`;
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+
+  try {
+    const res = await fetch(`/api/ai/stress-test/${encodeURIComponent(idea.id)}`);
+    if (!res.ok) throw new Error("Stress test synthesis failed");
+    const testData = await res.json();
+
+    if (scenarioEl) scenarioEl.textContent = testData.dilemma || idea.summary;
+    if (questionEl) questionEl.textContent = testData.question || "Which response correctly applies the model?";
+
+    if (optionsEl && testData.options && testData.options.length) {
+      optionsEl.innerHTML = testData.options.map((opt, idx) => {
+        const escapedExp = (opt.explanation || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        const escapedHeuristic = (testData.first_principles_heuristic || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        return `
+          <button 
+            onclick="handleStressChoice(${idx}, ${opt.is_correct ? 'true' : 'false'}, '${escapedExp}', '${escapedHeuristic}')"
+            class="stress-option-btn w-full text-left p-3.5 rounded-2xl bg-surface-container-high/80 hover:bg-surface-container-highest border border-outline-variant/40 hover:border-primary/50 text-xs text-white leading-relaxed transition flex items-start gap-2.5"
+          >
+            <span class="w-5 h-5 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold text-primary flex-shrink-0 mt-0.5">
+              ${String.fromCharCode(65 + idx)}
+            </span>
+            <span class="flex-1">${opt.text}</span>
+          </button>
+        `;
+      }).join('');
+    }
+  } catch (err) {
+    console.error("Stress test load error:", err);
+    if (scenarioEl) scenarioEl.textContent = `Scenario: You face a strategic crossroad involving ${idea.title}.`;
+    if (optionsEl) {
+      optionsEl.innerHTML = `
+        <button onclick="handleStressChoice(0, true, 'Accurate! Applying ${idea.title} directly identifies and eliminates systemic failure traps.', '${idea.one_liner}')" class="w-full text-left p-3.5 rounded-2xl bg-surface-container-high border border-outline-variant/40 text-xs text-white">
+          A) Systematically identify and prevent failure vectors before committing capital.
+        </button>
+        <button onclick="handleStressChoice(1, false, 'Incorrect. This relies on superficial optimism rather than first principles.', '${idea.one_liner}')" class="w-full text-left p-3.5 rounded-2xl bg-surface-container-high border border-outline-variant/40 text-xs text-white mt-2">
+          B) Maximize short-term leverage and assume positive momentum continues uninterrupted.
+        </button>
+      `;
+    }
+  }
+}
+
+function handleStressChoice(idx, isCorrect, explanation, heuristic) {
+  const feedbackBox = document.getElementById("stress-feedback-box");
+  const titleEl = document.getElementById("stress-feedback-title");
+  const expEl = document.getElementById("stress-feedback-explanation");
+  const heuristicEl = document.getElementById("stress-first-principles");
+
+  if (!feedbackBox) return;
+
+  const buttons = document.querySelectorAll(".stress-option-btn");
+  buttons.forEach((btn, i) => {
+    if (i === idx) {
+      if (isCorrect) {
+        btn.classList.add("border-primary", "bg-primary/10");
+      } else {
+        btn.classList.add("border-error", "bg-error/10");
+      }
+    }
+  });
+
+  if (isCorrect) {
+    feedbackBox.className = "p-4 rounded-2xl border border-primary/40 bg-primary/10 leading-relaxed";
+    if (titleEl) titleEl.innerHTML = `<span class="material-symbols-outlined text-primary text-[20px]">check_circle</span> <span class="text-primary font-bold">First-Principles Mastered (+10 XP)</span>`;
+  } else {
+    feedbackBox.className = "p-4 rounded-2xl border border-error/40 bg-error/10 leading-relaxed";
+    if (titleEl) titleEl.innerHTML = `<span class="material-symbols-outlined text-error text-[20px]">cancel</span> <span class="text-error font-bold">Cognitive Trap Detected</span>`;
+  }
+
+  if (expEl) expEl.textContent = explanation;
+  if (heuristicEl) {
+    heuristicEl.textContent = heuristic ? `💡 Key Heuristic: ${heuristic}` : '';
+  }
+
+  feedbackBox.classList.remove("hidden");
+}
+
+// 3. Audio & Markdown Export Handlers
+function toggleCardAudio() {
+  playCurrentCardAudio();
+}
+
+function exportCurrentCardMarkdown() {
+  const idea = currentDeepDiveIdea || (window.state.ideas || [])[window.state.currentIdeaIndex];
+  if (!idea) return;
+
+  const md = `---
+title: "${idea.title}"
+author: "${idea.author}"
+source: "${idea.source}"
+publisher: "${idea.publisher || 'Original Publication'}"
+topic: "${idea.topic}"
+tags: [${(idea.tags || []).map(t => `"${t}"`).join(', ')}]
+type: mental-model
+---
+
+# ${idea.title}
+> *"${idea.one_liner}"* — **${idea.author}** (*${idea.source}*)
+
+## 1. Summary
+${idea.summary}
+
+## 2. First-Principles Mechanics & Detailed Treatise
+${idea.detailed_explanation || idea.summary}
+
+## 3. Real-World Case Study
+${idea.example || 'Applied across strategic planning and system architecture.'}
+
+## 4. Visual Causal Architecture
+\`\`\`mermaid
+${idea.visual_diagram || 'graph LR\n  A[Challenge] --> B[Model Application] --> C[Robust Outcome]'}
+\`\`\`
+
+## 5. Daily Action Item
+- ${idea.action_item || 'Integrate this model into decision logs today.'}
+
+---
+*${idea.copyright_notice || ''}*
+`;
+
+  const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${(idea.title || 'mental-model').toLowerCase().replace(/[^a-z0-9]+/g, '-')}.md`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// 4. Deck Navigation Controls
+function prevCard() {
+  const ideas = window.state.ideas || [];
+  if (!ideas.length) return;
+  window.state.currentIdeaIndex = (window.state.currentIdeaIndex - 1 + ideas.length) % ideas.length;
+  updateStitchHeroCard();
+}
+
+function nextCard() {
+  const ideas = window.state.ideas || [];
+  if (!ideas.length) return;
+  window.state.currentIdeaIndex = (window.state.currentIdeaIndex + 1) % ideas.length;
+  updateStitchHeroCard();
+}
+
+function jumpToSwipeCard(target) {
+  if (typeof target === 'string') {
+    const idx = (window.state.ideas || []).findIndex(i => String(i.id) === String(target));
+    if (idx !== -1) {
+      window.state.currentIdeaIndex = idx;
+    }
+  } else if (typeof target === 'number') {
+    window.state.currentIdeaIndex = target;
+  }
+  updateStitchHeroCard();
+  switchTab('swipe');
+}
+
+// 5. Topic Filter & Chip State
+function filterByTopic(topic) {
+  window.state.selectedTopic = topic;
+  window.state.currentIdeaIndex = 0;
+  
+  document.querySelectorAll(".topic-chip, .topic-pill").forEach(chip => {
+    const text = chip.textContent.trim().toLowerCase();
+    const isMatch = (topic.toLowerCase() === 'all' && text.includes('all')) || 
+                    (topic.toLowerCase() === 'leitner-workout' && text.includes('workout')) ||
+                    text === topic.toLowerCase();
+    if (isMatch) {
+      chip.className = "topic-chip px-3.5 py-1.5 rounded-full bg-primary/20 text-primary border border-primary/50 text-xs font-bold whitespace-nowrap transition flex items-center gap-1 shadow-sm";
+    } else {
+      chip.className = "topic-chip px-3.5 py-1.5 rounded-full bg-surface-container-high/50 text-on-surface-variant hover:text-white border border-outline-variant/30 text-xs font-medium whitespace-nowrap transition flex items-center gap-1";
+    }
+  });
+
+  loadIdeas();
+}
+
+// 6. Global Library Cards Feed Renderer
+function renderFeedGrid() {
+  const container = document.getElementById("feed-grid-container") || document.getElementById("feed-grid");
+  if (!container) return;
+
+  const ideas = window.state.ideas || [];
+  const feedBadge = document.getElementById("feed-count-badge");
+  if (feedBadge) feedBadge.textContent = `${ideas.length} Models`;
+
+  if (!ideas.length) {
+    container.innerHTML = `
+      <div class="col-span-full py-12 text-center text-on-surface-variant">
+        <span class="material-symbols-outlined text-4xl opacity-40 mb-2">inbox</span>
+        <p class="text-sm font-semibold text-white">No mental model cards match this filter</p>
+        <p class="text-xs text-on-surface-variant mt-1">Try selecting 'All Models' or enter a search query.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = ideas.map((idea, index) => {
+    return `
+      <div class="tactile-glass p-4 sm:p-5 rounded-2xl border border-outline-variant/30 hover:border-primary/50 transition-all duration-200 flex flex-col justify-between group shadow-lg">
+        <div>
+          <div class="flex items-center justify-between gap-1 mb-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/30">
+              ${idea.topic}
+            </span>
+            <span class="text-[10px] text-on-surface-variant font-medium flex items-center gap-0.5">
+              <span class="material-symbols-outlined text-[13px]">timer</span>
+              ${idea.read_time_mins || 1} min
+            </span>
+          </div>
+
+          <h4 class="text-sm sm:text-base font-headline font-bold text-white group-hover:text-primary transition-colors mb-1">
+            ${idea.title}
+          </h4>
+
+          <p class="text-[11px] text-primary/90 font-medium italic mb-2 line-clamp-2">
+            "${idea.one_liner}"
+          </p>
+
+          <p class="text-xs text-on-surface-variant leading-relaxed line-clamp-3 mb-3">
+            ${idea.summary}
+          </p>
+        </div>
+
+        <div class="pt-3 border-t border-outline-variant/20 flex items-center justify-between gap-2">
+          <div class="text-[10px] text-on-surface-variant truncate max-w-[110px]">
+            <span class="text-white font-semibold block truncate">${idea.author}</span>
+            <span class="truncate block text-on-surface-variant/70">${idea.source}</span>
+          </div>
+
+          <div class="flex items-center gap-1.5 flex-shrink-0">
+            <button onclick="openStressTestModal('${idea.id}')" class="p-1.5 rounded-xl bg-secondary/15 hover:bg-secondary/25 text-secondary border border-secondary/30 transition text-[11px] font-bold flex items-center gap-1" title="Socratic Dilemma Arena">
+              <span class="material-symbols-outlined text-[14px]">bolt</span>
+              <span class="hidden sm:inline">Stress-Test</span>
+            </button>
+            <button onclick="openDeepDiveModal('${idea.id}')" class="p-1.5 rounded-xl bg-primary/15 hover:bg-primary/25 text-primary border border-primary/30 transition text-[11px] font-bold flex items-center gap-1" title="Detailed First Principles Treatise">
+              <span class="material-symbols-outlined text-[14px]">menu_book</span>
+              <span>Deep Dive</span>
+            </button>
+            <button onclick="jumpToSwipeCard('${idea.id}')" class="p-1.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface transition text-[11px] font-bold flex items-center" title="Study in Gym">
+              <span class="material-symbols-outlined text-[14px]">explore</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Global window registrations
+window.setDeepDiveSlide = setDeepDiveSlide;
+window.closeDeepDiveModal = closeDeepDiveModal;
+window.openDeepDiveModal = openDeepDiveModal;
+window.openStressTestModal = openStressTestModal;
+window.handleStressChoice = handleStressChoice;
+window.closeStressTestModal = closeStressTestModal;
+window.toggleCardAudio = toggleCardAudio;
+window.exportCurrentCardMarkdown = exportCurrentCardMarkdown;
+window.nextCard = nextCard;
+window.prevCard = prevCard;
+window.jumpToSwipeCard = jumpToSwipeCard;
+window.filterByTopic = filterByTopic;
+window.renderFeedGrid = renderFeedGrid;

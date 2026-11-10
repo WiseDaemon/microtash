@@ -21,24 +21,24 @@
       theme: {
         extend: {
           colors: {
-            // Obsidian Kinetic Color Tokens
-            "surface": "#0b1326",
-            "surface-container-lowest": "#060e20",
-            "surface-container-low": "#131b2e",
-            "surface-container": "#171f33",
-            "surface-container-high": "#222a3d",
-            "surface-container-highest": "#2d3448",
-            "on-surface": "#dae2fd",
-            "on-surface-variant": "#c1c9be",
-            "primary": "#4edea3",
-            "primary-container": "#005234",
-            "on-primary-container": "#6ffbbe",
-            "secondary": "#ffb95f",
-            "secondary-container": "#653e00",
-            "tertiary": "#d0bcff",
-            "outline": "#8b9389",
-            "outline-variant": "#414941",
-            "error": "#ffb4ab",
+            // Midnight Slate & Luminous Sky Cyan / Warm Amber Palette
+            "surface": "#0B0F19",
+            "surface-container-lowest": "#060911",
+            "surface-container-low": "#0F172A",
+            "surface-container": "#162032",
+            "surface-container-high": "#1E293B",
+            "surface-container-highest": "#334155",
+            "on-surface": "#F8FAFC",
+            "on-surface-variant": "#94A3B8",
+            "primary": "#38BDF8",
+            "primary-container": "#0284C7",
+            "on-primary-container": "#F0F9FF",
+            "secondary": "#F59E0B",
+            "secondary-container": "#78350F",
+            "tertiary": "#818CF8",
+            "outline": "#475569",
+            "outline-variant": "#334155",
+            "error": "#F87171",
           },
           fontFamily: {
             headline: ["'Plus Jakarta Sans'", "sans-serif"],
@@ -48,14 +48,14 @@
         }
       }
     };
-    mermaid.initialize({ startOnLoad: false, theme: 'dark', themeVariables: { darkMode: true, background: '#0b1326' } });
+    mermaid.initialize({ startOnLoad: false, theme: 'dark', themeVariables: { darkMode: true, background: '#0F172A' } });
   </script>
 
   <style>
-    /* Custom styling for Obsidian Kinetic & Android Sidecar Frame */
+    /* Custom styling for Deep Midnight Slate & Material 3 Kinetic Frame */
     body {
-      background-color: #060e20;
-      color: #dae2fd;
+      background-color: #060911;
+      color: #F8FAFC;
       font-family: 'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
     }
@@ -64,11 +64,11 @@
       height: 4px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #414941;
+      background: #334155;
       border-radius: 9999px;
     }
     .tactile-glass {
-      background: rgba(23, 31, 51, 0.75);
+      background: rgba(22, 32, 50, 0.75);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -309,7 +309,7 @@
             </div>
 
             <!-- High Impact Primary Socratic CTA -->
-            <button onclick="triggerCurrentCardStressTest()" class="flex-1 py-2.5 px-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary-container font-headline font-bold text-xs tracking-wide shadow-[0_0_20px_rgba(78,222,163,0.35)] flex items-center justify-center gap-1.5 hover:shadow-[0_0_25px_rgba(78,222,163,0.5)] active:scale-98 transition">
+            <button onclick="triggerCurrentCardStressTest()" class="flex-1 py-2.5 px-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary-container font-headline font-bold text-xs tracking-wide shadow-[0_0_20px_rgba(56,189,248,0.35)] flex items-center justify-center gap-1.5 hover:shadow-[0_0_25px_rgba(56,189,248,0.5)] active:scale-98 transition">
               <span class="material-symbols-outlined text-[18px]">bolt</span>
               <span>Stress-Test Me</span>
               <span class="text-[9px] px-1.5 py-0.2 rounded-full bg-on-primary-container/20 font-bold">+10 XP</span>
@@ -585,7 +585,7 @@
     <nav class="bg-surface-container/90 backdrop-blur-lg text-primary fixed bottom-0 max-w-[460px] md:max-w-4xl w-full rounded-t-3xl border-t border-outline-variant/30 flex items-center justify-around py-2.5 px-4 z-40 select-none shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
       
       <!-- Nav 1: Feed (Active) -->
-      <button onclick="switchTab('swipe')" id="stitch-nav-swipe" class="flex flex-col items-center justify-center bg-primary/15 text-primary rounded-full px-4 py-1.5 shadow-[0_0_12px_rgba(78,222,163,0.25)] transition">
+      <button onclick="switchTab('swipe')" id="stitch-nav-swipe" class="flex flex-col items-center justify-center bg-primary/15 text-primary rounded-full px-4 py-1.5 shadow-[0_0_12px_rgba(56,189,248,0.25)] transition">
         <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">explore</span>
         <span class="text-[10px] font-headline font-bold">Gym Feed</span>
       </button>

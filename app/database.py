@@ -280,14 +280,35 @@ def init_db():
     if count == 0:
         seed_data(conn)
     else:
-        # Sync rich detailed explanations, examples, visual diagrams, and copyright notices
+        # Insert any newly added default ideas and sync existing ones
+        today_iso = date.today().isoformat()
+        now_str = datetime.utcnow().isoformat()
         for i in DEFAULT_IDEAS:
             c_notice = generate_copyright_attribution(i["source"], i["author"], i.get("publisher", ""))
-            cursor.execute("""
-                UPDATE ideas
-                SET detailed_explanation = ?, example = ?, visual_diagram = ?, source_slug = ?, copyright_notice = ?
-                WHERE id = ? AND (detailed_explanation IS NULL OR detailed_explanation = '' OR example IS NULL OR example = '' OR visual_diagram IS NULL OR visual_diagram = '' OR source_slug IS NULL OR source_slug = '' OR copyright_notice IS NULL OR copyright_notice = '')
-            """, (i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""), slugify(i["source"]), c_notice, i["id"]))
+            src_slug = slugify(i["source"])
+            cursor.execute("SELECT id FROM ideas WHERE id = ?", (i["id"],))
+            row = cursor.fetchone()
+            if not row:
+                cursor.execute("""
+                    INSERT INTO ideas (
+                        id, title, one_liner, summary, detailed_explanation, example, visual_diagram, quote, action_item, author, source, source_slug, publisher, copyright_notice, topic,
+                        tags, read_time_mins, color_theme, likes, saved_count, is_liked, is_saved, leitner_box, next_review_date, created_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 1, ?, ?)
+                """, (
+                    i["id"], i["title"], i["one_liner"], i["summary"],
+                    i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""),
+                    i.get("quote", ""), i.get("action_item", ""), i["author"], i["source"], src_slug,
+                    i.get("publisher", "Original Publication"), c_notice, i["topic"],
+                    json.dumps(i.get("tags", [])), i.get("read_time_mins", 1),
+                    i.get("color_theme", "indigo"), i.get("likes", 120), i.get("saved_count", 65),
+                    today_iso, now_str
+                ))
+            else:
+                cursor.execute("""
+                    UPDATE ideas
+                    SET detailed_explanation = ?, example = ?, visual_diagram = ?, source_slug = ?, copyright_notice = ?
+                    WHERE id = ? AND (detailed_explanation IS NULL OR detailed_explanation = '' OR example IS NULL OR example = '' OR visual_diagram IS NULL OR visual_diagram = '' OR source_slug IS NULL OR source_slug = '' OR copyright_notice IS NULL OR copyright_notice = '')
+                """, (i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""), src_slug, c_notice, i["id"]))
         conn.commit()
 
         # Backfill any remaining ideas that lack visual diagrams
