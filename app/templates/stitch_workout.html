@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Microstash — Daily Cognitive Workout</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary": "#7bd0ff",
+            "surface-container-highest": "#2d3449",
+            "secondary-fixed-dim": "#ffb95f",
+            "error-container": "#93000a",
+            "primary-fixed": "#6ffbbe",
+            "on-surface": "#dae2fd",
+            "on-surface-variant": "#bbcabf",
+            "on-secondary-container": "#5b3800",
+            "on-error": "#690005",
+            "on-background": "#dae2fd",
+            "surface-container-lowest": "#060e20",
+            "surface-container-low": "#131b2e",
+            "on-secondary-fixed": "#2a1700",
+            "surface-dim": "#0b1326",
+            "tertiary-container": "#19aee8",
+            "surface-container": "#171f33",
+            "surface": "#0b1326",
+            "inverse-primary": "#006c49",
+            "secondary": "#ffb95f",
+            "outline": "#86948a",
+            "on-tertiary-container": "#003e55",
+            "on-error-container": "#ffdad6",
+            "on-secondary": "#472a00",
+            "secondary-container": "#ee9800",
+            "primary-fixed-dim": "#4edea3",
+            "on-primary-fixed": "#002113",
+            "on-secondary-fixed-variant": "#653e00",
+            "on-primary": "#003824",
+            "surface-container-high": "#222a3d",
+            "outline-variant": "#3c4a42",
+            "error": "#ffb4ab",
+            "surface-bright": "#31394d",
+            "background": "#0b1326",
+            "tertiary-fixed-dim": "#7bd0ff",
+            "tertiary-fixed": "#c4e7ff",
+            "inverse-on-surface": "#283044",
+            "primary-container": "#10b981",
+            "surface-tint": "#4edea3",
+            "secondary-fixed": "#ffddb8",
+            "on-tertiary-fixed-variant": "#004c69",
+            "on-tertiary": "#00354a",
+            "primary": "#4edea3",
+            "on-primary-container": "#00422b",
+            "inverse-surface": "#dae2fd",
+            "surface-variant": "#2d3449",
+            "on-tertiary-fixed": "#001e2c",
+            "on-primary-fixed-variant": "#005236"
+          },
+          "borderRadius": {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "3rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "2rem",
+            "margin": "1.25rem",
+            "space-lg": "1.5rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Inter"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"]
+          },
+          "fontSize": {
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-sm": ["10px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    /* Keyframe micro-glow */
+    @keyframes pulse-emerald {
+      0%, 100% {
+        box-shadow: 0 0 14px rgba(78, 222, 163, 0.4), inset 0 0 8px rgba(78, 222, 163, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 24px rgba(78, 222, 163, 0.65), inset 0 0 14px rgba(78, 222, 163, 0.35);
+      }
+    }
+    .animate-pulse-emerald {
+      animation: pulse-emerald 2.5s infinite ease-in-out;
+    }
+    /* Ambient directional sheen */
+    .tactile-glass {
+      background: rgba(30, 41, 59, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .stepper-scroll::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex justify-center selection:bg-primary-container selection:text-on-primary-container font-body-md">
+<!-- Mobile Viewport Wrapper (Constrained 440px / 640px Max) -->
+<div class="w-full max-w-[440px] min-h-screen bg-background flex flex-col relative pb-28 border-x border-outline-variant/20 shadow-2xl">
+<!-- Section 1: Top Status & Protocol Header -->
+<header class="sticky top-0 z-40 bg-surface/85 backdrop-blur-md px-5 pt-3 pb-3 border-b border-outline-variant/30">
+<!-- OS Status Bar Simulated -->
+<div class="flex items-center justify-between text-on-surface-variant text-label-sm font-label-sm mb-2.5 px-0.5">
+<span>09:41</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined text-[14px]">wifi</span>
+<span class="material-symbols-outlined text-[16px]">battery_charging_full</span>
+</div>
+</div>
+<!-- Main Protocol Navigation Row -->
+<div class="flex items-center justify-between gap-3">
+<!-- Leading Action -->
+<button aria-label="Back" class="w-9 h-9 rounded-full bg-surface-container-high/60 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<!-- Centered Workout Identity & Session Progress -->
+<div class="flex items-center gap-2.5 flex-1 justify-center">
+<!-- Circular Progress Ring (60% Reviewed) -->
+<div class="relative w-8 h-8 flex items-center justify-center">
+<svg class="w-8 h-8 -rotate-90 transform" viewbox="0 0 36 36">
+<path class="text-surface-container-highest stroke-current" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3.5"></path>
+<path class="text-primary stroke-current" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-dasharray="60, 100" stroke-linecap="round" stroke-width="3.5"></path>
+</svg>
+<span class="absolute text-[9px] font-label-sm font-bold text-primary">3/5</span>
+</div>
+<div>
+<h1 class="text-headline-md font-headline-md font-bold tracking-tight text-on-surface leading-tight">COGNITIVE WORKOUT</h1>
+<div class="flex items-center gap-1.5">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-[9px] font-label-sm font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-[10px] fill">bolt</span>
+                DAILY PROTOCOL
+              </span>
+<span class="text-on-surface-variant text-[11px] font-body-sm">• 3 of 5 Reviewed</span>
+</div>
+</div>
+</div>
+<!-- Trailing Session Settings / Sound Options -->
+<button aria-label="Options" class="w-9 h-9 rounded-full bg-surface-container-high/60 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-5 pt-4 space-y-4">
+<!-- Section 2: Leitner Spaced Repetition Box Pipeline Visualizer -->
+<section class="space-y-2">
+<div class="flex items-center justify-between text-on-surface-variant px-0.5">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">view_timeline</span>
+<span class="text-label-sm font-label-sm uppercase tracking-wider text-on-surface-variant">Leitner Repetition Pipeline</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary font-bold">52 Active Stashes</span>
+</div>
+<!-- Horizontal Pipeline Step Visualizer -->
+<div class="tactile-glass rounded-2xl p-3.5 overflow-x-auto stepper-scroll">
+<div class="flex items-center justify-between min-w-[340px] gap-2">
+<!-- Box 1 -->
+<div class="flex flex-col items-center flex-1 text-center group cursor-pointer">
+<div class="w-full py-1.5 px-1 rounded-xl bg-surface-container-high/70 border border-outline-variant/30 flex flex-col items-center justify-center transition-all group-hover:border-primary/40">
+<div class="flex items-center gap-1">
+<span class="text-label-sm font-label-sm text-on-surface">Box 1</span>
+</div>
+<span class="mt-0.5 px-1.5 py-0.2 rounded bg-surface-variant text-[10px] font-bold text-on-surface-variant">3 cards</span>
+</div>
+<span class="text-[10px] font-label-sm font-semibold text-on-surface-variant/80 mt-1.5">1d int.</span>
+</div>
+<!-- Connector arrow -->
+<span class="material-symbols-outlined text-[14px] text-outline-variant/70">chevron_right</span>
+<!-- Box 2 (Active/Current Focus) -->
+<div class="flex flex-col items-center flex-1 text-center relative cursor-pointer">
+<div class="w-full py-1.5 px-1 rounded-xl bg-primary/15 border-2 border-primary animate-pulse-emerald flex flex-col items-center justify-center">
+<div class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+<span class="text-label-sm font-label-sm text-primary font-bold">Box 2</span>
+</div>
+<span class="mt-0.5 px-1.5 py-0.2 rounded-full bg-primary text-on-primary-container text-[10px] font-extrabold shadow-sm">5 cards</span>
+</div>
+<span class="text-[10px] font-label-sm font-bold text-primary mt-1.5">3d int. • Active</span>
+</div>
+<!-- Connector arrow -->
+<span class="material-symbols-outlined text-[14px] text-outline-variant/70">chevron_right</span>
+<!-- Box 3 -->
+<div class="flex flex-col items-center flex-1 text-center group cursor-pointer">
+<div class="w-full py-1.5 px-1 rounded-xl bg-surface-container-high/70 border border-outline-variant/30 flex flex-col items-center justify-center transition-all group-hover:border-primary/40">
+<span class="text-label-sm font-label-sm text-on-surface">Box 3</span>
+<span class="mt-0.5 px-1.5 py-0.2 rounded bg-surface-variant text-[10px] font-bold text-on-surface-variant">8 cards</span>
+</div>
+<span class="text-[10px] font-label-sm font-semibold text-on-surface-variant/80 mt-1.5">7d int.</span>
+</div>
+<!-- Connector arrow -->
+<span class="material-symbols-outlined text-[14px] text-outline-variant/70">chevron_right</span>
+<!-- Box 4 -->
+<div class="flex flex-col items-center flex-1 text-center group cursor-pointer">
+<div class="w-full py-1.5 px-1 rounded-xl bg-surface-container-high/70 border border-outline-variant/30 flex flex-col items-center justify-center transition-all group-hover:border-primary/40">
+<span class="text-label-sm font-label-sm text-on-surface">Box 4</span>
+<span class="mt-0.5 px-1.5 py-0.2 rounded bg-surface-variant text-[10px] font-bold text-on-surface-variant">12 cards</span>
+</div>
+<span class="text-[10px] font-label-sm font-semibold text-on-surface-variant/80 mt-1.5">14d int.</span>
+</div>
+<!-- Connector arrow -->
+<span class="material-symbols-outlined text-[14px] text-outline-variant/70">chevron_right</span>
+<!-- Box 5 (Permanent Mastery) -->
+<div class="flex flex-col items-center flex-1 text-center group cursor-pointer">
+<div class="w-full py-1.5 px-1 rounded-xl bg-secondary/10 border border-secondary/30 flex flex-col items-center justify-center transition-all">
+<span class="text-label-sm font-label-sm text-secondary font-bold">Box 5</span>
+<span class="mt-0.5 px-1.5 py-0.2 rounded bg-secondary/20 text-[10px] font-bold text-secondary">24 cards</span>
+</div>
+<span class="text-[10px] font-label-sm font-semibold text-secondary-fixed-dim mt-1.5">30d Perm</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Center Active Recall / Flashcard -->
+<section class="tactile-glass rounded-2xl p-4 sm:p-5 relative overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.45)]">
+<!-- Ambient corner light flare -->
+<div class="absolute -top-12 -right-12 w-32 h-32 bg-primary/10 rounded-full blur-2xl pointer-events-none"></div>
+<!-- Metadata & Domain Badges -->
+<div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+<div class="flex items-center gap-1.5">
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary/10 border border-tertiary/30 text-tertiary text-label-sm font-label-sm uppercase tracking-wider font-bold">
+              STOICISM
+            </span>
+<span class="px-2 py-0.5 rounded-full bg-primary/15 border border-primary/40 text-primary text-label-sm font-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[11px] fill">layers</span>
+              Box 2
+            </span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high border border-outline-variant/40 text-on-surface-variant text-[10px] font-label-sm">
+            Difficulty: Intermediate
+          </span>
+</div>
+<!-- Model Title & Origin Attribution -->
+<div class="mb-3.5">
+<h2 class="text-headline-lg-mobile font-headline-lg-mobile font-bold text-on-surface tracking-tight">
+            The Obstacle is the Way
+          </h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant/90 mt-0.5 flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-secondary">history_edu</span>
+            Attributed to Marcus Aurelius (Meditations, Book V)
+          </p>
+</div>
+<!-- Question / Active Recall Prompt -->
+<div class="rounded-xl bg-surface-container-lowest/80 border border-outline-variant/40 p-3.5 mb-3.5">
+<div class="flex items-center gap-1.5 text-secondary text-label-sm font-label-sm font-bold uppercase tracking-wider mb-1">
+<span class="material-symbols-outlined text-[14px] fill">psychology_alt</span>
+            ACTIVE RECALL PROMPT
+          </div>
+<p class="text-on-surface text-body-md font-body-md font-medium leading-snug">
+            "When an impassable barrier blocks your path, what is the core Stoic discipline?"
+          </p>
+</div>
+<!-- Revealed Insight / Core Model Mechanism -->
+<div class="rounded-xl bg-surface-container/70 border-l-4 border-primary border-t border-r border-b border-outline-variant/30 p-3.5 mb-3.5 relative shadow-inner">
+<div class="flex items-start gap-2.5">
+<div class="w-7 h-7 rounded-lg bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-primary text-[18px]">format_quote</span>
+</div>
+<div>
+<p class="text-primary-fixed-dim text-body-md font-headline-md font-semibold italic leading-relaxed">
+                "The impediment to action advances action. What stands in the way becomes the way."
+              </p>
+<!-- Key Mechanics Bullet Points -->
+<div class="mt-2.5 pt-2.5 border-t border-outline-variant/30 space-y-1.5">
+<div class="text-[11px] font-label-sm font-bold uppercase tracking-wider text-on-surface-variant">Key Cognitive Catalysts:</div>
+<div class="flex items-start gap-2 text-body-sm font-body-sm text-on-surface">
+<span class="text-primary mt-0.5 text-xs">▸</span>
+<span><strong class="text-on-surface font-semibold">Perception Inversion:</strong> Reframe mental shock into an experimental laboratory.</span>
+</div>
+<div class="flex items-start gap-2 text-body-sm font-body-sm text-on-surface">
+<span class="text-primary mt-0.5 text-xs">▸</span>
+<span><strong class="text-on-surface font-semibold">Action Catalyst:</strong> Use resistance as mechanical leverage to exercise virtues (patience, resolve).</span>
+</div>
+<div class="flex items-start gap-2 text-body-sm font-body-sm text-on-surface">
+<span class="text-primary mt-0.5 text-xs">▸</span>
+<span><strong class="text-on-surface font-semibold">Willpower Preservation:</strong> Detach outcome desire from internal discipline fidelity.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Audio Briefing Pill -->
+<div class="flex items-center justify-between px-3 py-2 rounded-full bg-surface-container-high/80 border border-outline-variant/40 hover:border-primary/40 transition-colors">
+<div class="flex items-center gap-2">
+<button aria-label="Play soundbite" class="w-7 h-7 rounded-full bg-primary text-on-primary-container flex items-center justify-center active:scale-90 transition-transform shadow-md">
+<span class="material-symbols-outlined text-[16px] fill">play_arrow</span>
+</button>
+<div class="flex flex-col">
+<span class="text-[11px] font-headline-md font-semibold text-on-surface">Neural Soundbite</span>
+<span class="text-[9px] font-label-sm text-on-surface-variant">0:30s • Marcus' Heuristic</span>
+</div>
+</div>
+<!-- Tactile Soundwave Bars -->
+<div class="flex items-center gap-0.5 h-4 pr-1">
+<span class="w-0.5 h-2 bg-primary rounded-full"></span>
+<span class="w-0.5 h-3.5 bg-primary rounded-full"></span>
+<span class="w-0.5 h-1.5 bg-primary/60 rounded-full"></span>
+<span class="w-0.5 h-4 bg-primary rounded-full"></span>
+<span class="w-0.5 h-2.5 bg-primary rounded-full"></span>
+<span class="w-0.5 h-3 bg-primary/70 rounded-full"></span>
+<span class="w-0.5 h-1 bg-primary/40 rounded-full"></span>
+</div>
+</div>
+</section>
+<!-- Section 4: 3-Tier Self-Assessment Rating Bar -->
+<section class="space-y-2">
+<div class="flex items-center justify-between px-1">
+<label class="text-label-md font-label-md font-semibold text-on-surface tracking-wide">Rate your recall accuracy:</label>
+<span class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">keyboard_double_arrow_right</span>
+            Haptic enabled
+          </span>
+</div>
+<!-- 3 Ergonomic Tactile Buttons -->
+<div class="grid grid-cols-3 gap-2.5">
+<!-- Button 1: Forgot (Red/Crimson Tint) -->
+<button class="flex flex-col items-center justify-center py-2.5 px-2 rounded-2xl bg-error-container/20 border border-error/40 text-error hover:bg-error-container/30 active:scale-95 transition-all">
+<span class="text-label-lg font-label-lg font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">close</span>
+              Forgot
+            </span>
+<span class="text-[10px] font-body-sm opacity-90 mt-0.5">Reset to Box 1</span>
+<span class="mt-1 px-1.5 py-0.2 rounded bg-error-container/40 text-[9px] font-label-sm font-bold">↺ 1d</span>
+</button>
+<!-- Button 2: Hard (Amber/Gold Tint) -->
+<button class="flex flex-col items-center justify-center py-2.5 px-2 rounded-2xl bg-secondary-container/20 border border-secondary/40 text-secondary-fixed-dim hover:bg-secondary-container/30 active:scale-95 transition-all">
+<span class="text-label-lg font-label-lg font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">bolt</span>
+              Hard
+            </span>
+<span class="text-[10px] font-body-sm opacity-90 mt-0.5">Review in 3d</span>
+<span class="mt-1 px-1.5 py-0.2 rounded bg-secondary-container/40 text-[9px] font-label-sm font-bold">⚡ 3d</span>
+</button>
+<!-- Button 3: Mastered (Vibrant Emerald Glow) -->
+<button class="flex flex-col items-center justify-center py-2.5 px-2 rounded-2xl bg-primary/20 text-primary border border-primary shadow-[0_0_20px_rgba(78,222,163,0.35)] hover:bg-primary/25 active:scale-95 transition-all">
+<span class="text-label-lg font-label-lg font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] font-bold">done_all</span>
+              Mastered
+            </span>
+<span class="text-[10px] font-body-sm text-primary/90 mt-0.5">Advance to Box 3</span>
+<span class="mt-1 px-1.5 py-0.2 rounded bg-primary text-on-primary-container text-[9px] font-label-sm font-bold">✓ 7d</span>
+</button>
+</div>
+</section>
+<!-- Section 5: Consolidation & Retention Telemetry -->
+<section class="tactile-glass rounded-2xl p-3.5 space-y-2.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">neurology</span>
+<span class="text-label-sm font-label-sm font-bold uppercase tracking-wider text-on-surface">Cognitive Telemetry</span>
+</div>
+<span class="text-[10px] font-label-sm text-on-surface-variant">Live Leitner Engine</span>
+</div>
+<div class="grid grid-cols-3 gap-2 pt-1 border-t border-outline-variant/30 text-center">
+<!-- Metric 1 -->
+<div class="bg-surface-container-low/70 rounded-xl p-2 flex flex-col items-center justify-center">
+<span class="text-headline-md font-headline-md font-bold text-primary">92%</span>
+<span class="text-[9px] font-label-sm uppercase tracking-wider text-on-surface-variant mt-0.5">Consolidation</span>
+<div class="w-full bg-surface-container-highest h-1 rounded-full mt-1.5 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 92%"></div>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="bg-surface-container-low/70 rounded-xl p-2 flex flex-col items-center justify-center">
+<span class="text-headline-md font-headline-md font-bold text-secondary flex items-center gap-0.5">
+              7d <span class="text-xs">🔥</span>
+</span>
+<span class="text-[9px] font-label-sm uppercase tracking-wider text-on-surface-variant mt-0.5">Gym Streak</span>
+<span class="text-[9px] text-secondary font-label-sm font-semibold mt-1">Peak Form</span>
+</div>
+<!-- Metric 3 -->
+<div class="bg-surface-container-low/70 rounded-xl p-2 flex flex-col items-center justify-center">
+<span class="text-label-lg font-headline-md font-bold text-on-surface">08:00 AM</span>
+<span class="text-[9px] font-label-sm uppercase tracking-wider text-on-surface-variant mt-0.5">Next Stash</span>
+<span class="text-[9px] text-tertiary font-label-sm font-semibold mt-1">Tomorrow</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Section 6: Bottom Navigation Bar -->
+<!-- Matches Shared Components JSON: "BottomNavBar" with 'Workout' highlighted as the active tab -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface-container/85 dark:bg-surface-container/85 backdrop-blur-lg border-t border-outline-variant/40 rounded-t-2xl shadow-[0_-4px_24px_rgba(0,0,0,0.4)]">
+<!-- Feed Tab (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-3 py-1.5 hover:text-primary dark:hover:text-primary transition-colors active:scale-90 duration-150" href="#feed">
+<span class="material-symbols-outlined text-[22px]">explore</span>
+<span class="text-label-sm font-label-sm mt-0.5">Feed</span>
+</a>
+<!-- Workout Tab (ACTIVE MATCH based on cognitive session context) -->
+<a class="flex flex-col items-center justify-center bg-primary/15 text-primary dark:text-primary rounded-full px-4 py-1.5 shadow-[0_0_12px_rgba(78,222,163,0.25)] hover:text-primary dark:hover:text-primary transition-colors active:scale-90 duration-150" href="#workout">
+<span class="material-symbols-outlined text-[22px] fill">fitness_center</span>
+<span class="text-label-sm font-label-sm font-semibold mt-0.5">Workout</span>
+</a>
+<!-- Stashes Tab (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-3 py-1.5 hover:text-primary dark:hover:text-primary transition-colors active:scale-90 duration-150" href="#stashes">
+<span class="material-symbols-outlined text-[22px]">bookmarks</span>
+<span class="text-label-sm font-label-sm mt-0.5">Stashes</span>
+</a>
+<!-- Profile Tab (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-3 py-1.5 hover:text-primary dark:hover:text-primary transition-colors active:scale-90 duration-150" href="#profile">
+<span class="material-symbols-outlined text-[22px]">person</span>
+<span class="text-label-sm font-label-sm mt-0.5">Profile</span>
+</a>
+</nav>
+</div>
+<!-- Inline Micro-Interactions Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Tactile rating selection feedback
+      const ratingBtns = document.querySelectorAll('main section:nth-of-type(3) button');
+      ratingBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (window.navigator && window.navigator.vibrate) {
+            window.navigator.vibrate(35);
+          }
+        });
+      });
+    });
+  </script>
+</body></html>
