@@ -24,12 +24,12 @@ def find_available_port(starting_port=8000, max_attempts=20):
 
 def print_banner(port):
     print("=" * 68)
-    print("  ✨ MICROSTASH — Replace Doomscrolling with Microlearning! ✨")
-    print("  Deepstash-inspired bite-sized ideas, mental models & AI curator")
+    print("  🧠 MICROSTASH — The Mental Model Gym 🧠")
+    print("  Stop hoarding ideas. Wire high-leverage frameworks into your brain.")
     print("=" * 68)
     print(f"  • Local Server URL:    http://localhost:{port}")
     print(f"  • API Documentation:   http://localhost:{port}/docs")
-    print(f"  • AI Multi-Engine:     Gemini 3.5 Flash & NVIDIA NIM")
+    print(f"  • Cognitive Engine:    Socratic AI Stress-Tests & Leitner Spaced Recall")
     print(f"  • Neural Audio TTS:    Edge-TTS + Browser SpeechSynthesis")
     print("=" * 68)
     print("  Press Ctrl+C to stop the server at any time.\n")

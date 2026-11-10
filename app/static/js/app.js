@@ -170,15 +170,21 @@ function switchTab(tabId) {
 // --- Data Fetchers ---
 async function loadIdeas() {
   try {
-    const params = new URLSearchParams();
-    if (window.state.selectedTopic && window.state.selectedTopic !== 'All') {
-      params.append('topic', window.state.selectedTopic);
-    }
-    if (window.state.searchQuery) {
-      params.append('q', window.state.searchQuery);
+    let url = '/api/ideas';
+    if (window.state.selectedTopic === 'leitner-workout') {
+      url = '/api/ideas/leitner/due';
+    } else {
+      const params = new URLSearchParams();
+      if (window.state.selectedTopic && window.state.selectedTopic !== 'All' && window.state.selectedTopic !== 'all') {
+        params.append('topic', window.state.selectedTopic);
+      }
+      if (window.state.searchQuery) {
+        params.append('q', window.state.searchQuery);
+      }
+      url = `/api/ideas?${params.toString()}`;
     }
 
-    const res = await fetch(`/api/ideas?${params.toString()}`);
+    const res = await fetch(url);
     const data = await res.json();
     window.state.ideas = data;
 
@@ -884,6 +890,10 @@ function renderFeedGrid() {
         </div>
 
         <div class="flex items-center space-x-1">
+          <button onclick="openStressTestModal('${idea.id}')" class="px-2.5 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-600 text-amber-300 hover:text-white border border-amber-500/20 text-xs font-semibold flex items-center space-x-1 transition shadow-sm" title="Socratic Dilemma Stress-Test">
+            <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span class="hidden sm:inline">Stress Test</span>
+          </button>
           <button onclick="openDeepDiveModal('${idea.id}')" class="px-2.5 py-1.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/20 text-xs font-semibold flex items-center space-x-1 transition shadow-sm" title="Detailed explanation and example">
             <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
             <span>Detailed</span>

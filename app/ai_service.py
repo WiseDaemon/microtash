@@ -24,7 +24,7 @@ def extract_ideas_from_content(
 
     # Prompt design for atomic microlearning cards
     system_prompt = (
-        "You are an expert master microlearning curator for Deepstash, an app designed to replace doomscrolling with bite-sized wisdom. "
+        "You are an expert cognitive architect for Microstash, the active Mental Model Gym designed to help users retain, stress-test, and apply high-leverage decision frameworks. "
         "Your mission is to comprehensively extract atomic, high-leverage ideas from the provided book or material. "
         "Each idea MUST be distinct, actionable, memorable, and self-contained.\n\n"
         "CRITICAL CONTENT SEPARATION RULE:\n"
@@ -415,3 +415,88 @@ def generate_default_mermaid_diagram(title: str, summary: str = "", topic: str =
             f"  style Principles fill:#881337,stroke:#f43f5e,color:#fff\n"
             f"  style Output fill:#064e3b,stroke:#10b981,color:#fff"
         )
+
+
+def generate_socratic_stress_test(title: str, summary: str, detailed_explanation: str = "", author: str = "") -> Dict[str, Any]:
+    """
+    Synthesizes a realistic high-stakes scenario dilemma that tests the user's ability
+    to correctly apply the mental model versus falling into a common cognitive trap.
+    """
+    prompt = (
+        f"You are a Socratic tutor at Microstash (The Mental Model Gym). "
+        f"Create a realistic, high-stakes decision dilemma to stress-test whether someone truly understands how to apply '{title}'.\n\n"
+        f"Summary of Concept: {summary}\n"
+        f"Context/Details: {detailed_explanation[:300] if detailed_explanation else 'N/A'}\n\n"
+        f"Return ONLY a valid JSON object with this exact structure:\n"
+        f"{{\n"
+        f"  \"scenario\": \"A crisp, realistic business/career/life dilemma (70-110 words) presenting a tough decision.\",\n"
+        f"  \"question\": \"According to {title}, what is the optimal first-principles move?\",\n"
+        f"  \"options\": [\n"
+        f"    {{\n"
+        f"      \"id\": \"A\",\n"
+        f"      \"text\": \"Option representing a common intuitive mistake or cognitive bias.\",\n"
+        f"      \"is_correct\": false,\n"
+        f"      \"feedback\": \"Why this option fails: explains the trap or superficial thinking.\"\n"
+        f"    }},\n"
+        f"    {{\n"
+        f"      \"id\": \"B\",\n"
+        f"      \"text\": \"The counter-intuitive, highly leveraged choice applying {title}.\",\n"
+        f"      \"is_correct\": true,\n"
+        f"      \"feedback\": \"Exactly right! This demonstrates how {title} cuts through superficial noise.\"\n"
+        f"    }},\n"
+        f"    {{\n"
+        f"      \"id\": \"C\",\n"
+        f"      \"text\": \"A middle-of-the-road compromise that fails to achieve asymmetric upside.\",\n"
+        f"      \"is_correct\": false,\n"
+        f"      \"feedback\": \"Why compromise here leads to mediocre outcomes under this framework.\"\n"
+        f"    }}\n"
+        f"  ],\n"
+        f"  \"first_principles_takeaway\": \"One memorable 1-sentence mental rule to apply whenever facing this dilemma.\"\n"
+        f"}}"
+    )
+
+    if settings.GEMINI_API_KEY:
+        try:
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={settings.GEMINI_API_KEY}"
+            payload = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.4}}
+            with httpx.Client(timeout=20.0) as client:
+                resp = client.post(url, json=payload)
+                if resp.status_code == 200:
+                    text_resp = resp.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+                    parsed = parse_json_safely(text_resp)
+                    if isinstance(parsed, list) and len(parsed) > 0:
+                        return parsed[0]
+                    elif isinstance(parsed, dict):
+                        return parsed
+        except Exception as e:
+            print(f"Gemini Socratic stress-test failed, falling back: {e}")
+
+    return {
+        "scenario": (
+            f"Your team is facing a high-stakes, ambiguous dilemma with competing priorities and tight deadlines. "
+            f"Stakeholders are pushing for immediate action based on intuition, while unexpected edge cases are surfacing. "
+            f"How do you leverage '{title}' to navigate the uncertainty?"
+        ),
+        "question": f"According to {title}, what is the most disciplined next step?",
+        "options": [
+            {
+                "id": "A",
+                "text": "Accelerate execution immediately to gather empirical feedback, ignoring edge cases for now.",
+                "is_correct": False,
+                "feedback": f"Trap: Rushing into execution without clarifying underlying constraints violates the core discipline of {title}."
+            },
+            {
+                "id": "B",
+                "text": f"Deconstruct the situation to its immutable constraints, eliminate single points of failure, and focus effort on the 20% lever that controls 80% of the outcome.",
+                "is_correct": True,
+                "feedback": f"Spot on! This embodies the first-principles discipline of {title} by separating signal from emotional noise."
+            },
+            {
+                "id": "C",
+                "text": "Form a committee to compromise between both viewpoints and split resources evenly across all options.",
+                "is_correct": False,
+                "feedback": "Trap: Compromise often combines the flaws of both approaches without capturing the asymmetric benefits of either."
+            }
+        ],
+        "first_principles_takeaway": f"When uncertainty strikes, use {title} as an asymmetric filter: protect against ruin first, then maximize leverage."
+    }

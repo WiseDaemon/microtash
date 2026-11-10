@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ app_name }} — Replace Doomscrolling with Microlearning</title>
+  <title>{{ app_name }} — The Mental Model Gym</title>
   
   <!-- Tailwind CSS via CDN with Typography -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -65,7 +65,7 @@
             <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-amber-300 via-rose-300 to-indigo-300 bg-clip-text text-transparent">Microstash</span>
             <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-medium">NVIDIA NIM & AI</span>
           </div>
-          <p class="text-xs text-slate-400 hidden sm:block">Replace doomscrolling with microlearning</p>
+          <p class="text-xs text-slate-400 hidden sm:block">Stop hoarding ideas. Wire them into your brain.</p>
         </div>
       </div>
 
@@ -103,9 +103,9 @@
             <span id="streak-counter">1 Day</span>
           </div>
           <span class="text-slate-600">|</span>
-          <div class="flex items-center space-x-1 text-emerald-400 font-semibold" title="Doomscroll Minutes Replaced with Microlearning">
+          <div class="flex items-center space-x-1 text-emerald-400 font-semibold" title="Focus Capital Earned & Retained">
             <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
-            <span id="doomscroll-saved">0m Saved</span>
+            <span id="doomscroll-saved">0m Retained</span>
           </div>
         </div>
 
@@ -438,7 +438,7 @@
           </div>
         </div>
         <p class="text-sm text-slate-300 leading-relaxed">
-          Provide just a <strong>Book Title</strong>, <strong>Author</strong>, or <strong>Idea/Concept</strong>. Microstash automatically searches the web, pulls comprehensive summaries & quotes, and synthesizes atomic Deepstash idea cards ready for your feed.
+          Provide just a <strong>Book Title</strong>, <strong>Author</strong>, or <strong>Idea/Concept</strong>. Microstash automatically searches the web, pulls comprehensive summaries & quotes, and synthesizes atomic first-principles idea cards ready for your mental model gym.
         </p>
       </div>
 
@@ -1078,7 +1078,7 @@
       <div class="flex items-center justify-between pt-2">
         <span class="text-xs text-slate-400">Select Style:</span>
         <div class="flex space-x-2">
-          <button onclick="renderShareCard('gradient')" class="px-3 py-1 rounded-lg text-xs bg-indigo-600 text-white font-medium">Deepstash Purple</button>
+          <button onclick="renderShareCard('gradient')" class="px-3 py-1 rounded-lg text-xs bg-indigo-600 text-white font-medium">Indigo Classic</button>
           <button onclick="renderShareCard('minimal-dark')" class="px-3 py-1 rounded-lg text-xs bg-slate-800 text-slate-300">OLED Dark</button>
           <button onclick="renderShareCard('paper')" class="px-3 py-1 rounded-lg text-xs bg-slate-200 text-slate-900 font-medium">Warm Paper</button>
         </div>
@@ -1112,5 +1112,88 @@
       lucide.createIcons();
     });
   </script>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: SOCRATIC STRESS-TEST (DILEMMA & DECISION CHALLENGE)                 -->
+  <!-- ========================================================================= -->
+  <div id="stress-test-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-slate-900 border border-amber-500/30 rounded-3xl max-w-xl w-full shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Modal Header -->
+      <div class="p-5 sm:p-6 bg-gradient-to-r from-slate-900 via-amber-950/20 to-slate-900 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-inner">
+            <i data-lucide="zap" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-black tracking-wider uppercase px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">Socratic Stress-Test</span>
+            <h3 id="stress-test-title" class="text-base sm:text-lg font-bold text-white line-clamp-1">Mental Model Challenge</h3>
+          </div>
+        </div>
+        <button onclick="closeStressTestModal()" class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-5 text-sm">
+        
+        <!-- Loading State -->
+        <div id="stress-test-loading" class="py-12 flex flex-col items-center justify-center space-y-3">
+          <div class="w-10 h-10 border-4 border-amber-500/20 border-t-amber-400 rounded-full animate-spin"></div>
+          <p class="text-xs text-amber-300/80 font-medium">Constructing real-world decision dilemma...</p>
+        </div>
+
+        <!-- Content State -->
+        <div id="stress-test-content" class="hidden space-y-5">
+          <!-- Dilemma Scenario Box -->
+          <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-4 sm:p-5 relative overflow-hidden">
+            <div class="flex items-center space-x-2 text-xs font-bold text-amber-400 mb-2">
+              <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+              <span>High-Stakes Scenario</span>
+            </div>
+            <p id="stress-test-scenario" class="text-slate-200 leading-relaxed text-sm sm:text-base font-normal"></p>
+          </div>
+
+          <!-- The Question -->
+          <div>
+            <h4 id="stress-test-question" class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">According to this model, what is your move?</h4>
+            <div id="stress-test-options" class="space-y-2.5">
+              <!-- Dynamically populated choices -->
+            </div>
+          </div>
+
+          <!-- Diagnostic Feedback Box (Shows after answering) -->
+          <div id="stress-test-feedback-box" class="hidden rounded-2xl p-4 border transition-all">
+            <div id="stress-test-feedback-header" class="flex items-center space-x-2 text-xs font-bold mb-1.5"></div>
+            <p id="stress-test-feedback-text" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
+          </div>
+
+          <!-- First Principles Takeaway -->
+          <div id="stress-test-takeaway-box" class="hidden bg-emerald-950/30 border border-emerald-500/30 rounded-2xl p-4">
+            <div class="flex items-center space-x-2 text-xs font-bold text-emerald-400 mb-1">
+              <i data-lucide="compass" class="w-4 h-4"></i>
+              <span>First-Principles Heuristic</span>
+            </div>
+            <p id="stress-test-takeaway-text" class="text-xs sm:text-sm text-emerald-200 font-medium"></p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 sm:p-5 bg-slate-900/80 border-t border-slate-800 flex items-center justify-between">
+        <button onclick="regenerateStressTest()" class="text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center space-x-1.5 transition">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          <span>New Dilemma</span>
+        </button>
+        <button onclick="closeStressTestModal()" class="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition">
+          Done
+        </button>
+      </div>
+
+    </div>
+  </div>
+
 </body>
 </html>

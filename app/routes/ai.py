@@ -141,3 +141,30 @@ def save_as_book_stash(payload: SaveAsBookStashRequest):
         "saved_count": len(created_ideas),
         "ideas": created_ideas
     }
+
+
+@router.get("/stress-test/{idea_id}")
+def get_socratic_stress_test(idea_id: str):
+    """
+    Synthesizes a realistic high-stakes scenario dilemma that tests the user's ability
+    to correctly apply this specific mental model in real life.
+    """
+    idea = database.get_idea_by_id(idea_id)
+    if not idea:
+        raise HTTPException(status_code=404, detail="Idea card not found")
+
+    from app.ai_service import generate_socratic_stress_test
+    dilemma = generate_socratic_stress_test(
+        title=idea.title,
+        summary=idea.summary,
+        detailed_explanation=idea.detailed_explanation or "",
+        author=idea.author
+    )
+
+    return {
+        "status": "ok",
+        "idea_id": idea.id,
+        "idea_title": idea.title,
+        "author": idea.author,
+        "stress_test": dilemma
+    }

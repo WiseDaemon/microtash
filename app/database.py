@@ -189,7 +189,7 @@ def seed_data(conn):
             INSERT OR IGNORE INTO ideas (
                 id, title, one_liner, summary, detailed_explanation, example, visual_diagram, quote, action_item, author, source, topic,
                 tags, read_time_mins, color_theme, likes, saved_count, is_liked, is_saved, created_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?)
         """, (
             i["id"], i["title"], i["one_liner"], i["summary"],
             i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""),

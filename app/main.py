@@ -6,11 +6,11 @@ from pathlib import Path
 
 from app.config import settings
 from app.database import init_db
-from app.routes import ideas, stashes, ai, stats, audio
+from app.routes import ideas, stashes, ai, stats, audio, compliance
 
 app = FastAPI(
     title=settings.APP_NAME,
-    description="Replace doomscrolling with microlearning - Deepstash clone powered by NVIDIA & Gemini AI",
+    description="The Mental Model Gym — Retain high-leverage frameworks with active recall, system diagrams & Socratic AI challenges",
     version="1.0.0"
 )
 
@@ -40,6 +40,7 @@ app.include_router(stashes.router)
 app.include_router(ai.router)
 app.include_router(stats.router)
 app.include_router(audio.router)
+app.include_router(compliance.router)
 
 @app.on_event("startup")
 def on_startup():
