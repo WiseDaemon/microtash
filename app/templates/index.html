@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>{{ app_name }} — The Mental Model Gym</title>
   
-  <!-- Obsidian Kinetic Design System & Web Fonts -->
+  <!-- Swiss Knowledge Bento Fonts (Plus Jakarta Sans, Inter, JetBrains Mono) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
 
   <!-- Tailwind CSS & Mermaid.js -->
@@ -17,28 +17,29 @@
 
   <script>
     tailwind.config = {
-      darkMode: "class",
       theme: {
         extend: {
           colors: {
-            // Midnight Slate & Luminous Sky Cyan / Warm Amber Palette
-            "surface": "#0B0F19",
-            "surface-container-lowest": "#060911",
-            "surface-container-low": "#0F172A",
-            "surface-container": "#162032",
-            "surface-container-high": "#1E293B",
-            "surface-container-highest": "#334155",
-            "on-surface": "#F8FAFC",
-            "on-surface-variant": "#94A3B8",
-            "primary": "#38BDF8",
-            "primary-container": "#0284C7",
-            "on-primary-container": "#F0F9FF",
-            "secondary": "#F59E0B",
-            "secondary-container": "#78350F",
-            "tertiary": "#818CF8",
-            "outline": "#475569",
-            "outline-variant": "#334155",
-            "error": "#F87171",
+            // Swiss Knowledge Bento Palette (Clean Slate & Precision Blue)
+            "canvas": "#F8FAFC",
+            "surface": "#FFFFFF",
+            "surface-container-lowest": "#F8FAFC",
+            "surface-container-low": "#F1F5F9",
+            "surface-container": "#FFFFFF",
+            "surface-container-high": "#F8FAFC",
+            "surface-container-highest": "#E2E8F0",
+            "on-surface": "#0F172A",
+            "on-surface-variant": "#64748B",
+            "primary": "#2563EB",
+            "primary-hover": "#1D4ED8",
+            "primary-container": "#1D4ED8",
+            "on-primary-container": "#FFFFFF",
+            "secondary": "#D97706",
+            "secondary-container": "#FEF3C7",
+            "tertiary": "#4F46E5",
+            "outline": "#CBD5E1",
+            "outline-variant": "#E2E8F0",
+            "error": "#EF4444",
           },
           fontFamily: {
             headline: ["'Plus Jakarta Sans'", "sans-serif"],
@@ -48,386 +49,541 @@
         }
       }
     };
-    mermaid.initialize({ startOnLoad: false, theme: 'dark', themeVariables: { darkMode: true, background: '#0F172A' } });
+    mermaid.initialize({ 
+      startOnLoad: false, 
+      theme: 'default', 
+      themeVariables: { 
+        darkMode: false, 
+        background: '#FFFFFF',
+        primaryColor: '#EFF6FF',
+        primaryTextColor: '#1E40AF',
+        primaryBorderColor: '#BFDBFE',
+        lineColor: '#64748B',
+        fontFamily: 'Inter, sans-serif'
+      } 
+    });
   </script>
 
   <style>
-    /* Custom styling for Deep Midnight Slate & Material 3 Kinetic Frame */
+    /* Swiss Knowledge Bento - Clean Obsidian & Slate Style */
     body {
-      background-color: #060911;
-      color: #F8FAFC;
+      background-color: #F8FAFC;
+      color: #0F172A;
       font-family: 'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     .custom-scrollbar::-webkit-scrollbar {
-      width: 4px;
-      height: 4px;
+      width: 5px;
+      height: 5px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #334155;
+      background: #CBD5E1;
       border-radius: 9999px;
     }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
     .tactile-glass {
-      background: rgba(22, 32, 50, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+    }
+    .bento-card {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 1rem;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04);
+    }
+    .bento-card:hover {
+      box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+      border-color: #CBD5E1;
+    }
+    .bento-active-pill {
+      background: #2563EB;
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px -1px rgba(37, 99, 235, 0.35);
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-start p-0 sm:py-6 sm:px-4">
+<body class="min-h-screen flex flex-col bg-[#F8FAFC]">
 
-  <!-- Mobile Device Canvas Wrapper -->
-  <div class="w-full max-w-[460px] md:max-w-4xl min-h-screen sm:min-h-[880px] bg-surface flex flex-col relative sm:rounded-[36px] sm:border sm:border-outline-variant/40 shadow-2xl overflow-hidden pb-24">
-    
-    <!-- 1. ANDROID STATUS BAR (Pixel Style) -->
-    <div class="px-6 pt-3 pb-1 flex justify-between items-center text-xs text-on-surface-variant select-none z-50">
-      <span id="live-clock" class="font-headline font-bold text-white text-[13px]">09:41</span>
-      <div class="flex items-center gap-1.5 text-on-surface-variant">
-        <span class="material-symbols-outlined text-[15px]">wifi</span>
-        <span class="material-symbols-outlined text-[15px]">signal_cellular_4_bar</span>
-        <span class="material-symbols-outlined text-[16px] text-primary">battery_full</span>
-      </div>
-    </div>
-
-    <!-- 2. STITCH TOP APP BAR -->
-    <header class="bg-surface/85 backdrop-blur-md text-primary sticky top-0 z-40 border-b border-outline-variant/30 px-5 py-3">
-      <div class="flex justify-between items-center w-full">
-        <div class="flex items-center gap-2.5 cursor-pointer" onclick="switchTab('swipe')">
-          <div class="w-9 h-9 rounded-full bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shadow-inner">
-            <span class="material-symbols-outlined text-[20px]">psychology</span>
+  <!-- TOP WORKSPACE HEADER (Linear / Notion Precision) -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 gap-3 sm:gap-6">
+        
+        <!-- Brand & Title -->
+        <div class="flex items-center gap-3 cursor-pointer shrink-0" onclick="switchTab('swipe')">
+          <div class="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-headline font-extrabold text-sm shadow-sm">
+            M
           </div>
           <div>
-            <div class="text-lg font-headline font-extrabold tracking-wider text-primary">MICROSTASH</div>
-            <p class="text-[10px] text-on-surface-variant font-medium -mt-0.5">The Mental Model Gym</p>
+            <div class="flex items-center gap-1.5">
+              <span class="font-headline font-extrabold text-slate-900 text-base tracking-tight">MICROSTASH</span>
+              <span class="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-100">
+                v2.0 Bento
+              </span>
+            </div>
+            <p class="text-[11px] text-slate-500 font-medium -mt-0.5">The Mental Model Gym</p>
           </div>
         </div>
 
-        <div class="flex items-center gap-2">
+        <!-- Global Command Bar Search (Centered) -->
+        <div class="flex-1 max-w-lg relative z-30">
+          <div class="relative flex items-center">
+            <span class="material-symbols-outlined absolute left-3.5 text-slate-400 text-[18px]">search</span>
+            <input 
+              type="text" 
+              id="global-book-search-input" 
+              oninput="handleGlobalBookSearch(this.value)"
+              placeholder="Search 18+ models & global books (e.g. Inversion, Atomic Habits)..." 
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-16 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-100 transition shadow-inner"
+            />
+            <div class="absolute right-2.5 flex items-center gap-1">
+              <button id="global-search-clear" onclick="clearGlobalSearch()" class="hidden text-slate-400 hover:text-slate-600 mr-1">
+                <span class="material-symbols-outlined text-[16px]">close</span>
+              </button>
+              <kbd class="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono font-medium text-slate-400 bg-white border border-slate-200 rounded shadow-xs">⌘K</kbd>
+            </div>
+          </div>
+          <!-- Autocomplete Dropdown -->
+          <div id="global-search-autocomplete" class="hidden absolute left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-xl p-2 z-50 max-h-80 overflow-y-auto custom-scrollbar">
+            <!-- Autocomplete items populated via JS -->
+          </div>
+        </div>
+
+        <!-- Desktop Navigation Tabs -->
+        <nav class="hidden md:flex items-center gap-1">
+          <button onclick="switchTab('swipe')" id="desk-nav-swipe" class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-blue-50 text-blue-700">
+            <span class="material-symbols-outlined text-[17px]">explore</span>
+            <span>Feed</span>
+          </button>
+          <button onclick="switchTab('notes')" id="desk-nav-notes" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition flex items-center gap-1.5 relative">
+            <span class="material-symbols-outlined text-[17px] text-[#ff6719]">edit_note</span>
+            <span>Notes</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-[#ff6719] animate-pulse"></span>
+          </button>
+          <button onclick="switchTab('feed')" id="desk-nav-feed" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[17px]">menu_book</span>
+            <span>Books</span>
+          </button>
+          <button onclick="switchTab('leitner')" id="desk-nav-leitner" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[17px]">fitness_center</span>
+            <span>Workout</span>
+          </button>
+          <button onclick="switchTab('stashes')" id="desk-nav-stashes" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[17px]">bookmarks</span>
+            <span>Stashes</span>
+          </button>
+          <button onclick="switchTab('ai')" id="desk-nav-ai" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[17px]">auto_awesome</span>
+            <span>AI Sync</span>
+          </button>
+        </nav>
+
+        <!-- Right Quick Actions -->
+        <div class="flex items-center gap-2 shrink-0">
+          <!-- Blindspot Quiz Pill -->
+          <button onclick="openOnboardingQuiz()" class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition shadow-2xs">
+            <span class="material-symbols-outlined text-[16px] text-amber-600">target</span>
+            <span>Blindspot</span>
+          </button>
+
           <!-- User Auth / Profile Pill -->
           <div id="auth-header-btn-container">
-            <button onclick="openAuthModal()" id="btn-header-login" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/20 border border-primary/40 text-xs font-bold text-primary hover:bg-primary/30 transition shadow-sm">
+            <button onclick="openAuthModal()" id="btn-header-login" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition shadow-sm">
               <span class="material-symbols-outlined text-[16px]">person</span>
               <span id="header-user-label">Sign In</span>
             </button>
           </div>
 
-          <!-- Substack Notes Header Pill -->
-          <button onclick="switchTab('notes')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#ff6719]/15 border border-[#ff6719]/40 text-xs font-bold text-[#ff6719] hover:bg-[#ff6719]/25 transition shadow-sm relative">
-            <span class="material-symbols-outlined text-[16px]">edit_note</span>
-            <span>Notes</span>
-            <span class="w-1.5 h-1.5 rounded-full bg-[#ff6719] animate-pulse"></span>
-          </button>
-
-          <!-- Blindspot Quiz Pill -->
-          <button onclick="openOnboardingQuiz()" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high/80 border border-primary/40 text-xs font-bold text-primary hover:bg-primary/20 transition shadow-sm">
-            <span class="material-symbols-outlined text-[16px]">target</span>
-            <span>Blindspot Quiz</span>
-          </button>
-
-          <!-- Stitch UI Gallery Link -->
-          <a href="/stitch" target="_blank" class="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-surface-container-high/80 border border-secondary/40 text-xs font-bold text-secondary hover:bg-secondary/20 transition">
-            <span class="material-symbols-outlined text-[16px]">palette</span>
-            <span class="hidden sm:inline">Stitch Hub</span>
-          </a>
+          <!-- Hidden clock for backward compatibility -->
+          <span id="live-clock" class="hidden">09:41</span>
         </div>
-      </div>
-    </header>
 
-    <!-- GLOBAL INSTANT BOOK & MODEL SEARCH BAR -->
-    <div class="px-5 pt-3 pb-1 relative z-30">
-      <div class="relative flex items-center">
-        <span class="material-symbols-outlined absolute left-3.5 text-primary text-[18px]">search</span>
-        <input 
-          type="text" 
-          id="global-book-search-input" 
-          oninput="handleGlobalBookSearch(this.value)"
-          placeholder="Search 18+ models & global books (e.g. Atomic Habits, Thinking Fast)..." 
-          class="w-full bg-surface-container-high/80 border border-outline-variant/40 rounded-full pl-10 pr-10 py-2 text-xs text-white placeholder-on-surface-variant/60 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-inner"
-        />
-        <button id="global-search-clear" onclick="clearGlobalSearch()" class="hidden absolute right-3 text-on-surface-variant hover:text-white">
-          <span class="material-symbols-outlined text-[16px]">close</span>
-        </button>
-      </div>
-      <!-- Autocomplete Dropdown -->
-      <div id="global-search-autocomplete" class="hidden absolute left-5 right-5 mt-1.5 bg-surface-container border border-outline-variant/60 rounded-2xl shadow-2xl p-2 z-50 max-h-80 overflow-y-auto custom-scrollbar">
-        <!-- Autocomplete items populated via JS -->
       </div>
     </div>
+  </header>
 
-    <!-- 3. DAILY HABIT & GAMIFICATION PILLS ROW -->
-    <section class="px-5 pt-2.5 pb-2.5 flex items-center gap-2.5 overflow-x-auto custom-scrollbar select-none z-10">
-      <!-- Streak Pill -->
-      <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high/70 border border-secondary/40 shadow-sm flex-shrink-0">
-        <span class="material-symbols-outlined text-[16px] text-secondary" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
-        <span id="streak-counter" class="text-xs text-on-surface font-semibold tracking-tight">1 Day Streak</span>
-        <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-ping ml-0.5"></span>
-      </div>
-      <!-- Focus Capital Pill -->
-      <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high/70 border border-primary/30 flex-shrink-0">
-        <span class="material-symbols-outlined text-[16px] text-primary">verified_user</span>
-        <span id="doomscroll-saved" class="text-xs text-on-surface font-semibold tracking-tight">0m Retained</span>
-      </div>
-      <!-- Cards Mastered Pill -->
-      <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high/70 border border-outline-variant/40 flex-shrink-0">
-        <span class="material-symbols-outlined text-[15px] text-tertiary">military_tech</span>
-        <span id="read-counter" class="text-xs text-on-surface font-semibold tracking-tight">0 Mastered</span>
-      </div>
-    </section>
+  <!-- WORKSPACE MAIN CONTENT AREA -->
+  <div class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 flex-1 flex flex-col pb-24 lg:pb-12">
 
-    <!-- 4. TOPIC CHIP FILTER CAROUSEL -->
-    <nav class="px-5 py-2 flex items-center gap-2 overflow-x-auto custom-scrollbar z-10 select-none">
-      <button onclick="filterByTopic('All')" class="topic-chip px-3.5 py-1.5 rounded-full bg-primary/20 text-primary border border-primary/50 text-xs font-bold whitespace-nowrap transition">
-        All Models
-      </button>
-      <button onclick="filterByTopic('leitner-workout')" class="topic-chip px-3.5 py-1.5 rounded-full bg-surface-container-high/50 text-secondary border border-secondary/40 text-xs font-bold whitespace-nowrap transition flex items-center gap-1">
-        <span class="material-symbols-outlined text-[14px]">bolt</span>
-        <span>⚡ Daily Workout</span>
-      </button>
-      <button onclick="filterByTopic('Mental Models')" class="topic-chip px-3.5 py-1.5 rounded-full bg-surface-container-high/50 text-on-surface-variant text-xs font-medium whitespace-nowrap hover:text-white transition">
-        Mental Models
-      </button>
-      <button onclick="filterByTopic('Strategy')" class="topic-chip px-3.5 py-1.5 rounded-full bg-surface-container-high/50 text-on-surface-variant text-xs font-medium whitespace-nowrap hover:text-white transition">
-        Strategy
-      </button>
-      <button onclick="filterByTopic('Stoicism')" class="topic-chip px-3.5 py-1.5 rounded-full bg-surface-container-high/50 text-on-surface-variant text-xs font-medium whitespace-nowrap hover:text-white transition">
-        Stoicism
-      </button>
-      <button onclick="filterByTopic('Wealth')" class="topic-chip px-3.5 py-1.5 rounded-full bg-surface-container-high/50 text-on-surface-variant text-xs font-medium whitespace-nowrap hover:text-white transition">
-        Wealth
-      </button>
-      <button onclick="filterByTopic('Productivity')" class="topic-chip px-3.5 py-1.5 rounded-full bg-surface-container-high/50 text-on-surface-variant text-xs font-medium whitespace-nowrap hover:text-white transition">
-        Productivity
-      </button>
-    </nav>
-
-    <!-- ===================================================================== -->
-    <!-- TAB 1: STITCH ACTIVE RECALL SWIPE DECK (DEFAULT HERO)                 -->
-    <!-- ===================================================================== -->
-    <main id="tab-swipe-content" class="px-4 pt-2.5 pb-4 flex-1 flex flex-col relative z-10">
+    <!-- SUB-BAR: GAMIFICATION & TOPIC FILTERS -->
+    <div class="mb-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200/80 pb-4">
       
-      <!-- Ghost Card Stack (Visual Layering Depth) -->
-      <div class="relative w-full">
-        <!-- Background stacked card slice 2 -->
-        <div class="absolute inset-x-3 -top-1.5 h-16 rounded-2xl bg-surface-container-high/40 border border-white/5 opacity-50 transform scale-[0.98]"></div>
-        <!-- Background stacked card slice 1 -->
-        <div class="absolute inset-x-1.5 -top-0.5 h-16 rounded-2xl bg-surface-container-high/70 border border-white/10 opacity-70 transform scale-[0.99]"></div>
+      <!-- Topic Chips Row -->
+      <nav class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar select-none py-0.5">
+        <button onclick="filterByTopic('All')" class="topic-chip px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold whitespace-nowrap transition shadow-2xs">
+          All Models
+        </button>
+        <button onclick="filterByTopic('leitner-workout')" class="topic-chip px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-xs font-bold whitespace-nowrap transition flex items-center gap-1">
+          <span class="material-symbols-outlined text-[14px]">bolt</span>
+          <span>⚡ Daily Workout</span>
+        </button>
+        <button onclick="filterByTopic('Mental Models')" class="topic-chip px-3 py-1 rounded-full bg-white text-slate-600 border border-slate-200 hover:border-slate-300 text-xs font-medium whitespace-nowrap transition">
+          Mental Models
+        </button>
+        <button onclick="filterByTopic('Strategy')" class="topic-chip px-3 py-1 rounded-full bg-white text-slate-600 border border-slate-200 hover:border-slate-300 text-xs font-medium whitespace-nowrap transition">
+          Strategy
+        </button>
+        <button onclick="filterByTopic('Stoicism')" class="topic-chip px-3 py-1 rounded-full bg-white text-slate-600 border border-slate-200 hover:border-slate-300 text-xs font-medium whitespace-nowrap transition">
+          Stoicism
+        </button>
+        <button onclick="filterByTopic('Wealth')" class="topic-chip px-3 py-1 rounded-full bg-white text-slate-600 border border-slate-200 hover:border-slate-300 text-xs font-medium whitespace-nowrap transition">
+          Wealth
+        </button>
+        <button onclick="filterByTopic('Productivity')" class="topic-chip px-3 py-1 rounded-full bg-white text-slate-600 border border-slate-200 hover:border-slate-300 text-xs font-medium whitespace-nowrap transition">
+          Productivity
+        </button>
+      </nav>
 
-        <!-- Primary Elevated Mental Model Card -->
-        <article id="stitch-hero-card" class="relative w-full rounded-3xl bg-surface-container-high/85 backdrop-blur-xl border border-white/10 p-5 sm:p-6 shadow-[0_20px_45px_rgba(0,0,0,0.6)] flex flex-col justify-between transition-all duration-300">
+      <!-- Habit Stats Indicator Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto custom-scrollbar select-none shrink-0">
+        <!-- Streak Pill -->
+        <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold shadow-2xs">
+          <span class="material-symbols-outlined text-[15px] text-amber-600" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+          <span id="streak-counter">1 Day Streak</span>
+        </div>
+        <!-- Retained Focus Pill -->
+        <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-semibold shadow-2xs">
+          <span class="material-symbols-outlined text-[15px] text-blue-600">verified_user</span>
+          <span id="doomscroll-saved">0m Retained</span>
+        </div>
+        <!-- Cards Mastered Pill -->
+        <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-800 text-xs font-semibold shadow-2xs">
+          <span class="material-symbols-outlined text-[15px] text-indigo-600">military_tech</span>
+          <span id="read-counter">0 Mastered</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- TAB 1: SWISS BENTO HERO GRID (DEFAULT FEED)                           -->
+    <!-- ===================================================================== -->
+    <main id="tab-swipe-content" class="flex-1 flex flex-col">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- MAIN BENTO CARD (LEFT / CENTER 8 COLS) -->
+        <div class="lg:col-span-8 flex flex-col space-y-4">
           
-          <!-- Top Light Catch Accent Line -->
-          <div class="absolute top-0 inset-x-8 h-[1px] bg-gradient-to-r from-transparent via-white/25 to-transparent"></div>
-
-          <!-- Card Header & Metadata -->
-          <div class="flex items-center justify-between mb-3.5">
-            <div class="flex items-center gap-2 flex-wrap">
-              <span id="card-topic-badge" class="px-2.5 py-1 rounded-full bg-primary/15 border border-primary/40 text-primary text-[10px] font-bold uppercase tracking-wider">
-                STRATEGY
-              </span>
-              <span class="flex items-center gap-1 text-[11px] text-on-surface-variant">
-                <span class="material-symbols-outlined text-[13px]">timer</span>
-                <span id="card-read-time">1 min read</span>
-              </span>
-            </div>
-
-            <div class="flex items-center gap-2">
-              <!-- Leitner Box Status Indicator -->
-              <div id="card-leitner-pill" class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-lowest/80 border border-outline-variant/40 text-[10px] font-bold text-on-surface">
-                <span id="card-leitner-box-text">Box 1</span>
-                <div class="flex items-center gap-0.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                  <span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
-                  <span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
-                </div>
-              </div>
-
-              <!-- Stash Bookmark Button -->
-              <button onclick="toggleSaveCurrentCard()" id="card-btn-save" class="w-8 h-8 rounded-full bg-surface-container/90 border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-primary transition active:scale-95" title="Save to Stash">
-                <span class="material-symbols-outlined text-[18px]">bookmark_border</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Title & Thinker Block -->
-          <div class="mb-3">
-            <h1 id="card-title" class="text-2xl sm:text-3xl font-headline font-extrabold text-on-surface tracking-tight leading-tight">
-              The Inversion Principle
-            </h1>
-            <div class="flex items-center gap-2 mt-1.5">
-              <div id="card-avatar-initials" class="w-6 h-6 rounded-full bg-secondary/20 border border-secondary/40 flex items-center justify-center text-secondary text-[10px] font-bold">
-                CM
-              </div>
-              <span class="text-xs text-on-surface-variant">
-                Attributed to <span id="card-author" class="text-on-surface font-semibold">Charlie Munger</span>
-                <span id="card-source-citation" class="text-on-surface-variant/70 text-[11px] block sm:inline sm:ml-1">• Poor Charlie's Almanack</span>
-              </span>
-            </div>
-          </div>
-
-          <!-- Hook Quote Box -->
-          <div class="relative p-3.5 mb-4 rounded-xl bg-surface-container-lowest/70 border-l-2 border-primary border-outline-variant/20">
-            <span class="material-symbols-outlined absolute top-2.5 right-3 text-outline-variant/30 text-[24px]">format_quote</span>
-            <p id="card-one-liner" class="text-xs sm:text-sm text-on-surface/90 italic leading-relaxed pr-6">
-              "Avoid stupidity rather than striving for brilliant moves. Invert, always invert."
-            </p>
-          </div>
-
-          <!-- Interactive Causal Mapping Bento / Diagram Box -->
-          <div class="p-3.5 rounded-2xl bg-surface-container-low/90 border border-outline-variant/30 mb-4 shadow-inner">
-            <div class="flex justify-between items-center mb-2.5">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-primary flex items-center gap-1.5">
-                <span class="material-symbols-outlined text-[14px]">account_tree</span>
-                <span>Causal Architecture</span>
-              </span>
-              <button onclick="openDeepDiveModal()" class="text-[10px] text-tertiary hover:underline flex items-center gap-1">
-                <span>Detailed Treatise</span>
-                <span class="material-symbols-outlined text-[12px]">open_in_new</span>
-              </button>
-            </div>
+          <article id="stitch-hero-card" class="bento-card p-6 sm:p-8 flex flex-col justify-between relative bg-white border border-slate-200 rounded-2xl shadow-sm">
             
-            <div id="card-diagram-box" class="w-full min-h-[140px] flex items-center justify-center overflow-x-auto custom-scrollbar p-2 rounded-xl bg-surface-container-lowest/80 border border-outline-variant/20 text-xs">
-              <!-- Rendered via Mermaid.js or SVG -->
-            </div>
-          </div>
-
-          <!-- Action Bar: Audio Pill & Socratic Challenge Button -->
-          <div class="flex items-center gap-3 pt-2">
-            <!-- Neural Waveform Audio Pill -->
-            <button onclick="toggleCardAudio()" id="btn-card-audio" class="flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-surface-container border border-outline-variant/40 hover:border-primary/50 text-xs font-semibold text-on-surface transition active:scale-95 shadow-sm">
-              <span class="material-symbols-outlined text-primary text-[18px]" id="audio-icon">volume_up</span>
-              <div class="flex items-center gap-0.5 h-3" id="audio-waveform">
-                <span class="w-0.5 h-2 bg-primary/70 rounded-full"></span>
-                <span class="w-0.5 h-3 bg-primary rounded-full"></span>
-                <span class="w-0.5 h-1.5 bg-primary/60 rounded-full"></span>
-                <span class="w-0.5 h-2.5 bg-primary/80 rounded-full"></span>
+            <!-- Top Card Header: Topic Badge & Read Time & Leitner Pill -->
+            <div class="flex items-center justify-between gap-3 mb-4 flex-wrap">
+              <div class="flex items-center gap-2">
+                <span id="card-topic-badge" class="px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-[11px] font-bold uppercase tracking-wider">
+                  STRATEGY
+                </span>
+                <span class="flex items-center gap-1 text-xs text-slate-500 font-medium">
+                  <span class="material-symbols-outlined text-[14px]">timer</span>
+                  <span id="card-read-time">1 min read</span>
+                </span>
               </div>
-              <span class="text-[11px] text-on-surface-variant font-mono" id="audio-label">Listen</span>
-            </button>
 
-            <!-- Restack to Substack Notes -->
-              <button onclick="openRestackModal()" class="w-9 h-9 rounded-full bg-[#ff6719]/15 border border-[#ff6719]/40 flex items-center justify-center text-[#ff6719] hover:bg-[#ff6719] hover:text-white transition shadow-sm" title="Restack to Substack Notes">
-                <span class="material-symbols-outlined text-[18px]">repeat</span>
-              </button>
-              <!-- Export to Obsidian Markdown -->
-            <div class="flex items-center gap-1.5">
-              <button onclick="exportCurrentCardMarkdown()" class="w-9 h-9 rounded-full bg-surface-container border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-white transition" title="Export Obsidian Markdown">
-                <span class="material-symbols-outlined text-[18px]">download</span>
-              </button>
-              <button onclick="openDeepDiveModal()" class="w-9 h-9 rounded-full bg-surface-container border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-tertiary transition" title="Progressive 3-Slide Deep Dive">
-                <span class="material-symbols-outlined text-[18px]">menu_book</span>
-              </button>
+              <div class="flex items-center gap-2">
+                <!-- Leitner Status Box Pill -->
+                <div id="card-leitner-pill" class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700">
+                  <span id="card-leitner-box-text">Box 1</span>
+                  <div class="flex items-center gap-0.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                  </div>
+                </div>
+
+                <!-- Like Button -->
+                <button onclick="toggleLikeCurrentCard()" class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700 transition" title="Like Model">
+                  <span id="card-like-icon" class="material-symbols-outlined text-[16px] text-rose-500">favorite_border</span>
+                  <span id="card-like-count">0</span>
+                </button>
+
+                <!-- Stash Bookmark Button -->
+                <button onclick="toggleSaveCurrentCard()" id="card-btn-save" class="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:text-blue-600 transition" title="Save to Stash">
+                  <span class="material-symbols-outlined text-[18px]">bookmark_border</span>
+                </button>
+              </div>
             </div>
 
-            <!-- High Impact Primary Socratic CTA -->
-            <button onclick="triggerCurrentCardStressTest()" class="flex-1 py-2.5 px-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary-container font-headline font-bold text-xs tracking-wide shadow-[0_0_20px_rgba(56,189,248,0.35)] flex items-center justify-center gap-1.5 hover:shadow-[0_0_25px_rgba(56,189,248,0.5)] active:scale-98 transition">
-              <span class="material-symbols-outlined text-[18px]">bolt</span>
-              <span>Stress-Test Me</span>
-              <span class="text-[9px] px-1.5 py-0.2 rounded-full bg-on-primary-container/20 font-bold">+10 XP</span>
+            <!-- Title & Thinker Block -->
+            <div class="mb-4">
+              <h1 id="card-title" class="text-2xl sm:text-3xl font-headline font-bold text-slate-900 tracking-tight leading-tight">
+                The Inversion Principle
+              </h1>
+              <div class="flex items-center gap-2 mt-2">
+                <div id="card-avatar-initials" class="w-6 h-6 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-800 text-[10px] font-bold">
+                  CM
+                </div>
+                <span class="text-xs text-slate-600">
+                  Attributed to <span id="card-author" class="text-slate-900 font-bold">Charlie Munger</span>
+                  <span id="card-source-citation" class="text-slate-400 text-xs block sm:inline sm:ml-1">• Poor Charlie's Almanack</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Hook Quote Box -->
+            <div class="p-4 mb-4 rounded-xl bg-slate-50 border-l-4 border-blue-600 border border-slate-200/80">
+              <p id="card-one-liner" class="text-xs sm:text-sm font-medium text-slate-800 italic leading-relaxed">
+                "Avoid stupidity rather than striving for brilliant moves. Invert, always invert."
+              </p>
+            </div>
+
+            <!-- Interactive Causal Mapping / Diagram Box -->
+            <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200 mb-5">
+              <div class="flex justify-between items-center mb-2.5">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-blue-700 flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-[15px]">account_tree</span>
+                  <span>Causal Architecture</span>
+                </span>
+                <button onclick="openDeepDiveModal()" class="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline flex items-center gap-1">
+                  <span>Detailed Treatise</span>
+                  <span class="material-symbols-outlined text-[13px]">open_in_new</span>
+                </button>
+              </div>
+              
+              <!-- Diagram Containers for both ID variants -->
+              <div id="card-diagram-container" class="w-full min-h-[140px] flex items-center justify-center overflow-x-auto custom-scrollbar p-3 rounded-lg bg-white border border-slate-200 text-xs">
+                <!-- Mermaid or SVG diagram rendered via JS -->
+              </div>
+              <div id="card-diagram-box" class="hidden"></div>
+            </div>
+
+            <!-- Action Bar -->
+            <div class="flex flex-wrap items-center gap-2.5 pt-2 border-t border-slate-100">
+              
+              <!-- Neural Audio Pill -->
+              <button onclick="toggleCardAudio()" id="btn-card-audio" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:border-blue-400 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition shadow-2xs">
+                <span class="material-symbols-outlined text-blue-600 text-[18px]" id="audio-icon">volume_up</span>
+                <div class="flex items-center gap-0.5 h-3" id="audio-waveform">
+                  <span class="w-0.5 h-2 bg-blue-600 rounded-full"></span>
+                  <span class="w-0.5 h-3 bg-blue-600 rounded-full"></span>
+                  <span class="w-0.5 h-1.5 bg-blue-400 rounded-full"></span>
+                  <span class="w-0.5 h-2.5 bg-blue-500 rounded-full"></span>
+                </div>
+                <span class="text-[11px] text-slate-600 font-mono" id="audio-label">Listen</span>
+              </button>
+
+              <!-- Restack to Substack Notes -->
+              <button onclick="openRestackModal()" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#ff6719]/10 border border-[#ff6719]/30 text-[#ff6719] hover:bg-[#ff6719] hover:text-white text-xs font-bold transition shadow-2xs" title="Restack to Substack Notes">
+                <span class="material-symbols-outlined text-[16px]">repeat</span>
+                <span>Restack</span>
+              </button>
+
+              <!-- Read Full Treatise Drawer Button -->
+              <button onclick="openDeepDiveModal()" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition shadow-2xs">
+                <span class="material-symbols-outlined text-[16px]">menu_book</span>
+                <span>Read Treatise</span>
+              </button>
+
+              <!-- Export Markdown -->
+              <button onclick="exportCurrentCardMarkdown()" class="w-9 h-9 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 transition" title="Export Obsidian Markdown">
+                <span class="material-symbols-outlined text-[17px]">download</span>
+              </button>
+
+              <!-- Socratic Stress-Test Primary CTA -->
+              <button onclick="triggerCurrentCardStressTest()" class="flex-1 min-w-[170px] py-2 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-headline font-bold text-xs tracking-wide shadow-sm flex items-center justify-center gap-1.5 transition">
+                <span class="material-symbols-outlined text-[17px]">bolt</span>
+                <span>Stress-Test Me</span>
+                <span class="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20 font-bold">+10 XP</span>
+              </button>
+
+            </div>
+
+            <!-- Transformative Fair-Use Educational Credit -->
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-start gap-1.5 text-slate-400 text-[10px]">
+              <span class="material-symbols-outlined text-[13px] text-blue-600 flex-shrink-0 mt-0.5">verified</span>
+              <p id="card-attribution" class="leading-tight italic">
+                Transformative educational commentary & mental model summary based on original publications. All rights belong to respective authors & publishers under Fair Use.
+              </p>
+            </div>
+
+          </article>
+
+          <!-- Card Switcher & Keyboard Shortcut Bar -->
+          <div class="flex items-center justify-between text-xs text-slate-500 px-2 py-1 select-none">
+            <button onclick="prevCard()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 font-semibold text-slate-700 transition">
+              <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+              <span>Previous</span>
+            </button>
+            <span class="text-[11px] text-slate-400 font-mono">Use ← / → arrow keys or swipe</span>
+            <button onclick="nextCard()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 font-semibold text-blue-600 hover:text-blue-700 transition">
+              <span>Next Model</span>
+              <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
             </button>
           </div>
 
-          <!-- Transformative Fair Use Educational Credit -->
-          <div class="mt-3 pt-2 border-t border-outline-variant/20 flex items-start gap-1.5 text-on-surface-variant/40">
-            <span class="material-symbols-outlined text-[13px] text-primary/70 flex-shrink-0 mt-0.5">verified</span>
-            <p id="card-attribution" class="text-[9px] leading-tight italic">
-              Transformative educational commentary & mental model summary based on original publications. All rights belong to respective authors & publishers under Fair Use.
+        </div>
+
+        <!-- RIGHT BENTO TILES (4 COLS) -->
+        <aside class="lg:col-span-4 space-y-4">
+          
+          <!-- BENTO TILE 1: LEITNER WORKOUT SUMMARY -->
+          <div class="bento-card p-5 bg-white border border-slate-200 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5 text-slate-900 font-headline font-bold text-sm">
+                <span class="material-symbols-outlined text-blue-600 text-[18px]">fitness_center</span>
+                <span>Spaced Repetition Gym</span>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                4 Due Today
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Lock mental models into long-term memory via the 5-box Leitner forgetting curve algorithm.
             </p>
+            <!-- Mini Box Pipeline -->
+            <div class="grid grid-cols-5 gap-1.5 text-center py-1">
+              <div class="p-1.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 text-[10px] font-bold">B1</div>
+              <div class="p-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-semibold">B2</div>
+              <div class="p-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-semibold">B3</div>
+              <div class="p-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-semibold">B4</div>
+              <div class="p-1.5 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-700 text-[10px] font-bold">B5</div>
+            </div>
+            <button onclick="switchTab('leitner')" class="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-headline font-bold text-xs tracking-wide transition flex items-center justify-center gap-1.5 shadow-sm">
+              <span class="material-symbols-outlined text-[15px]">bolt</span>
+              <span>Launch Recall Workout</span>
+            </button>
           </div>
 
-        </article>
-      </div>
+          <!-- BENTO TILE 2: SUBSTACK NOTES PREVIEW -->
+          <div class="bento-card p-5 bg-white border border-slate-200 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5 font-headline font-bold text-sm text-slate-900">
+                <span class="material-symbols-outlined text-[#ff6719] text-[18px]">edit_note</span>
+                <span>Substack Notes</span>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ff6719]/10 text-[#ff6719]">
+                Live Stream
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Atomic insights, thinker quotes & mental model reflections from Farnam Street, Taleb & clear thinkers.
+            </p>
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="font-bold text-slate-800">Shane Parrish</span>
+                <span class="text-slate-400 text-[10px]">2h ago</span>
+              </div>
+              <p class="text-xs text-slate-600 italic line-clamp-2 leading-relaxed">
+                "The best mental models are the ones you use when you're exhausted or under pressure..."
+              </p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="switchTab('notes')" class="flex-1 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition text-center">
+                Open Notes Stream
+              </button>
+              <button onclick="openRestackModal()" class="px-3 py-2 rounded-xl bg-[#ff6719] hover:bg-[#e55913] text-white text-xs font-bold transition flex items-center gap-1">
+                <span class="material-symbols-outlined text-[15px]">repeat</span>
+                <span>Restack</span>
+              </button>
+            </div>
+          </div>
 
-      <!-- Quick Swipe Guidance Cue -->
-      <div class="flex justify-between items-center text-on-surface-variant/60 text-xs mt-3.5 px-2 select-none">
-        <button onclick="prevCard()" class="flex items-center gap-1 hover:text-white transition">
-          <span class="material-symbols-outlined text-[16px]">arrow_back</span>
-          <span>Previous</span>
-        </button>
-        <span class="text-[11px] text-on-surface-variant/40">Swipe or use arrow keys</span>
-        <button onclick="nextCard()" class="flex items-center gap-1 text-primary hover:text-primary/80 font-semibold transition">
-          <span>Next Model</span>
-          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-        </button>
-      </div>
+          <!-- BENTO TILE 3: COGNITIVE BLINDSPOT DIAGNOSTIC -->
+          <div class="bento-card p-5 bg-white border border-slate-200 rounded-2xl space-y-3">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-base">
+                🎯
+              </div>
+              <div>
+                <h3 class="font-headline font-bold text-xs text-slate-900">Cognitive Blindspot Diagnostic</h3>
+                <p class="text-[11px] text-slate-500">Find which model repairs your intuition</p>
+              </div>
+            </div>
+            <button onclick="openOnboardingQuiz()" class="w-full py-2 rounded-xl border border-slate-200 hover:border-blue-400 bg-white text-slate-700 hover:text-blue-600 text-xs font-semibold transition flex items-center justify-center gap-1.5">
+              <span>Take 60-Second Diagnostic</span>
+              <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+            </button>
+          </div>
 
+        </aside>
+
+      </div>
     </main>
 
     <!-- ===================================================================== -->
-    <!-- TAB 2: STITCH LEITNER COGNITIVE WORKOUT (RECALL GYM)                 -->
+    <!-- TAB 2: LEITNER COGNITIVE WORKOUT (RECALL GYM)                         -->
     <!-- ===================================================================== -->
-    <section id="tab-leitner-content" class="hidden flex-1 px-5 pt-4 space-y-5">
+    <section id="tab-leitner-content" class="hidden flex-1 space-y-5">
       
       <!-- Leitner Pipeline Visualizer Header -->
-      <div class="tactile-glass rounded-3xl p-4 shadow-xl space-y-3">
+      <div class="bento-card p-5 bg-white border border-slate-200 rounded-2xl space-y-3">
         <div class="flex items-center justify-between text-xs font-bold">
-          <div class="flex items-center gap-1.5 text-primary">
-            <span class="material-symbols-outlined text-[18px]">view_timeline</span>
-            <span class="uppercase tracking-wider">Leitner Memory Pipeline</span>
+          <div class="flex items-center gap-2 text-blue-600">
+            <span class="material-symbols-outlined text-[19px]">view_timeline</span>
+            <span class="uppercase tracking-wider text-slate-900 font-headline">Leitner Memory Pipeline</span>
           </div>
-          <span id="workout-due-count" class="px-2 py-0.5 rounded-full bg-secondary/20 text-secondary border border-secondary/30 text-[10px]">4 Due Today</span>
+          <span id="workout-due-count" class="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-xs font-bold">
+            4 Due Today
+          </span>
         </div>
 
         <!-- 5-Box Step Pipeline Visualizer -->
-        <div class="flex items-center justify-between gap-1.5 pt-1 overflow-x-auto custom-scrollbar">
+        <div class="flex items-center justify-between gap-2 pt-1 overflow-x-auto custom-scrollbar">
           <!-- Box 1 -->
-          <div class="flex-1 min-w-[55px] text-center p-2 rounded-xl bg-surface-container-high/80 border border-primary/40">
-            <span class="text-[10px] font-bold text-primary block">Box 1</span>
-            <span class="text-[9px] text-on-surface-variant block mt-0.5">1d int.</span>
+          <div class="flex-1 min-w-[65px] text-center p-3 rounded-xl bg-blue-50 border border-blue-200">
+            <span class="text-xs font-bold text-blue-700 block">Box 1</span>
+            <span class="text-[10px] text-blue-600 block mt-0.5">1d int.</span>
           </div>
-          <span class="text-outline-variant text-[12px]">→</span>
+          <span class="text-slate-300 text-sm">→</span>
           <!-- Box 2 -->
-          <div class="flex-1 min-w-[55px] text-center p-2 rounded-xl bg-surface-container-high/80 border border-outline-variant/30">
-            <span class="text-[10px] font-bold text-on-surface block">Box 2</span>
-            <span class="text-[9px] text-on-surface-variant block mt-0.5">3d int.</span>
+          <div class="flex-1 min-w-[65px] text-center p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="text-xs font-bold text-slate-800 block">Box 2</span>
+            <span class="text-[10px] text-slate-500 block mt-0.5">3d int.</span>
           </div>
-          <span class="text-outline-variant text-[12px]">→</span>
+          <span class="text-slate-300 text-sm">→</span>
           <!-- Box 3 -->
-          <div class="flex-1 min-w-[55px] text-center p-2 rounded-xl bg-surface-container-high/80 border border-outline-variant/30">
-            <span class="text-[10px] font-bold text-on-surface block">Box 3</span>
-            <span class="text-[9px] text-on-surface-variant block mt-0.5">7d int.</span>
+          <div class="flex-1 min-w-[65px] text-center p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="text-xs font-bold text-slate-800 block">Box 3</span>
+            <span class="text-[10px] text-slate-500 block mt-0.5">7d int.</span>
           </div>
-          <span class="text-outline-variant text-[12px]">→</span>
+          <span class="text-slate-300 text-sm">→</span>
           <!-- Box 4 -->
-          <div class="flex-1 min-w-[55px] text-center p-2 rounded-xl bg-surface-container-high/80 border border-outline-variant/30">
-            <span class="text-[10px] font-bold text-on-surface block">Box 4</span>
-            <span class="text-[9px] text-on-surface-variant block mt-0.5">14d int.</span>
+          <div class="flex-1 min-w-[65px] text-center p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="text-xs font-bold text-slate-800 block">Box 4</span>
+            <span class="text-[10px] text-slate-500 block mt-0.5">14d int.</span>
           </div>
-          <span class="text-outline-variant text-[12px]">→</span>
+          <span class="text-slate-300 text-sm">→</span>
           <!-- Box 5 -->
-          <div class="flex-1 min-w-[55px] text-center p-2 rounded-xl bg-surface-container-high/80 border border-outline-variant/30">
-            <span class="text-[10px] font-bold text-tertiary block">Box 5</span>
-            <span class="text-[9px] text-on-surface-variant block mt-0.5">30d int.</span>
+          <div class="flex-1 min-w-[65px] text-center p-3 rounded-xl bg-indigo-50 border border-indigo-200">
+            <span class="text-xs font-bold text-indigo-700 block">Box 5</span>
+            <span class="text-[10px] text-indigo-600 block mt-0.5">30d int.</span>
           </div>
         </div>
       </div>
 
       <!-- Active Recall 3D Flashcard Container -->
-      <div id="workout-card-container" class="tactile-glass rounded-3xl p-6 min-h-[300px] flex flex-col justify-between shadow-2xl border border-white/10 relative">
+      <div id="workout-card-container" class="bento-card p-6 sm:p-8 min-h-[320px] flex flex-col justify-between bg-white border border-slate-200 rounded-2xl shadow-sm relative">
         <div>
-          <div class="flex items-center justify-between text-xs text-on-surface-variant mb-3">
-            <span id="workout-card-topic" class="font-bold text-primary uppercase text-[10px]">STOICISM</span>
-            <span id="workout-card-flip-status" class="text-[10px] font-semibold text-secondary">TAP TO REVEAL</span>
+          <div class="flex items-center justify-between text-xs text-slate-500 mb-3">
+            <span id="workout-card-topic" class="font-bold text-blue-700 uppercase text-[11px] px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-100">STOICISM</span>
+            <span id="workout-card-flip-status" class="text-xs font-semibold text-amber-600 flex items-center gap-1">
+              <span class="material-symbols-outlined text-[15px]">sync</span>
+              <span>TAP TO REVEAL</span>
+            </span>
           </div>
-          <h2 id="workout-card-title" class="text-2xl font-headline font-bold text-white mb-2">The Obstacle is the Way</h2>
-          <div id="workout-card-body" class="text-sm text-on-surface/90 leading-relaxed italic mt-4">
+          <h2 id="workout-card-title" class="text-2xl font-headline font-bold text-slate-900 mb-2">The Obstacle is the Way</h2>
+          <div id="workout-card-body" class="text-sm text-slate-700 leading-relaxed italic mt-4 p-4 rounded-xl bg-slate-50 border-l-4 border-blue-600">
             "When an impassable barrier blocks your path, what is the Stoic discipline?"
           </div>
         </div>
 
         <div class="pt-6">
-          <button onclick="flipWorkoutCard()" class="w-full py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-xs font-semibold text-primary transition mb-4">
-            🔄 Flip Card
+          <button onclick="flipWorkoutCard()" class="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-800 transition mb-3 flex items-center justify-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px]">sync</span>
+            <span>Flip Card</span>
           </button>
           <!-- 3-Tier Rating Buttons -->
-          <div class="grid grid-cols-3 gap-2">
-            <button onclick="gradeWorkoutCard('hard')" class="py-2.5 rounded-xl bg-rose-950/40 border border-rose-500/40 text-rose-300 text-xs font-bold hover:bg-rose-900/50 transition">
+          <div class="grid grid-cols-3 gap-2.5">
+            <button onclick="gradeWorkoutCard('hard')" class="py-2.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold hover:bg-rose-100 transition">
               Forgot (1d)
             </button>
-            <button onclick="gradeWorkoutCard('good')" class="py-2.5 rounded-xl bg-amber-950/40 border border-amber-500/40 text-amber-300 text-xs font-bold hover:bg-amber-900/50 transition">
+            <button onclick="gradeWorkoutCard('good')" class="py-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 text-xs font-bold hover:bg-amber-100 transition">
               Hard (3d)
             </button>
-            <button onclick="gradeWorkoutCard('easy')" class="py-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs font-bold hover:bg-emerald-900/50 transition">
+            <button onclick="gradeWorkoutCard('easy')" class="py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold hover:bg-emerald-100 transition">
               Mastered (Adv)
             </button>
           </div>
@@ -437,147 +593,113 @@
     </section>
 
     <!-- ===================================================================== -->
-    <!-- TAB 3: GLOBAL BOOKS & COMMUNITY LIBRARY                               -->
+    <!-- TAB 3: GLOBAL BOOKSHELF & COMMUNITY LIBRARY                           -->
     <!-- ===================================================================== -->
-    <section id="tab-feed-content" class="hidden flex-1 px-5 pt-4 space-y-6">
+    <section id="tab-feed-content" class="hidden flex-1 space-y-6">
       
       <!-- Community Bookshelf Header -->
-      <div>
+      <div class="bento-card p-6 bg-white border border-slate-200 rounded-2xl">
         <div class="flex items-center justify-between mb-2">
           <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-[20px]">menu_book</span>
-            <h2 class="text-lg font-headline font-bold text-white">Global Bookshelf</h2>
+            <span class="material-symbols-outlined text-blue-600 text-[22px]">menu_book</span>
+            <h2 class="text-lg font-headline font-bold text-slate-900">Global Bookshelf</h2>
           </div>
-          <span id="books-count-badge" class="px-2.5 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/30 text-[10px] font-bold">
+          <span id="books-count-badge" class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold">
             0 Books Cached
           </span>
         </div>
-        <p class="text-xs text-on-surface-variant">
-          Books requested by community members are permanently indexed here with <span class="text-primary font-bold">0s scan time</span> for everyone.
+        <p class="text-xs text-slate-500">
+          Books requested by community members are permanently indexed here with <span class="text-blue-600 font-bold">0s scan time</span> for everyone.
         </p>
       </div>
 
-      <!-- Books Horizontal Shelf -->
-      <div id="books-shelf-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+      <!-- Books Horizontal Shelf Grid -->
+      <div id="books-shelf-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <!-- Rendered via app.js -->
       </div>
 
-      <!-- Individual Mental Models Divider & Section -->
-      <div class="pt-2 border-t border-outline-variant/30">
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="text-base font-headline font-bold text-white flex items-center gap-2">
-            <span class="material-symbols-outlined text-secondary text-[18px]">psychology</span>
+      <!-- All Mental Models Section -->
+      <div class="pt-4 border-t border-slate-200">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-base font-headline font-bold text-slate-900 flex items-center gap-2">
+            <span class="material-symbols-outlined text-amber-600 text-[20px]">psychology</span>
             <span>All Deconstructed Mental Models</span>
           </h3>
-          <span id="feed-count-badge" class="text-xs text-on-surface-variant font-medium">18 Models</span>
+          <span id="feed-count-badge" class="text-xs text-slate-500 font-medium">18 Models</span>
         </div>
-        <div id="feed-grid-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <div id="feed-grid-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <!-- Dynamically rendered via app.js -->
         </div>
       </div>
     </section>
 
     <!-- ===================================================================== -->
-    <!-- TAB 4: MY STASHES & CURATED COLLECTIONS (SOCIAL LEARNING)               -->
+    <!-- TAB 4: MY STASHES & CURATED COLLECTIONS                               -->
     <!-- ===================================================================== -->
-    <section id="tab-stashes-content" class="hidden flex-1 px-5 pt-4 space-y-4">
-      <div class="flex items-center justify-between">
+    <section id="tab-stashes-content" class="hidden flex-1 space-y-5">
+      <div class="bento-card p-6 bg-white border border-slate-200 rounded-2xl flex items-center justify-between">
         <div>
-          <h2 class="text-lg font-headline font-bold text-white">Curated Stashes</h2>
-          <p class="text-[11px] text-on-surface-variant font-medium">Community shared decks & personal collections</p>
+          <h2 class="text-lg font-headline font-bold text-slate-900">Curated Stashes</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Community shared decks & personal collections</p>
         </div>
-        <button onclick="openCreateStashModal()" class="px-3 py-1.5 rounded-full bg-primary/20 text-primary border border-primary/40 text-xs font-bold hover:bg-primary/30 transition flex items-center gap-1 shadow-sm">
-          <span class="material-symbols-outlined text-[15px]">add</span>
+        <button onclick="openCreateStashModal()" class="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+          <span class="material-symbols-outlined text-[16px]">add</span>
           <span>New Stash</span>
         </button>
       </div>
 
       <!-- Social Learning Filter Tabs -->
-      <div class="flex items-center gap-2 border-b border-outline-variant/30 pb-2">
-        <button id="btn-stash-scope-my" onclick="switchStashScope('my')" class="px-3.5 py-1.5 rounded-full text-xs font-headline font-bold bg-primary text-surface-container-lowest transition flex items-center gap-1.5 shadow-sm">
+      <div class="flex items-center gap-2 border-b border-slate-200 pb-3">
+        <button id="btn-stash-scope-my" onclick="switchStashScope('my')" class="px-4 py-1.5 rounded-full text-xs font-headline font-bold bg-blue-600 text-white transition flex items-center gap-1.5 shadow-sm">
           <span class="material-symbols-outlined text-[15px]">folder_special</span>
           <span>My Stashes</span>
         </button>
-        <button id="btn-stash-scope-public" onclick="switchStashScope('public')" class="px-3.5 py-1.5 rounded-full text-xs font-headline font-bold bg-surface-container-high text-on-surface-variant hover:text-white transition flex items-center gap-1.5">
+        <button id="btn-stash-scope-public" onclick="switchStashScope('public')" class="px-4 py-1.5 rounded-full text-xs font-headline font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition flex items-center gap-1.5">
           <span class="material-symbols-outlined text-[15px]">public</span>
           <span>Community Shared Stashes 🌐</span>
         </button>
       </div>
 
       <!-- Main Stashes Grid -->
-      <div id="stashes-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <!-- Dynamically rendered -->
+      <div id="stashes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Dynamically rendered via social.js -->
       </div>
       <div id="stashes-grid-container" class="hidden"></div>
 
-      <!-- Stash Detail View (When a stash is opened) -->
+      <!-- Stash Detail View -->
       <div id="stash-detail-view" class="hidden space-y-4">
         <div class="flex items-center justify-between">
-          <button onclick="closeStashDetail()" class="text-xs text-primary hover:underline flex items-center gap-1 font-bold">
+          <button onclick="closeStashDetail()" class="text-xs text-blue-600 hover:underline flex items-center gap-1 font-bold">
             <span class="material-symbols-outlined text-[16px]">arrow_back</span>
             <span>Back to Stashes</span>
           </button>
-          <div id="stash-detail-actions" class="flex items-center gap-2">
-            <!-- Share, Clone, Publish buttons dynamically injected -->
-          </div>
+          <div id="stash-detail-actions" class="flex items-center gap-2"></div>
         </div>
         <div id="stash-detail-content" class="space-y-4"></div>
       </div>
     </section>
 
-    <!-- CREATE NEW STASH MODAL -->
-    <div id="create-stash-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
-      <div class="bg-surface-container border border-outline-variant/60 rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
-        <button onclick="closeCreateStashModal()" class="absolute top-4 right-4 p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant hover:text-white transition">
-          <span class="material-symbols-outlined text-[20px]">close</span>
-        </button>
-        <h3 class="text-lg font-headline font-bold text-white mb-1">Create New Stash</h3>
-        <p class="text-xs text-on-surface-variant mb-4">Curate your favorite mental models into a focused theme.</p>
-        
-        <form onsubmit="handleCreateStashSubmit(event)" class="space-y-3.5">
-          <div>
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Stash Title</label>
-            <input type="text" id="new-stash-title" required placeholder="e.g. Founder Mental Models" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary">
-          </div>
-          <div>
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Description</label>
-            <textarea id="new-stash-desc" rows="2" placeholder="What core decision frameworks are in this collection?" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary"></textarea>
-          </div>
-          <div class="flex items-center gap-2 pt-1">
-            <input type="checkbox" id="new-stash-public" class="rounded border-outline-variant text-primary focus:ring-0">
-            <label for="new-stash-public" class="text-xs text-white font-medium cursor-pointer">
-              Publish to Community (allow other learners to discover and clone)
-            </label>
-          </div>
-          <button type="submit" class="w-full py-2.5 mt-3 rounded-xl bg-primary hover:bg-primary-hover text-surface-container-lowest font-headline font-bold text-xs tracking-wide shadow-md transition flex items-center justify-center gap-1.5">
-            <span class="material-symbols-outlined text-[16px]">folder</span>
-            <span>Create Stash</span>
-          </button>
-        </form>
-      </div>
-    </div>
-
     <!-- ===================================================================== -->
     <!-- TAB 5: AI STASHIFIER & WEB DECONSTRUCTOR                              -->
     <!-- ===================================================================== -->
-    <section id="tab-ai-content" class="hidden flex-1 px-5 pt-4 space-y-4">
-      <div class="tactile-glass rounded-3xl p-5 shadow-2xl space-y-4">
+    <section id="tab-ai-content" class="hidden flex-1 space-y-5">
+      <div class="bento-card p-6 sm:p-8 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-4">
         <div>
-          <span class="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 border border-primary/30 px-2.5 py-0.5 rounded-full">AI Stashifier</span>
-          <h2 class="text-xl font-headline font-bold text-white mt-2">Deconstruct Any Book or URL</h2>
-          <p class="text-xs text-on-surface-variant mt-1">Paste any URL, book excerpt, or essay. Gemini & NVIDIA synthesize atomic mental models with causal diagrams.</p>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full">AI Stashifier</span>
+          <h2 class="text-xl font-headline font-bold text-slate-900 mt-2">Deconstruct Any Book or URL</h2>
+          <p class="text-xs text-slate-500 mt-1">Paste any URL, book excerpt, or essay. Gemini & NVIDIA synthesize atomic mental models with causal diagrams.</p>
         </div>
 
         <div class="space-y-3">
-          <textarea id="ai-input-text" rows="4" class="w-full rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/40 p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-primary" placeholder="Paste article URL (e.g. https://...) or raw book notes here..."></textarea>
+          <textarea id="ai-input-text" rows="4" class="w-full rounded-xl bg-slate-50 border border-slate-200 p-3.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-100 transition leading-relaxed" placeholder="Paste article URL (e.g. https://...) or raw book notes here..."></textarea>
           
           <div class="flex items-center justify-between">
-            <select id="ai-provider-select" class="bg-surface-container-high border border-outline-variant/40 rounded-xl px-3 py-1.5 text-xs text-on-surface">
+            <select id="ai-provider-select" class="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-600">
               <option value="gemini">Gemini 2.5 Flash</option>
               <option value="nvidia">NVIDIA Nemotron 70B</option>
             </select>
-            <button onclick="runAiExtraction()" class="py-2.5 px-5 rounded-full bg-primary text-surface-container-lowest font-headline font-bold text-xs shadow-lg hover:shadow-primary/30 transition">
-              ⚡ Deconstruct into Cards
+            <button onclick="runAiExtraction()" class="py-2.5 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-headline font-bold text-xs shadow-sm transition flex items-center gap-1.5">
+              <span>⚡ Deconstruct into Cards</span>
             </button>
           </div>
         </div>
@@ -585,38 +707,39 @@
 
       <!-- AI Extraction Results Container -->
       <div id="ai-results-container" class="space-y-4 hidden">
-        <h3 class="text-sm font-bold text-white uppercase tracking-wider">Synthesized Mental Models</h3>
+        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Synthesized Mental Models</h3>
         <div id="ai-cards-list" class="space-y-3"></div>
       </div>
     </section>
 
     <!-- ===================================================================== -->
-    <!-- TAB 6: SUBSTACK NOTES & INTELLECTUAL STREAM                              -->
+    <!-- TAB 6: SUBSTACK NOTES & INTELLECTUAL STREAM                           -->
     <!-- ===================================================================== -->
-    <section id="tab-notes-content" class="hidden flex-1 px-4 sm:px-5 pt-3 pb-8 space-y-4">
+    <section id="tab-notes-content" class="hidden flex-1 space-y-4">
+      
       <!-- Substack Header & Publications -->
-      <div class="p-4 rounded-3xl bg-gradient-to-r from-surface-container via-surface-container-high to-surface-container border border-outline-variant/30 space-y-3">
+      <div class="bento-card p-5 bg-white border border-slate-200 rounded-2xl space-y-3.5">
         <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2.5">
-            <div class="w-9 h-9 rounded-full bg-[#ff6719]/20 border border-[#ff6719]/40 flex items-center justify-center text-[#ff6719] shadow-inner font-bold text-xs">
-              <span class="material-symbols-outlined text-[20px]">edit_note</span>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-[#ff6719]/10 text-[#ff6719] flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[22px]">edit_note</span>
             </div>
             <div>
-              <div class="flex items-center gap-1.5">
-                <h3 class="text-sm font-headline font-bold text-white tracking-wide">SUBSTACK NOTES</h3>
-                <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-[#ff6719] text-white">STREAM</span>
+              <div class="flex items-center gap-2">
+                <h3 class="text-base font-headline font-bold text-slate-900">SUBSTACK NOTES</h3>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ff6719] text-white">STREAM</span>
               </div>
-              <p class="text-[10px] text-on-surface-variant font-medium">Atomic insights, mental model restacks & thinker dispatches</p>
+              <p class="text-xs text-slate-500">Atomic insights, mental model restacks & thinker dispatches</p>
             </div>
           </div>
-          <button onclick="loadSubstackNotes()" class="w-7 h-7 rounded-full bg-surface-container-highest border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-white transition" title="Refresh Notes">
-            <span class="material-symbols-outlined text-[15px]">refresh</span>
+          <button onclick="loadSubstackNotes()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 transition" title="Refresh Notes">
+            <span class="material-symbols-outlined text-[16px]">refresh</span>
           </button>
         </div>
 
         <!-- Featured Publications Carousel -->
         <div>
-          <span class="text-[10px] uppercase font-bold text-on-surface-variant tracking-wider">Top Thinkers & Publications</span>
+          <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Top Thinkers & Publications</span>
           <div id="substack-pubs-carousel" class="flex items-center gap-2.5 overflow-x-auto custom-scrollbar pt-2 pb-1 select-none">
             <!-- Publications loaded dynamically -->
           </div>
@@ -624,422 +747,297 @@
       </div>
 
       <!-- Note Composer Card -->
-      <div class="p-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 space-y-2.5">
-        <div class="flex items-start gap-2.5">
-          <div class="w-8 h-8 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center text-primary font-bold text-xs shrink-0 mt-0.5">
+      <div class="bento-card p-4 bg-white border border-slate-200 rounded-2xl space-y-3">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
             <span class="material-symbols-outlined text-[16px]">person</span>
           </div>
-          <textarea id="note-compose-content" rows="2" placeholder="What's on your mind? Share an atomic insight, quote or mental model reflection..." class="w-full bg-surface-container/60 border border-outline-variant/40 rounded-xl p-2.5 text-xs text-white placeholder-on-surface-variant/60 focus:outline-none focus:border-[#ff6719] resize-none leading-relaxed custom-scrollbar"></textarea>
+          <textarea id="note-compose-content" rows="2" placeholder="What's on your mind? Share an atomic insight, quote or mental model reflection..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#ff6719] focus:bg-white resize-none leading-relaxed custom-scrollbar transition"></textarea>
         </div>
-        <div class="flex items-center justify-between pt-1 border-t border-outline-variant/20">
-          <div class="flex items-center gap-2 text-on-surface-variant text-[11px]">
-            <button onclick="switchTab('swipe')" class="hover:text-primary transition flex items-center gap-1">
-              <span class="material-symbols-outlined text-[14px]">psychology</span>
+        <div class="flex items-center justify-between pt-1 border-t border-slate-100">
+          <div class="flex items-center gap-2 text-slate-500 text-xs">
+            <button onclick="switchTab('swipe')" class="hover:text-blue-600 transition flex items-center gap-1 font-medium">
+              <span class="material-symbols-outlined text-[15px]">psychology</span>
               <span>Quote a Model</span>
             </button>
           </div>
-          <button onclick="handleCreateSubstackNote()" class="px-4 py-1.5 rounded-xl bg-[#ff6719] hover:bg-[#e55913] text-white text-xs font-headline font-bold shadow-md transition flex items-center gap-1.5">
+          <button onclick="handleCreateSubstackNote()" class="px-4 py-2 rounded-xl bg-[#ff6719] hover:bg-[#e55913] text-white text-xs font-headline font-bold shadow-sm transition flex items-center gap-1.5">
             <span>Post Note</span>
-            <span class="material-symbols-outlined text-[14px]">send</span>
+            <span class="material-symbols-outlined text-[15px]">send</span>
           </button>
         </div>
       </div>
 
       <!-- Stream of Notes -->
       <div id="substack-notes-list" class="space-y-3">
-        <!-- Notes loaded dynamically -->
+        <!-- Notes loaded dynamically via substack.js -->
       </div>
     </section>
 
-    <!-- ===================================================================== -->
-    <!-- 6. STITCH BOTTOM NAVIGATION BAR                                      -->
-    <!-- ===================================================================== -->
-    <nav class="bg-surface-container/90 backdrop-blur-lg text-primary fixed bottom-0 max-w-[460px] md:max-w-4xl w-full rounded-t-3xl border-t border-outline-variant/30 flex items-center justify-around py-2.5 px-4 z-40 select-none shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
-      
-      <!-- Nav 1: Feed (Active) -->
-      <button onclick="switchTab('swipe')" id="stitch-nav-swipe" class="flex flex-col items-center justify-center bg-primary/15 text-primary rounded-full px-3 py-1 shadow-[0_0_12px_rgba(56,189,248,0.25)] transition">
-        <span class="material-symbols-outlined text-[19px]" style="font-variation-settings: 'FILL' 1;">explore</span>
-        <span class="text-[9px] font-headline font-bold">Gym Feed</span>
-      </button>
-
-      <!-- Nav 2: Substack Notes -->
-      <button onclick="switchTab('notes')" id="stitch-nav-notes" class="flex flex-col items-center justify-center text-on-surface-variant hover:text-[#ff6719] transition px-2.5 py-1 relative">
-        <span class="material-symbols-outlined text-[19px]">edit_note</span>
-        <span class="text-[9px] font-headline font-medium">Notes</span>
-        <span class="absolute top-1 right-2 w-1.5 h-1.5 rounded-full bg-[#ff6719] animate-pulse"></span>
-      </button>
-
-      <!-- Nav 3: Bookshelf / Library -->
-      <button onclick="switchTab('feed')" id="stitch-nav-feed" class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition px-3 py-1.5">
-        <span class="material-symbols-outlined text-[20px]">menu_book</span>
-        <span class="text-[10px] font-headline font-medium">Books</span>
-      </button>
-
-      <!-- Nav 3: Workout -->
-      <button onclick="switchTab('leitner')" id="stitch-nav-leitner" class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition px-3 py-1.5">
-        <span class="material-symbols-outlined text-[20px]">fitness_center</span>
-        <span class="text-[10px] font-headline font-medium">Workout</span>
-      </button>
-
-      <!-- Nav 4: Stashes -->
-      <button onclick="switchTab('stashes')" id="stitch-nav-stashes" class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition px-3 py-1.5">
-        <span class="material-symbols-outlined text-[20px]">bookmarks</span>
-        <span class="text-[10px] font-headline font-medium">Stashes</span>
-      </button>
-
-      <!-- Nav 5: AI Stashifier -->
-      <button onclick="switchTab('ai')" id="stitch-nav-ai" class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition px-3 py-1.5">
-        <span class="material-symbols-outlined text-[20px]">auto_awesome</span>
-        <span class="text-[10px] font-headline font-medium">AI Sync</span>
-      </button>
-    </nav>
-
-    <!-- Android Gesture Pill Navigation Handle -->
-    <div class="fixed bottom-1 left-1/2 -translate-x-1/2 w-28 h-1 bg-outline-variant/60 rounded-full z-50 pointer-events-none"></div>
-
   </div>
 
   <!-- ========================================================================= -->
-  <!-- MODAL: GLOBAL BOOK DETAILS & DECOMPOSED CARDS VIEW                        -->
+  <!-- MOBILE BOTTOM NAVIGATION (Hidden on Desktop 'md:hidden')                  -->
   <!-- ========================================================================= -->
-  <div id="book-detail-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-    <div class="bg-surface border border-primary/40 rounded-3xl max-w-2xl w-full shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-in fade-in zoom-in-95 duration-200">
+  <nav class="md:hidden bg-white/95 backdrop-blur-md text-slate-700 fixed bottom-0 left-0 right-0 border-t border-slate-200 flex items-center justify-around py-2 px-3 z-40 select-none shadow-lg">
+    <button onclick="switchTab('swipe')" id="stitch-nav-swipe" class="flex flex-col items-center justify-center text-blue-600 px-2 py-1">
+      <span class="material-symbols-outlined text-[20px]">explore</span>
+      <span class="text-[10px] font-bold">Feed</span>
+    </button>
+    <button onclick="switchTab('notes')" id="stitch-nav-notes" class="flex flex-col items-center justify-center text-slate-500 hover:text-[#ff6719] px-2 py-1 relative">
+      <span class="material-symbols-outlined text-[20px]">edit_note</span>
+      <span class="text-[10px] font-medium">Notes</span>
+      <span class="absolute top-1 right-2 w-1.5 h-1.5 rounded-full bg-[#ff6719] animate-pulse"></span>
+    </button>
+    <button onclick="switchTab('feed')" id="stitch-nav-feed" class="flex flex-col items-center justify-center text-slate-500 hover:text-blue-600 px-2 py-1">
+      <span class="material-symbols-outlined text-[20px]">menu_book</span>
+      <span class="text-[10px] font-medium">Books</span>
+    </button>
+    <button onclick="switchTab('leitner')" id="stitch-nav-leitner" class="flex flex-col items-center justify-center text-slate-500 hover:text-blue-600 px-2 py-1">
+      <span class="material-symbols-outlined text-[20px]">fitness_center</span>
+      <span class="text-[10px] font-medium">Workout</span>
+    </button>
+    <button onclick="switchTab('stashes')" id="stitch-nav-stashes" class="flex flex-col items-center justify-center text-slate-500 hover:text-blue-600 px-2 py-1">
+      <span class="material-symbols-outlined text-[20px]">bookmarks</span>
+      <span class="text-[10px] font-medium">Stashes</span>
+    </button>
+    <button onclick="switchTab('ai')" id="stitch-nav-ai" class="flex flex-col items-center justify-center text-slate-500 hover:text-blue-600 px-2 py-1">
+      <span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+      <span class="text-[10px] font-medium">AI Sync</span>
+    </button>
+  </nav>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: SWISS SLIDE-OVER DRAWER (PROGRESSIVE 5-TAB DEEP DIVE)              -->
+  <!-- ========================================================================= -->
+  <div id="deep-dive-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-3xl w-full shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-in fade-in duration-200">
       
-      <!-- Modal Header -->
-      <div class="p-5 bg-gradient-to-r from-surface via-surface-container to-surface border-b border-outline-variant/30 flex items-start justify-between">
-        <div class="flex items-start gap-3.5">
-          <div class="w-12 h-16 rounded-xl bg-primary/20 border border-primary/40 flex items-center justify-center text-primary flex-shrink-0 shadow-inner">
-            <span class="material-symbols-outlined text-[28px]">menu_book</span>
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <span id="book-modal-topic" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/30">
-                TOPIC
-              </span>
-              <span id="book-modal-ideas-count" class="text-xs text-secondary font-bold flex items-center gap-1">
-                <span class="material-symbols-outlined text-[13px]">flash_on</span>
-                <span>0 Models</span>
-              </span>
-            </div>
-            <h2 id="book-modal-title" class="text-xl sm:text-2xl font-headline font-bold text-white mt-1">Book Title</h2>
-            <p id="book-modal-author-pub" class="text-xs text-on-surface-variant font-medium mt-0.5">Author • Publisher</p>
-          </div>
-        </div>
-        <button onclick="closeBookDetailModal()" class="w-8 h-8 rounded-full bg-surface-container border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-white transition">
-          <span class="material-symbols-outlined text-[18px]">close</span>
-        </button>
-      </div>
-
-      <!-- Transformative Fair-Use Copyright & Attribution Banner -->
-      <div class="px-5 py-3 bg-surface-container-lowest border-b border-outline-variant/20 flex items-start gap-2.5">
-        <span class="material-symbols-outlined text-[16px] text-primary mt-0.5 flex-shrink-0">verified</span>
-        <p id="book-modal-copyright-notice" class="text-[10px] text-on-surface-variant/80 leading-relaxed italic">
-          Transformative educational commentary & mental model summary based on original publication. All original copyrights remain with the author and publisher.
-        </p>
-      </div>
-
-      <!-- Modal Body: Cards List -->
-      <div id="book-modal-cards-list" class="p-5 sm:p-6 overflow-y-auto space-y-3.5 custom-scrollbar flex-1">
-        <!-- Rendered via JS -->
-      </div>
-
-      <!-- Modal Footer -->
-      <div class="p-4 bg-surface-container border-t border-outline-variant/30 flex items-center justify-between">
-        <span class="text-xs text-on-surface-variant">Cached for 0s instantaneous scan across all users.</span>
-        <button onclick="closeBookDetailModal()" class="px-5 py-2 rounded-full bg-primary text-surface-container-lowest font-headline font-bold text-xs shadow-md">
-          Close Library View
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========================================================================= -->
-  <!-- MODAL: GOOGLE STITCH SOCRATIC DILEMMA ARENA (SCREEN 2)                    -->
-  <!-- ========================================================================= -->
-  <div id="stress-test-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-    <div class="bg-surface border border-secondary/40 rounded-3xl max-w-lg w-full shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-in fade-in zoom-in-95 duration-200">
-      
-      <!-- Modal Header -->
-      <div class="p-5 bg-gradient-to-r from-surface via-surface-container to-surface border-b border-outline-variant/30 flex items-center justify-between">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-full bg-secondary/20 border border-secondary/40 flex items-center justify-center text-secondary">
-            <span class="material-symbols-outlined text-[18px]">bolt</span>
-          </div>
-          <div>
-            <span class="text-[10px] font-bold uppercase tracking-wider text-secondary">Socratic Arena</span>
-            <h3 class="text-sm font-headline font-bold text-white">Pressure-Test Your Intuition</h3>
-          </div>
-        </div>
-        <button onclick="closeStressTestModal()" class="w-8 h-8 rounded-full bg-surface-container border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-white transition">
-          <span class="material-symbols-outlined text-[18px]">close</span>
-        </button>
-      </div>
-
-      <!-- Modal Body -->
-      <div class="p-5 sm:p-6 overflow-y-auto space-y-4 text-xs sm:text-sm custom-scrollbar flex-1">
-        <div class="p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/30 leading-relaxed text-on-surface/90">
-          <p class="text-[10px] font-bold text-secondary uppercase mb-1">Scenario Dilemma</p>
-          <div id="stress-scenario" class="italic">Synthesizing high-stakes dilemma...</div>
-        </div>
-
-        <div>
-          <p id="stress-question" class="font-headline font-bold text-white text-sm mb-3">Which response correctly applies the model?</p>
-          <div id="stress-options" class="space-y-2"></div>
-        </div>
-
-        <!-- Feedback Box -->
-        <div id="stress-feedback-box" class="hidden p-4 rounded-2xl border leading-relaxed">
-          <div class="flex items-center gap-2 font-bold mb-1" id="stress-feedback-title"></div>
-          <div id="stress-feedback-explanation" class="text-xs opacity-90"></div>
-          <div id="stress-first-principles" class="mt-2 pt-2 border-t border-white/10 text-[11px] text-primary font-semibold"></div>
-        </div>
-      </div>
-
-      <!-- Modal Footer -->
-      <div class="p-4 bg-surface-container border-t border-outline-variant/30 flex items-center justify-between">
-        <span class="text-xs text-on-surface-variant">Tap choice to verify mental model</span>
-        <button onclick="closeStressTestModal()" class="px-5 py-2 rounded-full bg-primary text-surface-container-lowest font-headline font-bold text-xs transition shadow-md">
-          Done
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========================================================================= -->
-  <!-- MODAL: PROGRESSIVE DISCLOSURE 3-SLIDE DEEP DIVE                           -->
-  <!-- ========================================================================= -->
-  <div id="deep-dive-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-    <div class="bg-surface border border-outline-variant/50 rounded-3xl max-w-2xl w-full shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-in fade-in zoom-in-95 duration-200">
-      
-      <!-- Modal Header -->
-      <div class="p-5 bg-gradient-to-r from-surface via-surface-container to-surface border-b border-outline-variant/30 flex items-center justify-between">
+      <!-- Drawer Header -->
+      <div class="p-5 sm:p-6 bg-slate-50/80 border-b border-slate-200 flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <span id="modal-topic" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/30">
+          <span id="modal-topic" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
             STRATEGY
           </span>
-          <span id="modal-author-source" class="text-xs text-on-surface-variant">Charlie Munger • Poor Charlie's Almanack</span>
+          <span id="modal-author-source" class="text-xs text-slate-500">Charlie Munger • Poor Charlie's Almanack</span>
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="exportCurrentCardMarkdown()" class="w-8 h-8 rounded-full bg-surface-container border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-white transition" title="Export Markdown">
+          <button onclick="exportCurrentCardMarkdown()" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 transition" title="Export Markdown">
             <span class="material-symbols-outlined text-[16px]">download</span>
           </button>
-          <button onclick="closeDeepDiveModal()" class="w-8 h-8 rounded-full bg-surface-container border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-white transition">
+          <button onclick="closeDeepDiveModal()" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 transition">
             <span class="material-symbols-outlined text-[18px]">close</span>
           </button>
         </div>
       </div>
 
-      <!-- 4-Slide Step Progress Pills -->
-      <div class="px-5 py-2.5 bg-surface-container-low border-b border-outline-variant/20 flex items-center justify-between gap-1.5 overflow-x-auto custom-scrollbar select-none">
-        <button onclick="setDeepDiveSlide(1)" id="pill-slide-1" class="flex-1 min-w-[75px] py-1.5 px-2.5 rounded-full text-[11px] font-bold text-primary bg-primary/20 border border-primary/50 transition text-center shadow-sm">
+      <!-- 5-Slide Step Progress Pills -->
+      <div class="px-5 py-2.5 bg-white border-b border-slate-200 flex items-center justify-between gap-1.5 overflow-x-auto custom-scrollbar select-none">
+        <button onclick="setDeepDiveSlide(1)" id="pill-slide-1" class="flex-1 min-w-[80px] py-1.5 px-2.5 rounded-xl text-xs font-bold text-white bg-blue-600 shadow-2xs transition text-center">
           1. Mechanism
         </button>
-        <button onclick="setDeepDiveSlide(2)" id="pill-slide-2" class="flex-1 min-w-[75px] py-1.5 px-2.5 rounded-full text-[11px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant/30 transition text-center hover:text-white">
+        <button onclick="setDeepDiveSlide(2)" id="pill-slide-2" class="flex-1 min-w-[80px] py-1.5 px-2.5 rounded-xl text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-200 transition text-center hover:bg-slate-100">
           2. Case Study
         </button>
-        <button onclick="setDeepDiveSlide(3)" id="pill-slide-3" class="flex-1 min-w-[75px] py-1.5 px-2.5 rounded-full text-[11px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant/30 transition text-center hover:text-white">
+        <button onclick="setDeepDiveSlide(3)" id="pill-slide-3" class="flex-1 min-w-[80px] py-1.5 px-2.5 rounded-xl text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-200 transition text-center hover:bg-slate-100">
           3. Bounds & Action
         </button>
-        <button onclick="setDeepDiveSlide(4)" id="pill-slide-4" class="flex-1 min-w-[70px] py-1.5 px-2 rounded-full text-[11px] font-medium text-secondary bg-surface-container border border-secondary/30 transition text-center hover:text-white flex items-center justify-center gap-1">
-          <span class="material-symbols-outlined text-[13px]">menu_book</span>
+        <button onclick="setDeepDiveSlide(4)" id="pill-slide-4" class="flex-1 min-w-[80px] py-1.5 px-2 rounded-xl text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-200 transition text-center hover:bg-slate-100 flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-[14px]">menu_book</span>
           <span>Full Treatise</span>
         </button>
-        <button onclick="setDeepDiveSlide(5)" id="pill-slide-5" class="flex-1 min-w-[75px] py-1.5 px-2 rounded-full text-[11px] font-bold text-[#ff6719] bg-[#ff6719]/15 border border-[#ff6719]/40 transition text-center hover:bg-[#ff6719]/25 flex items-center justify-center gap-1 shadow-sm">
-          <span class="material-symbols-outlined text-[13px]">article</span>
+        <button onclick="setDeepDiveSlide(5)" id="pill-slide-5" class="flex-1 min-w-[85px] py-1.5 px-2 rounded-xl text-xs font-bold text-[#ff6719] bg-[#ff6719]/10 border border-[#ff6719]/30 transition text-center hover:bg-[#ff6719]/20 flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-[14px]">article</span>
           <span>Substack Reader</span>
         </button>
       </div>
 
       <!-- Modal Body -->
-      <div class="p-6 overflow-y-auto space-y-4 text-xs sm:text-sm custom-scrollbar flex-1">
-        <h2 id="modal-title" class="text-2xl font-headline font-bold text-white">The Inversion Principle</h2>
-        <p id="modal-one-liner" class="text-sm font-semibold text-primary italic"></p>
+      <div class="p-6 sm:p-8 overflow-y-auto space-y-5 text-sm custom-scrollbar flex-1 bg-white">
+        <div>
+          <h2 id="modal-title" class="text-2xl sm:text-3xl font-headline font-bold text-slate-900 tracking-tight">The Inversion Principle</h2>
+          <p id="modal-one-liner" class="text-sm font-semibold text-blue-600 italic mt-1"></p>
+        </div>
 
         <!-- SLIDE 1: MECHANISM & VISUAL ARCHITECTURE -->
         <div id="modal-slide-1" class="space-y-4">
-          <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30">
-            <h4 class="text-xs font-bold text-secondary uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-[16px]">psychology</span>
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+            <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-blue-600 text-[17px]">psychology</span>
               <span>First Principles Theoretical Breakdown</span>
             </h4>
-            <div id="modal-detailed-explanation" class="text-on-surface/90 space-y-2 leading-relaxed"></div>
+            <div id="modal-detailed-explanation" class="text-slate-700 space-y-2 leading-relaxed"></div>
           </div>
-          <div id="modal-diagram-container" class="p-3 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/20 min-h-[140px] flex items-center justify-center"></div>
+          <div id="modal-diagram-container" class="p-4 rounded-2xl bg-white border border-slate-200 min-h-[140px] flex items-center justify-center"></div>
         </div>
 
         <!-- SLIDE 2: COMPREHENSIVE CASE STUDY -->
         <div id="modal-slide-2" class="hidden space-y-4">
-          <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30">
-            <h4 class="text-xs font-bold text-tertiary uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-[16px]">history_edu</span>
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+            <h4 class="text-xs font-bold text-indigo-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[17px]">history_edu</span>
               <span>In-Depth Historical & Industrial Case Study</span>
             </h4>
-            <div id="modal-example" class="text-on-surface/90 space-y-2.5 leading-relaxed"></div>
+            <div id="modal-example" class="text-slate-700 space-y-2.5 leading-relaxed"></div>
           </div>
         </div>
 
         <!-- SLIDE 3: BOUNDS & ACTION PROTOCOL -->
         <div id="modal-slide-3" class="hidden space-y-4">
-          <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30">
-            <h4 class="text-xs font-bold text-error uppercase tracking-wider mb-1 flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-[16px]">dangerous</span>
+          <div class="p-5 rounded-2xl bg-rose-50 border border-rose-200">
+            <h4 class="text-xs font-bold text-rose-700 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[17px]">dangerous</span>
               <span>When NOT to Apply (Falsification Boundary)</span>
             </h4>
-            <p id="modal-boundary-text" class="text-on-surface/90 leading-relaxed"></p>
+            <p id="modal-boundary-text" class="text-rose-900 leading-relaxed"></p>
           </div>
-          <div class="p-4 rounded-2xl bg-primary/10 border border-primary/30">
-            <h4 class="text-xs font-bold text-primary uppercase tracking-wider mb-1 flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-[16px]">task_alt</span>
+          <div class="p-5 rounded-2xl bg-blue-50 border border-blue-200">
+            <h4 class="text-xs font-bold text-blue-800 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[17px]">task_alt</span>
               <span>Operational Execution Protocol (Try It Today)</span>
             </h4>
-            <div id="modal-action-item" class="text-primary font-medium leading-relaxed"></div>
+            <div id="modal-action-item" class="text-blue-900 font-medium leading-relaxed"></div>
           </div>
         </div>
 
         <!-- SLIDE 4: FULL UNIFIED MASTERCLASS TREATISE -->
         <div id="modal-slide-4" class="hidden space-y-5">
-          <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30 space-y-3">
-            <h4 class="text-xs font-bold text-secondary uppercase tracking-wider flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-[16px]">psychology</span>
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-blue-600 text-[17px]">psychology</span>
               <span>1. Theoretical Foundations & First Principles</span>
             </h4>
-            <div id="modal-full-mechanism" class="text-on-surface/90 space-y-2 leading-relaxed"></div>
+            <div id="modal-full-mechanism" class="text-slate-700 space-y-2 leading-relaxed"></div>
           </div>
 
-          <div class="p-3 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/20 min-h-[140px] flex items-center justify-center">
+          <div class="p-4 rounded-2xl bg-white border border-slate-200 min-h-[140px] flex items-center justify-center">
             <div id="modal-full-diagram" class="w-full flex items-center justify-center"></div>
           </div>
 
-          <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30 space-y-2">
-            <h4 class="text-xs font-bold text-tertiary uppercase tracking-wider flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-[16px]">history_edu</span>
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <h4 class="text-xs font-bold text-indigo-700 uppercase tracking-wider flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[17px]">history_edu</span>
               <span>2. Real-World Case Study</span>
             </h4>
-            <div id="modal-full-example" class="text-on-surface/90 space-y-2 leading-relaxed"></div>
+            <div id="modal-full-example" class="text-slate-700 space-y-2 leading-relaxed"></div>
           </div>
 
-          <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30">
-            <h4 class="text-xs font-bold text-error uppercase tracking-wider mb-1 flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-[16px]">dangerous</span>
+          <div class="p-5 rounded-2xl bg-rose-50 border border-rose-200">
+            <h4 class="text-xs font-bold text-rose-700 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[17px]">dangerous</span>
               <span>3. Boundary Conditions & Failure Modes</span>
             </h4>
-            <p id="modal-full-boundary" class="text-on-surface/90 leading-relaxed"></p>
+            <p id="modal-full-boundary" class="text-rose-900 leading-relaxed"></p>
           </div>
 
-          <div class="p-4 rounded-2xl bg-primary/10 border border-primary/30">
-            <h4 class="text-xs font-bold text-primary uppercase tracking-wider mb-1 flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-[16px]">task_alt</span>
+          <div class="p-5 rounded-2xl bg-blue-50 border border-blue-200">
+            <h4 class="text-xs font-bold text-blue-800 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[17px]">task_alt</span>
               <span>4. Executive Action Protocol</span>
             </h4>
-            <div id="modal-full-action" class="text-primary font-medium leading-relaxed"></div>
+            <div id="modal-full-action" class="text-blue-900 font-medium leading-relaxed"></div>
           </div>
-        </div>
-
 
           <!-- Discussion in Full Treatise -->
-          <div class="p-4 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/30 space-y-3">
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
             <h4 class="text-xs font-bold text-[#ff6719] uppercase tracking-wider flex items-center gap-1.5">
-              <span class="material-symbols-outlined text-[16px]">forum</span>
+              <span class="material-symbols-outlined text-[17px]">forum</span>
               <span>Community Discussion & Applications</span>
             </h4>
-            <div class="space-y-2">
-              <button onclick="setDeepDiveSlide(5)" class="text-xs font-bold text-[#ff6719] hover:underline flex items-center gap-1">
-                <span>View all discussions & join the conversation in Substack Reader</span>
-                <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
-              </button>
-            </div>
+            <button onclick="setDeepDiveSlide(5)" class="text-xs font-bold text-[#ff6719] hover:underline flex items-center gap-1">
+              <span>View all discussions & join the conversation in Substack Reader</span>
+              <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+            </button>
           </div>
-
+        </div>
 
         <!-- SLIDE 5: SUBSTACK READER & PUBLICATION MODE -->
         <div id="modal-slide-5" class="hidden space-y-6">
           <!-- Substack Publication Masthead -->
-          <div class="p-5 rounded-3xl bg-surface-container-lowest border border-outline-variant/30 space-y-3.5">
-            <div class="flex items-center justify-between border-b border-outline-variant/20 pb-3">
+          <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
               <div>
                 <span class="text-[10px] font-headline font-extrabold uppercase tracking-widest text-[#ff6719]">THE MENTAL MODEL REVIEW</span>
-                <h3 id="reader-title" class="text-xl sm:text-2xl font-serif font-bold text-white mt-1"></h3>
+                <h3 id="reader-title" class="text-xl sm:text-2xl font-serif font-bold text-slate-900 mt-1"></h3>
               </div>
-              <button id="reader-subscribe-btn" onclick="handleReaderSubscribe()" class="px-4 py-1.5 rounded-full text-xs font-headline font-bold text-white bg-[#ff6719] hover:bg-[#e55913] shadow-md transition flex items-center gap-1.5 shrink-0">
-                <span class="material-symbols-outlined text-[14px]">notifications_active</span>
+              <button id="reader-subscribe-btn" onclick="handleReaderSubscribe()" class="px-4 py-1.5 rounded-full text-xs font-headline font-bold text-white bg-[#ff6719] hover:bg-[#e55913] shadow-sm transition flex items-center gap-1.5 shrink-0">
+                <span class="material-symbols-outlined text-[15px]">notifications_active</span>
                 <span>Subscribe</span>
               </button>
             </div>
 
             <!-- Author byline & Read Time -->
-            <div class="flex items-center justify-between text-xs text-on-surface-variant">
+            <div class="flex items-center justify-between text-xs text-slate-500">
               <div class="flex items-center gap-2">
-                <div class="w-7 h-7 rounded-full bg-[#ff6719]/20 text-[#ff6719] flex items-center justify-center font-bold text-xs">
+                <div class="w-7 h-7 rounded-full bg-[#ff6719]/10 text-[#ff6719] flex items-center justify-center font-bold text-xs">
                   <span class="material-symbols-outlined text-[15px]">person</span>
                 </div>
                 <div>
-                  <span id="reader-author" class="font-bold text-slate-200"></span>
-                  <span class="text-on-surface-variant/60">• <span id="reader-source"></span></span>
+                  <span id="reader-author" class="font-bold text-slate-900"></span>
+                  <span class="text-slate-500">• <span id="reader-source"></span></span>
                 </div>
               </div>
-              <span id="reader-time" class="font-mono text-[11px] text-secondary">3 min read</span>
+              <span id="reader-time" class="font-mono text-[11px] text-amber-700 font-semibold">3 min read</span>
             </div>
 
             <!-- Substack Audio Voiceover Player Bar -->
-            <div class="p-3 rounded-2xl bg-surface-container/70 border border-outline-variant/30 flex items-center justify-between gap-3">
+            <div class="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-3">
               <div class="flex items-center gap-2.5">
-                <button onclick="toggleSpeechAudio()" class="w-8 h-8 rounded-full bg-[#ff6719] text-white flex items-center justify-center shadow-md hover:scale-105 transition">
+                <button onclick="toggleSpeechAudio()" class="w-8 h-8 rounded-full bg-[#ff6719] text-white flex items-center justify-center shadow-sm hover:scale-105 transition">
                   <span class="material-symbols-outlined text-[18px]">play_arrow</span>
                 </button>
                 <div>
-                  <span class="text-xs font-bold text-white block">Listen to Essay</span>
-                  <span class="text-[10px] text-on-surface-variant">Substack Voiceover Edition</span>
+                  <span class="text-xs font-bold text-slate-900 block">Listen to Essay</span>
+                  <span class="text-[10px] text-slate-500">Substack Voiceover Edition</span>
                 </div>
               </div>
-              <div class="flex items-center gap-1 text-[11px] font-mono text-[#ff6719] bg-[#ff6719]/10 px-2 py-0.5 rounded-full">
-                <span>1.0x</span>
-              </div>
+              <span class="text-[11px] font-mono text-[#ff6719] bg-[#ff6719]/10 px-2 py-0.5 rounded-full font-bold">1.0x</span>
             </div>
           </div>
 
           <!-- Editorial Serif Body -->
-          <div class="p-6 rounded-3xl bg-surface-container-lowest/90 border border-outline-variant/30 space-y-4 font-serif text-[14px] sm:text-[15px] leading-relaxed text-slate-100">
+          <div class="p-6 rounded-2xl bg-white border border-slate-200 space-y-4 font-serif text-[15px] leading-relaxed text-slate-800">
             <!-- Pull Quote in Substack Styling -->
-            <div class="border-l-4 border-[#ff6719] bg-surface-container-low/70 p-4 rounded-r-2xl my-3">
-              <p id="reader-pullquote" class="text-sm sm:text-base font-serif italic text-slate-200 leading-snug"></p>
+            <div class="border-l-4 border-[#ff6719] bg-slate-50 p-4 rounded-r-xl my-3">
+              <p id="reader-pullquote" class="text-sm sm:text-base font-serif italic text-slate-800 leading-snug"></p>
             </div>
 
-            <div id="reader-detailed" class="space-y-3 font-sans text-xs sm:text-sm"></div>
+            <div id="reader-detailed" class="space-y-3 font-sans text-xs sm:text-sm text-slate-700"></div>
 
             <!-- Real-World Case Study -->
-            <div class="pt-4 border-t border-outline-variant/20">
+            <div class="pt-4 border-t border-slate-200">
               <h4 class="font-headline font-bold text-xs text-[#ff6719] uppercase tracking-wider mb-2 font-sans flex items-center gap-1.5">
                 <span class="material-symbols-outlined text-[16px]">history_edu</span>
                 <span>Case Analysis</span>
               </h4>
-              <div id="reader-example" class="font-sans text-xs sm:text-sm space-y-2 text-slate-300"></div>
+              <div id="reader-example" class="font-sans text-xs sm:text-sm space-y-2 text-slate-700"></div>
             </div>
 
             <!-- Boundaries & Execution -->
-            <div class="p-3.5 rounded-2xl bg-surface-container/60 border border-outline-variant/30 space-y-1.5 font-sans">
-              <span class="text-[11px] font-bold text-error uppercase tracking-wider flex items-center gap-1">
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5 font-sans">
+              <span class="text-[11px] font-bold text-rose-700 uppercase tracking-wider flex items-center gap-1">
                 <span class="material-symbols-outlined text-[14px]">dangerous</span>
                 <span>Falsification Boundary</span>
               </span>
-              <p id="reader-boundary" class="text-xs text-slate-300"></p>
+              <p id="reader-boundary" class="text-xs text-slate-700"></p>
             </div>
           </div>
 
           <!-- Threaded Community Discussion Section -->
-          <div class="p-5 rounded-3xl bg-surface-container-lowest border border-outline-variant/30 space-y-4">
-            <div class="flex items-center justify-between border-b border-outline-variant/20 pb-2.5">
+          <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-2.5">
               <div class="flex items-center gap-2">
                 <span class="material-symbols-outlined text-[18px] text-[#ff6719]">chat</span>
-                <h4 class="text-sm font-headline font-bold text-white">Discussion (<span id="modal-discussion-count">0</span>)</h4>
+                <h4 class="text-sm font-headline font-bold text-slate-900">Discussion (<span id="modal-discussion-count">0</span>)</h4>
               </div>
-              <span class="text-[10px] text-on-surface-variant font-medium">Substack Community</span>
+              <span class="text-[10px] text-slate-500 font-medium">Substack Community</span>
             </div>
 
             <!-- Comment Input -->
             <div class="space-y-2">
-              <textarea id="modal-new-comment-input" rows="2" placeholder="Write a response or share how you apply this mental model..." class="w-full bg-surface-container/60 border border-outline-variant/40 rounded-xl p-2.5 text-xs text-white placeholder-on-surface-variant/60 focus:outline-none focus:border-[#ff6719] resize-none leading-relaxed custom-scrollbar"></textarea>
+              <textarea id="modal-new-comment-input" rows="2" placeholder="Write a response or share how you apply this mental model..." class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#ff6719] resize-none leading-relaxed custom-scrollbar transition"></textarea>
               <div class="flex justify-end">
-                <button onclick="handlePostComment()" class="px-4 py-1.5 rounded-xl bg-[#ff6719] hover:bg-[#e55913] text-white text-xs font-headline font-bold shadow-md transition flex items-center gap-1">
+                <button onclick="handlePostComment()" class="px-4 py-1.5 rounded-xl bg-[#ff6719] hover:bg-[#e55913] text-white text-xs font-headline font-bold shadow-sm transition flex items-center gap-1">
                   <span>Comment</span>
                   <span class="material-symbols-outlined text-[14px]">send</span>
                 </button>
@@ -1053,10 +1051,10 @@
           </div>
         </div>
 
-        <!-- Author, Publisher & Transformative Copyright Credit Footer -->
-        <div class="pt-3 border-t border-outline-variant/20 flex items-start gap-2 text-on-surface-variant/50 text-[10px]">
-          <span class="material-symbols-outlined text-[14px] text-primary/70 flex-shrink-0 mt-0.5">verified</span>
-          <p id="modal-copyright-notice" class="italic leading-normal">
+        <!-- Transformative Copyright Credit Footer -->
+        <div class="pt-4 border-t border-slate-200 flex items-start gap-2 text-slate-400 text-xs">
+          <span class="material-symbols-outlined text-[15px] text-blue-600 flex-shrink-0 mt-0.5">verified</span>
+          <p id="modal-copyright-notice" class="italic leading-normal text-[11px]">
             Transformative educational commentary & mental model summary based on original publication. All original copyrights remain with the author and publisher.
           </p>
         </div>
@@ -1066,63 +1064,169 @@
   </div>
 
   <!-- ========================================================================= -->
+  <!-- MODAL: SOCRATIC DILEMMA ARENA                                             -->
+  <!-- ========================================================================= -->
+  <div id="stress-test-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-in fade-in duration-200">
+      
+      <!-- Modal Header -->
+      <div class="p-5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
+            <span class="material-symbols-outlined text-[18px]">bolt</span>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700">Socratic Arena</span>
+            <h3 class="text-sm font-headline font-bold text-slate-900">Pressure-Test Your Intuition</h3>
+          </div>
+        </div>
+        <button onclick="closeStressTestModal()" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 transition">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 overflow-y-auto space-y-4 text-xs sm:text-sm custom-scrollbar flex-1 bg-white">
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 leading-relaxed text-slate-800">
+          <p class="text-[10px] font-bold text-amber-700 uppercase mb-1">Scenario Dilemma</p>
+          <div id="stress-scenario" class="italic">Synthesizing high-stakes dilemma...</div>
+        </div>
+
+        <div>
+          <p id="stress-question" class="font-headline font-bold text-slate-900 text-sm mb-3">Which response correctly applies the model?</p>
+          <div id="stress-options" class="space-y-2.5"></div>
+        </div>
+
+        <!-- Feedback Box -->
+        <div id="stress-feedback-box" class="hidden p-4 rounded-xl border leading-relaxed">
+          <div class="flex items-center gap-2 font-bold mb-1" id="stress-feedback-title"></div>
+          <div id="stress-feedback-explanation" class="text-xs opacity-90"></div>
+          <div id="stress-first-principles" class="mt-2 pt-2 border-t border-slate-200 text-xs text-blue-700 font-semibold"></div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+        <span class="text-xs text-slate-500">Tap choice to verify mental model</span>
+        <button onclick="closeStressTestModal()" class="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-headline font-bold text-xs transition shadow-sm">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: GLOBAL BOOK DETAILS & DECOMPOSED CARDS VIEW                        -->
+  <!-- ========================================================================= -->
+  <div id="book-detail-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-in fade-in duration-200">
+      
+      <!-- Modal Header -->
+      <div class="p-5 sm:p-6 bg-slate-50 border-b border-slate-200 flex items-start justify-between">
+        <div class="flex items-start gap-3.5">
+          <div class="w-12 h-16 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 flex-shrink-0 shadow-2xs">
+            <span class="material-symbols-outlined text-[28px]">menu_book</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="book-modal-topic" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
+                TOPIC
+              </span>
+              <span id="book-modal-ideas-count" class="text-xs text-amber-700 font-bold flex items-center gap-1">
+                <span class="material-symbols-outlined text-[13px]">flash_on</span>
+                <span>0 Models</span>
+              </span>
+            </div>
+            <h2 id="book-modal-title" class="text-xl sm:text-2xl font-headline font-bold text-slate-900 mt-1">Book Title</h2>
+            <p id="book-modal-author-pub" class="text-xs text-slate-500 font-medium mt-0.5">Author • Publisher</p>
+          </div>
+        </div>
+        <button onclick="closeBookDetailModal()" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 transition">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+
+      <!-- Transformative Fair-Use Copyright & Attribution Banner -->
+      <div class="px-5 py-3 bg-white border-b border-slate-100 flex items-start gap-2.5">
+        <span class="material-symbols-outlined text-[16px] text-blue-600 mt-0.5 flex-shrink-0">verified</span>
+        <p id="book-modal-copyright-notice" class="text-[11px] text-slate-500 leading-relaxed italic">
+          Transformative educational commentary & mental model summary based on original publication. All original copyrights remain with the author and publisher.
+        </p>
+      </div>
+
+      <!-- Modal Body: Cards List -->
+      <div id="book-modal-cards-list" class="p-5 sm:p-6 overflow-y-auto space-y-3.5 custom-scrollbar flex-1 bg-slate-50/50">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 bg-white border-t border-slate-200 flex items-center justify-between">
+        <span class="text-xs text-slate-500">Cached for 0s instantaneous scan across all users.</span>
+        <button onclick="closeBookDetailModal()" class="px-5 py-2 rounded-xl bg-blue-600 text-white font-headline font-bold text-xs shadow-sm hover:bg-blue-700">
+          Close Library View
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
   <!-- MODAL: PERSONALIZED COGNITIVE BLINDSPOT DIAGNOSTIC QUIZ                   -->
   <!-- ========================================================================= -->
-  <div id="onboarding-quiz-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-    <div class="bg-surface border border-primary/40 rounded-3xl max-w-xl w-full shadow-2xl flex flex-col overflow-hidden max-h-[92vh]">
+  <div id="onboarding-quiz-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-xl w-full shadow-2xl flex flex-col overflow-hidden max-h-[92vh]">
       
       <!-- Quiz Header -->
-      <div class="p-5 bg-gradient-to-r from-surface via-surface-container to-surface border-b border-outline-variant/30 flex items-center justify-between">
+      <div class="p-5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-primary/20 border border-primary/40 flex items-center justify-center text-primary shadow-inner">
+          <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center shadow-2xs">
             <span class="material-symbols-outlined text-[22px]">target</span>
           </div>
           <div>
-            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/30">Cognitive Diagnostic</span>
-            <h3 class="text-base font-headline font-bold text-white">Find Your Decision Blindspot</h3>
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Cognitive Diagnostic</span>
+            <h3 class="text-base font-headline font-bold text-slate-900">Find Your Decision Blindspot</h3>
           </div>
         </div>
-        <button onclick="closeOnboardingQuiz()" class="w-8 h-8 rounded-full bg-surface-container border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-white transition">
+        <button onclick="closeOnboardingQuiz()" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 transition">
           <span class="material-symbols-outlined text-[18px]">close</span>
         </button>
       </div>
 
       <!-- Quiz Body: 3 Steps -->
-      <div class="p-5 sm:p-6 overflow-y-auto space-y-4 text-xs sm:text-sm">
+      <div class="p-6 overflow-y-auto space-y-4 text-xs sm:text-sm bg-white">
         
         <!-- STEP 1 -->
         <div id="quiz-step-1" class="space-y-3">
           <div>
-            <span class="text-xs font-bold text-primary uppercase">Step 1 of 2</span>
-            <h4 class="text-base font-bold text-white mt-1">What is your biggest decision-making friction right now?</h4>
+            <span class="text-xs font-bold text-blue-600 uppercase">Step 1 of 2</span>
+            <h4 class="text-base font-bold text-slate-900 mt-1">What is your biggest decision-making friction right now?</h4>
           </div>
           <div class="space-y-2">
-            <button onclick="selectQuizBlindspot('analysis_paralysis')" class="w-full text-left p-3.5 rounded-2xl bg-surface-container-high/80 hover:bg-surface-container-highest border border-outline-variant/30 transition flex items-start gap-3">
+            <button onclick="selectQuizBlindspot('analysis_paralysis')" class="w-full text-left p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition flex items-start gap-3">
               <span class="text-xl">🤯</span>
               <div>
-                <p class="font-bold text-white">Analysis Paralysis & Overthinking</p>
-                <p class="text-[11px] text-on-surface-variant">Struggling to commit to choices; getting buried in endless research.</p>
+                <p class="font-bold text-slate-900">Analysis Paralysis & Overthinking</p>
+                <p class="text-[11px] text-slate-500">Struggling to commit to choices; getting buried in endless research.</p>
               </div>
             </button>
-            <button onclick="selectQuizBlindspot('emotional_reactive')" class="w-full text-left p-3.5 rounded-2xl bg-surface-container-high/80 hover:bg-surface-container-highest border border-outline-variant/30 transition flex items-start gap-3">
+            <button onclick="selectQuizBlindspot('emotional_reactive')" class="w-full text-left p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition flex items-start gap-3">
               <span class="text-xl">⚡</span>
               <div>
-                <p class="font-bold text-white">Emotional & Reactive Impulsivity</p>
-                <p class="text-[11px] text-on-surface-variant">Responding swiftly to immediate stress; forgetting long-term consequences.</p>
+                <p class="font-bold text-slate-900">Emotional & Reactive Impulsivity</p>
+                <p class="text-[11px] text-slate-500">Responding swiftly to immediate stress; forgetting long-term consequences.</p>
               </div>
             </button>
-            <button onclick="selectQuizBlindspot('execution_drag')" class="w-full text-left p-3.5 rounded-2xl bg-surface-container-high/80 hover:bg-surface-container-highest border border-outline-variant/30 transition flex items-start gap-3">
+            <button onclick="selectQuizBlindspot('execution_drag')" class="w-full text-left p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition flex items-start gap-3">
               <span class="text-xl">⏳</span>
               <div>
-                <p class="font-bold text-white">Execution Drag & Procrastination</p>
-                <p class="text-[11px] text-on-surface-variant">Knowing what to do, but struggling to convert thoughts into daily momentum.</p>
+                <p class="font-bold text-slate-900">Execution Drag & Procrastination</p>
+                <p class="text-[11px] text-slate-500">Knowing what to do, but struggling to convert thoughts into daily momentum.</p>
               </div>
             </button>
-            <button onclick="selectQuizBlindspot('sunk_cost')" class="w-full text-left p-3.5 rounded-2xl bg-surface-container-high/80 hover:bg-surface-container-highest border border-outline-variant/30 transition flex items-start gap-3">
+            <button onclick="selectQuizBlindspot('sunk_cost')" class="w-full text-left p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition flex items-start gap-3">
               <span class="text-xl">⚓</span>
               <div>
-                <p class="font-bold text-white">Sunk Cost & Ego Traps</p>
-                <p class="text-[11px] text-on-surface-variant">Pouring more time/money into failing projects because of past investments.</p>
+                <p class="font-bold text-slate-900">Sunk Cost & Ego Traps</p>
+                <p class="text-[11px] text-slate-500">Pouring more time/money into failing projects because of past investments.</p>
               </div>
             </button>
           </div>
@@ -1131,44 +1235,44 @@
         <!-- STEP 2 -->
         <div id="quiz-step-2" class="hidden space-y-3">
           <div>
-            <span class="text-xs font-bold text-primary uppercase">Step 2 of 2</span>
-            <h4 class="text-base font-bold text-white mt-1">What is your primary operating battlefield?</h4>
+            <span class="text-xs font-bold text-blue-600 uppercase">Step 2 of 2</span>
+            <h4 class="text-base font-bold text-slate-900 mt-1">What is your primary operating battlefield?</h4>
           </div>
           <div class="grid grid-cols-2 gap-2.5">
-            <button onclick="selectQuizContext('startups')" class="p-3.5 rounded-2xl bg-surface-container-high border border-outline-variant/30 text-left hover:border-primary/50 transition">
+            <button onclick="selectQuizContext('startups')" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-left hover:border-blue-300 hover:bg-blue-50 transition">
               <span class="text-lg">🚀</span>
-              <p class="font-bold text-white text-xs mt-1">Founding & Startups</p>
+              <p class="font-bold text-slate-900 text-xs mt-1">Founding & Startups</p>
             </button>
-            <button onclick="selectQuizContext('engineering')" class="p-3.5 rounded-2xl bg-surface-container-high border border-outline-variant/30 text-left hover:border-primary/50 transition">
+            <button onclick="selectQuizContext('engineering')" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-left hover:border-blue-300 hover:bg-blue-50 transition">
               <span class="text-lg">💻</span>
-              <p class="font-bold text-white text-xs mt-1">Software & Tech</p>
+              <p class="font-bold text-slate-900 text-xs mt-1">Software & Tech</p>
             </button>
-            <button onclick="selectQuizContext('investing')" class="p-3.5 rounded-2xl bg-surface-container-high border border-outline-variant/30 text-left hover:border-primary/50 transition">
+            <button onclick="selectQuizContext('investing')" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-left hover:border-blue-300 hover:bg-blue-50 transition">
               <span class="text-lg">📈</span>
-              <p class="font-bold text-white text-xs mt-1">Investing & Capital</p>
+              <p class="font-bold text-slate-900 text-xs mt-1">Investing & Capital</p>
             </button>
-            <button onclick="selectQuizContext('habits')" class="p-3.5 rounded-2xl bg-surface-container-high border border-outline-variant/30 text-left hover:border-primary/50 transition">
+            <button onclick="selectQuizContext('habits')" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-left hover:border-blue-300 hover:bg-blue-50 transition">
               <span class="text-lg">🧘</span>
-              <p class="font-bold text-white text-xs mt-1">Habits & Mindset</p>
+              <p class="font-bold text-slate-900 text-xs mt-1">Habits & Mindset</p>
             </button>
           </div>
         </div>
 
         <!-- STEP 3: RESULT -->
         <div id="quiz-step-result" class="hidden space-y-4 text-center">
-          <div class="w-14 h-14 rounded-2xl bg-primary/20 border border-primary/40 mx-auto flex items-center justify-center text-2xl shadow-lg">
+          <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-700 mx-auto flex items-center justify-center text-2xl shadow-sm">
             🎯
           </div>
           <div>
-            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary/20 text-primary">Your Thinking Archetype</span>
-            <h3 id="quiz-archetype-title" class="text-xl font-headline font-bold text-white mt-1.5">The First-Principles Strategist</h3>
-            <p id="quiz-archetype-desc" class="text-xs text-on-surface-variant max-w-sm mx-auto mt-1 leading-relaxed"></p>
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-blue-700">Your Thinking Archetype</span>
+            <h3 id="quiz-archetype-title" class="text-xl font-headline font-bold text-slate-900 mt-1.5">The First-Principles Strategist</h3>
+            <p id="quiz-archetype-desc" class="text-xs text-slate-500 max-w-sm mx-auto mt-1 leading-relaxed"></p>
           </div>
-          <div class="bg-surface-container-high p-3.5 rounded-2xl text-left border border-outline-variant/30">
-            <p class="text-[10px] font-bold text-primary uppercase mb-2">Tailored 3-Card Starter Deck</p>
+          <div class="bg-slate-50 p-4 rounded-xl text-left border border-slate-200">
+            <p class="text-[10px] font-bold text-blue-700 uppercase mb-2">Tailored 3-Card Starter Deck</p>
             <div id="quiz-recommended-cards" class="space-y-1.5"></div>
           </div>
-          <button onclick="applyQuizWorkoutAndClose()" class="w-full py-3 rounded-2xl bg-primary text-surface-container-lowest font-headline font-bold text-xs tracking-wide shadow-lg transition">
+          <button onclick="applyQuizWorkoutAndClose()" class="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-headline font-bold text-xs tracking-wide shadow-sm transition">
             🚀 Launch My Cognitive Workout
           </button>
         </div>
@@ -1178,21 +1282,23 @@
     </div>
   </div>
 
-  <!-- USER AUTHENTICATION & PROFILE MODAL -->
-  <div id="auth-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
-    <div class="bg-surface-container border border-outline-variant/60 rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
-      <button onclick="closeAuthModal()" class="absolute top-4 right-4 p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant hover:text-white transition">
+  <!-- ========================================================================= -->
+  <!-- MODAL: USER AUTHENTICATION & PROFILE                                      -->
+  <!-- ========================================================================= -->
+  <div id="auth-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition">
         <span class="material-symbols-outlined text-[20px]">close</span>
       </button>
 
       <!-- VIEW 1: AUTH TABS (SIGN IN / CREATE ACCOUNT) -->
       <div id="auth-view-tabs" class="space-y-4">
         <!-- Tab Selectors -->
-        <div class="flex items-center gap-2 p-1 bg-surface-container-highest rounded-2xl">
-          <button id="auth-tab-login-btn" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-headline font-bold rounded-xl transition bg-primary text-surface-container-lowest">
+        <div class="flex items-center gap-1 p-1 bg-slate-100 rounded-xl">
+          <button id="auth-tab-login-btn" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-headline font-bold rounded-lg transition bg-white text-slate-900 shadow-2xs">
             Sign In
           </button>
-          <button id="auth-tab-register-btn" onclick="switchAuthTab('register')" class="flex-1 py-2 text-xs font-headline font-bold rounded-xl text-on-surface-variant hover:text-white transition">
+          <button id="auth-tab-register-btn" onclick="switchAuthTab('register')" class="flex-1 py-2 text-xs font-headline font-bold rounded-lg text-slate-500 hover:text-slate-900 transition">
             Create Account
           </button>
         </div>
@@ -1203,42 +1309,42 @@
         <!-- LOGIN FORM -->
         <form id="form-auth-login" onsubmit="handleAuthLogin(event)" class="space-y-3.5">
           <div>
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Email or Username</label>
-            <input type="text" id="login-identifier" required placeholder="demo@microstash.app or demo" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Email or Username</label>
+            <input type="text" id="login-identifier" required placeholder="demo@microstash.app or demo" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition">
           </div>
           <div>
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Password</label>
-            <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Password</label>
+            <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition">
           </div>
-          <button type="submit" id="btn-submit-login" class="w-full py-2.5 mt-2 rounded-xl bg-primary hover:bg-primary-hover text-surface-container-lowest font-headline font-bold text-xs tracking-wide shadow-md transition flex items-center justify-center gap-2">
+          <button type="submit" id="btn-submit-login" class="w-full py-2.5 mt-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-headline font-bold text-xs tracking-wide shadow-sm transition flex items-center justify-center gap-2">
             <span>Sign In to Microstash</span>
             <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
           </button>
           <div class="text-center pt-1">
-            <span class="text-[11px] text-on-surface-variant">Default test user: </span>
-            <code class="text-[10px] text-primary bg-primary/10 px-1.5 py-0.5 rounded">demo / demo1234</code>
+            <span class="text-[11px] text-slate-500">Default test user: </span>
+            <code class="text-[10px] text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded font-mono">demo / demo1234</code>
           </div>
         </form>
 
         <!-- REGISTER FORM -->
         <form id="form-auth-register" onsubmit="handleAuthRegister(event)" class="hidden space-y-3">
           <div>
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Full Name</label>
-            <input type="text" id="reg-fullname" placeholder="Alex Rivers" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Full Name</label>
+            <input type="text" id="reg-fullname" placeholder="Alex Rivers" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition">
           </div>
           <div>
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Username</label>
-            <input type="text" id="reg-username" required placeholder="alex_mind" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Username</label>
+            <input type="text" id="reg-username" required placeholder="alex_mind" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition">
           </div>
           <div>
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Email</label>
-            <input type="email" id="reg-email" required placeholder="alex@domain.com" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Email</label>
+            <input type="email" id="reg-email" required placeholder="alex@domain.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition">
           </div>
           <div>
-            <label class="block text-[11px] font-bold uppercase tracking-wider text-on-surface-variant mb-1">Password</label>
-            <input type="password" id="reg-password" required minlength="6" placeholder="At least 6 characters" class="w-full bg-surface-container-high border border-outline-variant/50 rounded-xl px-3.5 py-2 text-xs text-white placeholder-on-surface-variant/50 focus:outline-none focus:border-primary">
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Password</label>
+            <input type="password" id="reg-password" required minlength="6" placeholder="At least 6 characters" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition">
           </div>
-          <button type="submit" id="btn-submit-register" class="w-full py-2.5 mt-2 rounded-xl bg-secondary hover:bg-secondary/90 text-surface-container-lowest font-headline font-bold text-xs tracking-wide shadow-md transition flex items-center justify-center gap-2">
+          <button type="submit" id="btn-submit-register" class="w-full py-2.5 mt-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-headline font-bold text-xs tracking-wide shadow-sm transition flex items-center justify-center gap-2">
             <span>Create Free Account</span>
             <span class="material-symbols-outlined text-[16px]">how_to_reg</span>
           </button>
@@ -1247,30 +1353,30 @@
 
       <!-- VIEW 2: LOGGED-IN PROFILE SUMMARY -->
       <div id="auth-view-profile" class="hidden space-y-5 text-center">
-        <div class="w-16 h-16 rounded-full bg-primary/20 border-2 border-primary mx-auto flex items-center justify-center text-primary text-2xl font-bold font-headline shadow-lg" id="profile-avatar-initials">
+        <div class="w-16 h-16 rounded-full bg-blue-50 border-2 border-blue-600 mx-auto flex items-center justify-center text-blue-600 text-2xl font-bold font-headline shadow-sm" id="profile-avatar-initials">
           U
         </div>
         <div>
-          <h3 id="profile-fullname" class="text-lg font-headline font-bold text-white">Alex Rivers</h3>
-          <p id="profile-username" class="text-xs text-primary font-mono font-medium">@alex_mind</p>
-          <p id="profile-email" class="text-[11px] text-on-surface-variant mt-0.5">alex@domain.com</p>
+          <h3 id="profile-fullname" class="text-lg font-headline font-bold text-slate-900">Alex Rivers</h3>
+          <p id="profile-username" class="text-xs text-blue-600 font-mono font-medium">@alex_mind</p>
+          <p id="profile-email" class="text-[11px] text-slate-500 mt-0.5">alex@domain.com</p>
         </div>
 
         <div class="grid grid-cols-2 gap-2.5 text-left">
-          <div class="p-3 rounded-2xl bg-surface-container-high border border-outline-variant/40">
-            <span class="text-[10px] uppercase font-bold text-on-surface-variant">Session Status</span>
-            <p class="text-xs font-bold text-secondary mt-0.5 flex items-center gap-1">
-              <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="text-[10px] uppercase font-bold text-slate-500">Session Status</span>
+            <p class="text-xs font-bold text-amber-700 mt-0.5 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
               JWT Authenticated
             </p>
           </div>
-          <div class="p-3 rounded-2xl bg-surface-container-high border border-outline-variant/40">
-            <span class="text-[10px] uppercase font-bold text-on-surface-variant">Sync Scope</span>
-            <p class="text-xs font-bold text-tertiary mt-0.5">Universal Multi-User</p>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="text-[10px] uppercase font-bold text-slate-500">Sync Scope</span>
+            <p class="text-xs font-bold text-indigo-700 mt-0.5">Universal Multi-User</p>
           </div>
         </div>
 
-        <button onclick="handleAuthLogout()" class="w-full py-2.5 rounded-xl bg-error/20 hover:bg-error/30 border border-error/40 text-error font-headline font-bold text-xs tracking-wide transition flex items-center justify-center gap-2">
+        <button onclick="handleAuthLogout()" class="w-full py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-headline font-bold text-xs tracking-wide transition flex items-center justify-center gap-2">
           <span class="material-symbols-outlined text-[16px]">logout</span>
           <span>Sign Out</span>
         </button>
@@ -1279,42 +1385,75 @@
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- MODAL: CREATE NEW STASH                                                   -->
+  <!-- ========================================================================= -->
+  <div id="create-stash-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closeCreateStashModal()" class="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+      <h3 class="text-lg font-headline font-bold text-slate-900 mb-1">Create New Stash</h3>
+      <p class="text-xs text-slate-500 mb-4">Curate your favorite mental models into a focused theme.</p>
+      
+      <form onsubmit="handleCreateStashSubmit(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Stash Title</label>
+          <input type="text" id="new-stash-title" required placeholder="e.g. Founder Mental Models" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">Description</label>
+          <textarea id="new-stash-desc" rows="2" placeholder="What core decision frameworks are in this collection?" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition"></textarea>
+        </div>
+        <div class="flex items-center gap-2 pt-1">
+          <input type="checkbox" id="new-stash-public" class="rounded border-slate-300 text-blue-600 focus:ring-0">
+          <label for="new-stash-public" class="text-xs text-slate-700 font-medium cursor-pointer">
+            Publish to Community (allow other learners to discover and clone)
+          </label>
+        </div>
+        <button type="submit" class="w-full py-2.5 mt-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-headline font-bold text-xs tracking-wide shadow-sm transition flex items-center justify-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">folder</span>
+          <span>Create Stash</span>
+        </button>
+      </form>
+    </div>
+  </div>
 
   <!-- ========================================================================= -->
   <!-- MODAL: SUBSTACK QUOTE RESTACK                                             -->
   <!-- ========================================================================= -->
-  <div id="restack-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-surface border border-[#ff6719]/40 rounded-3xl max-w-lg w-full shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-      <div class="p-4 bg-surface-container-high border-b border-outline-variant/30 flex items-center justify-between">
+  <div id="restack-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full shadow-2xl flex flex-col overflow-hidden animate-in fade-in duration-200">
+      <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined text-[20px] text-[#ff6719]">repeat</span>
-          <h3 class="text-sm font-headline font-bold text-white">Restack with your thought</h3>
+          <h3 class="text-sm font-headline font-bold text-slate-900">Restack with your thought</h3>
         </div>
-        <button onclick="closeRestackModal()" class="w-7 h-7 rounded-full bg-surface-container border border-outline-variant/40 flex items-center justify-center text-on-surface-variant hover:text-white transition">
+        <button onclick="closeRestackModal()" class="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 transition">
           <span class="material-symbols-outlined text-[16px]">close</span>
         </button>
       </div>
 
-      <div class="p-5 space-y-4">
+      <div class="p-5 space-y-4 bg-white">
         <!-- Quoted Preview -->
-        <div class="p-3.5 rounded-2xl bg-surface-container-low border-l-4 border-[#ff6719] border-outline-variant/30 space-y-1">
+        <div class="p-4 rounded-xl bg-slate-50 border-l-4 border-[#ff6719] border border-slate-200 space-y-1">
           <div class="flex items-center justify-between">
-            <span id="restack-preview-title" class="text-xs font-bold text-white">The Inversion Principle</span>
-            <span id="restack-preview-author" class="text-[10px] text-on-surface-variant font-mono">Charlie Munger</span>
+            <span id="restack-preview-title" class="text-xs font-bold text-slate-900">The Inversion Principle</span>
+            <span id="restack-preview-author" class="text-[10px] text-slate-500 font-mono">Charlie Munger</span>
           </div>
-          <p id="restack-preview-quote" class="text-xs text-slate-300 italic font-serif leading-snug">"Invert, always invert..."</p>
+          <p id="restack-preview-quote" class="text-xs text-slate-700 italic font-serif leading-snug">"Invert, always invert..."</p>
         </div>
 
         <div>
-          <label class="block text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1.5">Add Your Reflection (Optional)</label>
-          <textarea id="restack-comment-input" rows="3" placeholder="Why does this mental model matter? How did you apply it in your life or company?" class="w-full bg-surface-container-low border border-outline-variant/40 rounded-xl p-3 text-xs text-white placeholder-on-surface-variant/60 focus:outline-none focus:border-[#ff6719] resize-none leading-relaxed custom-scrollbar"></textarea>
+          <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">Add Your Reflection (Optional)</label>
+          <textarea id="restack-comment-input" rows="3" placeholder="Why does this mental model matter? How did you apply it in your life or company?" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#ff6719] focus:bg-white resize-none leading-relaxed custom-scrollbar transition"></textarea>
         </div>
 
         <div class="flex items-center justify-end gap-2 pt-2">
-          <button onclick="closeRestackModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-on-surface-variant hover:text-white transition">
+          <button onclick="closeRestackModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition">
             Cancel
           </button>
-          <button onclick="submitRestack()" class="px-5 py-2 rounded-xl bg-[#ff6719] hover:bg-[#e55913] text-white text-xs font-headline font-bold shadow-lg transition flex items-center gap-1.5">
+          <button onclick="submitRestack()" class="px-5 py-2 rounded-xl bg-[#ff6719] hover:bg-[#e55913] text-white text-xs font-headline font-bold shadow-sm transition flex items-center gap-1.5">
             <span class="material-symbols-outlined text-[16px]">repeat</span>
             <span>Restack Note</span>
           </button>
@@ -1324,22 +1463,34 @@
   </div>
 
   <!-- Core JavaScript Controllers -->
-  <script src="/static/js/auth.js?v=1.0"></script>
-  <script src="/static/js/social.js?v=1.0"></script>
-  <script src="/static/js/substack.js?v=1.0"></script>
-  <script src="/static/js/app.js?v=4.0"></script>
-  <script src="/static/js/swipe.js?v=4.0"></script>
-  <script src="/static/js/audio.js?v=4.0"></script>
-  <script src="/static/js/share.js?v=4.0"></script>
+  <script src="/static/js/auth.js?v=2.0"></script>
+  <script src="/static/js/social.js?v=2.0"></script>
+  <script src="/static/js/substack.js?v=2.0"></script>
+  <script src="/static/js/app.js?v=5.0"></script>
+  <script src="/static/js/swipe.js?v=5.0"></script>
+  <script src="/static/js/audio.js?v=5.0"></script>
+  <script src="/static/js/share.js?v=5.0"></script>
 
   <script>
-    function updateClock() {
-      const now = new Date();
-      const el = document.getElementById("live-clock");
-      if (el) el.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    // Desktop Nav Active State Sync
+    function syncDesktopNav(tabId) {
+      ["swipe", "notes", "feed", "leitner", "stashes", "ai"].forEach(t => {
+        const btn = document.getElementById(`desk-nav-${t}`);
+        if (!btn) return;
+        if (t === tabId) {
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-blue-50 text-blue-700 shadow-2xs";
+        } else {
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition flex items-center gap-1.5";
+        }
+      });
     }
-    setInterval(updateClock, 1000);
-    updateClock();
+
+    // Intercept switchTab to keep desktop nav synced
+    const prevSwitchTab = window.switchTab;
+    window.switchTab = function(tabId) {
+      if (typeof prevSwitchTab === 'function') prevSwitchTab(tabId);
+      syncDesktopNav(tabId);
+    };
   </script>
 </body>
 </html>

@@ -281,17 +281,17 @@ function initMermaidIfNeeded() {
     try {
       mermaid.initialize({
         startOnLoad: false,
-        theme: 'dark',
+        theme: 'default',
         securityLevel: 'loose',
         themeVariables: {
-          darkMode: true,
-          background: 'transparent',
-          primaryColor: '#312e81',
-          primaryTextColor: '#ffffff',
-          primaryBorderColor: '#6366f1',
-          lineColor: '#818cf8',
-          secondaryColor: '#064e3b',
-          tertiaryColor: '#78350f',
+          darkMode: false,
+          background: '#FFFFFF',
+          primaryColor: '#EFF6FF',
+          primaryTextColor: '#1E40AF',
+          primaryBorderColor: '#BFDBFE',
+          lineColor: '#64748B',
+          secondaryColor: '#FEF3C7',
+          tertiaryColor: '#F1F5F9',
           fontFamily: 'Inter, system-ui, sans-serif'
         }
       });
@@ -2409,9 +2409,9 @@ function updateStitchHeroCard() {
   }
 
   // Render diagram in Stitch container
-  const diagContainer = document.getElementById("card-diagram-container");
+  const diagContainer = document.getElementById("card-diagram-container") || document.getElementById("card-diagram-box");
   if (diagContainer) {
-    renderIdeaVisualDiagram(idea, "card-diagram-container");
+    renderIdeaVisualDiagram(idea, diagContainer.id);
   }
 }
 
@@ -2558,9 +2558,9 @@ switchTab = function(tabId) {
     const btn = document.getElementById(`stitch-nav-${t}`);
     if (btn) {
       if (t === tabId) {
-        btn.className = "flex flex-col items-center justify-center bg-primary/15 text-primary rounded-full px-3 py-1 shadow-[0_0_12px_rgba(78,222,163,0.25)] transition";
+        btn.className = "flex flex-col items-center justify-center text-blue-600 px-2 py-1 font-bold transition";
       } else {
-        btn.className = "flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition px-2.5 py-1";
+        btn.className = "flex flex-col items-center justify-center text-slate-500 hover:text-blue-600 px-2 py-1 transition";
       }
     }
   });
@@ -2865,15 +2865,15 @@ function setDeepDiveSlide(slideNum) {
     if (pill) {
       if (n === slideNum) {
         if (n === 5) {
-          pill.className = "flex-1 min-w-[75px] py-1.5 px-2 rounded-full text-[11px] font-bold text-white bg-[#ff6719] border border-[#ff6719] transition text-center shadow-md flex items-center justify-center gap-1";
+          pill.className = "flex-1 min-w-[85px] py-1.5 px-2 rounded-xl text-xs font-bold text-white bg-[#ff6719] shadow-sm transition text-center flex items-center justify-center gap-1";
         } else {
-          pill.className = "flex-1 min-w-[70px] py-1.5 px-2 rounded-full text-[11px] font-bold text-primary bg-primary/20 border border-primary/50 transition text-center shadow-sm flex items-center justify-center gap-1";
+          pill.className = "flex-1 min-w-[80px] py-1.5 px-2 rounded-xl text-xs font-bold text-white bg-blue-600 shadow-2xs transition text-center flex items-center justify-center gap-1";
         }
       } else {
         if (n === 5) {
-          pill.className = "flex-1 min-w-[75px] py-1.5 px-2 rounded-full text-[11px] font-bold text-[#ff6719] bg-[#ff6719]/15 border border-[#ff6719]/40 transition text-center hover:bg-[#ff6719]/25 flex items-center justify-center gap-1";
+          pill.className = "flex-1 min-w-[85px] py-1.5 px-2 rounded-xl text-xs font-bold text-[#ff6719] bg-[#ff6719]/10 border border-[#ff6719]/30 transition text-center hover:bg-[#ff6719]/20 flex items-center justify-center gap-1";
         } else {
-          pill.className = "flex-1 min-w-[70px] py-1.5 px-2 rounded-full text-[11px] font-medium text-on-surface-variant bg-surface-container border border-outline-variant/30 transition text-center hover:text-white flex items-center justify-center gap-1";
+          pill.className = "flex-1 min-w-[80px] py-1.5 px-2 rounded-xl text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-200 transition text-center hover:bg-slate-100 flex items-center justify-center gap-1";
         }
       }
     }
