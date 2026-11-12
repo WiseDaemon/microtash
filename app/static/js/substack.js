@@ -46,10 +46,10 @@ function renderSubstackNotes(notes) {
 
   if (!notes || notes.length === 0) {
     container.innerHTML = `
-      <div class="p-8 text-center bg-surface-container-low rounded-2xl border border-outline-variant/30 text-on-surface-variant">
+      <div class="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-500">
         <span class="material-symbols-outlined text-4xl text-[#ff6719] mb-2">edit_note</span>
-        <h4 class="font-headline font-bold text-white text-sm">No Notes Yet</h4>
-        <p class="text-xs text-on-surface-variant/80 mt-1">Be the first to share an insight or restack a mental model!</p>
+        <h4 class="font-headline font-bold text-slate-900 text-sm">No Notes Yet</h4>
+        <p class="text-xs text-slate-500 mt-1">Be the first to share an insight or restack a mental model!</p>
       </div>
     `;
     return;
@@ -63,13 +63,13 @@ function renderSubstackNotes(notes) {
     let quoteBlock = "";
     if (note.referenced_idea_id) {
       quoteBlock = `
-        <div class="mt-3 p-3.5 rounded-xl bg-surface-container-highest/80 border-l-4 border-[#ff6719] border-outline-variant/30 transition hover:border-[#ff6719] cursor-pointer" onclick="openDeepDiveModal('${note.referenced_idea_id}')">
+        <div class="mt-3 p-3.5 rounded-xl bg-slate-50 border-l-4 border-[#ff6719] border border-slate-200 transition hover:border-[#ff6719] cursor-pointer" onclick="openDeepDiveModal('${note.referenced_idea_id}')">
           <div class="flex items-center gap-1.5 text-[10px] uppercase font-bold text-[#ff6719] tracking-wider mb-1">
             <span class="material-symbols-outlined text-[13px]">psychology</span>
             <span>${note.referenced_idea_title || "Mental Model"}</span>
-            <span class="text-on-surface-variant/50">• ${note.referenced_idea_author || "Curated"}</span>
+            <span class="text-slate-400">• ${note.referenced_idea_author || "Curated"}</span>
           </div>
-          <p class="text-xs text-slate-200 italic font-serif leading-snug">
+          <p class="text-xs text-slate-700 italic font-serif leading-snug">
             "${note.referenced_idea_quote || ''}"
           </p>
         </div>
@@ -87,18 +87,18 @@ function renderSubstackNotes(notes) {
     }
 
     return `
-      <div class="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/30 hover:border-outline-variant/60 transition shadow-sm space-y-2.5" id="note-card-${note.id}">
+      <div class="p-5 rounded-2xl bg-white border border-slate-200 hover:border-slate-300 transition shadow-2xs space-y-2.5" id="note-card-${note.id}">
         ${restackBadge}
         <!-- Author Header -->
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2.5">
-            <img src="${avatar}" alt="${note.author_name}" class="w-9 h-9 rounded-full object-cover border border-outline-variant/40 shadow-sm" />
+            <img src="${avatar}" alt="${note.author_name}" class="w-9 h-9 rounded-full object-cover border border-slate-200 shadow-2xs" />
             <div>
               <div class="flex items-center gap-1.5">
-                <span class="font-headline font-bold text-xs text-white">${note.author_name}</span>
-                <span class="text-[11px] text-on-surface-variant font-mono">@${note.author_handle}</span>
+                <span class="font-headline font-bold text-xs text-slate-900">${note.author_name}</span>
+                <span class="text-[11px] text-slate-500 font-mono">@${note.author_handle}</span>
               </div>
-              <span class="text-[10px] text-on-surface-variant/60">${timeAgo}</span>
+              <span class="text-[10px] text-slate-400">${timeAgo}</span>
             </div>
           </div>
 
@@ -110,7 +110,7 @@ function renderSubstackNotes(notes) {
         </div>
 
         <!-- Note Text Content -->
-        <p class="text-xs sm:text-sm text-slate-100 leading-relaxed font-sans pt-1">
+        <p class="text-xs sm:text-sm text-slate-800 leading-relaxed font-sans pt-1">
           ${note.restack_comment || note.content}
         </p>
 
@@ -118,8 +118,8 @@ function renderSubstackNotes(notes) {
         ${quoteBlock}
 
         <!-- Actions Footer -->
-        <div class="flex items-center justify-between pt-2 border-t border-outline-variant/20 text-on-surface-variant text-xs">
-          <button onclick="handleLikeSubstackNote('${note.id}')" class="flex items-center gap-1.5 hover:text-rose-400 transition ${isLiked ? 'text-rose-500 font-bold' : ''}" id="note-like-btn-${note.id}">
+        <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-slate-500 text-xs">
+          <button onclick="handleLikeSubstackNote('${note.id}')" class="flex items-center gap-1.5 hover:text-rose-500 transition ${isLiked ? 'text-rose-500 font-bold' : ''}" id="note-like-btn-${note.id}">
             <span class="material-symbols-outlined text-[16px]" style="${isLiked ? 'font-variation-settings: \'FILL\' 1;' : ''}">favorite</span>
             <span id="note-likes-count-${note.id}">${note.likes_count}</span>
           </button>
@@ -336,19 +336,19 @@ function renderIdeaComments(comments, ideaId) {
     const timeAgo = formatSubstackTimeAgo(c.created_at);
 
     return `
-      <div class="p-3.5 rounded-xl bg-surface-container-lowest border border-outline-variant/30 space-y-1.5">
+      <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <img src="${avatar}" alt="${c.user_name}" class="w-6 h-6 rounded-full object-cover" />
-            <span class="font-headline font-bold text-xs text-white">${c.user_name}</span>
-            <span class="text-[10px] text-on-surface-variant/60">${timeAgo}</span>
+            <span class="font-headline font-bold text-xs text-slate-900">${c.user_name}</span>
+            <span class="text-[10px] text-slate-400">${timeAgo}</span>
           </div>
-          <button class="flex items-center gap-1 text-[11px] text-on-surface-variant hover:text-rose-400 transition">
+          <button class="flex items-center gap-1 text-[11px] text-slate-500 hover:text-rose-500 transition">
             <span class="material-symbols-outlined text-[13px]">favorite</span>
             <span>${c.likes_count || 0}</span>
           </button>
         </div>
-        <p class="text-xs text-slate-200 leading-relaxed pl-8">
+        <p class="text-xs text-slate-700 leading-relaxed pl-8">
           ${c.comment_text}
         </p>
       </div>
@@ -441,18 +441,18 @@ async function loadPublicationsCarousel() {
     if (!res.ok) return;
     const pubs = await res.json();
     container.innerHTML = pubs.map(p => `
-      <div class="min-w-[190px] p-3 rounded-2xl bg-surface-container border border-outline-variant/30 flex flex-col justify-between shrink-0 shadow-sm">
+      <div class="min-w-[190px] p-3.5 rounded-2xl bg-white border border-slate-200 flex flex-col justify-between shrink-0 shadow-2xs">
         <div>
           <div class="flex items-center gap-2 mb-1.5">
             <div class="w-7 h-7 rounded-full bg-[#ff6719]/15 text-[#ff6719] flex items-center justify-center font-bold text-xs">
               <span class="material-symbols-outlined text-[16px]">${p.avatar || 'psychology'}</span>
             </div>
             <div>
-              <h5 class="text-xs font-headline font-bold text-white leading-tight truncate max-w-[110px]">${p.name}</h5>
-              <span class="text-[10px] text-on-surface-variant font-mono">${p.subscribers} readers</span>
+              <h5 class="text-xs font-headline font-bold text-slate-900 leading-tight truncate max-w-[110px]">${p.name}</h5>
+              <span class="text-[10px] text-slate-500 font-mono">${p.subscribers} readers</span>
             </div>
           </div>
-          <p class="text-[11px] text-on-surface-variant/80 line-clamp-2 leading-snug">${p.description}</p>
+          <p class="text-[11px] text-slate-600 line-clamp-2 leading-snug">${p.description}</p>
         </div>
         <button onclick="handleNoteAuthorSubscribe('${escapeAttr(p.name)}')" class="w-full mt-2.5 py-1 rounded-xl bg-[#ff6719]/10 hover:bg-[#ff6719] text-[#ff6719] hover:text-white border border-[#ff6719]/30 transition text-[10px] font-bold tracking-wide flex items-center justify-center gap-1">
           <span class="material-symbols-outlined text-[12px]">add</span>

@@ -143,19 +143,19 @@ function switchAuthTab(tab) {
 
   if (tab === 'login') {
     if (loginBtn) {
-      loginBtn.className = "flex-1 py-2 text-xs font-headline font-bold rounded-xl transition bg-primary text-surface-container-lowest";
+      loginBtn.className = "flex-1 py-2 text-xs font-headline font-bold rounded-lg transition bg-blue-600 text-white shadow-2xs";
     }
     if (regBtn) {
-      regBtn.className = "flex-1 py-2 text-xs font-headline font-bold rounded-xl text-on-surface-variant hover:text-white transition";
+      regBtn.className = "flex-1 py-2 text-xs font-headline font-bold rounded-lg text-slate-600 hover:text-slate-900 transition";
     }
     if (formLogin) formLogin.classList.remove('hidden');
     if (formReg) formReg.classList.add('hidden');
   } else {
     if (regBtn) {
-      regBtn.className = "flex-1 py-2 text-xs font-headline font-bold rounded-xl transition bg-secondary text-surface-container-lowest";
+      regBtn.className = "flex-1 py-2 text-xs font-headline font-bold rounded-lg transition bg-amber-600 text-white shadow-2xs";
     }
     if (loginBtn) {
-      loginBtn.className = "flex-1 py-2 text-xs font-headline font-bold rounded-xl text-on-surface-variant hover:text-white transition";
+      loginBtn.className = "flex-1 py-2 text-xs font-headline font-bold rounded-lg text-slate-600 hover:text-slate-900 transition";
     }
     if (formReg) formReg.classList.remove('hidden');
     if (formLogin) formLogin.classList.add('hidden');

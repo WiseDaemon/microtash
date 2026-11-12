@@ -585,57 +585,57 @@ function renderStyledStepFlow(idea) {
   return `
     <div class="w-full flex flex-col space-y-3 py-1 text-xs">
       <!-- Step 1: Trigger / Problem -->
-      <div class="p-3.5 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 flex items-start space-x-3 transition hover:border-indigo-400">
-        <div class="w-7 h-7 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+      <div class="p-3.5 rounded-xl bg-blue-50 border border-blue-200 flex items-start space-x-3">
+        <div class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 border border-blue-300 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
           1
         </div>
         <div class="flex-1">
           <div class="flex items-center justify-between mb-1">
-            <span class="text-[10px] text-indigo-400 font-bold uppercase tracking-wider">Trigger / Problem State</span>
+            <span class="text-[10px] text-blue-700 font-bold uppercase tracking-wider">Trigger / Problem State</span>
             <span class="text-[10px] text-slate-500">Context</span>
           </div>
-          <p class="text-xs sm:text-sm font-semibold text-slate-100">${hook}</p>
+          <p class="text-xs sm:text-sm font-semibold text-slate-900">${hook}</p>
         </div>
       </div>
 
       <!-- Arrow Down Connector -->
-      <div class="flex items-center justify-center text-slate-600 -my-1">
-        <i data-lucide="arrow-down" class="w-4 h-4 text-slate-500"></i>
+      <div class="flex items-center justify-center text-slate-400 -my-1">
+        <i data-lucide="arrow-down" class="w-4 h-4 text-slate-400"></i>
       </div>
 
       <!-- Step 2: Mental Model Filter -->
-      <div class="p-3.5 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 flex items-start space-x-3 transition hover:border-emerald-400">
-        <div class="w-7 h-7 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+      <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start space-x-3">
+        <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 border border-emerald-300 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
           2
         </div>
         <div class="flex-1">
           <div class="flex items-center justify-between mb-1">
-            <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Mental Model / First Principles</span>
-            <span class="text-[10px] text-emerald-500/80 font-mono">Algorithm</span>
+            <span class="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">Mental Model / First Principles</span>
+            <span class="text-[10px] text-emerald-600 font-mono">Algorithm</span>
           </div>
-          <p class="text-xs sm:text-sm font-bold text-white">${title}</p>
-          <p class="text-xs text-slate-300 mt-1 leading-relaxed">${idea.summary || ''}</p>
+          <p class="text-xs sm:text-sm font-bold text-slate-900">${title}</p>
+          <p class="text-xs text-slate-700 mt-1 leading-relaxed">${idea.summary || ''}</p>
         </div>
       </div>
 
       <!-- Arrow Down Connector -->
-      <div class="flex items-center justify-center text-slate-600 -my-1">
-        <i data-lucide="arrow-down" class="w-4 h-4 text-slate-500"></i>
+      <div class="flex items-center justify-center text-slate-400 -my-1">
+        <i data-lucide="arrow-down" class="w-4 h-4 text-slate-400"></i>
       </div>
 
       <!-- Step 3: High-Leverage Payoff -->
-      <div class="p-3.5 rounded-2xl bg-purple-950/40 border border-purple-500/30 flex items-start space-x-3 transition hover:border-purple-400">
-        <div class="w-7 h-7 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/40 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+      <div class="p-3.5 rounded-xl bg-indigo-50 border border-indigo-200 flex items-start space-x-3">
+        <div class="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-700 border border-indigo-300 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
           3
         </div>
         <div class="flex-1">
           <div class="flex items-center justify-between mb-1">
-            <span class="text-[10px] text-purple-400 font-bold uppercase tracking-wider">Practical Payoff & Asymmetric Execution</span>
-            <span class="text-[10px] text-purple-400 font-mono">Impact</span>
+            <span class="text-[10px] text-indigo-700 font-bold uppercase tracking-wider">Practical Payoff & Asymmetric Execution</span>
+            <span class="text-[10px] text-indigo-600 font-mono">Impact</span>
           </div>
-          <p class="text-xs sm:text-sm font-semibold text-slate-100">${action}</p>
-          <div class="mt-2 pt-2 border-t border-purple-500/20 text-[11px] text-purple-200/80">
-            <span class="font-bold text-purple-300">Case Example:</span> ${example}
+          <p class="text-xs sm:text-sm font-semibold text-slate-900">${action}</p>
+          <div class="mt-2 pt-2 border-t border-indigo-200 text-[11px] text-slate-700">
+            <span class="font-bold text-indigo-800">Case Example:</span> ${example}
           </div>
         </div>
       </div>
@@ -870,22 +870,22 @@ function renderFeedGrid() {
           </span>
         </div>
 
-        <h3 class="text-lg font-bold text-white mb-1.5 leading-snug group-hover:text-indigo-300 transition">
+        <h3 class="text-lg font-bold text-slate-900 mb-1.5 leading-snug group-hover:text-blue-600 transition">
           ${idea.title}
         </h3>
         
-        <p class="text-xs text-indigo-300/80 font-medium mb-3">
+        <p class="text-xs text-blue-600 font-medium mb-3">
           ${idea.one_liner}
         </p>
 
-        <p class="text-xs text-slate-300 leading-relaxed line-clamp-4 mb-4">
+        <p class="text-xs text-slate-700 leading-relaxed line-clamp-4 mb-4">
           ${idea.summary}
         </p>
       </div>
 
-      <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
+      <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
         <div class="text-[11px]">
-          <span class="font-semibold text-slate-200 block truncate max-w-[120px]">${idea.author}</span>
+          <span class="font-semibold text-slate-900 block truncate max-w-[120px]">${idea.author}</span>
           <span class="text-slate-500 block truncate max-w-[120px]">${idea.source}</span>
         </div>
 
@@ -964,14 +964,14 @@ function renderStashesGrid() {
         </span>
       </div>
 
-      <h3 class="text-xl font-bold text-white mb-2 group-hover:text-indigo-300 transition">
+      <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition">
         ${stash.title}
       </h3>
-      <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+      <p class="text-xs text-slate-600 line-clamp-2 leading-relaxed">
         ${stash.description}
       </p>
 
-      <div class="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-indigo-400 font-semibold">
+      <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-blue-600 font-semibold">
         <span>Open Collection</span>
         <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
       </div>
@@ -992,32 +992,32 @@ async function viewStashDetail(stashId) {
     detailView.classList.remove("hidden");
 
     detailContent.innerHTML = `
-      <div class="bg-slate-900 p-6 rounded-3xl border border-slate-800 mb-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-6">
         <div class="flex items-center space-x-3 mb-2">
-          <div class="w-10 h-10 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center">
+          <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
             <i data-lucide="${stash.icon || 'bookmark'}" class="w-5 h-5"></i>
           </div>
           <div>
-            <h2 class="text-2xl font-bold text-white">${stash.title}</h2>
-            <p class="text-xs text-slate-400">${stash.ideas_count} curated atomic ideas</p>
+            <h2 class="text-2xl font-bold text-slate-900">${stash.title}</h2>
+            <p class="text-xs text-slate-500">${stash.ideas_count} curated atomic ideas</p>
           </div>
         </div>
-        <p class="text-sm text-slate-300 mt-2">${stash.description}</p>
+        <p class="text-sm text-slate-700 mt-2">${stash.description}</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         ${(stash.ideas || []).map(idea => `
-          <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between">
+          <div class="bg-white border border-slate-200 shadow-2xs rounded-2xl p-6 flex flex-col justify-between">
             <div>
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
                 ${idea.topic}
               </span>
-              <h4 class="text-base font-bold text-white mt-2">${idea.title}</h4>
-              <p class="text-xs text-indigo-300/80 font-medium mb-2">${idea.one_liner}</p>
-              <p class="text-xs text-slate-300 leading-relaxed mb-4">${idea.summary}</p>
+              <h4 class="text-base font-bold text-slate-900 mt-2">${idea.title}</h4>
+              <p class="text-xs text-blue-600 font-medium mb-2">${idea.one_liner}</p>
+              <p class="text-xs text-slate-700 leading-relaxed mb-4">${idea.summary}</p>
             </div>
-            <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-              <span class="text-slate-400 font-medium truncate max-w-[120px]">${idea.author}</span>
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+              <span class="text-slate-500 font-medium truncate max-w-[120px]">${idea.author}</span>
               <div class="flex items-center space-x-1.5">
                 <button onclick="openDeepDiveModal('${idea.id}')" class="px-2.5 py-1 rounded-lg bg-indigo-500/10 hover:bg-indigo-600 text-indigo-300 hover:text-white text-xs font-semibold flex items-center space-x-1 transition" title="Detailed explanation and example">
                   <i data-lucide="book-open" class="w-3 h-3"></i>
@@ -1064,14 +1064,14 @@ function openStashModal(ideaId) {
 
   const stashes = window.state.stashes;
   list.innerHTML = stashes.map(stash => `
-    <button onclick="saveIdeaToSpecificStash('${stash.id}')" class="w-full p-3 rounded-2xl bg-slate-800 hover:bg-slate-700/80 border border-slate-700 text-left flex items-center justify-between transition">
+    <button onclick="saveIdeaToSpecificStash('${stash.id}')" class="w-full p-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-left flex items-center justify-between transition shadow-2xs">
       <div class="flex items-center space-x-3">
-        <div class="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center">
+        <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
           <i data-lucide="${stash.icon || 'bookmark'}" class="w-4 h-4"></i>
         </div>
         <div>
-          <span class="text-sm font-semibold text-white block">${stash.title}</span>
-          <span class="text-[11px] text-slate-400 block">${stash.ideas_count} ideas</span>
+          <span class="text-sm font-semibold text-slate-900 block">${stash.title}</span>
+          <span class="text-[11px] text-slate-500 block">${stash.ideas_count} ideas</span>
         </div>
       </div>
       <i data-lucide="plus" class="w-4 h-4 text-slate-400"></i>
@@ -1143,12 +1143,12 @@ async function submitNewStash() {
 
 function formatMarkdownInline(str) {
   if (!str) return "";
-  // Bold **text**
-  let res = str.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>');
-  // Italic *text*
-  res = res.replace(/(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)/g, '<em class="text-indigo-200/90 font-medium">$1</em>');
-  // Code `code`
-  res = res.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-slate-800 text-indigo-300 font-mono text-[11px]">$1</code>');
+  // Bold **text** -> high-contrast dark slate
+  let res = str.replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-900 font-bold">$1</strong>');
+  // Italic *text* -> readable dark slate italic
+  res = res.replace(/(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)/g, '<em class="text-slate-800 font-medium italic">$1</em>');
+  // Code `code` -> clean light slate pill
+  res = res.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-slate-100 text-blue-700 font-mono text-[11px] border border-slate-200">$1</code>');
   return res;
 }
 
@@ -1174,30 +1174,42 @@ function renderMarkdownDetailed(text) {
         inParagraph = false;
       }
       const title = trimmed.replace(/^#+\s*/, "");
-      html += `<div class="deep-dive-section-heading">
-        <span class="deep-dive-bullet-dot"></span>
+      html += `<h4 class="text-xs sm:text-sm font-headline font-bold text-slate-900 mt-4 mb-2 flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0"></span>
         <span>${formatMarkdownInline(title)}</span>
-      </div>`;
+      </h4>`;
     } else if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
       if (inParagraph) {
         html += "</p>";
         inParagraph = false;
       }
-      html += `<div class="deep-dive-bullet-item">
-        <span class="deep-dive-bullet-dot"></span>
-        <span>${formatMarkdownInline(trimmed.substring(2))}</span>
+      html += `<div class="flex items-start gap-2.5 my-1.5 text-xs sm:text-sm text-slate-800 leading-relaxed">
+        <span class="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2 shrink-0"></span>
+        <span class="text-slate-800">${formatMarkdownInline(trimmed.substring(2))}</span>
+      </div>`;
+    } else if (/^\d+\.\s/.test(trimmed)) {
+      if (inParagraph) {
+        html += "</p>";
+        inParagraph = false;
+      }
+      const match = trimmed.match(/^(\d+)\.\s*(.*)$/);
+      const num = match ? match[1] : "•";
+      const itemText = match ? match[2] : trimmed;
+      html += `<div class="flex items-start gap-2.5 my-1.5 text-xs sm:text-sm text-slate-800 leading-relaxed">
+        <span class="px-1.5 py-0.2 rounded bg-blue-50 text-blue-700 text-[10px] font-bold shrink-0 mt-0.5 border border-blue-200">${num}</span>
+        <span class="text-slate-800">${formatMarkdownInline(itemText)}</span>
       </div>`;
     } else if (trimmed.startsWith("> ")) {
       if (inParagraph) {
         html += "</p>";
         inParagraph = false;
       }
-      html += `<blockquote class="border-l-3 border-indigo-500/70 bg-slate-950/40 rounded-r-xl pl-3.5 py-2 my-2 text-xs sm:text-sm text-slate-300 italic font-serif">
+      html += `<blockquote class="border-l-4 border-blue-600 bg-slate-50 rounded-r-xl pl-4 py-2.5 my-3 text-xs sm:text-sm text-slate-800 italic font-serif leading-relaxed">
         ${formatMarkdownInline(trimmed.substring(2))}
       </blockquote>`;
     } else {
       if (!inParagraph) {
-        html += `<p class="text-xs sm:text-sm text-slate-200 leading-relaxed my-2">`;
+        html += `<p class="text-xs sm:text-sm text-slate-800 leading-relaxed my-2">`;
         inParagraph = true;
       } else {
         html += " ";
@@ -1713,41 +1725,41 @@ function renderAIExtractionResults(ideas) {
 
     <div class="space-y-4 pt-2">
       ${ideas.map((card, idx) => `
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-3">
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-3">
           <div class="flex items-center justify-between">
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase bg-blue-50 text-blue-700 border border-blue-200">
               #${idx+1} • ${card.topic}
             </span>
-            <span class="text-xs text-slate-400">${card.author} — ${card.source}</span>
+            <span class="text-xs text-slate-500">${card.author} — ${card.source}</span>
           </div>
 
-          <h4 class="text-lg font-extrabold text-white">${card.title}</h4>
-          <p class="text-xs text-indigo-300 font-medium">${card.one_liner}</p>
-          <p class="text-xs text-slate-300 leading-relaxed">${card.summary}</p>
+          <h4 class="text-lg font-bold text-slate-900">${card.title}</h4>
+          <p class="text-xs text-blue-600 font-medium italic">"${card.one_liner}"</p>
+          <p class="text-xs text-slate-700 leading-relaxed">${card.summary}</p>
 
           ${card.detailed_explanation ? `
-            <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-4 text-xs text-slate-300 space-y-1.5">
-              <span class="font-bold text-indigo-400 uppercase tracking-wider block">Detailed Concept Breakdown:</span>
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-800 space-y-1.5">
+              <span class="font-bold text-blue-700 uppercase tracking-wider block">Detailed Concept Breakdown:</span>
               <p class="leading-relaxed">${card.detailed_explanation}</p>
             </div>
           ` : ''}
 
           ${card.example ? `
-            <div class="bg-amber-950/30 border border-amber-800/40 rounded-2xl p-4 text-xs text-amber-200/90 space-y-1">
-              <span class="font-bold text-amber-400 uppercase tracking-wider block">Real-World Case Study / Example:</span>
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900 space-y-1">
+              <span class="font-bold text-amber-700 uppercase tracking-wider block">Real-World Case Study / Example:</span>
               <p class="leading-relaxed">${card.example}</p>
             </div>
           ` : ''}
 
           ${card.quote ? `
-            <blockquote class="border-l-2 border-indigo-500 pl-3 text-xs italic text-slate-300">
+            <blockquote class="border-l-4 border-blue-600 bg-slate-50 pl-3.5 py-2 text-xs italic text-slate-800">
               "${card.quote}"
             </blockquote>
           ` : ''}
 
           ${card.action_item ? `
-            <div class="bg-emerald-950/40 border border-emerald-800/40 rounded-xl p-3 text-xs text-emerald-200">
-              <span class="font-bold uppercase tracking-wider block mb-1">Try It Today:</span>
+            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-900">
+              <span class="font-bold uppercase tracking-wider block mb-1 text-emerald-700">Try It Today:</span>
               ${card.action_item}
             </div>
           ` : ''}
@@ -1954,31 +1966,31 @@ function renderLeitnerCard() {
 
         <!-- The Retrieval Challenge Question -->
         <div class="space-y-3 py-2">
-          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center space-x-1.5">
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 flex items-center space-x-1.5">
             <i data-lucide="help-circle" class="w-4 h-4"></i>
             <span>Active Recall Prompt</span>
           </span>
-          <h3 class="text-xl sm:text-2xl font-extrabold text-white leading-tight">
+          <h3 class="text-xl sm:text-2xl font-bold text-slate-900 leading-tight">
             ${idea.title}
           </h3>
-          <p class="text-sm sm:text-base text-slate-300 italic border-l-2 border-indigo-500/40 pl-3">
+          <p class="text-sm sm:text-base text-slate-800 italic border-l-4 border-blue-600 bg-slate-50 p-3 rounded-r-xl">
             "${idea.one_liner}"
           </p>
         </div>
 
         <!-- Active Retrieval Exercise Instructions -->
-        <div class="p-4 rounded-2xl bg-indigo-950/30 border border-indigo-500/30 text-xs text-indigo-200/90 flex items-start space-x-3">
-          <i data-lucide="sparkles" class="w-5 h-5 text-indigo-400 shrink-0 mt-0.5"></i>
+        <div class="p-4 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-900 flex items-start space-x-3">
+          <i data-lucide="sparkles" class="w-5 h-5 text-blue-600 shrink-0 mt-0.5"></i>
           <div class="space-y-1">
-            <span class="font-bold text-white block">Test Your Memory First</span>
-            <p class="text-slate-300 leading-relaxed">
+            <span class="font-bold text-slate-900 block">Test Your Memory First</span>
+            <p class="text-slate-700 leading-relaxed">
               Before revealing, mentally answer: What is the underlying mechanism? How would you explain this model to a peer?
             </p>
           </div>
         </div>
 
         <!-- Big Reveal Answer Button -->
-        <button onclick="revealLeitnerAnswer()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm sm:text-base shadow-xl shadow-emerald-950/50 flex items-center justify-center space-x-2 transition transform hover:scale-[1.01] active:scale-[0.99] cursor-pointer">
+        <button onclick="revealLeitnerAnswer()" class="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base shadow-sm flex items-center justify-center space-x-2 transition cursor-pointer">
           <i data-lucide="eye" class="w-5 h-5"></i>
           <span>Reveal Answer & Explanation</span>
           <span class="ml-2 px-2 py-0.5 rounded-md bg-white/20 text-xs font-mono hidden sm:inline">Space</span>
@@ -1990,52 +2002,52 @@ function renderLeitnerCard() {
     // BACK: Revealed Knowledge & Self-Grading Buttons
     const detailedHtml = (idea.detailed_explanation && idea.detailed_explanation.trim().length >= 80)
       ? renderMarkdownDetailed(idea.detailed_explanation)
-      : `<p class="text-slate-300 leading-relaxed">${idea.summary}</p>`;
+      : `<p class="text-slate-800 leading-relaxed">${idea.summary}</p>`;
 
     container.innerHTML = `
-      <div class="bg-gradient-to-b from-slate-900 to-slate-950 border border-emerald-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl transition-all duration-300 space-y-6">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm transition-all duration-300 space-y-5">
         
         <!-- Header -->
-        <div class="flex items-center justify-between text-xs border-b border-slate-800 pb-3">
+        <div class="flex items-center justify-between text-xs border-b border-slate-100 pb-3">
           <div class="flex items-center space-x-2">
-            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${getTopicBadgeClass(idea.topic)}">
+            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
               ${idea.topic || 'Mental Model'}
             </span>
-            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-amber-50 text-amber-700 border border-amber-200">
               Box ${boxNum} Revealed
             </span>
           </div>
-          <button onclick="playIdeaAudioById('${idea.id}')" class="p-1.5 rounded-xl text-slate-400 hover:text-sky-400 hover:bg-slate-800 transition cursor-pointer" title="Listen to narration">
+          <button onclick="playIdeaAudioById('${idea.id}')" class="p-1.5 rounded-xl text-slate-500 hover:text-blue-600 hover:bg-slate-100 transition cursor-pointer" title="Listen to narration">
             <i data-lucide="volume-2" class="w-4 h-4"></i>
           </button>
         </div>
 
         <!-- Title & Core Summary -->
         <div class="space-y-2">
-          <h3 class="text-xl sm:text-2xl font-bold text-white">${idea.title}</h3>
-          <p class="text-sm text-slate-300 leading-relaxed bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800/80">
+          <h3 class="text-xl sm:text-2xl font-bold text-slate-900">${idea.title}</h3>
+          <p class="text-sm text-slate-800 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-200">
             ${idea.summary}
           </p>
         </div>
 
         <!-- In-Depth Theoretical Mechanics -->
         <div class="space-y-2">
-          <span class="text-xs font-bold uppercase tracking-wider text-indigo-400 flex items-center space-x-1.5">
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-700 flex items-center space-x-1.5">
             <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
             <span>Theoretical Mechanics & First Principles</span>
           </span>
-          <div class="text-xs sm:text-sm text-slate-300 leading-relaxed space-y-2 bg-slate-950/40 p-4 rounded-2xl border border-indigo-950/40 max-h-56 overflow-y-auto">
+          <div class="text-xs sm:text-sm text-slate-800 leading-relaxed space-y-2 bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-56 overflow-y-auto custom-scrollbar">
             ${detailedHtml}
           </div>
         </div>
 
         <!-- Concrete Real-World Example -->
         ${idea.example ? `
-          <div class="p-3.5 rounded-2xl bg-amber-950/20 border border-amber-500/30 text-xs sm:text-sm text-amber-200/90 flex items-start space-x-2.5">
-            <i data-lucide="zap" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+          <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs sm:text-sm text-amber-900 flex items-start space-x-2.5">
+            <i data-lucide="zap" class="w-4 h-4 text-amber-700 shrink-0 mt-0.5"></i>
             <div class="space-y-0.5">
-              <span class="font-bold text-amber-300 block text-[11px] uppercase tracking-wider">Applied Example</span>
-              <p class="text-slate-300 leading-relaxed">${idea.example}</p>
+              <span class="font-bold text-amber-700 block text-[11px] uppercase tracking-wider">Applied Example</span>
+              <p class="text-slate-800 leading-relaxed">${idea.example}</p>
             </div>
           </div>
         ` : ''}
@@ -2337,9 +2349,9 @@ function selectQuizContext(ctx) {
 
   const cardsContainer = document.getElementById("quiz-recommended-cards");
   cardsContainer.innerHTML = cards.map(c => `
-    <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-700/60 flex items-center justify-between">
-      <span class="font-bold text-white text-xs">${c.title}</span>
-      <span class="text-[10px] uppercase font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">${c.topic}</span>
+    <div class="p-2.5 rounded-xl bg-white border border-slate-200 flex items-center justify-between shadow-2xs">
+      <span class="font-bold text-slate-900 text-xs">${c.title}</span>
+      <span class="text-[10px] uppercase font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">${c.topic}</span>
     </div>
   `).join("");
 
@@ -2632,11 +2644,11 @@ function renderGlobalBooksShelf(books) {
               ${book.ideas_count || 0} models
             </span>
           </div>
-          <h4 class="text-xs sm:text-sm font-headline font-bold text-white group-hover:text-primary transition-colors truncate">
+          <h4 class="text-xs sm:text-sm font-headline font-bold text-slate-900 group-hover:text-blue-600 transition-colors truncate">
             ${book.title}
           </h4>
-          <p class="text-[11px] text-on-surface-variant truncate mt-0.5">
-            By ${book.author} • <span class="text-on-surface-variant/70">${book.publisher || 'Original Publication'}</span>
+          <p class="text-[11px] text-slate-500 truncate mt-0.5">
+            By <span class="text-slate-700 font-medium">${book.author}</span> • <span class="text-slate-400">${book.publisher || 'Original Publication'}</span>
           </p>
           <div class="mt-2 flex items-center gap-1 text-[10px] text-primary/80 font-semibold">
             <span>⚡ Instant Global Cache</span>
@@ -2689,17 +2701,17 @@ function handleGlobalBookSearch(val) {
 
       let html = '';
       if (books.length) {
-        html += `<div class="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">Globally Cached Books</div>`;
+        html += `<div class="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-700">Globally Cached Books</div>`;
         html += books.map(b => `
-          <div onclick="openBookDetailModal('${b.id}'); clearGlobalSearch();" class="p-2.5 rounded-xl hover:bg-surface-container-high cursor-pointer transition flex items-center justify-between gap-2 border-b border-outline-variant/20 last:border-0">
+          <div onclick="openBookDetailModal('${b.id}'); clearGlobalSearch();" class="p-2.5 rounded-xl hover:bg-slate-50 cursor-pointer transition flex items-center justify-between gap-2 border-b border-slate-100 last:border-0">
             <div class="flex items-center gap-2.5 min-w-0">
-              <span class="material-symbols-outlined text-primary text-[18px]">menu_book</span>
+              <span class="material-symbols-outlined text-blue-600 text-[18px]">menu_book</span>
               <div class="truncate">
-                <p class="text-xs font-bold text-white truncate">${b.title}</p>
-                <p class="text-[10px] text-on-surface-variant truncate">${b.author} • ${b.publisher || 'Original Publication'}</p>
+                <p class="text-xs font-bold text-slate-900 truncate">${b.title}</p>
+                <p class="text-[10px] text-slate-500 truncate">${b.author} • ${b.publisher || 'Original Publication'}</p>
               </div>
             </div>
-            <span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/30 text-[9px] font-bold flex-shrink-0">
+            <span class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-[9px] font-bold flex-shrink-0">
               ⚡ 0s Scan (${b.ideas_count})
             </span>
           </div>
@@ -2707,17 +2719,17 @@ function handleGlobalBookSearch(val) {
       }
 
       if (localMatches.length) {
-        html += `<div class="px-2 pt-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-secondary">Matching Mental Models</div>`;
+        html += `<div class="px-2 pt-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-amber-700">Matching Mental Models</div>`;
         html += localMatches.map(m => `
-          <div onclick="jumpToSwipeCard('${m.id}'); clearGlobalSearch();" class="p-2.5 rounded-xl hover:bg-surface-container-high cursor-pointer transition flex items-center justify-between gap-2 border-b border-outline-variant/20 last:border-0">
+          <div onclick="jumpToSwipeCard('${m.id}'); clearGlobalSearch();" class="p-2.5 rounded-xl hover:bg-slate-50 cursor-pointer transition flex items-center justify-between gap-2 border-b border-slate-100 last:border-0">
             <div class="flex items-center gap-2.5 min-w-0">
-              <span class="material-symbols-outlined text-secondary text-[18px]">psychology</span>
+              <span class="material-symbols-outlined text-amber-600 text-[18px]">psychology</span>
               <div class="truncate">
-                <p class="text-xs font-bold text-white truncate">${m.title}</p>
-                <p class="text-[10px] text-on-surface-variant truncate">${m.author} • ${m.source}</p>
+                <p class="text-xs font-bold text-slate-900 truncate">${m.title}</p>
+                <p class="text-[10px] text-slate-500 truncate">${m.author} • ${m.source}</p>
               </div>
             </div>
-            <span class="text-[10px] text-primary font-bold">Study →</span>
+            <span class="text-[10px] text-blue-600 font-bold">Study →</span>
           </div>
         `).join('');
       }
@@ -2775,20 +2787,20 @@ async function openBookDetailModal(bookSlug) {
         cardsList.innerHTML = `<p class="text-xs text-on-surface-variant text-center py-6">No cards found for this book.</p>`;
       } else {
         cardsList.innerHTML = book.ideas.map((card, idx) => `
-          <div class="p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-2">
+          <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-2">
             <div class="flex items-center justify-between">
-              <span class="text-[10px] font-bold uppercase text-primary tracking-wider">Model #${idx + 1}</span>
-              <button onclick="openStressTestModal('${card.id}')" class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary/15 text-secondary border border-secondary/30 text-[10px] font-bold hover:bg-secondary/25 transition">
+              <span class="text-[10px] font-bold uppercase text-blue-700 tracking-wider">Model #${idx + 1}</span>
+              <button onclick="openStressTestModal('${card.id}')" class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-[10px] font-bold hover:bg-amber-100 transition">
                 <span class="material-symbols-outlined text-[13px]">bolt</span>
                 <span>Stress-Test</span>
               </button>
             </div>
-            <h4 class="text-base font-headline font-bold text-white">${card.title}</h4>
-            <p class="text-xs text-primary italic font-semibold">"${card.one_liner}"</p>
-            <p class="text-xs text-on-surface/90 leading-relaxed">${card.summary}</p>
-            <div class="pt-1 flex items-center justify-between text-[11px] text-on-surface-variant/70 border-t border-outline-variant/20 mt-2">
+            <h4 class="text-base font-headline font-bold text-slate-900">${card.title}</h4>
+            <p class="text-xs text-blue-600 italic font-semibold">"${card.one_liner}"</p>
+            <p class="text-xs text-slate-700 leading-relaxed">${card.summary}</p>
+            <div class="pt-1 flex items-center justify-between text-[11px] text-slate-500 border-t border-slate-100 mt-2">
               <span>${card.read_time_mins || 1} min read</span>
-              <button onclick="jumpToSwipeCard('${card.id}'); closeBookDetailModal();" class="text-primary hover:underline font-bold">
+              <button onclick="jumpToSwipeCard('${card.id}'); closeBookDetailModal();" class="text-blue-600 hover:underline font-bold">
                 Study in Swipe Gym →
               </button>
             </div>
@@ -3096,12 +3108,12 @@ async function openStressTestModal(ideaId = null) {
         return `
           <button 
             onclick="handleStressChoice(${idx}, ${opt.is_correct ? 'true' : 'false'}, '${escapedExp}', '${escapedHeuristic}')"
-            class="stress-option-btn w-full text-left p-3.5 rounded-2xl bg-surface-container-high/80 hover:bg-surface-container-highest border border-outline-variant/40 hover:border-primary/50 text-xs text-white leading-relaxed transition flex items-start gap-2.5"
+            class="stress-option-btn w-full text-left p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-blue-300 text-xs text-slate-900 font-medium leading-relaxed transition flex items-start gap-2.5 shadow-2xs"
           >
-            <span class="w-5 h-5 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold text-primary flex-shrink-0 mt-0.5">
+            <span class="w-5 h-5 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[10px] font-bold text-blue-600 flex-shrink-0 mt-0.5">
               ${String.fromCharCode(65 + idx)}
             </span>
-            <span class="flex-1">${opt.text}</span>
+            <span class="flex-1 text-slate-800">${opt.text}</span>
           </button>
         `;
       }).join('');
@@ -3111,10 +3123,10 @@ async function openStressTestModal(ideaId = null) {
     if (scenarioEl) scenarioEl.textContent = `Scenario: You face a strategic crossroad involving ${idea.title}.`;
     if (optionsEl) {
       optionsEl.innerHTML = `
-        <button onclick="handleStressChoice(0, true, 'Accurate! Applying ${idea.title} directly identifies and eliminates systemic failure traps.', '${idea.one_liner}')" class="w-full text-left p-3.5 rounded-2xl bg-surface-container-high border border-outline-variant/40 text-xs text-white">
+        <button onclick="handleStressChoice(0, true, 'Accurate! Applying ${idea.title} directly identifies and eliminates systemic failure traps.', '${idea.one_liner}')" class="w-full text-left p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 font-medium">
           A) Systematically identify and prevent failure vectors before committing capital.
         </button>
-        <button onclick="handleStressChoice(1, false, 'Incorrect. This relies on superficial optimism rather than first principles.', '${idea.one_liner}')" class="w-full text-left p-3.5 rounded-2xl bg-surface-container-high border border-outline-variant/40 text-xs text-white mt-2">
+        <button onclick="handleStressChoice(1, false, 'Incorrect. This relies on superficial optimism rather than first principles.', '${idea.one_liner}')" class="w-full text-left p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 font-medium mt-2">
           B) Maximize short-term leverage and assume positive momentum continues uninterrupted.
         </button>
       `;
@@ -3270,10 +3282,10 @@ function renderFeedGrid() {
 
   if (!ideas.length) {
     container.innerHTML = `
-      <div class="col-span-full py-12 text-center text-on-surface-variant">
+      <div class="col-span-full py-12 text-center text-slate-500">
         <span class="material-symbols-outlined text-4xl opacity-40 mb-2">inbox</span>
-        <p class="text-sm font-semibold text-white">No mental model cards match this filter</p>
-        <p class="text-xs text-on-surface-variant mt-1">Try selecting 'All Models' or enter a search query.</p>
+        <p class="text-sm font-semibold text-slate-900">No mental model cards match this filter</p>
+        <p class="text-xs text-slate-500 mt-1">Try selecting 'All Models' or enter a search query.</p>
       </div>
     `;
     return;
@@ -3281,47 +3293,47 @@ function renderFeedGrid() {
 
   container.innerHTML = ideas.map((idea, index) => {
     return `
-      <div class="tactile-glass p-4 sm:p-5 rounded-2xl border border-outline-variant/30 hover:border-primary/50 transition-all duration-200 flex flex-col justify-between group shadow-lg">
+      <div class="bento-card p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-400 transition-all duration-200 flex flex-col justify-between group shadow-sm">
         <div>
           <div class="flex items-center justify-between gap-1 mb-2">
-            <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/30">
+            <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
               ${idea.topic}
             </span>
-            <span class="text-[10px] text-on-surface-variant font-medium flex items-center gap-0.5">
+            <span class="text-[10px] text-slate-500 font-medium flex items-center gap-0.5">
               <span class="material-symbols-outlined text-[13px]">timer</span>
               ${idea.read_time_mins || 1} min
             </span>
           </div>
 
-          <h4 class="text-sm sm:text-base font-headline font-bold text-white group-hover:text-primary transition-colors mb-1">
+          <h4 class="text-sm sm:text-base font-headline font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-1">
             ${idea.title}
           </h4>
 
-          <p class="text-[11px] text-primary/90 font-medium italic mb-2 line-clamp-2">
+          <p class="text-[11px] text-blue-700 font-medium italic mb-2 line-clamp-2">
             "${idea.one_liner}"
           </p>
 
-          <p class="text-xs text-on-surface-variant leading-relaxed line-clamp-3 mb-3">
+          <p class="text-xs text-slate-600 leading-relaxed line-clamp-3 mb-3">
             ${idea.summary}
           </p>
         </div>
 
-        <div class="pt-3 border-t border-outline-variant/20 flex items-center justify-between gap-2">
-          <div class="text-[10px] text-on-surface-variant truncate max-w-[110px]">
-            <span class="text-white font-semibold block truncate">${idea.author}</span>
-            <span class="truncate block text-on-surface-variant/70">${idea.source}</span>
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+          <div class="text-[10px] text-slate-500 truncate max-w-[120px]">
+            <span class="text-slate-900 font-semibold block truncate">${idea.author}</span>
+            <span class="truncate block text-slate-400">${idea.source}</span>
           </div>
 
           <div class="flex items-center gap-1.5 flex-shrink-0">
-            <button onclick="openStressTestModal('${idea.id}')" class="p-1.5 rounded-xl bg-secondary/15 hover:bg-secondary/25 text-secondary border border-secondary/30 transition text-[11px] font-bold flex items-center gap-1" title="Socratic Dilemma Arena">
+            <button onclick="openStressTestModal('${idea.id}')" class="p-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 transition text-[11px] font-bold flex items-center gap-1" title="Socratic Dilemma Arena">
               <span class="material-symbols-outlined text-[14px]">bolt</span>
               <span class="hidden sm:inline">Stress-Test</span>
             </button>
-            <button onclick="openDeepDiveModal('${idea.id}')" class="p-1.5 rounded-xl bg-primary/15 hover:bg-primary/25 text-primary border border-primary/30 transition text-[11px] font-bold flex items-center gap-1" title="Detailed First Principles Treatise">
+            <button onclick="openDeepDiveModal('${idea.id}')" class="p-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 transition text-[11px] font-bold flex items-center gap-1" title="Detailed First Principles Treatise">
               <span class="material-symbols-outlined text-[14px]">menu_book</span>
               <span>Deep Dive</span>
             </button>
-            <button onclick="jumpToSwipeCard('${idea.id}')" class="p-1.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface transition text-[11px] font-bold flex items-center" title="Study in Gym">
+            <button onclick="jumpToSwipeCard('${idea.id}')" class="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition text-[11px] font-bold flex items-center" title="Study in Gym">
               <span class="material-symbols-outlined text-[14px]">explore</span>
             </button>
           </div>

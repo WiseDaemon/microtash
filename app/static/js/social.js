@@ -57,10 +57,10 @@ function renderStashesGrid(stashesList, isPublicView = false) {
   const stashes = stashesList || window.state.stashes || [];
   if (!stashes.length) {
     container.innerHTML = `
-      <div class="col-span-full py-12 text-center text-on-surface-variant/70 border border-outline-variant/30 rounded-3xl bg-surface-container-high/40 p-8">
-        <span class="material-symbols-outlined text-4xl text-on-surface-variant/40 mb-2">folder_open</span>
-        <p class="text-xs font-bold text-white">${isPublicView ? 'No community stashes found.' : 'You have no personal stashes yet.'}</p>
-        <p class="text-[11px] text-on-surface-variant mt-1">${isPublicView ? 'Be the first to publish a curated stash!' : 'Create a stash or clone one from the Community tab.'}</p>
+      <div class="col-span-full py-12 text-center text-slate-500 border border-slate-200 rounded-3xl bg-white p-8">
+        <span class="material-symbols-outlined text-4xl text-slate-400 mb-2">folder_open</span>
+        <p class="text-xs font-bold text-slate-900">${isPublicView ? 'No community stashes found.' : 'You have no personal stashes yet.'}</p>
+        <p class="text-[11px] text-slate-500 mt-1">${isPublicView ? 'Be the first to publish a curated stash!' : 'Create a stash or clone one from the Community tab.'}</p>
       </div>
     `;
     return;
@@ -72,49 +72,49 @@ function renderStashesGrid(stashesList, isPublicView = false) {
     const clones = stash.clone_count || 0;
 
     return `
-      <div onclick="viewStashDetail('${stash.id}')" class="cursor-pointer group bg-surface-container hover:bg-surface-container-high border border-outline-variant/40 hover:border-primary/50 rounded-3xl p-5 shadow-lg transition-all duration-200 hover:-translate-y-0.5 flex flex-col justify-between">
+      <div onclick="viewStashDetail('${stash.id}')" class="cursor-pointer group bento-card bg-white hover:border-blue-400 border border-slate-200 rounded-2xl p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between mb-3">
-            <div class="w-10 h-10 rounded-2xl bg-primary/15 text-primary border border-primary/30 flex items-center justify-center text-base font-bold">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 border border-blue-200 flex items-center justify-center text-base font-bold">
               <span class="material-symbols-outlined text-[20px]">${stash.icon === 'book-open' ? 'menu_book' : (stash.icon || 'bookmark')}</span>
             </div>
             <div class="flex items-center gap-1.5">
               ${isPublic ? `
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-secondary/20 text-secondary border border-secondary/40 flex items-center gap-1">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
                   <span class="material-symbols-outlined text-[12px]">public</span>
                   <span>${clones} Clones</span>
                 </span>
               ` : `
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-surface-container-highest text-on-surface-variant border border-outline-variant/40">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
                   Private
                 </span>
               `}
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-surface-container-high text-primary border border-primary/30">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
                 ${stash.ideas_count} cards
               </span>
             </div>
           </div>
 
-          <h3 class="text-base font-headline font-bold text-white group-hover:text-primary transition line-clamp-1">
+          <h3 class="text-base font-headline font-bold text-slate-900 group-hover:text-blue-600 transition line-clamp-1">
             ${stash.title}
           </h3>
-          <p class="text-xs text-on-surface-variant line-clamp-2 leading-relaxed mt-1">
+          <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mt-1">
             ${stash.description || 'Curated microlearning mental model deck.'}
           </p>
         </div>
 
-        <div class="mt-4 pt-3 border-t border-outline-variant/20 flex items-center justify-between text-xs">
-          <button onclick="event.stopPropagation(); shareStashLink('${shareSlug}', '${stash.title.replace(/'/g, "\\'")}')" class="flex items-center gap-1 text-[11px] font-bold text-primary hover:underline" title="Copy shareable link">
+        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+          <button onclick="event.stopPropagation(); shareStashLink('${shareSlug}', '${stash.title.replace(/'/g, "\\'")}')" class="flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:underline" title="Copy shareable link">
             <span class="material-symbols-outlined text-[14px]">share</span>
             <span>Share Link</span>
           </button>
           ${isPublicView ? `
-            <button onclick="event.stopPropagation(); cloneStashToMyLibrary('${stash.id}')" class="px-2.5 py-1 rounded-xl bg-primary/20 hover:bg-primary/30 text-primary border border-primary/40 text-[11px] font-bold transition flex items-center gap-1">
+            <button onclick="event.stopPropagation(); cloneStashToMyLibrary('${stash.id}')" class="px-2.5 py-1 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-[11px] font-bold transition flex items-center gap-1">
               <span class="material-symbols-outlined text-[13px]">content_copy</span>
               <span>Clone Stash</span>
             </button>
           ` : `
-            <span class="text-primary font-bold flex items-center gap-0.5 text-[11px] group-hover:translate-x-1 transition-transform">
+            <span class="text-blue-600 font-bold flex items-center gap-0.5 text-[11px] group-hover:translate-x-1 transition-transform">
               <span>Open</span>
               <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
             </span>
@@ -163,38 +163,38 @@ async function viewStashDetail(stashId) {
 
     if (detailContent) {
       detailContent.innerHTML = `
-        <div class="bg-surface-container p-6 rounded-3xl border border-outline-variant/40 space-y-3">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
           <div class="flex items-center justify-between">
-            <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/20 text-primary border border-primary/40">
+            <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
               Curated Mental Model Deck
             </span>
-            <span class="text-xs text-on-surface-variant font-medium">
-              Curated by <strong class="text-white">@${stash.owner_username || 'community'}</strong> • ${stash.clone_count || 0} Clones
+            <span class="text-xs text-slate-500 font-medium">
+              Curated by <strong class="text-slate-900">@${stash.owner_username || 'community'}</strong> • ${stash.clone_count || 0} Clones
             </span>
           </div>
-          <h2 class="text-2xl font-headline font-extrabold text-white">${stash.title}</h2>
-          <p class="text-xs text-on-surface-variant leading-relaxed">${stash.description || 'Complete microlearning mental model deck.'}</p>
+          <h2 class="text-2xl font-headline font-extrabold text-slate-900">${stash.title}</h2>
+          <p class="text-xs text-slate-600 leading-relaxed">${stash.description || 'Complete microlearning mental model deck.'}</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           ${(stash.ideas || []).map(card => `
-            <div class="bg-surface-container border border-outline-variant/40 rounded-3xl p-5 flex flex-col justify-between space-y-3">
+            <div class="bg-white border border-slate-200 shadow-2xs rounded-2xl p-5 flex flex-col justify-between space-y-3">
               <div>
                 <div class="flex items-center justify-between mb-1.5">
-                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/30">
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
                     ${card.topic}
                   </span>
-                  <span class="text-[11px] text-on-surface-variant">${card.read_time_mins || 1} min read</span>
+                  <span class="text-[11px] text-slate-500">${card.read_time_mins || 1} min read</span>
                 </div>
-                <h4 class="text-base font-headline font-bold text-white mt-1">${card.title}</h4>
-                <p class="text-xs text-primary font-medium italic mt-0.5">"${card.one_liner}"</p>
-                <p class="text-xs text-on-surface/90 leading-relaxed mt-2">${card.summary}</p>
+                <h4 class="text-base font-headline font-bold text-slate-900 mt-1">${card.title}</h4>
+                <p class="text-xs text-blue-600 font-medium italic mt-0.5">"${card.one_liner}"</p>
+                <p class="text-xs text-slate-700 leading-relaxed mt-2">${card.summary}</p>
               </div>
 
-              <div class="pt-2 border-t border-outline-variant/20 flex items-center justify-between text-xs text-on-surface-variant">
+              <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                 <span class="font-medium truncate max-w-[150px]">• ${card.author}</span>
                 <div class="flex items-center gap-2">
-                  <button onclick="jumpToSwipeCard('${card.id}')" class="text-primary hover:underline font-bold text-[11px]">
+                  <button onclick="jumpToSwipeCard('${card.id}')" class="text-blue-600 hover:underline font-bold text-[11px]">
                     Study in Gym →
                   </button>
                 </div>
