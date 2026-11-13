@@ -195,9 +195,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (_) => StressTestScreen(
-                        ideaId: idea.id,
-                        ideaTitle: idea.title,
-                        author: idea.author,
+                        idea: idea,
                       ),
                     ),
                   );

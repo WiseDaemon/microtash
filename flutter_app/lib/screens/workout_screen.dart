@@ -282,7 +282,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     child: const Column(
                       children: [
                         Text('Forgot', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                        Text('Reset to Box 1', style: TextStyle(fontSize: 10, opacity: 0.8)),
+                        Text('Reset to Box 1', style: TextStyle(fontSize: 10, color: Colors.white70)),
                       ],
                     ),
                   ),
@@ -300,7 +300,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     child: const Column(
                       children: [
                         Text('Hard', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                        Text('Review in 3d', style: TextStyle(fontSize: 10, opacity: 0.8)),
+                        Text('Review in 3d', style: TextStyle(fontSize: 10, color: Colors.white70)),
                       ],
                     ),
                   ),
@@ -318,7 +318,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     child: const Column(
                       children: [
                         Text('Mastered', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                        Text('Advance Box', style: TextStyle(fontSize: 10, opacity: 0.8)),
+                        Text('Advance Box', style: TextStyle(fontSize: 10, color: Colors.white70)),
                       ],
                     ),
                   ),

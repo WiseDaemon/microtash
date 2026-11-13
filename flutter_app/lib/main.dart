@@ -38,7 +38,6 @@ class MicrostashApp extends StatelessWidget {
           primary: Color(0xFF10B981),
           secondary: Color(0xFFF59E0B),
           surface: Color(0xFF1E293B),
-          background: Color(0xFF0F172A),
         ),
       ),
       home: const MainNavigationShell(),

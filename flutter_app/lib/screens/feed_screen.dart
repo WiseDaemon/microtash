@@ -180,9 +180,7 @@ class _FeedScreenState extends State<FeedScreen> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (_) => StressTestScreen(
-                                                ideaId: idea.id,
-                                                ideaTitle: idea.title,
-                                                author: idea.author,
+                                                idea: idea,
                                               ),
                                             ),
                                           );
