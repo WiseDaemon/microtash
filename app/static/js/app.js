@@ -2420,12 +2420,36 @@ function updateStitchHeroCard() {
     saveBtn.innerHTML = `<span class="material-symbols-outlined text-[18px] ${idea.is_saved ? 'text-primary' : ''}">${idea.is_saved ? 'bookmark' : 'bookmark_border'}</span>`;
   }
 
+  const summaryEl = document.getElementById("card-summary");
+  if (summaryEl) summaryEl.textContent = idea.summary || "";
+
+  const sourceCitation = document.getElementById("card-source-citation");
+  if (sourceCitation) sourceCitation.textContent = idea.source ? `• ${idea.source}` : "";
+
   // Render diagram in Stitch container
   const diagContainer = document.getElementById("card-diagram-container") || document.getElementById("card-diagram-box");
   if (diagContainer) {
     renderIdeaVisualDiagram(idea, diagContainer.id);
   }
 }
+
+function toggleCardDiagram() {
+  const container = document.getElementById("card-diagram-toggle-section");
+  const btn = document.getElementById("btn-toggle-diagram");
+  if (!container) return;
+  const isHidden = container.classList.contains("hidden");
+  if (isHidden) {
+    container.classList.remove("hidden");
+    if (btn) btn.innerHTML = `<span class="material-symbols-outlined text-[16px]">expand_less</span><span>Hide Causal Diagram</span>`;
+    const ideas = window.state.ideas;
+    const idea = ideas[window.state.currentIdeaIndex] || ideas[0];
+    if (idea) renderIdeaVisualDiagram(idea, 'card-diagram-container');
+  } else {
+    container.classList.add("hidden");
+    if (btn) btn.innerHTML = `<span class="material-symbols-outlined text-[16px]">account_tree</span><span>View Causal Diagram</span>`;
+  }
+}
+window.toggleCardDiagram = toggleCardDiagram;
 
 function triggerCurrentCardStressTest() {
   const ideas = window.state.ideas;
