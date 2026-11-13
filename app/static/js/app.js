@@ -2423,33 +2423,117 @@ function updateStitchHeroCard() {
   const summaryEl = document.getElementById("card-summary");
   if (summaryEl) summaryEl.textContent = idea.summary || "";
 
+  // Detailed Breakdown on card
+  const detailedEl = document.getElementById("card-detailed-content");
+  if (detailedEl) {
+    if (idea.detailed_explanation && idea.detailed_explanation.trim().length > 0) {
+      detailedEl.innerHTML = renderMarkdownDetailed(idea.detailed_explanation);
+    } else {
+      detailedEl.innerHTML = `<p class="leading-relaxed text-slate-800">${idea.summary}</p>`;
+    }
+  }
+
+  // Example / Case study on card
+  const exampleEl = document.getElementById("card-example-content");
+  if (exampleEl) {
+    if (idea.example && idea.example.trim().length > 0) {
+      exampleEl.innerHTML = renderMarkdownDetailed(idea.example);
+    } else {
+      exampleEl.innerHTML = "<p class='leading-relaxed text-slate-700'>Historical case study context.</p>";
+    }
+  }
+
+  // Boundary condition on card
+  const boundaryEl = document.getElementById("card-boundary-content");
+  if (boundaryEl) {
+    boundaryEl.textContent = idea.boundary || "Avoid dogmatic application when foundational axioms or systemic constraints are altered by sudden environmental shifts.";
+  }
+
+  // Action item on card
+  const actionEl = document.getElementById("card-action-content");
+  if (actionEl) {
+    actionEl.innerHTML = renderMarkdownDetailed(idea.action_item || "Identify one high-friction decision today and filter it through this framework.");
+  }
+
   const sourceCitation = document.getElementById("card-source-citation");
   if (sourceCitation) sourceCitation.textContent = idea.source ? `• ${idea.source}` : "";
 
-  // Render diagram in Stitch container
-  const diagContainer = document.getElementById("card-diagram-container") || document.getElementById("card-diagram-box");
-  if (diagContainer) {
-    renderIdeaVisualDiagram(idea, diagContainer.id);
+  // Render diagram if diagram pane is open or container exists
+  const activeView = window.state.cardActiveView || 'detailed';
+  if (activeView === 'diagram') {
+    renderCardDiagramCurrent();
   }
 }
 
-function toggleCardDiagram() {
-  const container = document.getElementById("card-diagram-toggle-section");
-  const btn = document.getElementById("btn-toggle-diagram");
-  if (!container) return;
-  const isHidden = container.classList.contains("hidden");
-  if (isHidden) {
-    container.classList.remove("hidden");
-    if (btn) btn.innerHTML = `<span class="material-symbols-outlined text-[16px]">expand_less</span><span>Hide Causal Diagram</span>`;
-    const ideas = window.state.ideas;
-    const idea = ideas[window.state.currentIdeaIndex] || ideas[0];
-    if (idea) renderIdeaVisualDiagram(idea, 'card-diagram-container');
-  } else {
-    container.classList.add("hidden");
-    if (btn) btn.innerHTML = `<span class="material-symbols-outlined text-[16px]">account_tree</span><span>View Causal Diagram</span>`;
+function switchCardView(viewName) {
+  window.state.cardActiveView = viewName;
+  const views = ['detailed', 'summary', 'diagram'];
+  views.forEach(v => {
+    const pane = document.getElementById(`card-view-${v}`);
+    const tab = document.getElementById(`card-tab-${v}`);
+    if (pane) pane.classList.toggle('hidden', v !== viewName);
+    if (tab) {
+      if (v === viewName) {
+        tab.className = "flex-1 py-1.5 px-3 rounded-lg bg-white text-slate-900 shadow-xs font-bold transition flex items-center justify-center gap-1.5 border border-slate-200/60";
+      } else {
+        tab.className = "flex-1 py-1.5 px-3 rounded-lg text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5";
+      }
+    }
+  });
+
+  if (viewName === 'diagram') {
+    setTimeout(renderCardDiagramCurrent, 50);
   }
 }
-window.toggleCardDiagram = toggleCardDiagram;
+window.switchCardView = switchCardView;
+
+function setDiagramViewType(type) {
+  window.state.diagramType = type;
+  const btnGraph = document.getElementById("btn-flow-graph");
+  const btnStepped = document.getElementById("btn-flow-stepped");
+  const graphContainer = document.getElementById("card-diagram-container");
+  const steppedContainer = document.getElementById("card-stepped-container");
+
+  if (type === 'graph') {
+    if (btnGraph) btnGraph.className = "px-2 py-0.5 rounded bg-white text-slate-900 shadow-2xs font-bold";
+    if (btnStepped) btnStepped.className = "px-2 py-0.5 rounded text-slate-600 hover:text-slate-900";
+    if (graphContainer) graphContainer.classList.remove("hidden");
+    if (steppedContainer) steppedContainer.classList.add("hidden");
+    renderCardDiagramCurrent();
+  } else {
+    if (btnGraph) btnGraph.className = "px-2 py-0.5 rounded text-slate-600 hover:text-slate-900";
+    if (btnStepped) btnStepped.className = "px-2 py-0.5 rounded bg-white text-slate-900 shadow-2xs font-bold";
+    if (graphContainer) graphContainer.classList.add("hidden");
+    if (steppedContainer) {
+      steppedContainer.classList.remove("hidden");
+      const ideas = window.state.ideas;
+      const idea = ideas[window.state.currentIdeaIndex] || ideas[0];
+      if (idea) {
+        steppedContainer.innerHTML = renderStyledStepFlow(idea);
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+  }
+}
+window.setDiagramViewType = setDiagramViewType;
+
+function renderCardDiagramCurrent() {
+  const ideas = window.state.ideas;
+  if (!ideas || !ideas.length) return;
+  const idea = ideas[window.state.currentIdeaIndex] || ideas[0];
+  if (!idea) return;
+
+  const diagType = window.state.diagramType || 'graph';
+  if (diagType === 'stepped') {
+    const steppedContainer = document.getElementById("card-stepped-container");
+    if (steppedContainer) {
+      steppedContainer.innerHTML = renderStyledStepFlow(idea);
+      if (window.lucide) lucide.createIcons();
+    }
+  } else {
+    renderIdeaVisualDiagram(idea, 'card-diagram-container');
+  }
+}
 
 function triggerCurrentCardStressTest() {
   const ideas = window.state.ideas;
