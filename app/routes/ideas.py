@@ -98,6 +98,7 @@ def export_idea_markdown(idea_id: str):
         raise HTTPException(status_code=404, detail="Idea not found")
 
     tag_str = ", ".join([f'"{t}"' for t in idea.tags]) if idea.tags else f'"{idea.topic}"'
+    visual_diag = idea.visual_diagram or "graph TD\n  Input --> Process --> Output"
     
     md = f"""---
 title: "{idea.title}"
@@ -123,7 +124,7 @@ type: "mental-model"
 
 ## 📊 Visual System Architecture
 ```mermaid
-{idea.visual_diagram or "graph TD\n  Input --> Process --> Output"}
+{visual_diag}
 ```
 
 ## 🏢 Real-World Case Study

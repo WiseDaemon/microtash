@@ -383,7 +383,7 @@ def test_social_learning_and_notifications():
     print(f"      [OK] Stash successfully cloned into user library with verified clone metrics.")
 
     # 8. Mobile Notification Service verification
-    notif_file = Path("flutter_app/lib/services/notification_service.dart")
+    notif_file = PROJECT_DIR / "flutter_app" / "lib" / "services" / "notification_service.dart"
     assert notif_file.exists(), "NotificationService must exist in Flutter project"
     notif_content = notif_file.read_text(encoding="utf-8")
     assert "scheduleDailyWorkoutReminder" in notif_content
@@ -392,7 +392,7 @@ def test_social_learning_and_notifications():
     print("      [OK] Flutter NotificationService (scheduleDailyWorkoutReminder, checkDueCardsAndNotify) verified.")
 
     # 9. Mobile Workout Screen notification trigger verification
-    workout_file = Path("flutter_app/lib/screens/workout_screen.dart")
+    workout_file = PROJECT_DIR / "flutter_app" / "lib" / "screens" / "workout_screen.dart"
     assert workout_file.exists()
     workout_content = workout_file.read_text(encoding="utf-8")
     assert "NotificationService.checkDueCardsAndNotify" in workout_content
