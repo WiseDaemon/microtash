@@ -346,7 +346,7 @@ def init_db():
                     INSERT INTO ideas (
                         id, title, one_liner, summary, detailed_explanation, example, visual_diagram, boundary, quote, action_item, author, source, source_slug, publisher, copyright_notice, topic,
                         tags, read_time_mins, color_theme, likes, saved_count, is_liked, is_saved, leitner_box, next_review_date, created_at
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 1, ?, ?)
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 1, ?, ?)
                 """, (
                     i["id"], i["title"], i["one_liner"], i["summary"],
                     i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""),
@@ -420,6 +420,7 @@ def init_db():
 def seed_data(conn):
     cursor = conn.cursor()
     now_str = datetime.utcnow().isoformat()
+    today_iso = date.today().isoformat()
 
     # Seed stashes
     for s in DEFAULT_STASHES:
@@ -434,16 +435,18 @@ def seed_data(conn):
         c_notice = generate_copyright_attribution(i["source"], i["author"], i.get("publisher", ""))
         cursor.execute("""
             INSERT OR IGNORE INTO ideas (
-                id, title, one_liner, summary, detailed_explanation, example, visual_diagram, quote, action_item, author, source, source_slug, publisher, copyright_notice, topic,
-                tags, read_time_mins, color_theme, likes, saved_count, is_liked, is_saved, created_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?)
+                id, title, one_liner, summary, detailed_explanation, example, visual_diagram, boundary, quote, action_item, author, source, source_slug, publisher, copyright_notice, topic,
+                tags, read_time_mins, color_theme, likes, saved_count, is_liked, is_saved, leitner_box, next_review_date, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 1, ?, ?)
         """, (
             i["id"], i["title"], i["one_liner"], i["summary"],
             i.get("detailed_explanation", ""), i.get("example", ""), i.get("visual_diagram", ""),
+            i.get("boundary", ""),
             i.get("quote", ""), i.get("action_item", ""), i["author"], i["source"], src_slug,
             i.get("publisher", "Original Publication"), c_notice, i["topic"],
             json.dumps(i.get("tags", [])), i.get("read_time_mins", 1),
-            i.get("color_theme", "indigo"), i.get("likes", 0), i.get("saved_count", 0), now_str
+            i.get("color_theme", "indigo"), i.get("likes", 120), i.get("saved_count", 65),
+            today_iso, now_str
         ))
 
         # Assign to appropriate default stashes
