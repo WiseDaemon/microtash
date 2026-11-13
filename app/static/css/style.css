@@ -77,23 +77,66 @@ html:not(.dark) #card-author {
   color: #1e293b;
 }
 
-html:not(.dark) .bg-slate-900 {
-  background-color: #ffffff !important;
-  border-color: #e2e8f0 !important;
-}
-
-html:not(.dark) .bg-slate-800 {
-  background-color: #f1f5f9 !important;
-  color: #1e293b !important;
-  border-color: #e2e8f0 !important;
-}
-
+/* High-contrast readability safeguards across all elements */
 html:not(.dark) .text-slate-300 {
   color: #334155 !important;
 }
 
 html:not(.dark) .text-slate-400 {
-  color: #64748b !important;
+  color: #475569 !important;
+}
+
+/* Ensure rich markdown and masterclass content has crisp obsidian contrast */
+#card-detailed-content,
+#modal-detailed-explanation,
+#modal-full-mechanism,
+#card-example-content,
+#modal-example,
+#card-boundary-content,
+#modal-boundary-text,
+#modal-full-boundary,
+#card-action-content,
+#modal-action-item,
+#modal-full-action,
+#reader-detailed,
+#reader-example,
+#reader-boundary,
+#reader-pullquote {
+  color: #0f172a !important;
+}
+
+#card-detailed-content p,
+#modal-detailed-explanation p,
+#modal-full-mechanism p,
+#card-example-content p,
+#modal-example p,
+#reader-detailed p,
+#reader-example p {
+  color: #1e293b !important;
+  font-size: 0.875rem !important;
+  line-height: 1.65 !important;
+  font-weight: 400 !important;
+}
+
+#card-detailed-content h4,
+#modal-detailed-explanation h4,
+#modal-full-mechanism h4 {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+#card-detailed-content strong,
+#modal-detailed-explanation strong,
+#modal-full-mechanism strong {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+#card-detailed-content em,
+#modal-detailed-explanation em,
+#modal-full-mechanism em {
+  color: #1e293b !important;
+  font-style: italic !important;
 }
 
 
@@ -317,15 +360,21 @@ html:not(.dark) .text-slate-400 {
 }
 
 /* Nodes in Mermaid SVGs - Modern High-Polish Aesthetic */
-.mermaid svg {
+.mermaid svg,
+[id*="diagram"] svg {
   max-width: 100% !important;
   height: auto !important;
   font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif !important;
+  display: block;
+  margin: 0 auto;
 }
 
 .mermaid .node,
 .mermaid g.node,
-.mermaid [class*="flowchart-"] {
+.mermaid [class*="flowchart-"],
+[id*="diagram"] .node,
+[id*="diagram"] g.node,
+[id*="diagram"] [class*="flowchart-"] {
   cursor: pointer !important;
   pointer-events: all !important;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease !important;
@@ -333,29 +382,39 @@ html:not(.dark) .text-slate-400 {
 
 .mermaid .node rect,
 .mermaid .node circle,
-.mermaid .node polygon {
-  rx: 10px !important;
-  ry: 10px !important;
+.mermaid .node polygon,
+[id*="diagram"] .node rect,
+[id*="diagram"] .node circle,
+[id*="diagram"] .node polygon {
+  rx: 12px !important;
+  ry: 12px !important;
   stroke-width: 1.5px !important;
-  filter: drop-shadow(0 2px 4px rgba(15, 23, 42, 0.05)) !important;
+  filter: drop-shadow(0 2px 6px rgba(15, 23, 42, 0.06)) !important;
 }
 
-.mermaid .node:hover {
-  filter: drop-shadow(0 6px 14px rgba(37, 99, 235, 0.2)) !important;
-  transform: translateY(-1.5px);
+.mermaid .node:hover,
+[id*="diagram"] .node:hover {
+  filter: drop-shadow(0 6px 16px rgba(37, 99, 235, 0.22)) !important;
+  transform: translateY(-2px);
 }
 
 .mermaid .node .label,
-.mermaid .nodeLabel {
+.mermaid .nodeLabel,
+.mermaid .node text,
+[id*="diagram"] .node .label,
+[id*="diagram"] .nodeLabel,
+[id*="diagram"] .node text {
   font-family: 'Plus Jakarta Sans', 'Inter', sans-serif !important;
   font-weight: 600 !important;
   font-size: 12.5px !important;
   letter-spacing: -0.01em !important;
   color: #0F172A !important;
+  fill: #0F172A !important;
 }
 
 /* Subgraphs / Clusters in Mermaid */
-.mermaid .cluster rect {
+.mermaid .cluster rect,
+[id*="diagram"] .cluster rect {
   rx: 16px !important;
   ry: 16px !important;
   fill: #F8FAFC !important;
@@ -364,7 +423,8 @@ html:not(.dark) .text-slate-400 {
   stroke-dasharray: 4 4 !important;
 }
 
-.mermaid .cluster .label {
+.mermaid .cluster .label,
+[id*="diagram"] .cluster .label {
   font-family: 'Plus Jakarta Sans', sans-serif !important;
   font-weight: 800 !important;
   font-size: 11px !important;
@@ -375,29 +435,32 @@ html:not(.dark) .text-slate-400 {
 }
 
 /* Edges and Connectors in Mermaid SVGs */
-.mermaid .edgePath path {
-  stroke: #64748B !important;
+.mermaid .edgePath path,
+[id*="diagram"] .edgePath path {
+  stroke: #475569 !important;
   stroke-width: 2px !important;
   stroke-linecap: round !important;
   stroke-linejoin: round !important;
   transition: stroke 0.2s ease, stroke-width 0.2s ease !important;
 }
 
-.mermaid marker path {
-  fill: #64748B !important;
+.mermaid marker path,
+[id*="diagram"] marker path {
+  fill: #475569 !important;
   stroke: none !important;
 }
 
-.mermaid .edgeLabel {
+.mermaid .edgeLabel,
+[id*="diagram"] .edgeLabel {
   background-color: #FFFFFF !important;
-  color: #475569 !important;
+  color: #1E293B !important;
   font-size: 11px !important;
   font-weight: 600 !important;
   font-family: 'Inter', sans-serif !important;
-  padding: 2px 6px !important;
-  border-radius: 6px !important;
+  padding: 3px 8px !important;
+  border-radius: 8px !important;
   border: 1px solid #E2E8F0 !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
 }
 
 /* ==========================================================================

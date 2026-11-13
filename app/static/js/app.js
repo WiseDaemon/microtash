@@ -281,18 +281,34 @@ function initMermaidIfNeeded() {
     try {
       mermaid.initialize({
         startOnLoad: false,
-        theme: 'default',
+        theme: 'base',
         securityLevel: 'loose',
+        flowchart: {
+          curve: 'basis',
+          htmlLabels: true,
+          nodeSpacing: 50,
+          rankSpacing: 50,
+          padding: 16
+        },
         themeVariables: {
           darkMode: false,
           background: '#FFFFFF',
-          primaryColor: '#EFF6FF',
-          primaryTextColor: '#1E40AF',
-          primaryBorderColor: '#BFDBFE',
-          lineColor: '#64748B',
+          primaryColor: '#EEF2FF',
+          primaryTextColor: '#0F172A',
+          primaryBorderColor: '#6366F1',
+          lineColor: '#475569',
           secondaryColor: '#FEF3C7',
-          tertiaryColor: '#F1F5F9',
-          fontFamily: 'Inter, system-ui, sans-serif'
+          secondaryTextColor: '#78350F',
+          secondaryBorderColor: '#F59E0B',
+          tertiaryColor: '#ECFDF5',
+          tertiaryTextColor: '#064E3B',
+          tertiaryBorderColor: '#10B981',
+          edgeLabelBackground: '#FFFFFF',
+          nodeBorder: '#CBD5E1',
+          clusterBkg: '#F8FAFC',
+          clusterBorder: '#CBD5E1',
+          fontFamily: "'Plus Jakarta Sans', 'Inter', system-ui, sans-serif",
+          fontSize: '13px'
         }
       });
       mermaidInitialized = true;
@@ -305,6 +321,8 @@ function initMermaidIfNeeded() {
 async function renderIdeaVisualDiagram(idea, targetElId) {
   const container = document.getElementById(targetElId);
   if (!container || !idea) return;
+
+  container.classList.add('mermaid');
 
   // In modal, if user selected Adaptive Step Flow, render directly
   if (targetElId === 'modal-diagram-render' && window.state.diagramViewMode === 'flow') {
@@ -684,10 +702,14 @@ function setDiagramViewMode(mode) {
 function updateSwipeCardDisplay() {
   const ideas = window.state.ideas;
   if (!ideas.length) {
-    document.getElementById("card-title").textContent = "All caught up!";
-    document.getElementById("card-one-liner").textContent = "You've absorbed all microlearning cards in this filter.";
-    document.getElementById("card-summary").textContent = "Switch topics or use the AI Stashifier to generate more bite-sized wisdom from any book or article!";
-    document.getElementById("deck-progress").textContent = "(0 of 0)";
+    const emptyCt = document.getElementById("card-title");
+    if (emptyCt) emptyCt.textContent = "All caught up!";
+    const emptyCol = document.getElementById("card-one-liner");
+    if (emptyCol) emptyCol.textContent = "You've absorbed all microlearning cards in this filter.";
+    const emptyCs = document.getElementById("card-summary");
+    if (emptyCs) emptyCs.textContent = "Switch topics or use the AI Stashifier to generate more bite-sized wisdom from any book or article!";
+    const emptyDp = document.getElementById("deck-progress");
+    if (emptyDp) emptyDp.textContent = "(0 of 0)";
     return;
   }
 
@@ -711,13 +733,26 @@ function updateSwipeCardDisplay() {
     glowEl.style.background = `radial-gradient(circle, ${getTopicGlowColor(idea.topic)} 0%, rgba(0,0,0,0) 70%)`;
   }
 
-  document.getElementById("card-read-time").textContent = `${idea.read_time_mins || 1} min read`;
-  document.getElementById("card-title").textContent = idea.title;
-  document.getElementById("card-one-liner").textContent = idea.one_liner;
-  document.getElementById("card-summary").textContent = idea.summary;
-  document.getElementById("card-author").textContent = idea.author;
-  document.getElementById("card-source").textContent = idea.source;
-  document.getElementById("card-likes-val").textContent = idea.likes;
+  const rtEl = document.getElementById("card-read-time");
+  if (rtEl) rtEl.textContent = `${idea.read_time_mins || 1} min read`;
+
+  const titleEl = document.getElementById("card-title");
+  if (titleEl) titleEl.textContent = idea.title;
+
+  const oneLinerEl = document.getElementById("card-one-liner");
+  if (oneLinerEl) oneLinerEl.textContent = idea.one_liner;
+
+  const summaryEl = document.getElementById("card-summary");
+  if (summaryEl) summaryEl.textContent = idea.summary;
+
+  const authorEl = document.getElementById("card-author");
+  if (authorEl) authorEl.textContent = idea.author;
+
+  const sourceEl = document.getElementById("card-source");
+  if (sourceEl) sourceEl.textContent = idea.source;
+
+  const likesValEl = document.getElementById("card-likes-val");
+  if (likesValEl) likesValEl.textContent = idea.likes;
 
   // Like button visual
   const likeBtn = document.getElementById("icon-like");
@@ -733,8 +768,11 @@ function updateSwipeCardDisplay() {
   }
 
   // Back face elements (Detailed / Flip)
-  document.getElementById("card-back-quote").textContent = idea.quote ? `“${idea.quote.replace(/^["“”]|["“”]$/g, '')}”` : `“${idea.one_liner}”`;
-  document.getElementById("card-back-action").textContent = idea.action_item || "Reflect on this mental model and observe how it applies in your decisions today.";
+  const cbQuote = document.getElementById("card-back-quote");
+  if (cbQuote) cbQuote.textContent = idea.quote ? `“${idea.quote.replace(/^["“”]|["“”]$/g, '')}”` : `“${idea.one_liner}”`;
+
+  const cbAction = document.getElementById("card-back-action");
+  if (cbAction) cbAction.textContent = idea.action_item || "Reflect on this mental model and observe how it applies in your decisions today.";
 
   const exampleEl = document.getElementById("card-back-example");
   if (exampleEl) {
@@ -749,7 +787,10 @@ function updateSwipeCardDisplay() {
   }
 
   // Render Visual Architecture Diagram on Card Back
-  renderIdeaVisualDiagram(idea, 'card-back-diagram-render');
+  const cbDiag = document.getElementById('card-back-diagram-render');
+  if (cbDiag) {
+    renderIdeaVisualDiagram(idea, 'card-back-diagram-render');
+  }
 
   if (window.lucide) lucide.createIcons();
 }
@@ -2285,9 +2326,12 @@ function openOnboardingQuiz() {
   const modal = document.getElementById("onboarding-quiz-modal");
   if (!modal) return;
   modal.classList.remove("hidden");
-  document.getElementById("quiz-step-1").classList.remove("hidden");
-  document.getElementById("quiz-step-2").classList.add("hidden");
-  document.getElementById("quiz-step-result").classList.add("hidden");
+  const s1 = document.getElementById("quiz-step-1");
+  if (s1) s1.classList.remove("hidden");
+  const s2 = document.getElementById("quiz-step-2");
+  if (s2) s2.classList.add("hidden");
+  const sr = document.getElementById("quiz-step-result");
+  if (sr) sr.classList.add("hidden");
   if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
@@ -2298,16 +2342,19 @@ function closeOnboardingQuiz() {
 
 function selectQuizBlindspot(type) {
   userQuizProfile.blindspot = type;
-  document.getElementById("quiz-step-1").classList.add("hidden");
-  document.getElementById("quiz-step-2").classList.remove("hidden");
+  const s1 = document.getElementById("quiz-step-1");
+  if (s1) s1.classList.add("hidden");
+  const s2 = document.getElementById("quiz-step-2");
+  if (s2) s2.classList.remove("hidden");
   if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 function selectQuizContext(ctx) {
   userQuizProfile.context = ctx;
-  document.getElementById("quiz-step-2").classList.add("hidden");
+  const s2 = document.getElementById("quiz-step-2");
+  if (s2) s2.classList.add("hidden");
   const resultStep = document.getElementById("quiz-step-result");
-  resultStep.classList.remove("hidden");
+  if (resultStep) resultStep.classList.remove("hidden");
 
   // Determine Archetype
   let title = "The First-Principles Strategist";
@@ -2344,16 +2391,20 @@ function selectQuizContext(ctx) {
     ];
   }
 
-  document.getElementById("quiz-archetype-title").textContent = title;
-  document.getElementById("quiz-archetype-desc").textContent = desc;
+  const archTitle = document.getElementById("quiz-archetype-title");
+  if (archTitle) archTitle.textContent = title;
+  const archDesc = document.getElementById("quiz-archetype-desc");
+  if (archDesc) archDesc.textContent = desc;
 
   const cardsContainer = document.getElementById("quiz-recommended-cards");
-  cardsContainer.innerHTML = cards.map(c => `
-    <div class="p-2.5 rounded-xl bg-white border border-slate-200 flex items-center justify-between shadow-2xs">
-      <span class="font-bold text-slate-900 text-xs">${c.title}</span>
-      <span class="text-[10px] uppercase font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">${c.topic}</span>
-    </div>
-  `).join("");
+  if (cardsContainer) {
+    cardsContainer.innerHTML = cards.map(c => `
+      <div class="p-2.5 rounded-xl bg-white border border-slate-200 flex items-center justify-between shadow-2xs">
+        <span class="font-bold text-slate-900 text-xs">${c.title}</span>
+        <span class="text-[10px] uppercase font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">${c.topic}</span>
+      </div>
+    `).join("");
+  }
 
   if (typeof lucide !== 'undefined') lucide.createIcons();
 }
@@ -2881,13 +2932,18 @@ async function openBookDetailModal(bookSlug) {
     if (!res.ok) return;
     const book = await res.json();
 
-    document.getElementById("book-modal-title").textContent = book.title;
-    document.getElementById("book-modal-author-pub").textContent = `By ${book.author} • Published by ${book.publisher || 'Original Publication'}`;
-    document.getElementById("book-modal-topic").textContent = (book.topic || 'Mental Models').toUpperCase();
-    document.getElementById("book-modal-ideas-count").innerHTML = `<span class="material-symbols-outlined text-[13px]">flash_on</span><span>${(book.ideas || []).length} Models</span>`;
+    const bTitle = document.getElementById("book-modal-title");
+    if (bTitle) bTitle.textContent = book.title;
+    const bAuthor = document.getElementById("book-modal-author-pub");
+    if (bAuthor) bAuthor.textContent = `By ${book.author} • Published by ${book.publisher || 'Original Publication'}`;
+    const bTopic = document.getElementById("book-modal-topic");
+    if (bTopic) bTopic.textContent = (book.topic || 'Mental Models').toUpperCase();
+    const bCount = document.getElementById("book-modal-ideas-count");
+    if (bCount) bCount.innerHTML = `<span class="material-symbols-outlined text-[13px]">flash_on</span><span>${(book.ideas || []).length} Models</span>`;
     
     const cNotice = book.copyright_notice || `Transformative educational commentary & mental model summary of '${book.title}' by ${book.author}. All original copyrights remain with the author and publisher.`;
-    document.getElementById("book-modal-copyright-notice").textContent = cNotice;
+    const bNotice = document.getElementById("book-modal-copyright-notice");
+    if (bNotice) bNotice.textContent = cNotice;
 
     const cardsList = document.getElementById("book-modal-cards-list");
     if (cardsList) {
