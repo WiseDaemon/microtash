@@ -86,7 +86,7 @@ html:not(.dark) .text-slate-400 {
   color: #475569 !important;
 }
 
-/* Ensure rich markdown and masterclass content has crisp obsidian contrast */
+/* Ensure rich markdown, masterclass treatise, and deep-dive modal content has crisp obsidian contrast */
 #card-detailed-content,
 #modal-detailed-explanation,
 #modal-full-mechanism,
@@ -98,20 +98,30 @@ html:not(.dark) .text-slate-400 {
 #card-action-content,
 #modal-action-item,
 #modal-full-action,
+#modal-full-example,
 #reader-detailed,
 #reader-example,
 #reader-boundary,
-#reader-pullquote {
+#reader-pullquote,
+#deep-dive-modal,
+#modal-slide-1,
+#modal-slide-2,
+#modal-slide-3,
+#modal-slide-4,
+#modal-slide-5 {
   color: #0f172a !important;
 }
 
 #card-detailed-content p,
 #modal-detailed-explanation p,
 #modal-full-mechanism p,
+#modal-full-example p,
 #card-example-content p,
 #modal-example p,
 #reader-detailed p,
-#reader-example p {
+#reader-example p,
+#modal-slide-4 p,
+#modal-slide-1 p {
   color: #1e293b !important;
   font-size: 0.875rem !important;
   line-height: 1.65 !important;
@@ -120,21 +130,36 @@ html:not(.dark) .text-slate-400 {
 
 #card-detailed-content h4,
 #modal-detailed-explanation h4,
-#modal-full-mechanism h4 {
+#modal-full-mechanism h4,
+#modal-full-example h4,
+#modal-slide-4 h4 {
   color: #0f172a !important;
   font-weight: 700 !important;
 }
 
 #card-detailed-content strong,
 #modal-detailed-explanation strong,
-#modal-full-mechanism strong {
+#modal-full-mechanism strong,
+#modal-full-example strong,
+#reader-detailed strong,
+#reader-example strong,
+#modal-slide-1 strong,
+#modal-slide-2 strong,
+#modal-slide-3 strong,
+#modal-slide-4 strong,
+#modal-slide-5 strong,
+#deep-dive-modal strong {
   color: #0f172a !important;
   font-weight: 700 !important;
 }
 
 #card-detailed-content em,
 #modal-detailed-explanation em,
-#modal-full-mechanism em {
+#modal-full-mechanism em,
+#modal-full-example em,
+#reader-detailed em,
+#reader-example em,
+#modal-slide-4 em {
   color: #1e293b !important;
   font-style: italic !important;
 }

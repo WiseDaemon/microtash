@@ -322,14 +322,13 @@ function sanitizeAndElevateMermaid(diag, targetElId) {
   if (!diag) return '';
   let clean = diag.trim().replace(/^```mermaid\s*/i, '').replace(/```\s*$/, '').trim();
 
-  // If rendering inside a card or modal-full-diagram, or viewport is mobile, convert graph LR to graph TD
-  const isCard = targetElId.includes('card') || targetElId.includes('modal-full') || window.innerWidth < 768;
-  if (isCard) {
-    clean = clean.replace(/^graph\s+LR\b/m, 'graph TD');
-  }
+  // Always normalize diagrams to top-down graph TD so flowcharts fit cards, modals, and mobile screens without squashing
+  clean = clean.replace(/^(graph|flowchart)\s+LR\b/m, '$1 TD');
 
-  // Wrap unquoted parentheses in node definitions like C[Linear Return on Capital O(N)] -> C["Linear Return on Capital O(N)"]
-  clean = clean.replace(/\[([^\"\]\n]*\([^\)\]\n]+\)[^\"\]\n]*)\]/g, '["$1"]');
+  // Auto-quote unquoted node definitions: id[Some Text] -> id["Some Text"]
+  clean = clean.replace(/([a-zA-Z0-9_]+)\[([^"\]\n][^\]\n]*)\]/g, '$1["$2"]');
+  // Auto-quote unquoted diamond questions: id{Some Question?} -> id{"Some Question?"}
+  clean = clean.replace(/([a-zA-Z0-9_]+)\{([^"\}\n][^\}\n]*)\}/g, '$1{"$2"}');
 
   // Map dark fill hex codes to light, high-contrast pastel colors
   const darkToPastel = {

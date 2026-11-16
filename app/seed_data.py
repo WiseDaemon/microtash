@@ -64,15 +64,21 @@ In corporate finance, John Bogle transformed asset management by inverting the e
 
 In software reliability engineering, Netflix implemented inversion through Chaos Engineering. Rather than hoping distributed microservices would survive unannounced AWS outages, engineers created 'Chaos Monkey'—an automated daemon that randomly terminates production servers during peak business hours. By inverting reliability into deliberate failure injection, engineers were forced to architect stateless failovers and self-healing services that withstand catastrophic infrastructure failures without customer interruption.""",
         "boundary": """Do not apply inversion dogmatically in early-stage greenfield exploration or artistic creation. Inversion is a risk-mitigation and downside-protection tool; when you are exploring open-ended possibility spaces with negligible downside and unlimited positive optionality, premature inversion induces risk-aversion, over-filtering, and paralysis. Use inversion after hypothesis validation, not before.""",
-        "visual_diagram": """graph LR
-  subgraph Standard["Standard Approach (Fragile)"]
-    A[Strive for Brilliance] --> B[Complex Forecasting] --> C[Hidden Landmines & Failure]
-  end
-  subgraph Inversion["Inversion Approach (Robust)"]
-    D[Define Absolute Catastrophe] --> E[Systematically Eliminate Traps] --> F[Success as Default Residue]
-  end
-  style Standard fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
-  style Inversion fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+        "visual_diagram": """graph TD
+  Problem["🎯 Complex Problem or Strategic Goal"]
+  Problem -->|Standard Forward Thinking| Forward["📈 'How do we achieve brilliant success?'<br/>• Over-optimistic forecasting<br/>• Blind to hidden landmines"]
+  Problem -->|Inversion Method| Inverted["🔄 'What guarantees catastrophic failure?'<br/>• Identify every ruin vector<br/>• Pre-Mortem vulnerability audit"]
+  
+  Forward --> ForwardFail["💥 Severe Fragility & Unseen Ruin"]
+  Inverted --> Guardrails["🛡️ Install Immutable Safety Guardrails"]
+  Guardrails --> Enduring["🏆 Enduring Success as Default Residue"]
+
+  style Problem fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style Forward fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Inverted fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style ForwardFail fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Guardrails fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style Enduring fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """Invert, always invert: Turn a situation or problem upside down. What happens if all our assumptions are wrong?""",
         "action_item": """Run a 30-Minute Pre-Mortem Protocol: Before signing off on your next major initiative, gather your core stakeholders. Announce: 'Imagine it is 12 months from now, and this initiative has failed catastrophically. What caused the disaster?' Write down every vulnerability and install 2 preventative guardrails today.""",
         "author": "Charlie Munger",
@@ -109,11 +115,20 @@ Musk looked up the spot commodity prices of each material on the London Metal Ex
 Similarly, in battery manufacturing, early electric vehicle skeptics claimed lithium-ion battery packs would never drop below $600 per kilowatt-hour because 'that was what they historically cost.' By breaking down the raw spot prices of cobalt, nickel, aluminum, carbon, and polymers on the open market ($80/kWh of raw materials), Tesla focused engineering solely on chemical refinement and manufacturing scale, driving battery pack costs below $120/kWh and making mass-market electric transit economically competitive with internal combustion engines.""",
         "boundary": """Do not apply first-principles thinking to every trivial everyday decision. Re-evaluating the physical chemistry of your morning coffee or questioning established municipal traffic conventions wastes vital cognitive bandwidth. Reserve first-principles exclusively for decisions where stakes are immense, conventional wisdom has plateaued, or you suspect a massive delta between actual cost and market convention.""",
         "visual_diagram": """graph TD
-  A[Complex Problem / Convention] -->|Deconstruct Assumptions| B[Foundational Truths & Physics]
-  B -->|Reason Upwards from Scratch| C[Original Step-Function Solution]
-  style A fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
-  style B fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
-  style C fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+  Problem["🧩 Complex Industry Problem or High Cost"]
+  Problem -->|Analogy / Benchmarking| Analogy["📋 Copy Competitors with 5% Tweaks<br/>• Trapped in local optima<br/>• Accepts historical markups"]
+  Problem -->|First-Principles Thinking| FirstP["🔬 Deconstruct to Foundational Truths<br/>• Raw physics & spot material costs<br/>• Strip away dogma & conventions"]
+  
+  Analogy --> Incremental["🐌 Slow, Marginal Improvement"]
+  FirstP --> GroundUp["⚙️ Ground-Up Engineering Synthesis"]
+  GroundUp --> Breakthrough["🚀 10x Step-Function Breakthrough"]
+
+  style Problem fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style Analogy fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style FirstP fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Incremental fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style GroundUp fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style Breakthrough fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """First principles is a physics way of looking at the world. You boil things down to the most fundamental truths and say, 'What are we sure is true?'""",
         "action_item": """Isolate the single most expensive recurring cost or operational bottleneck in your business. Deconstruct it into its raw fundamental materials, human hours, and compute costs. Calculate the true physical floor cost and evaluate the delta.""",
         "author": "Elon Musk & Aristotle",
@@ -151,15 +166,25 @@ Buffett refused to deploy capital into internet infrastructure and dot-com softw
 In contrast, Long-Term Capital Management (LTCM)—a hedge fund founded by Nobel laureate economists and renowned Wall Street bond traders—possessed unparalleled mathematical edge in fixed-income arbitrage. However, in 1998, they stepped outside their circle by taking massive leveraged directional bets on Russian sovereign debt and equity volatility. When Russia unexpectedly defaulted on its domestic debt, LTCM lost $4.6 billion in six weeks and required a Federal Reserve-orchestrated bailout to prevent systemic Wall Street collapse.""",
         "boundary": """Do not mistake the circle of competence for intellectual stagnation. Having a defined perimeter is not an excuse to refuse learning new domains. It means acknowledging your current level of understanding honestly: when exploring a new field, recognize that you are a novice, reduce bet size, consult verified domain masters, and avoid making irreversible leveraged commitments.""",
         "visual_diagram": """graph TD
-  subgraph Competence_Map["Boundary of Competence"]
-    Inside["INSIDE CIRCLE<br/>Authentic Edge & Mastery<br/>(Bet Confidently)"]
-    Perimeter["PERIMETER<br/>Intellectual Honesty<br/>('I Do Not Know')"]
-    Outside["OUTSIDE PERIMETER<br/>Blind Spots & Noise<br/>(Pass / Delegate)"]
-    Inside --> Perimeter --> Outside
-  end
-  style Inside fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  Opportunity["💼 New Investment or High-Stakes Bet"]
+  Opportunity --> PerimeterCheck{"Perimeter Audit: Do you have verifiable edge?"}
+  
+  PerimeterCheck -->|Inside Circle| Inside["🟢 INSIDE CIRCLE: Authentic Mastery<br/>• Sweat-and-scars experience<br/>• Deep structural understanding"]
+  PerimeterCheck -->|On Boundary| Perimeter["🟡 PERIMETER: The 'Too Hard' Pile<br/>• Intellectual honesty<br/>• 'I do not know'"]
+  PerimeterCheck -->|Outside Circle| Outside["🔴 OUTSIDE CIRCLE: Chauffeur Knowledge<br/>• Parroting buzzwords<br/>• Gambling without edge"]
+  
+  Inside --> Bet["🚀 Bet with Sizable Conviction"]
+  Perimeter --> Study["📚 Deep Research / Reduce Position Size"]
+  Outside --> Pass["🛑 Pass Immediately / Say NO"]
+
+  style Opportunity fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style PerimeterCheck fill:#F1F5F9,stroke:#64748B,stroke-width:1.5px,color:#0F172A
+  style Inside fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
   style Perimeter fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
-  style Outside fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239""",
+  style Outside fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Bet fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Study fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style Pass fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239""",
         "quote": "It is not a competency if you don't know the edge of it.",
         "action_item": """Draw two concentric circles on paper. In the inner circle, write the 3 domains where you possess verifiable, differentiated judgment. In the outer circle, write 3 trending domains where you have opinions but zero operational track record. Vow to make zero high-stakes bets in the outer ring this quarter.""",
         "author": "Warren Buffett",
@@ -199,14 +224,22 @@ In modern urban planning, the 'Braess's Paradox' and induced demand demonstrate 
 
 In monetary economics, zero-interest-rate policies (ZIRP) implemented after the 2008 financial crisis aimed to stimulate corporate capital investment (first-order). The second- and third-order consequences over the subsequent decade included massive asset price inflation in residential housing, an explosion of unprofitable 'zombie' companies kept alive by cheap debt, and an intense search for yield that fueled reckless speculation in speculative assets.""",
         "boundary": """Avoid 'paralysis by analysis' in trivial low-stakes decisions. Attempting to calculate the fifth-order consequences of what to order for lunch wastes precious mental energy. Second-order thinking is mandatory for high-stakes, asymmetric, irreversible decisions where complex human feedback and multi-year time horizons govern the outcome.""",
-        "visual_diagram": """graph LR
-  Decision[Decision / Policy] -->|Immediate| R1[1st Order: Direct Gratification]
-  R1 -->|6-12 Months| R2[2nd Order: Systemic Adaptations & Feedback]
-  R2 -->|2-5 Years| R3[3rd Order: Compounding Asymmetric Outcome]
-  style Decision fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
-  style R1 fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
-  style R2 fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
-  style R3 fill:#EEF2FF,stroke:#818CF8,stroke-width:1.5px,color:#312E81""",
+        "visual_diagram": """graph TD
+  Intervention["⚡ Initial Decision, Policy or Strategy Shift"]
+  Intervention --> TimeHorizon{"Evaluation Horizon"}
+  
+  TimeHorizon -->|Immediate Intuition (1-30 Days)| FirstOrder["1️⃣ First-Order Effect<br/>• Fast gratification & obvious metric boost<br/>• Zero consideration of feedback loops"]
+  FirstOrder --> FragilePayoff["⚠️ Unintended Catastrophic Systemic Backlash"]
+  
+  TimeHorizon -->|Second & Third-Order Systems Thinking| HighOrder["2️⃣ Second & Third-Order Modeling (1-5 Years)<br/>• How will competitors, users & markets adapt?<br/>• Anticipate dynamic counter-moves"]
+  HighOrder --> MoatPayoff["🏰 Asymmetric Compounding Advantage & Generational Moat"]
+
+  style Intervention fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style TimeHorizon fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style FirstOrder fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style FragilePayoff fill:#FFF1F2,stroke:#F43F5E,stroke-width:2px,color:#9F1239
+  style HighOrder fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style MoatPayoff fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """Failing to consider second- and third-order consequences is the cause of a great many painfully bad decisions.""",
         "action_item": """Before approving any policy change, price shift, or strategic pivot, draw 3 columns: 'Immediate Consequence (1-30 Days)', 'Stakeholder Adaptation (3-12 Months)', and 'Compounding Equilibrium (2-5 Years)'. Force your team to defend the proposal under the third column.""",
         "author": "Howard Marks & Ray Dalio",
@@ -244,18 +277,21 @@ Popularized by David Allen in *Getting Things Done* and mathematically generaliz
 
 Similarly, in elite athletic conditioning, Russian weightlifting methodology pioneered 'greasing the groove'—performing sub-maximal repetitions (such as doing two pull-ups or a single kettlebell snatch whenever walking past a doorway) throughout the day without inducing muscular fatigue or lactic acid accumulation. By keeping each bout under 120 seconds, athletes logged tens of thousands of neuromuscular practice reps annually without neural burnout, proving that gateway frequency systematically outperforms sporadic exhaustion.""",
         "boundary": """Do not apply the Two-Minute Rule to deep analytical synthesis, strategic negotiation, or creative architectural design. If you spend your working day continuously executing two-minute administrative tasks (answering pings, triaging micro-emails), you fall into the 'Urgency Trap' and trigger chronic attention residue. The Two-Minute Rule is strictly an initiation gateway for high-leverage habits or an immediate triage mechanism for trivial maintenance, never an operating system for substantive cognitive output.""",
-        "visual_diagram": """graph LR
-  subgraph Traditional["Traditional Approach (High Friction)"]
-    A[Massive Intimidating Goal] -->|Triggers Amygdala Threat| B[Severe Task Paralysis]
-    B -->|Guilt & Avoidance| C[Perpetual Procrastination]
-  end
-  subgraph Gateway["Two-Minute Gateway Protocol"]
-    D[Massive Goal] -->|Radical Truncation| E[Sub-120s Micro Action]
-    E -->|Bypasses Friction| F[Physical Initiation State]
-    F -->|Zeigarnik Effect| G[Kinetic Momentum & Deep Flow]
-  end
-  style Traditional fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
-  style Gateway fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+        "visual_diagram": """graph TD
+  Goal["🎯 Massive, Intimidating Habit or Task"]
+  Goal -->|Traditional Framing| Heavy["🧗 Attempt 90m Workout or Book Draft<br/>• Massive cognitive activation energy<br/>• Amygdala threat avoidance triggered"]
+  Goal -->|Two-Minute Rule| Micro["⚡ Truncate to Sub-120s Gateway Action<br/>• 'Put on gym shoes' / 'Write 1 sentence'<br/>• Bypasses psychological friction"]
+  
+  Heavy --> Procrastinate["❌ Task Paralysis & Avoidance Loop"]
+  Micro --> Initiate["✅ Physical Action Initiated"]
+  Initiate --> Zeigarnik["🌊 Zeigarnik Momentum: Kinetic Flow State"]
+
+  style Goal fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style Heavy fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Micro fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Procrastinate fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Initiate fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Zeigarnik fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A""",
         "quote": """A habit must be established before it can be improved. If you can't learn the basic skill of showing up, you will never master the finer details.""",
         "action_item": """Select your single most procrastinated project today. Shrink its first step into a physical action that takes under 120 seconds (e.g., opening a terminal or creating a single slide). Execute it immediately.""",
         "author": "James Clear",
@@ -296,13 +332,21 @@ In software engineering, Bill Gates famously took bi-annual 'Think Weeks' throug
 Theoretical physicist Peter Higgs, who predicted the existence of the Higgs boson particle, attributed his Nobel Prize-winning breakthrough to a complete absence of modern communication interruptions. Higgs famously worked without a telephone, refused to use computers, and never checked email, stating: 'Today I wouldn't get an academic job. It's as simple as that. I wouldn't be regarded as productive enough because I wrote only a handful of papers.' Yet his deep immersion cracked one of the greatest riddles in the Standard Model of particle physics.""",
         "boundary": """Deep work is metabolically exhausting. Empirical neuroscience indicates that even elite performers (concert violinists, grandmasters, mathematicians) can sustain at most 3 to 4 hours of true deep work per day. Attempting to force 8 continuous hours of deep work leads to cognitive degradation. The remainder of the workday should be allocated to low-friction administrative coordination, exercise, and deep biological recovery.""",
         "visual_diagram": """graph TD
-  TaskA[Deep Work Project A] -->|10-Second Inbox / Slack Glance| TaskB[Task B Interrupt]
-  TaskB -->|Attempt to Return| Residue[Cognitive Residue Clogs Working Memory]
-  Residue -->|20+ Minutes Cognitive Drag| Frag[Degraded Processing Speed & Surface Work]
-  style TaskA fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
-  style TaskB fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
-  style Residue fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
-  style Frag fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A""",
+  DeepFocus["🧠 Deep High-Leverage Strategic Work"]
+  DeepFocus --> Impulse{"Incoming Distraction Stimulus"}
+  
+  Impulse -->|Check Phone / Slack ('Just 10 seconds')| Switch["📱 Rapid Context Switch<br/>• Attention residue fragments working memory<br/>• Brain remains half-processing the message"]
+  Switch --> Tax["⏳ 23-Minute Cognitive Refocus Tax<br/>• Surface-level thinking & severe cognitive exhaustion"]
+  
+  Impulse -->|Monastic Attention Barrier| Shield["🛡️ Full Environmental Shielding<br/>• Zero notifications & asynchronous communication<br/>• Continuous immersion in flow"]
+  Shield --> Breakthrough["💎 Breakthrough Insights & Elite 10x Velocity"]
+
+  style DeepFocus fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style Impulse fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style Switch fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Tax fill:#FFF1F2,stroke:#F43F5E,stroke-width:2px,color:#9F1239
+  style Shield fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style Breakthrough fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """To produce at your peak level you need to work for extended periods with full concentration on a single task free from distraction.""",
         "action_item": """Institute a 'Bunker Block' Tomorrow Morning: Set your phone in another room on airplane mode. Block out 90 minutes on your calendar from 9:00 AM to 10:30 AM. Work on your single highest-leverage strategic problem with zero browser tabs open except the active document.""",
         "author": "Cal Newport",
@@ -339,19 +383,23 @@ Every affirmative commitment ($C_1$) carries an implicit, permanent negative bet
 Similarly, in investment management, Warren Buffett and Charlie Munger operate Berkshire Hathaway with an extreme 'Hell Yeah or No' hurdle rate. Despite receiving hundreds of acquisition pitches annually, Berkshire's investment committee frequently goes 18 to 24 months without executing a single acquisition, letting tens of billions in cash sit idle in short-term Treasuries. They wait patiently at the plate like Ted Williams, refusing to swing at pitches outside their sweet spot until a fat, undeniable 10/10 pitch enters their circle of competence.""",
         "boundary": """Do not apply the 'Hell Yeah or No' filter during the exploratory apprenticeship phase of your career, or when entering a brand-new domain where you have zero signal. In the early stages of a career, your primary objective is variance generation and luck surface area: you must say 'Yes' to almost everything to discover where your latent talent, market demand, and intrinsic obsession intersect. Sivers' rule is a scaling and defense filter for individuals who have already established product-market fit or professional traction and are drowning in incoming demand.""",
         "visual_diagram": """graph TD
-  subgraph Conventional["Conventional Acceptance Trap"]
-    A[Incoming Opportunity] -->|Evaluated as 'Pretty Good'| B[Agreed Out of Politeness / Vanity]
-    B --> C[Calendar Filled with Mediocre Obligations]
-    C --> D[Zero Bandwidth for Asymmetric Breakthroughs]
-  end
-  subgraph Bimodal["Bimodal Sivers Filter"]
-    E[Incoming Opportunity] -->|Enthusiasm < 9/10| F[Immediate, Graceful 'NO']
-    E -->|Visceral 9 or 10/10| G[Total All-In 'HELL YEAH!']
-    F --> H[Preserves Pristine Whitespace & Optionality]
-    H --> G
-  end
-  style Conventional fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
-  style Bimodal fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+  Incoming["📩 Incoming Invite, Opportunity or Deal"]
+  Incoming --> SiversFilter{"Visceral Enthusiasm Rating (1-10)<br/>*Rule: The number 7 is strictly banned*"}
+  
+  SiversFilter -->|Score 1 to 6: Lukewarm / Obligatory| Decline["❌ Polite, Immediate 'NO'<br/>• Protects cognitive sanity<br/>• Eliminates calendar clutter"]
+  SiversFilter -->|Score 9 or 10: Pure Excitement| Accept["🔥 Uncompromising 'HELL YEAH!'<br/>• Total all-in execution<br/>• World-class commitment"]
+  
+  Decline --> Whitespace["✨ Pristine Whitespace & High Optionality"]
+  Whitespace --> Breakthrough["🚀 Capacity Ready for 100x Breakthroughs"]
+  Accept --> Mastery["🌟 Extraordinary Compound Value"]
+
+  style Incoming fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style SiversFilter fill:#F1F5F9,stroke:#64748B,stroke-width:1.5px,color:#0F172A
+  style Decline fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Accept fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Whitespace fill:#EFF6FF,stroke:#3B82F6,stroke-width:1.5px,color:#1D4ED8
+  style Breakthrough fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Mastery fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """If you're not saying 'HELL YEAH!' about something, say no. When you say no to most things, you leave room in your life to really throw yourself completely into that rare thing that makes you say 'HELL YEAH!'""",
         "action_item": """Audit your commitments for the coming 14 days. Identify the single obligation you agreed to out of guilt or mild interest. Cancel or delegate it gracefully today.""",
         "author": "Derek Sivers",
@@ -397,18 +445,20 @@ The individuals in Group A still fundamentally identified as smokers who were cu
 In technology product engineering, Amazon leveraged identity-based mechanics to revolutionize operational security. Rather than enforcing top-down compliance manuals and periodic security audits, Amazon established the organizational identity: *"Every software builder owns production security."* By integrating automated code-scanning tools directly into the CI/CD pipeline and celebrating engineers who caught subtle vulnerabilities during peer review, security ceased to be a bottleneck checklist and became a point of professional pride and engineering identity.""",
         "boundary": """Beware the shadow side of rigid identity: cognitive ossification. When an identity becomes overly dogmatic or fragile ('I am an uncompromising purist coder who only writes C++', or 'I am a solo founder who never takes outside capital'), it blinds you to evolutionary market shifts and technological paradigms. When foundational conditions change, you must possess the epistemic flexibility to upgrade your identity without experiencing an existential identity crisis.""",
         "visual_diagram": """graph TD
-  subgraph Backward["Fragile Outcome-Based Approach"]
-    A[Desire External Outcome: 'Lose 20lbs'] --> B[Force Temporary Process / Diet]
-    B -->|Requires Constant Willpower| C[Goal Reached or Burnout]
-    C -->|Identity Unchanged| D[Relapse to Baseline]
-  end
-  subgraph Enduring["Enduring Identity-Based Approach"]
-    E[Define Identity: 'I Am an Athlete'] --> F[Cast Daily Atomic Votes: 10m Workout]
-    F -->|Bayesian Evidence Compounds| G[Subconscious Internalizes Identity]
-    G -->|Automated Congruence| H[Lifelong Sustained Mastery]
-  end
-  style Backward fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
-  style Enduring fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+  Ambition["🎯 Personal Transformation Goal"]
+  Ambition -->|Outcome-Based (Fragile)| Outcome["🏁 'I want to lose 20 lbs'<br/>• Requires constant conscious willpower<br/>• Reverts to baseline upon completion"]
+  Ambition -->|Identity-Based (Enduring)| Identity["🧬 'I am an athlete / writer'<br/>• Cast daily atomic micro-votes<br/>• Bayesian self-evidence accumulation"]
+  
+  Outcome --> Relapse["🔄 Yo-Yo Effect & Willpower Burnout"]
+  Identity --> Internalized["🧠 Subconscious Internalizes New Self-Concept"]
+  Internalized --> Sustained["🌟 Automated, Effortless Lifelong Habit"]
+
+  style Ambition fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style Outcome fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Identity fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Relapse fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Internalized fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style Sustained fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """Every action you take is a vote for the type of person you wish to become. No single instance will transform your beliefs, but as the votes build up, so does the evidence of your new identity.""",
         "action_item": """Complete this prompt: 'I am the type of person who...'. Identify one small, 60-second action today that casts an undeniable vote for that identity.""",
         "author": "James Clear",
@@ -452,22 +502,22 @@ In modern competitive athletics, legendary UCLA basketball coach John Wooden nev
 
 In financial trading, George Soros demonstrated the dichotomy of control by detaching his ego from investment forecasts. When asked how he survived extreme market crashes, Soros noted: 'I'm not an expert at predicting the future; I'm an expert at recognizing when I am wrong.' Soros treated market prices as external Set B variables; his only internal Set A control was rapid position sizing and immediate stop-loss execution.""",
         "boundary": """Do not use the dichotomy of control to justify apathy, social withdrawal, or neglect of duty. Acknowledging that the future of an organization is not completely within your control is not an excuse to work carelessly. It demands that you care intensely about your duty and personal performance, while abandoning neurotic attachment to external praise or arbitrary guarantees.""",
-        "visual_diagram": """graph LR
-  subgraph In_Control["WITHIN MY CONTROL"]
-    C1[My Beliefs & Judgments]
-    C2[My Decisions & Responses]
-    C3[My Ethical Character]
-  end
-  subgraph Not_In_Control["OUTSIDE MY CONTROL"]
-    O1[Other People's Opinions]
-    O2[Macro Economic Cycles]
-    O3[The Past & Weather]
-  end
-  In_Control -.->|100% Emotional Investment| Peace[Inner Freedom & Ataraxia]
-  Not_In_Control -.->|Radical Acceptance & Detachment| Peace
-  style In_Control fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
-  style Not_In_Control fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
-  style Peace fill:#EEF2FF,stroke:#818CF8,stroke-width:1.5px,color:#312E81""",
+        "visual_diagram": """graph TD
+  Event["🌪️ Chaos, Crisis, or High-Stakes Outcome"]
+  Event --> StoicTriage{"The Epictetus Filter"}
+  
+  StoicTriage -->|Up to Us: Intentions, Integrity, Action| Within["🛡️ WITHIN MY CONTROL<br/>• 100% Focused execution<br/>• Supreme ethical sovereignty"]
+  StoicTriage -->|Not Up to Us: Opinion, Macro, Fortune| Outside["🌧️ OUTSIDE MY CONTROL<br/>• Radical acceptance<br/>• Whispered: 'This is nothing to me'"]
+  
+  Within --> Freedom["⚡ Supreme Agency & Direct Power"]
+  Outside --> Serenity["🕊️ Inner Peace & Ataraxia"]
+
+  style Event fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style StoicTriage fill:#F1F5F9,stroke:#64748B,stroke-width:1.5px,color:#0F172A
+  style Within fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Outside fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Freedom fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Serenity fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A""",
         "quote": "Make the best use of what is in your power, and take the rest as it happens.",
         "action_item": """The Two-Column Anxiety Triage: Take your biggest active worry right now. Divide a sheet into 'Things I Can Directly Influence Today' and 'Things Governed by External Circumstances'. Cross out the second column completely and execute the first item on the left.""",
         "author": "Epictetus & Marcus Aurelius",
@@ -503,14 +553,22 @@ In the military theater, General George S. Patton utilized German counter-offens
 
 In modern business, Steve Jobs's humiliating public firing from Apple in 1985 seemed like a career execution. Years later, Jobs reflected: 'I didn't see it then, but it turned out that getting fired from Apple was the best thing that could have ever happened to me. The heaviness of being successful was replaced by the lightness of being a beginner again.' During his exile, he founded NeXT (whose operating system became macOS) and acquired Pixar (revolutionizing computer animation), returning to Apple in 1997 with the mature executive wisdom that built the most valuable enterprise in human history.""",
         "boundary": """The obstacle is the way is not a license for toxic positivity or reckless masochism. You should not deliberately engineer catastrophic failures or tolerate abusive environments under the guise of 'building character.' It is an emergency operational heuristic to be deployed when an unavoidable, immutable external shock hits.""",
-        "visual_diagram": """graph LR
-  Path[Intended Journey Path] -->|Unforeseen Roadblock| Block[Severe Crisis / Obstacle]
-  Block -->|Stoic Mental Inversion| Catalyst[Catalyst: Demands Grit, Ingenuity & Virtue]
-  Catalyst -->|Elevated Trajectory| Triumph[What Stood in the Way BECOMES The Way]
-  style Path fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
-  style Block fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
-  style Catalyst fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
-  style Triumph fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+        "visual_diagram": """graph TD
+  Plan["🚀 Intended Course of Action"]
+  Plan -->|Unforeseen Catastrophe / Roadblock| Roadblock["🧱 Unexpected Obstacle / Crisis"]
+  
+  Roadblock -->|Victim Mindset| Panic["😫 Grief, Complaining & Paralysis"]
+  Roadblock -->|Stoic Mental Inversion| Alchemy["🔥 Marcus Aurelius Crucible<br/>• Obstacle becomes the raw training weight<br/>• Demands patience, ingenuity & grit"]
+  
+  Panic --> Defeat["💥 Defeat & Lost Momentum"]
+  Alchemy --> Elevated["🏆 What Stood in the Way BECOMES The Way"]
+
+  style Plan fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style Roadblock fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style Panic fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Alchemy fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Defeat fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Elevated fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": "The mind adapts and converts to its own purposes the obstacle to our acting.",
         "action_item": """Perform Marcus's Reframing Drill: Write down your biggest current professional headache or roadblock. Cross out the complaint and write: 'This obstacle is giving me the rare chance to practice [Patience / Redundancy / First-Principles Engineering]. My next concrete move is...'""",
         "author": "Marcus Aurelius",
@@ -548,18 +606,20 @@ In *De Brevitate Vitae* (On the Shortness of Life), Seneca formulated an economi
 In Roman military history, whenever a triumphant general marched through the streets of Rome receiving deafening adoration, flowers, and god-like acclaim from hundreds of thousands of citizens, state tradition mandated that a public slave stand directly behind him in the golden chariot, holding a laurel wreath above his head while whispering continuously into his ear: *"Respice post te. Hominem te esse memento. Memento mori."* (Look behind you. Remember that you are only a man. Remember you will die.) This systemic institutional ritual was engineered to immunize the empire's most powerful commanders against fatal hubris and megalomaniacal delusion.""",
         "boundary": """Do not allow Memento Mori to degenerate into nihilism, apathy, or reckless hedonism ('Nothing matters, we are all going to die, so why build anything?'). The Stoic purpose of Memento Mori is the exact opposite of nihilism: it is hyper-engagement with the present moment and virtuous commitment to duty. Death does not strip life of meaning; it is the absolute scarcity of life that creates all value. Scarcity generates price; finitude generates urgency.""",
         "visual_diagram": """graph TD
-  subgraph Distorted["Illusion of Infinite Time"]
-    A[Subconscious Assumes Endless Days] --> B[Inflates Petty Slights & Bureaucratic Noise]
-    B --> C[Postpones Authentic Work to 'Someday']
-    C --> D[Profligate Squandering of Temporal Capital]
-  end
-  subgraph Stoic["Memento Mori Reality Filter"]
-    E[Confront Inevitable Biological Finitude] --> F[Trivial Anxieties & Vanity Instantly Evaporate]
-    F --> G[Deep Clarity on Authentic Priorities]
-    G --> H[Radical Presence, Courage & Virtuous Action]
-  end
-  style Distorted fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
-  style Stoic fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E""",
+  Morning["🌅 Daily Wake-up & Task Inflow"]
+  Morning --> CheckFinitude{"Memento Mori Consciousness Filter"}
+  CheckFinitude -->|Subconscious Assumes Infinite Time| Distracted["⚠️ Squander Temporal Capital<br/>• Inflate petty slights & vanity<br/>• Postpone authentic deep work"]
+  Distracted --> Regret["📉 Existential Drift & Regret"]
+  
+  CheckFinitude -->|Confront Biological Finitude| Clarified["💎 Radical Priority Inversion<br/>• Trivial anxieties evaporate<br/>• Fierce focus on essential virtuous actions"]
+  Clarified --> Presence["⚡ Deep Presence, Courage & Meaningful Creation"]
+
+  style Morning fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style CheckFinitude fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style Distracted fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Regret fill:#FFF1F2,stroke:#F43F5E,stroke-width:2px,color:#9F1239
+  style Clarified fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style Presence fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """You could leave life right now. Let that determine what you do and say and think. Death smiles at us all; all a man can do is smile back.""",
         "action_item": """Identify the primary source of emotional anxiety currently weighing on your mind. Ask yourself: 'If this were my final week on Earth, would this issue deserve even five minutes of my attention?' Act accordingly.""",
         "author": "Seneca",
@@ -601,15 +661,21 @@ In venture capital investing, SoftBank's Masayoshi Son committed $4.4 billion to
 In aviation, following the catastrophic crash of United Airlines Flight 173 in 1978 (where the crew became so fixated on an apparent landing gear malfunction that they allowed the DC-8 aircraft to run completely out of fuel and crash in a suburb), the airline industry pioneered Crew Resource Management (CRM). CRM trains junior copilots to actively challenge captains when System 1 fixation occurs, transforming cockpit hierarchy into distributed System 2 verification.""",
         "boundary": """Do not attempt to run System 2 for every mundane daily encounter. Attempting to statistically calculate the expected utility of every handshake, meal choice, or casual conversation will cause acute cognitive exhaustion and social awkwardness. System 1 intuition is extraordinarily powerful in domain environments with high regularity and immediate valid feedback (chess masters, experienced firefighters, tennis players). Reserve System 2 for low-validity, high-noise environments (financial markets, long-term strategy, geopolitical forecasting).""",
         "visual_diagram": """graph TD
-  Input[Daily Decisions & Biases] --> S1[System 1: Fast, Intuitive, Cognitive Miser]
-  S1 -->|Default Shortcuts| FastErr[Heuristic Reactions & Cognitive Biases]
-  Input -->|Deliberate Reflection| S2[System 2: Slow, Deliberate, Effortful]
-  S2 -->|Analytical Calculation| SoundJudg[Calibrated Strategic Judgment]
-  style Input fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
-  style S1 fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
-  style S2 fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
-  style FastErr fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
-  style SoundJudg fill:#F0FDFA,stroke:#14B8A6,stroke-width:1.5px,color:#0F766E""",
+  Decision["⚡ Decision or Cognitive Stimulus"]
+  Decision --> ModeChoice{"Stakes & Complexity Evaluation"}
+  
+  ModeChoice -->|Default Cognitive Miser| Sys1["🏎️ System 1 (Fast & Intuitive)<br/>• Pattern matching & heuristics<br/>• Prone to cognitive biases & impulse"]
+  Sys1 --> FastOutcome["⚠️ Quick Reaction with Hidden Blindspots"]
+  
+  ModeChoice -->|Deliberate Engagement| Sys2["🐢 System 2 (Slow & Analytical)<br/>• First-principles calculation<br/>• Stress-tests counterfactuals"]
+  Sys2 --> DeepOutcome["🎯 High-Accuracy Calibrated Strategic Judgment"]
+
+  style Decision fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style ModeChoice fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style Sys1 fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style FastOutcome fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Sys2 fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style DeepOutcome fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": "Thinking is to humans as swimming is to cats; they can do it, but they'd prefer not to.",
         "action_item": """Institute a 'Checklist Filter' on Major Decisions: Identify your top recurring decision (hiring a candidate, buying stock, committing to a vendor). Draft a 5-point non-negotiable checklist that must be scored numerically before any emotional 'gut feeling' is permitted to approve the deal.""",
         "author": "Daniel Kahneman",
@@ -648,18 +714,23 @@ When Loss Aversion operates unchecked in modern decision-making, it metastasizes
 Conversely, in 1985, Intel CEO Andy Grove and Gordon Moore demonstrated masterclass immunity to loss aversion. Intel had founded the silicon memory chip industry, and dynamic RAM (DRAM) was the sacred core of the company's identity. However, Japanese semiconductor manufacturers were crushing Intel on manufacturing scale and price. Intel was bleeding tens of millions of dollars trying to defend its memory business. Grove famously looked at Moore and asked: *"If we were kicked out and the board brought in a new CEO, what do you think he would do?"* Moore answered without hesitation: *"He would get us out of memories."* Grove replied: *"Why shouldn't you and I walk out the door, come back in, and do it ourselves?"* They walked away from memory chips, booked the loss, and pivoted Intel entirely to microprocessors, creating one of the greatest corporate wealth engines in history.""",
         "boundary": """Do not confuse healthy persistence through the inevitable hardships of innovation with irrational loss aversion. High-conviction bets in uncharted territory frequently look like failures in the middle of their developmental lifecycle. The key diagnostic distinction: persistence is guided by updated empirical evidence confirming that your fundamental thesis remains sound; sunk cost entrapment is guided strictly by emotional reluctance to book a loss or admit error.""",
         "visual_diagram": """graph TD
-  subgraph SunkTrap["The Loss Aversion & Sunk Cost Trap"]
-    A[Failing Initiative with Sunk Capital] -->|Confronted with Failure| B{Acknowledge Loss?}
-    B -->|Psychological Agony of -2.5x Loss| C[Refuse Loss: Double Down & Pour More Resources]
-    C --> D[Catastrophic Wealth & Bandwidth Destruction]
-  end
-  subgraph CleanSlate["The Andy Grove Clean Slate Protocol"]
-    E[Failing Initiative with Sunk Capital] -->|Grove Test: 'If New CEO Arrived Today'| F[Zero-Baggage Objective Evaluation]
-    F -->|Acknowledge Sunk Costs Are Gone| G[Decisively Sever Losses]
-    G --> H[Reallocate Capital to Asymmetric Opportunities]
-  end
-  style SunkTrap fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
-  style CleanSlate fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+  FailingProject["📉 Failing Initiative or Investment (Capital Sunk)"]
+  FailingProject --> Dilemma{"Evaluation Protocol"}
+  
+  Dilemma -->|Loss Aversion Trap (-2.5x Pain)| DoubleDown["🛑 Refuse Loss & Double Down<br/>• Emotional attachment to past costs<br/>• Pour good capital after bad"]
+  DoubleDown --> Destruction["💥 Compounding Wealth & Bandwidth Destruction"]
+  
+  Dilemma -->|Grove Clean Slate Protocol| NewCEO["🧼 New CEO Reset: 'If We Were Hired Today?'<br/>• Acknowledge sunk capital is gone forever<br/>• Evaluate forward expected value only"]
+  NewCEO --> Sever["✂️ Decisively Cut Losses & Liquidate"]
+  Sever --> Reallocate["🚀 Reallocate Resources to Asymmetric Winners"]
+
+  style FailingProject fill:#FFF1F2,stroke:#F43F5E,stroke-width:2px,color:#9F1239
+  style Dilemma fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style DoubleDown fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Destruction fill:#FFF1F2,stroke:#F43F5E,stroke-width:2px,color:#9F1239
+  style NewCEO fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style Sever fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style Reallocate fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """Losses loom larger than gains. The response to losses is stronger than the response to corresponding gains. The pain of losing is psychologically twice as powerful as the pleasure of gaining.""",
         "action_item": """Audit your current commitments for one 'zombie project' you are maintaining purely because you have already invested significant time or money into it. Apply Andy Grove's clean slate test and decide its fate today.""",
         "author": "Amos Tversky & Daniel Kahneman",
@@ -699,11 +770,25 @@ In media leverage, Joe Rogan built the world's most lucrative audio broadcasting
 In open-source software, Linus Torvalds authored the initial Linux kernel in 1991 as a personal hobby project in Helsinki. By releasing the code under the GNU General Public License, Torvalds provided permissionless leverage to the entire planet. Today, Linux powers over 90% of the world's cloud computing infrastructure, the top 500 global supercomputers, billions of Android smartphones, and SpaceX rocket avionics.""",
         "boundary": """Leverage without judgment is a death sentence. If you apply 100x financial leverage to a bad investment, you are wiped out instantly. If you apply code leverage to an insecure or poorly architected system, you expose millions of user credentials to hackers in milliseconds. Before turning on the amplifier, ruthlessly verify the signal.""",
         "visual_diagram": """graph TD
-  L1[1. Labor: Human Headcount<br/>High Politics, Requires Permission] --> L2[2. Capital: Money / Debt<br/>Requires Gatekeepers & Investors]
-  L2 --> L3[3. Code & Media: PERMISSIONLESS<br/>Zero Marginal Cost, Works Infinitely While You Sleep]
-  style L1 fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
-  style L2 fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
-  style L3 fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+  Ambition["📈 Building Scalable Wealth & Impact"]
+  Ambition --> FormOfLeverage{"Form of Leverage Deployed"}
+  
+  FormOfLeverage -->|1. Human Labor| Labor["👥 Labor: Headcount & Employees<br/>• High politics & human friction<br/>• Requires managerial permission"]
+  FormOfLeverage -->|2. Financial Capital| Capital["💰 Capital: Loans & Equity<br/>• High leverage but requires gatekeepers<br/>• Subject to margin call risks"]
+  FormOfLeverage -->|3. Code & Media| Permissionless["🚀 Code & Media: PERMISSIONLESS<br/>• Zero marginal cost of replication<br/>• Works for you infinitely while you sleep"]
+  
+  Labor --> ComplexScale["⚖️ High Overhead Scaling"]
+  Capital --> GatekeeperScale["🏛️ Dependent on Financiers"]
+  Permissionless --> AsymmetricUpside["🌟 Unbounded Asymmetric Freedom"]
+
+  style Ambition fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style FormOfLeverage fill:#F1F5F9,stroke:#64748B,stroke-width:1.5px,color:#0F172A
+  style Labor fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Capital fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style Permissionless fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style ComplexScale fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style GatekeeperScale fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style AsymmetricUpside fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": "Forget rich versus poor, white-collar versus blue-collar. It's now leveraged versus un-leveraged.",
         "action_item": """Audit your output: How much of your weekly labor is rented by the hour versus creating reusable code, content, or automated systems? Commit to creating one digital asset this month (a Python tool, guide, or template) that can be accessed by 1,000 people without requiring an extra second of your time.""",
         "author": "Naval Ravikant",
@@ -748,18 +833,21 @@ In stark contrast, Richard Fuscone was a Harvard-educated Merrill Lynch executiv
 In corporate capital allocation, Berkshire Hathaway preserves a permanent \\$150B+ cash buffer earning modest returns. Critics constantly urge Buffett to spend the cash on glamorous, market-moving mega-deals. Buffett refuses, noting that sleeping well and maintaining the absolute power to capitalize on once-in-a-generation liquidity panics is vastly more valuable than maximizing short-term return on equity.""",
         "boundary": """Do not mistake wealth accumulation for pathological miserliness. Money is a tool designed to purchase human happiness, health, security, and memorable experiences. If you hoard cash out of irrational fear while depriving yourself and your loved ones of fundamental comforts, education, and health, you have inverted the relationship between master and servant. The objective of wealth is not the hoarding of paper; it is the acquisition of total autonomy over your time.""",
         "visual_diagram": """graph TD
-  subgraph RichTrack["The Visible Rich Treadmill"]
-    A[High Income Inflow] --> B[Conspicuous Consumption & Luxury Display]
-    B --> C[Massive Monthly Burn Rate & Debt]
-    C -->|Zero Margin of Safety| D[Existential Fragility & Golden Handcuffs]
-  end
-  subgraph WealthTrack["The Invisible Wealth Engine"]
-    E[Income Inflow] -->|Suppress Ego| F[Unspent Capital & Compounding Assets]
-    F --> G[Invisible Liquidity & Massive Margin of Safety]
-    G --> H[Absolute Temporal Sovereignty & Lifelong Freedom]
-  end
-  style RichTrack fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
-  style WealthTrack fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+  Inflow["💰 Cash Inflow & Income Expansion"]
+  Inflow --> PathChoice{"Capital Allocation Mindset"}
+  
+  PathChoice -->|Visible Consumption Focus| RichTrack["🏎️ Rich Treadmill (Visible Display)<br/>• Luxury spending & conspicuous status<br/>• Monthly burn rate expands with income"]
+  RichTrack --> Fragile["⚠️ Golden Handcuffs & Zero Margin of Safety<br/>• High stress & existential vulnerability"]
+  
+  PathChoice -->|Invisible Freedom Focus| WealthTrack["🏰 Wealth Engine (Suppressed Ego)<br/>• Convert cash into compounding unspent assets<br/>• Maximize optionality & quiet liquidity"]
+  WealthTrack --> Freedom["🕊️ Complete Temporal Sovereignty<br/>• Control your calendar, location, and focus"]
+
+  style Inflow fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style PathChoice fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style RichTrack fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Fragile fill:#FFF1F2,stroke:#F43F5E,stroke-width:2px,color:#9F1239
+  style WealthTrack fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style Freedom fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """Spending money to show people how much money you have is the fastest way to have less money. Wealth is what you don't see.""",
         "action_item": """Calculate your personal 'Freedom Runway': divide your liquid net worth by your monthly burn. Reflect on how increasing that number by 12 months would alter your strategic bravery and stress levels.""",
         "author": "Morgan Housel",
@@ -796,14 +884,24 @@ In finance, Jim Simons was an elite mathematician who cracked cryptographic code
 
 In modern internet culture, Marques Brownlee (MKBHD) started uploading YouTube videos reviewing HP laptop remote controls and smartphone webcams as a 15-year-old high school student in his bedroom in 2008. Over 15 years of uninterrupted weekly video production, he accumulated specific knowledge in consumer electronics ergonomics, 8K video cinematography, and consumer taste. Today, with over 18 million subscribers, major tech CEOs (including Tim Cook and Satya Nadella) personally debut products on his channel, because his authentic credibility cannot be replicated by traditional advertising agencies.""",
         "boundary": """Specific knowledge must solve real human problems or create genuine economic utility. Having obsessive specific knowledge in an entirely useless, self-indulgent niche with zero market demand (e.g. memorizing obscure movie trivia) generates zero leverage. Specific knowledge becomes economically valuable when it intersects with high societal demand and emerging technological leverage.""",
-        "visual_diagram": """graph LR
-  Curiosity[Authentic Childhood Curiosities & Obsessions] --> Moat[Specific Knowledge: Cannot Be Taught in a School]
-  Moat --> Leverage[Permissionless Leverage: Code & Content]
-  Leverage --> Asymmetry[Feels Like Play to You, Looks Like Hard Work to Others]
-  style Curiosity fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
-  style Moat fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
-  style Leverage fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
-  style Asymmetry fill:#F0FDFA,stroke:#14B8A6,stroke-width:1.5px,color:#0F766E""",
+        "visual_diagram": """graph TD
+  Curiosity["🔍 Childhood Obsessions & Natural Curiosities"]
+  Curiosity --> CareerPath{"Career & Skill Acquisition Strategy"}
+  
+  CareerPath -->|Standard Linear Career Track| Generic["🎓 Generalized Credentials & Standard Curriculum<br/>• Easily taught, commoditized & automated<br/>• High competition & low pricing power"]
+  Generic --> Replaceable["⚠️ High Replaceability & Career Treadmill"]
+  
+  CareerPath -->|Cultivate Authentic Obsession| Specific["💡 Specific Knowledge Cultivation<br/>• Feels like play to you, looks like work to others<br/>• Unteachable through standard courses"]
+  Specific --> ArmLeverage["⚡ Arm with Code, Media & Capital Leverage<br/>• Extreme asymmetric upside with authentic accountability"]
+  ArmLeverage --> PeerlessMoat["🏰 Peerless Unreplicable Professional Moat"]
+
+  style Curiosity fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style CareerPath fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style Generic fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Replaceable fill:#FFF1F2,stroke:#F43F5E,stroke-width:2px,color:#9F1239
+  style Specific fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style ArmLeverage fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style PeerlessMoat fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """Specific knowledge cannot be taught, but it can be learned through apprenticeship and intense obsession.""",
         "action_item": """The Childhood Archaeology Exercise: Ask your parents or childhood friends: 'What was I obsessively doing between ages 10 and 16 that seemed strange or effortless to me?' Cross-reference that innate curiosity with modern technological leverage (Code, AI, Media).""",
         "author": "Naval Ravikant",
@@ -849,14 +947,25 @@ In financial architecture, the collapse of Lehman Brothers in 2008 demonstrated 
 In software architecture, modern microservices platforms like Kubernetes utilize antifragile orchestrators. If a single microservice container experiences a memory leak or crash, the container runtime automatically kills the rogue instance, boots a fresh image on an alternate node, and shifts traffic seamlessly, making the overall distributed cluster stronger and more reliable through automated localized failure recovery.""",
         "boundary": """Antifragility requires two non-negotiable prerequisites: **absence of existential ruin** and **adequate recovery intervals**. A stressor that kills the host or completely obliterates an enterprise produces zero antifragile growth—only death. Furthermore, continuous chronic stress without recovery produces cumulative exhaustion and degradation (burnout). Stressors must be acute, survivable, and followed by adequate consolidation periods.""",
         "visual_diagram": """graph TD
-  subgraph Volatility_Triad["The Triad Under Chaos & Volatility"]
-    F["FRAGILE (Porcelain)<br/>Breaks Under Stress"]
-    R["ROBUST (Granite)<br/>Resists Stress, Stays Equal"]
-    A["ANTIFRAGILE (Immune System/Hydra)<br/>Thrives and Grows Stronger from Stress"]
-  end
-  style F fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
-  style R fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
-  style A fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+  Stressor["⚡ Environmental Volatility or Stressor Shock"]
+  Stressor --> TriadFilter{"System Architecture Under Chaos"}
+  
+  TriadFilter -->|Breaks / Degrades| Fragile["❌ FRAGILE (Porcelain)<br/>• Conceals micro-stressors<br/>• Negative asymmetry: small upside, catastrophic ruin"]
+  TriadFilter -->|Resists / Unchanged| Robust["🛡️ ROBUST (Granite)<br/>• Withstands shocks without changing<br/>• Zero adaptive evolution"]
+  TriadFilter -->|Overcompensates / Thrives| Antifragile["🚀 ANTIFRAGILE (Immune System/Hydra)<br/>• Benefits from volatility via Hormesis<br/>• Positive asymmetry: bounded loss, unlimited upside"]
+  
+  Fragile --> Collapse["💥 Catastrophic Ruin"]
+  Robust --> Stagnant["⚖️ Preserves Status Quo"]
+  Antifragile --> ConvexGrowth["🌟 Exponential Evolutionary Compounding"]
+
+  style Stressor fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style TriadFilter fill:#F1F5F9,stroke:#64748B,stroke-width:1.5px,color:#0F172A
+  style Fragile fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Robust fill:#F8FAFC,stroke:#94A3B8,stroke-width:1.5px,color:#334155
+  style Antifragile fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Collapse fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Stagnant fill:#F8FAFC,stroke:#94A3B8,stroke-width:1.5px,color:#334155
+  style ConvexGrowth fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": "Wind extinguishes a candle and energizes fire. You want to be the fire and wish for the wind.",
         "action_item": """Conduct an Antifragile Audit: Identify one area where you are over-optimizing for comfort or stability (e.g. relying on a single employer or single marketing channel). Construct a Barbell: protect your core survival with 6 months of liquid runway, and allocate 5 hours weekly to an open-ended asymmetric side-project.""",
         "author": "Nassim Nicholas Taleb",
@@ -893,15 +1002,22 @@ In contrast, Warren Buffett and Charlie Munger constructed Berkshire Hathaway ar
 
 In open-source software and venture capitalism, early-stage founders demonstrate skin in the game by investing their life savings and forgoing market salaries to build working prototypes. Investors recognize that a founder who has mortgaged their house and committed five years of sweat equity has skin in the game, whereas a corporate innovation consultant working on an hourly retainer incurs zero downside if the project is aborted.""",
         "boundary": """Skin in the game should not be confused with blind, reckless sacrifice. Demanding skin in the game does not mean that every mistake must be punished with termination. In innovative research and scientific experimentation, honest calculated failures must be permitted to encourage risk-taking. Skin in the game specifically targets **asymmetric transfers of risk**—where someone privatizes gains while socializing losses.""",
-        "visual_diagram": """graph LR
-  subgraph No_Skin["NO SKIN IN THE GAME (Moral Hazard)"]
-    N1[High Risk Decisions] --> N2[Keep Private Upside] --> N3[Socialize Downside to Others]
-  end
-  subgraph Real_Skin["SKIN IN THE GAME (Ethical Symmetry)"]
-    S1[High Conviction Thesis] --> S2[Direct Downside Penalty if Wrong] --> S3[True Credibility & Tested Wisdom]
-  end
-  style No_Skin fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
-  style Real_Skin fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+        "visual_diagram": """graph TD
+  Advice["🗣️ Strategic Advice, Forecast, or Deal Proposal"]
+  Advice --> PenaltyCheck{"Personal Downside Audit"}
+  
+  PenaltyCheck -->|No Personal Penalty if Wrong| NoSkin["❌ NO SKIN IN THE GAME (Moral Hazard)<br/>• Takes private upside bonuses<br/>• Transfers downside catastrophic ruin onto others"]
+  PenaltyCheck -->|Direct Symmetric Vulnerability| RealSkin["✅ SKIN IN THE GAME (Ethical Symmetry)<br/>• Suffers dollar-for-dollar if wrong<br/>• Authentic credibility earned through personal exposure"]
+  
+  NoSkin --> Reject["🛑 Discard Advice as Reckless Noise"]
+  RealSkin --> Partner["🤝 High-Trust Partnership & Long-Term Alignment"]
+
+  style Advice fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style PenaltyCheck fill:#F1F5F9,stroke:#64748B,stroke-width:1.5px,color:#0F172A
+  style NoSkin fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style RealSkin fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Reject fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Partner fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": "If you give an opinion, and someone follows it, you should share in the consequences.",
         "action_item": """Before accepting advice from any financial planner, consultant, or career coach, ask the Golden Question: 'Can you show me your personal portfolio/operating logs to verify you own this exact advice in your own life?' If they hold zero personal exposure, walk away.""",
         "author": "Nassim Nicholas Taleb",
@@ -944,18 +1060,21 @@ Kennedy paused, applying the logic of Hanlon's Razor: he suspected the shootdown
 In technology infrastructure, whenever an internal API fails or data pipeline corrupts, engineers at Stripe and Google practice 'Blameless Post-Mortems'. Instead of seeking malicious actors or issuing punitive reprimands, teams assume all engineers operated with positive intent within the constraints of their information. The post-mortem focuses exclusively on why the system allowed a tired or confused human to trigger a catastrophe, building automated guardrails rather than hunting villains.""",
         "boundary": """Do not apply Hanlon's Razor blindly in the presence of repeated, asymmetric bad-faith patterns. When an individual or institutional counterparty repeatedly extracts value at your expense, violates contractual covenants, or exhibits consistent sociopathic exploitation, treating their behavior as mere 'cluelessness' makes you an easy victim. Hanlon's Razor is a first-response diagnostic heuristic, not an excuse for perpetual naivety against predatory adversaries who possess clear malicious incentives.""",
         "visual_diagram": """graph TD
-  subgraph Default["Paranoid Default Trap"]
-    A[Partner Fails / Drops Deliverable] -->|Hostile Attribution Bias| B[Assume Deliberate Malice & Sabotage]
-    B -->|Defensive Aggression & Paranoia| C[Escalatory Conflict Spiral]
-    C --> D[Permanent Relational & Organizational Destruction]
-  end
-  subgraph Razor["Hanlon's Razor Protocol"]
-    E[Partner Fails / Drops Deliverable] -->|Apply Hanlon's Razor| F[Evaluate: Fatigue, Ambiguity, Incentives]
-    F -->|Assume Positive Intent / Blunder| G[Blameless Inquiry & System Clarification]
-    G --> H[High-Trust Collaboration & Robust Guardrails]
-  end
-  style Default fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
-  style Razor fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+  Incident["⚠️ Partner or Teammate Drops Critical Deliverable"]
+  Incident --> Attribution{"Attribution Lens"}
+  
+  Attribution -->|Hostile Attribution Bias| Paranoid["😡 Assume Deliberate Malice & Sabotage<br/>• Defensive accusations & paranoia<br/>• Escalating political warfare"]
+  Paranoid --> Ruin["💥 Toxic Culture & Organizational Fracture"]
+  
+  Attribution -->|Apply Hanlon's Razor| Razor["🔍 Assume Fatigue, Ignorance or Ambiguity<br/>• Blameless post-mortem inquiry<br/>• Clarify incentives, expectations & tooling"]
+  Razor --> Trust["🤝 Resilient High-Trust Collaboration & Guardrails"]
+
+  style Incident fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style Attribution fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style Paranoid fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Ruin fill:#FFF1F2,stroke:#F43F5E,stroke-width:2px,color:#9F1239
+  style Razor fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style Trust fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """Never attribute to malice that which is adequately explained by stupidity. Misunderstandings and neglect create more confusion in this world than trickery and malice.""",
         "action_item": """Think of someone who recently frustrated or slighted you at work. Formulate two legitimate explanations based on miscommunication, fatigue, or stress, and re-engage them from a place of curiosity today.""",
         "author": "Robert J. Hanlon",
@@ -996,18 +1115,21 @@ Copernicus and later Kepler applied Occam's Razor: by placing the Sun at the cen
 In modern medical diagnostics, physicians are trained on the clinical manifestation of Occam's Razor: *"When you hear hoofbeats, think horses, not zebras."* When a patient presents with fever, joint aches, and fatigue, doctors do not immediately diagnose a one-in-a-million autoimmune genetic mutation; they test for the common influenza or bacterial infection that parsimoniously accounts for all symptoms.""",
         "boundary": """Never weaponize Occam's Razor to oversimplify complex non-linear systems. As Albert Einstein famously clarified: *"Everything should be made as simple as possible, but not simpler."* If an explanation requires five variables to accurately describe reality, forcibly truncating it to three because 'simpler is better' is not parsimony—it is reductionist delusion. Occam's Razor applies only when comparing hypotheses of *equal explanatory power*.""",
         "visual_diagram": """graph TD
-  subgraph Baroque["Overfitted Baroque Hypothesis"]
-    A[Observed Anomaly] --> B[Assumes Shadow Conspiracy]
-    B --> C[Requires 7 Unverified Multi-Party Assumptions]
-    C --> D[Fragile, Overfitted & Statistically Improbable]
-  end
-  subgraph Parsimonious["Occam's Parsimonious Law"]
-    E[Observed Anomaly] --> F[Assumes 1 Observable Systemic Variable / Simple Oversight]
-    F --> G[Directly Testable & Statistically Dominant]
-    G --> H[Fast, High-Leverage Resolution]
-  end
-  style Baroque fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
-  style Parsimonious fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+  Observation["🔍 Unexpected Anomaly or Bug Observed"]
+  Observation --> TheoryChoice{"Competing Hypotheses"}
+  
+  TheoryChoice -->|Conspiracy / Complex Narrative| Baroque["🧶 Overfitted Baroque Theory<br/>• Requires 7 unverified assumptions<br/>• Coordinated malice or bizarre edge cases"]
+  Baroque --> AnalysisParalysis["⚠️ Wasted Cycles & Fragile Debugging"]
+  
+  TheoryChoice -->|Parsimonious Simplest Explanation| Occam["🎯 Occam's Razor Selection<br/>• 1 simple variable / configuration mismatch<br/>• Easily tested and falsified"]
+  Occam --> RapidResolution["⚡ Rapid Root-Cause Fix & System Stability"]
+
+  style Observation fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style TheoryChoice fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style Baroque fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style AnalysisParalysis fill:#FFF1F2,stroke:#F43F5E,stroke-width:2px,color:#9F1239
+  style Occam fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style RapidResolution fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """Entities should not be multiplied without necessity. The simplest explanation that accounts for all the facts is usually the right one.""",
         "action_item": """Examine a complex problem currently stalling your team. Identify the three most baroque, multi-step explanations or plans being proposed. Ask: 'What is the most direct, boring, single-variable explanation?' Test that first.""",
         "author": "William of Ockham",
@@ -1045,11 +1167,21 @@ The catastrophic second-order consequence: sparrows did not merely eat seeds; th
 In software engineering, a newly hired senior architect at a major payment gateway identified a 500-millisecond artificial sleep delay in the transaction authorization worker queue. Deeming it amateurish legacy code, the architect deleted the sleep call and deployed to production. During the Black Friday shopping surge, concurrent database write locks spiked by 1,000x, deadlocking the primary PostgreSQL cluster and halting all credit card authorizations for four hours—causing $35 million in lost checkout transactions. The 500ms delay was a crude but brilliant jitter dampener designed four years earlier to prevent database connection pool exhaustion under sudden traffic spikes.""",
         "boundary": """Chesterton's Fence does not mean systems should never be reformed. In fact, many historical fences become obsolete when underlying environmental technologies fundamentally change (e.g. keeping physical signature stamps after introducing cryptographic public keys). The rule merely mandates that **understanding must precede destruction**. Once you have articulated the historical purpose and installed a superior modern alternative, you may tear down the fence.""",
         "visual_diagram": """graph TD
-  A[Observed Legacy Rule / Fence] --> B{Do You Understand Its Origin?}
-  B -->|No: Blind Removal| C[Hidden Catastrophic Regression]
-  B -->|Yes: Discovered Latent Function| D[Address Root Need or Safely Refactor]
-  style C fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
-  style D fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+  Encounter["🚧 Encounter Obsolete-Looking Legacy Rule or Code"]
+  Encounter --> Investigation{"Chesterton Understanding Gate"}
+  
+  Investigation -->|No: Blind Removal ('This is pointless')| BlindRemoval["💥 Tear Down Fence Prematurely<br/>• Re-open ancient resolved edge case<br/>• Hidden catastrophic regression in production"]
+  BlindRemoval --> Catastrophe["🚨 Outage, Legal Exposure or System Failure"]
+  
+  Investigation -->|Yes: Discovered Latent Defensive Purpose| DecisiveRefactor["🛡️ Understand Why It Was Built<br/>• Identify original threat model or bug<br/>• Formulate modern equivalent architecture"]
+  DecisiveRefactor --> SafeRefactoring["✅ Safe System Evolution with Zero Regressions"]
+
+  style Encounter fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style Investigation fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style BlindRemoval fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Catastrophe fill:#FFF1F2,stroke:#F43F5E,stroke-width:2px,color:#9F1239
+  style DecisiveRefactor fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style SafeRefactoring fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": "If you do not see the use of a fence, I certainly won't let you clear it away.",
         "action_item": """Run the Fence Audit: Identify one legacy procedure, bureaucratic sign-off, or code routine your team complains about. Forbid anyone from proposing its deletion until someone interviews its originators and produces a 1-page memo explaining its original necessity.""",
         "author": "G.K. Chesterton",
@@ -1088,13 +1220,22 @@ Bezos took a 48-hour walk in Central Park to decide. Applying the Regret Minimiz
 
 Similarly, in 1975, 19-year-old Bill Gates dropped out of Harvard University to co-found Microsoft with Paul Allen. When his parents expressed acute alarm at abandoning an elite Ivy League degree, Gates evaluated the decision through regret minimization: the microcomputer revolution (the Altair 8800 and the Intel 8080 chip) was happening right now. If he waited until graduation in 1977, the software operating system window would be permanently closed. At age 80, he would never regret having to re-enroll at Harvard, but he would forever regret missing the birth of personal computing.""",
         "boundary": """Do not use regret minimization to justify reckless, existential ruin bets (e.g. gambling your life savings on leveraged penny stocks or Russian roulette). The framework operates strictly on **calculated risks where failure is survivable**. If failing at age 30 produces irreversible catastrophic ruin (death, prison, bankruptcy that harms dependents), the framework must be checked by the Inversion Principle and margin of safety.""",
-        "visual_diagram": """graph LR
-  A[Crossroads Decision] --> B[Short-Term Lens: Fear of Embarrassment]
-  A --> C[Age-80 Horizon: Regret of Inaction]
-  B --> D[Safe Conformity & Persistent Long-Term Regret]
-  C --> E[Bold Agency & Maximum Asymmetric Trajectory]
-  style B fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
-  style C fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+        "visual_diagram": """graph TD
+  Dilemma["⚡ High-Stakes Career / Life Pivot Opportunity"]
+  Dilemma --> HorizonFilter{"Jeff Bezos Time-Horizon Shift"}
+  
+  HorizonFilter -->|Short-Term Perspective (Age 30)| ShortTerm["😰 Social Friction & Near-Term Fear<br/>• Leaving a lucrative Wall Street bonus<br/>• Fear of immediate peer embarrassment"]
+  HorizonFilter -->|Projected Perspective (Age 80)| LongTerm["👴 Projected to Age 80 in Quiet Reflection<br/>• 'Will I regret trying and failing?' (No)<br/>• 'Will I regret never trying at all?' (YES)"]
+  
+  ShortTerm --> Inertia["🛑 Inaction & Safe Conventional Path"]
+  LongTerm --> BoldLeap["🚀 Bold Leap into High-Asymmetry Future"]
+
+  style Dilemma fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style HorizonFilter fill:#F1F5F9,stroke:#64748B,stroke-width:1.5px,color:#0F172A
+  style ShortTerm fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style LongTerm fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Inertia fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style BoldLeap fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """I knew that when I was eighty I was not going to regret having tried this. I knew that I would always be haunted by a decision to not try at all.""",
         "action_item": """The Age-80 Letter Drill: Take the boldest, most frightening crossroad decision currently facing you. Write a 1-paragraph letter from your 80-year-old self advising your current self on what to do. Sign it and take the first concrete step within 24 hours.""",
         "author": "Jeff Bezos",
@@ -1134,13 +1275,22 @@ In modern business, Zara (Inditex) dominated global fast fashion by institutiona
 
 In algorithmic trading, high-frequency market makers execute OODA loops in microseconds. Microwave transmission networks between Chicago and New York observe order-book imbalances, orient market depth, decide liquidity quotes, and execute trades before traditional institutional orders can clear fiber-optic cables.""",
         "boundary": """Do not sacrifice Orientation quality for reckless Action speed. Acting rapidly without accurate Observation and first-principles Orientation simply accelerates you off a cliff. The goal is not frantic activity; the goal is **cohesive, high-fidelity orientation paired with decisive execution**.""",
-        "visual_diagram": """graph LR
-  Obs[Observe: Live Telemetry] --> Ori[Orient: Mental Models & Culture]
-  Ori --> Dec[Decide: Formulate Hypothesis]
-  Dec --> Act[Act: Execute Experiment]
-  Act --> Obs
-  style Ori fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
-  style Act fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+        "visual_diagram": """graph TD
+  Arena["⚔️ Fast-Moving Chaotic Arena"]
+  Arena --> Obs["1️⃣ OBSERVE<br/>Scan shifting landscape & incoming data"]
+  Obs --> Ori["2️⃣ ORIENT (The Crucible)<br/>Filter through mental models & cultural heritage"]
+  Ori --> Dec["3️⃣ DECIDE<br/>Formulate hypothesis & select optimal path"]
+  Dec --> Act["4️⃣ ACT<br/>Execute rapid probe / test into reality"]
+  Act -->|New Reality Generated| Obs
+  
+  Act --> Tempo["⚡ Faster OODA Tempo Inside Opponent's Loop<br/>• Forces disorientation & strategic collapse"]
+
+  style Arena fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style Obs fill:#EFF6FF,stroke:#3B82F6,stroke-width:1.5px,color:#1D4ED8
+  style Ori fill:#FAF5FF,stroke:#A855F7,stroke-width:2px,color:#6B21A8
+  style Dec fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style Act fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Tempo fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": "He who can handle the quickest rate of change is the one who survives.",
         "action_item": """Compress Your Feedback Loop: Identify the slowest phase in your team's current delivery cycle (e.g. waiting two weeks for customer feedback). Cut the cycle time in half this week by shipping a 48-hour prototype to 5 live users.""",
         "author": "John Boyd",
@@ -1178,14 +1328,20 @@ In contrast, the United Kingdom's National Health Service (NHS) launched the 'Na
 Similarly, Amazon Web Services (AWS) began in 2006 not as a complex multi-cloud enterprise platform, but as a single primitive service: Amazon S3 (Simple Storage Service). S3 did exactly one thing: put and get unstructured data objects via basic HTTP calls. Because S3 worked with 99.999999999% durability, Amazon layered EC2 (compute instances) on top, followed by databases, networking, and machine learning, evolving into a $100 billion annual cloud empire.""",
         "boundary": """Gall's Law is not an excuse to write sloppy, unmaintainable 'throwaway' code under the banner of moving fast. A simple system that works must be architected with clean, modular boundaries so that future complexity can be grafted onto it without collapsing the core. Simplicity is not carelessness; simplicity is the highest form of structural discipline.""",
         "visual_diagram": """graph TD
-  subgraph Fragile["De Novo Complex Design (Fails)"]
-    A[Monolithic Complex Blueprint] --> B[Cascading Latent Bugs & Collapse]
-  end
-  subgraph Robust["Gall's Evolutionary Path (Thrives)"]
-    C[Simple Working Core] --> D[Survive Live Real-World Stress] --> E[Modular Incremental Evolution]
-  end
-  style Fragile fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
-  style Robust fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+  Vision["🏛️ Complex System Ambition"]
+  Vision -->|The De Novo Trap| ComplexBuild["❌ Build Complex Architecture from Scratch<br/>• Monolithic grand design<br/>• Cascading latent bugs & interface friction"]
+  Vision -->|Gall's Evolutionary Law| SimpleBuild["✅ Build Simple, Robust Working Core<br/>• Ships rapidly into real-world contact<br/>• Operates flawlessly under live stress"]
+  
+  ComplexBuild --> Crash["💥 Predictable Total System Collapse"]
+  SimpleBuild --> Evolve["🔄 Evolve Incrementally Under Real Feedback"]
+  Evolve --> ResilientComplex["🌟 Resilient Complex System that Endures"]
+
+  style Vision fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style ComplexBuild fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style SimpleBuild fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Crash fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Evolve fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style ResilientComplex fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": "A complex system designed from scratch never works and cannot be patched up to make it work.",
         "action_item": """The Modular MVP Test: If your current project is slated to take 6 months before its first public release, stop. What is the stripped-down, 3-day version of the core loop that solves 80% of the customer's problem right now? Ship that first, verify survival, and iterate.""",
         "author": "John Gall",
@@ -1227,12 +1383,18 @@ In Silicon Valley software startups, Customer Support teams are frequently grade
 
 During the Vietnam War, United States Secretary of Defense Robert McNamara applied quantitative management metrics to military operations, using 'Enemy Body Count' as the definitive proxy metric for battlefield progress. Field commanders, incentivized by promotions and resources, began counting dead civilians, livestock, and unverified targets as enemy combatants, generating statistical reports claiming near-total victory while the actual strategic and political position in the theater deteriorated irreversibly.""",
         "boundary": """Goodhart's Law is not an excuse to abandon measurement and retreat into subjective ambiguity. Organizations need objective KPIs to align decentralized resources. Goodhart's Law mandates that **metrics must be treated as navigational instruments, not moral scorecards**. Pair metrics antagonistically, audit qualitative reality, and never allow a proxy to replace frontline human judgment.""",
-        "visual_diagram": """graph LR
-  A[Target Metric Defined] --> B[Incentives Tied to Metric]
-  B --> C[Gamers Optimize Proxy Variable]
-  C --> D[Underlying Core Goal Corrupted]
-  style A fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
-  style D fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239""",
+        "visual_diagram": """graph TD
+  Goal["🎯 Strategic Objective (e.g. Software Quality)"]
+  Goal --> SelectProxy["📊 Select Operational Proxy Metric<br/>• e.g. Count of Lines of Code or Closed Bugs"]
+  SelectProxy --> GameMetric["🎮 Participants Adapt Incentives (Goodhart's Law)<br/>• Gaming the metric for bonuses<br/>• Writing bloated code, closing fake bugs"]
+  GameMetric --> Disconnect["💥 Metric Skyrockets while Core Reality Degrades"]
+  Disconnect --> Remedy["🛡️ Remedy: Use Multi-Metric Counterweights & Qualitative Audits"]
+
+  style Goal fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style SelectProxy fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style GameMetric fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Disconnect fill:#FFF1F2,stroke:#F43F5E,stroke-width:2px,color:#9F1239
+  style Remedy fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """Any observed statistical regularity will tend to collapse once pressure is placed upon it for control purposes.""",
         "action_item": """Audit Your Primary KPI: Look at the #1 number your team is evaluated on. Ask: 'If a cynical actor wanted to double this number in 30 days without doing any actual good work, how would they game it?' Install a counter-metric immediately to neutralize that specific loophole.""",
         "author": "Charles Goodhart",
@@ -1270,11 +1432,19 @@ In literature and media consumption, consider the contrast between the *New York
 In consumer tools, physical knives, wooden spoons, glass cups, and wheels have remained structurally unchanged for thousands of years. While complex electronic kitchen gadgets (electric pasta makers, single-use fruit slicers) break and end up in thrift stores within three years, the simple chef's knife endures as an irreplaceable culinary primitive.""",
         "boundary": """The Lindy Effect applies strictly to **non-perishable informational or structural entities**, never to biological organisms. Furthermore, Lindy is a statistical heuristic, not an absolute guarantee: ancient institutions can still be obliterated by unprecedented step-function physical disruptions (e.g. horse transport being displaced by the internal combustion engine). Use Lindy to filter for quality, not to blindly dismiss emerging physical breakthroughs.""",
         "visual_diagram": """graph TD
-  A[New Idea / Tool Born] --> B{Withstands Decades of Stress?}
-  B -->|No: Fragile Fad| C[Extinct & Forgotten]
-  B -->|Yes: Proved Durability| D[Lindy Dynamic: Expected Lifespan Grows with Age]
-  style C fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
-  style D fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+  Technology["💡 Non-Perishable Idea, Book or Technology"]
+  Technology --> Exposure{"Decades of Cultural & Market Stress"}
+  
+  Exposure -->|Fails Stress Test| FragileFad["🍂 Fragile Ephemeral Fad<br/>• High novelty, low fundamental utility<br/>• Rapid obsolescence & extinction"]
+  
+  Exposure -->|Survives Intact| LindyDynamic["⏳ Lindy Law Active<br/>• Proportional durability: 50 yrs old -> expected 50 more<br/>• Deeply antifragile to societal turnover"]
+  LindyDynamic --> TimelessAdvantage["🏛️ Foundational Wisdom & Perennial Competitive Edge"]
+
+  style Technology fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style Exposure fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style FragileFad fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style LindyDynamic fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style TimelessAdvantage fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": "If a book has been in print for forty years, I can expect it to be in print for another forty years.",
         "action_item": """The Lindy Information Filter: Before opening your next book or adding a dependency to your technical stack, check its age. Vow that for every modern book published this year, you will read one classic that has remained continuously in print for at least 50 years.""",
         "author": "Benoit Mandelbrot & Nassim Taleb",
@@ -1315,19 +1485,21 @@ The most dangerous pathology in systems thinking is the phenomenon of **Time Del
 In digital business models, Amazon's foundational 'Virtuous Cycle' (sketched by Jeff Bezos on a napkin in 2001) is the quintessential reinforcing feedback loop: Lower Prices $\\to$ More Customer Visits $\\to$ More Third-Party Sellers $\\to$ More Scale & Fulfillment Fixed-Cost Absorption $\\to$ Lower Cost Structure $\\to$ Even Lower Prices. By aligning capital and talent exclusively with compounding reinforcing loops, Amazon created an unstoppable compounding flywheel.""",
         "boundary": """Do not mistake reinforcing loops for infinite perpetual-motion machines. In physics and economics, no reinforcing loop grows indefinitely without encountering a hard balancing barrier (resource exhaustion, market saturation, regulatory intervention, algorithmic toxicity). If leadership fails to identify the impending carrying capacity of their flywheel, the reinforcing loop abruptly inverts into an equally violent reinforcing collapse.""",
         "visual_diagram": """graph TD
-  subgraph Reinforcing["Reinforcing Loop (Exponential Flywheel)"]
-    A[Lower Prices] --> B[More Customer Traffic]
-    B --> C[Attracts 3rd-Party Merchants]
-    C --> D[Greater Scale & Lower Unit Cost]
-    D -->|Feeds Back into Accelerator| A
-  end
-  subgraph Balancing["Balancing Loop (Homeostatic Stabilizer)"]
-    E[Current State Deviation] --> F[Thermostatic Corrective Action]
-    F -->|Time Delay Latency| G[System Realigns to Equilibrium]
-    G -->|Resists Perturbation| E
-  end
-  style Reinforcing fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
-  style Balancing fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A""",
+  Stimulus["⚡ System Input or Policy Change"]
+  Stimulus --> LoopType{"Feedback Architecture"}
+  
+  LoopType -->|Reinforcing Loop (Flywheel)| Reinforce["🌀 Exponential Compounding<br/>• Lower prices -> more users -> more scale<br/>• Runaway growth or death spiral"]
+  Reinforce --> FlywheelPayoff["🚀 Exponential Scale & Unassailable Moats"]
+  
+  LoopType -->|Balancing Loop (Thermostat)| Balance["⚖️ Homeostatic Stabilization<br/>• Deviation detected -> corrective force applied<br/>• Dampens volatility back to equilibrium"]
+  Balance --> StabilityPayoff["🛡️ Antifragile Resilience & Predictable Health"]
+
+  style Stimulus fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style LoopType fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style Reinforce fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style FlywheelPayoff fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Balance fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style StabilityPayoff fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """A system is an interconnected set of elements coherently organized in a way that achieves something. You cannot do just one thing in a system; everything is connected, and feedback always returns.""",
         "action_item": """Draw the feedback loop governing your team's primary metric. Identify where the longest time delay exists between an action and its observable result, and find one way to cut that latency in half.""",
         "author": "Donella Meadows",
@@ -1370,17 +1542,23 @@ The matrix deconstructs all human obligations along two strictly orthogonal axes
 In modern enterprise execution, Steve Jobs practiced extreme Quadrant II ruthlessness during Apple's annual executive retreat. Jobs would stand before Apple's top 100 leaders, solicit 300 proposed product initiatives, narrow them down through brutal debate to a list of 10, and then dramatically strike through the bottom seven with a black marker, declaring: *"We can only do three. Everything else is a distraction that steals resources from the vital few."*""",
         "boundary": """Do not use the Eisenhower Matrix as an excuse to abdicate frontline empathy or ignore critical early-stage operational warning signs. When a genuine Quadrant I existential crisis strikes (cash runway expiring in 3 weeks, key database corrupted, active cyber intrusion), philosophical retreats into Quadrant II planning are catastrophic. In genuine emergencies, execute with wartime urgency first, then immediately build the Quadrant II systems that guarantee the crisis never recurs.""",
         "visual_diagram": """graph TD
-  subgraph Quadrant_Matrix["The Eisenhower Triage Matrix"]
-    Q1["Quadrant I: URGENT & IMPORTANT<br/>Crises, Imminent Deadlines<br/>Action: MANAGE & RESOLVE"]
-    Q2["Quadrant II: NOT URGENT & IMPORTANT<br/>Strategy, Health, Deep Craft, Systems<br/>Action: SCHEDULE SACROSANCT TIME"]
-    Q3["Quadrant III: URGENT & NOT IMPORTANT<br/>Interruptions, Pings, Busywork<br/>Action: DELEGATE / AUTOMATE"]
-    Q4["Quadrant IV: NOT URGENT & NOT IMPORTANT<br/>Mindless Feeds, Escapism<br/>Action: DELETE MERCILESSLY"]
-    Q2 -->|Drives 90% of Compounding Leverage| Success[Enduring Strategic Mastery]
-  end
+  Task["📋 Incoming Task, Request or Meeting"]
+  Task --> Filter{"Is it truly important to long-term goals?"}
+  
+  Filter -->|Important & Urgent| Q1["🔥 Quadrant I: Manage<br/>• Pressing crises & imminent deadlines<br/>• Action: EXECUTE IMMEDIATELY"]
+  Filter -->|Important & Not Urgent| Q2["💎 Quadrant II: Focus<br/>• Strategy, deep health, relationships<br/>• Action: SCHEDULE SACRED TIME"]
+  Filter -->|Not Important & Urgent| Q3["⚡ Quadrant III: Delegate<br/>• Pings, interruptions, other's agendas<br/>• Action: AUTOMATE OR DELEGATE"]
+  Filter -->|Not Important & Not Urgent| Q4["🗑️ Quadrant IV: Eliminate<br/>• Mindless feeds & busywork distraction<br/>• Action: DELETE MERCILESSLY"]
+  
+  Q2 --> Compounding["🌟 90% of Life Leverage Compounds Here"]
+
+  style Task fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style Filter fill:#F1F5F9,stroke:#64748B,stroke-width:1.5px,color:#0F172A
   style Q1 fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
-  style Q2 fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style Q2 fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
   style Q3 fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
-  style Q4 fill:#F8FAFC,stroke:#64748B,stroke-width:1.5px,color:#0F172A""",
+  style Q4 fill:#F8FAFC,stroke:#64748B,stroke-width:1.5px,color:#0F172A
+  style Compounding fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """What is important is seldom urgent and what is urgent is seldom important. The key is not to prioritize what's on your schedule, but to schedule your priorities.""",
         "action_item": """Audit yesterday's calendar. Categorize every hour into Q1, Q2, Q3, or Q4. If your Q2 time was under 90 minutes, block out a non-negotiable 90-minute deep work block tomorrow morning.""",
         "author": "Dwight D. Eisenhower",
@@ -1418,12 +1596,22 @@ In corporate turnarounds, Intel's pivot in 1985 demonstrates heroic liberation f
 
 In everyday software development, engineering teams frequently spend six months building a complex proprietary ORM or authentication service that proves buggy and difficult to maintain. When a reliable open-source library arrives that solves the problem for free, junior leads often refuse to migrate: 'We spent six months building this custom code!' Senior architects understand that the six months are gone forever; the only relevant question is the maintenance cost over the next five years.""",
         "boundary": """Do not confuse overcoming sunk cost with lack of perseverance. Pivoting away from a failing hypothesis is intellectual discipline; quitting an initiative simply because the work is hard or currently experiencing temporary operational friction is laziness. Distinguish between **fundamental structural insolvency** (the investment thesis is definitively disproven) versus **ordinary execution friction** (the thesis remains sound, but requires grit).""",
-        "visual_diagram": """graph LR
-  A[Past Sunk Investment: Gone Forever] --> B{Decision Gate}
-  B -->|Fallacy: Honor Past Spend| C[Double Down on Value-Destroying Path]
-  B -->|Rational: Focus Solely on Future ROI| D[Cut Losses & Reallocate Capital to Best Opportunity]
-  style C fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
-  style D fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+        "visual_diagram": """graph TD
+  Investment["💸 Heavy Past Sunk Capital / Time Spent"]
+  Investment --> ForkCheck{"Decision Fork: What is future expected value?"}
+  
+  ForkCheck -->|Sunk Cost Fallacy: Honor the Past| Trap["❌ Pour More Capital into Failing Project<br/>• Emotional reluctance to admit loss<br/>• Escalating commitment to catastrophe"]
+  ForkCheck -->|Rational Zero-Based Thinking| Rational["✅ Focus Strictly on Forward ROI<br/>• Acknowledge past capital is gone forever<br/>• Cut losses immediately"]
+  
+  Trap --> TotalRuin["💥 Value Destruction & Opportunity Cost Drag"]
+  Rational --> Reallocate["🚀 Reallocate Resources to Highest-Upside Bets"]
+
+  style Investment fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style ForkCheck fill:#F1F5F9,stroke:#64748B,stroke-width:1.5px,color:#0F172A
+  style Trap fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Rational fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style TotalRuin fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Reallocate fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """The cost of something is what you give up to get it. Sunk costs are already given up; do not let them hold your future hostage.""",
         "action_item": """The Clean Slate Audit: Review your current active project portfolio. Identify the single project that drains the most time and capital relative to its future expected return. Apply the Andy Grove Test: 'If I took over this role today with zero emotional attachment to past efforts, would I fund this project?' If the answer is no, kill it this week.""",
         "author": "Richard Thaler",
@@ -1465,16 +1653,22 @@ Flow cannot occur in arbitrary environments. It requires precise mathematical tu
 In competitive sports, the concept of the 'Zone'—where NBA players describe the basketball hoop appearing 'as wide as an ocean'—is the physiological manifestation of transient hypofrontality. During Michael Jordan's famous 63-point playoff performance against the Boston Celtics in 1986, his conscious self-judgment was entirely absent; actions flowed directly from muscle memory and subconscious pattern recognition at hyper-speed.""",
         "boundary": """Do not mistake flow state for strategic wisdom. Flow is an execution amplifier, not a compass. You can enter an ecstatic, effortless flow state while refactoring irrelevant legacy code, playing video games for 10 hours, or optimizing a marketing campaign for a doomed product. Always deploy second-order thinking and the Eisenhower Matrix *before* entering flow, ensuring your cognitive firepower is applied to the right problem.""",
         "visual_diagram": """graph TD
-  subgraph FlowCurve["Csikszentmihalyi Challenge-Skill Equilibrium"]
-    A[High Challenge / Low Skill] --> B[Anxiety, Threat Response & Paralysis]
-    C[Low Challenge / High Skill] --> D[Boredom, Apathy & Distraction]
-    E[Challenge Exceeds Skill by ~4%] --> F[THE FLOW CHANNEL]
-    F --> G[Transient Hypofrontality: Inner Critic Silenced]
-    G --> H[500% Performance & Asymmetric Output]
-  end
-  style A fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
-  style C fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
-  style F fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+  Challenge["🎯 Challenging Goal or Creative Endeavor"]
+  Challenge --> BalanceCheck{"Challenge vs Skill Calibration"}
+  
+  BalanceCheck -->|Challenge >> Skill| Anxiety["😰 Overwhelmed & Anxious<br/>• Threat response triggers fight/flight<br/>• Cognitive paralysis"]
+  
+  BalanceCheck -->|Skill >> Challenge| Boredom["🥱 Boredom & Distraction<br/>• Attention wanders to low-value stimulation<br/>• Cognitive atrophy"]
+  
+  BalanceCheck -->|Challenge Exceeds Skill by ~4%| FlowChannel["🌊 THE FLOW CHANNEL<br/>• Deep immersion & total focus<br/>• Transient hypofrontality silences inner critic"]
+  FlowChannel --> HyperPerformance["⚡ 500% Increase in Problem-Solving Speed & Mastery"]
+
+  style Challenge fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style BalanceCheck fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style Anxiety fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Boredom fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style FlowChannel fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style HyperPerformance fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """The best moments in our lives are not the passive, receptive, relaxing times. The best moments usually occur if a person's body or mind is stretched to its limits in a voluntary effort to accomplish something difficult and worthwhile.""",
         "action_item": """Identify your most cognitively demanding task today. Eliminate all notifications, close all browser tabs except one, and set a timer for 60 uninterrupted minutes to enter the flow channel.""",
         "author": "Mihaly Csikszentmihalyi",
@@ -1515,18 +1709,21 @@ Mark Zuckerberg deployed an intentional clustering strategy rooted in Metcalfe's
 In decentralized financial systems, Bitcoin and Ethereum derive their multi-trillion-dollar security models and capital liquidity directly from Metcalfe's Law. Even if a rival project clones Ethereum's open-source codebase line-for-line, it cannot clone the millions of active wallets, liquidity pools, developer integrations, and smart contracts that form its quadratic network moat.""",
         "boundary": """Beware the dark side of Metcalfe's Law: negative network externalities. Metcalfe assumed that every newly added connection adds positive value. In reality, as networks scale past their optimal Dunbar thresholds, uncurated node growth introduces noise, spam, tribal polarization, and security vulnerabilities. When the cost of bad connections exceeds the value of good ones, the network triggers a mass exodus of elite users—the 'Eternal September' phenomenon.""",
         "visual_diagram": """graph TD
-  subgraph Linear["Classical Industrial Scaling (Linear)"]
-    A[1 Factory Unit] -->|Adds Linear Output| B[2 Factory Units: 2x Output]
-    B -->|Costs Scale Linearly| C["Linear Return on Capital O(N)"]
-  end
-  subgraph Metcalfe["Metcalfe Network Scaling (Quadratic)"]
-    D[2 Nodes = 1 Connection] --> E[5 Nodes = 10 Connections]
-    E --> F[12 Nodes = 66 Connections]
-    F --> G["100 Nodes = 4,950 Connections: Quadratic Value O(N^2)"]
-    G --> H[Exponential Gravitational Moat & Winner-Take-Most]
-  end
-  style Linear fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
-  style Metcalfe fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+  ScalingModel["📈 Business Growth & Network Strategy"]
+  ScalingModel --> ArchChoice{"Architecture Choice"}
+  
+  ArchChoice -->|Linear Industrial Scaling O(N)| Linear["🏭 Add Factory Units Linearly<br/>• Costs scale 1:1 with output<br/>• Vulnerable to commodity pricing"]
+  Linear --> ThinMargins["⚠️ Linear Margins & Low Defensibility"]
+  
+  ArchChoice -->|Network Density Scaling O(N^2)| Metcalfe["🌐 Metcalfe Quadratic Expansion<br/>• Value = N*(N-1)/2 interconnectivity<br/>• Each new user multiplies utility for all"]
+  Metcalfe --> Dominance["🏰 Gravitational Winner-Take-Most Monopoly"]
+
+  style ScalingModel fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style ArchChoice fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style Linear fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style ThinMargins fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Metcalfe fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style Dominance fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """The value of a network is proportional to the square of the number of users connected to the system. Once a network reaches critical mass, its gravity becomes virtually inescapable.""",
         "action_item": """Analyze your business or project. Ask: 'Does our 1,000th user make the product significantly more valuable for our 1st user?' If not, how can you design a multiplayer feedback loop into the core workflow?""",
         "author": "Robert Metcalfe",
@@ -1569,17 +1766,21 @@ Conversely, Bell Labs, where Ken Thompson and Dennis Ritchie engineered UNIX, wa
 In modern cloud computing, Amazon’s transformation in 2002 via Jeff Bezos’s famous 'API Mandate' represents the greatest intentional execution of the Inverse Conway Maneuver in industrial history. Bezos mandated that all teams must decouple their data and functionality exclusively through service interfaces designed to be publicly exposable. By restructuring Amazon's organizational communication into modular, decoupled service teams, Amazon organically birthed Amazon Web Services (AWS)—the multi-billion-dollar backbone of the modern internet.""",
         "boundary": """Do not apply the Inverse Conway Maneuver blindly without assessing the cognitive overhead of distributed teams. Decomposing an organization into dozens of autonomous micro-teams introduces significant operational friction: contract synchronization, distributed tracing complexity, and organizational isolation. In early-stage startups (under 10 people), a tight, monolithic architecture built by a single co-located team is vastly more efficient than premature microservices.""",
         "visual_diagram": """graph TD
-  subgraph OrgStructure["Human Communication Topology (Org Chart)"]
-    A[Team Alpha: Backend Silo] <-->|Weekly Formal Friction| B[Team Beta: Frontend Silo]
-    A <-->|Political Friction| C[Team Gamma: Data Science Silo]
-  end
-  subgraph CodeArchitecture["Resulting System Architecture (Conway's Law)"]
-    D[Monolithic Backend Service] <-->|Brittle, Bloated REST Interface| E[Bloated Frontend Layer]
-    D <-->|Unstable ETL Nightly Batch| F[Isolated Data Warehouse]
-  end
-  OrgStructure -->|Isomorphic Inevitability| CodeArchitecture
-  style OrgStructure fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
-  style CodeArchitecture fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239""",
+  OrgDesign["🏢 Organizational Communication Topology"]
+  OrgDesign --> TeamStructure{"Team Boundaries & Silos"}
+  
+  TeamStructure -->|Isolated Depts & Turf Wars| Fragmented["🧱 Frontend Silo vs Backend Silo<br/>• Politics & weekly bureaucratic handoffs<br/>• Misaligned team goals"]
+  Fragmented --> BrittleArchitecture["💥 Conway's Law Manifestation<br/>• Brittle monolithic services with bloated REST interfaces<br/>• Nightly batch failures reflecting org friction"]
+  
+  TeamStructure -->|Cross-Functional Autonomous Pods| Pods["⚡ Small Two-Pizza Outcome Teams<br/>• High empathy & tight co-location<br/>• Direct ownership of customer journey"]
+  Pods --> CleanMicroservices["✨ Modular, Decoupled & High-Velocity Architecture"]
+
+  style OrgDesign fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style TeamStructure fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style Fragmented fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style BrittleArchitecture fill:#FFF1F2,stroke:#F43F5E,stroke-width:2px,color:#9F1239
+  style Pods fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style CleanMicroservices fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """Organizations which design systems are constrained to produce designs which are copies of the communication structures of these organizations. If you have four groups working on a compiler, you will get a 4-pass compiler.""",
         "action_item": """Examine the most brittle, bug-ridden integration in your current codebase or project workflow. Identify the two teams responsible for each side of that boundary and audit how they communicate.""",
         "author": "Melvin Conway",
@@ -1621,18 +1822,21 @@ Almost none thought to test a *disconfirming* sequence ($5-3-1$ or $2-4-7$) to f
 In catastrophic contrast, the collapse of intelligence analysis prior to the 2003 Iraq War exemplifies confirmation bias at an existential geopolitical scale. Analysts operating under intense political pressure collected thousands of disparate data points. Ambiguous aluminum tubes (which were actually intended for artillery rockets) and mobile biological testing trucks were cataloged as definitive proof of active Weapons of Mass Destruction (WMDs). Contradictory reports from UN weapons inspectors demonstrating that facilities were abandoned were dismissed as Iraqi deception. The analytical apparatus saw only what it was primed to see, culminating in a catastrophic strategic blunder.""",
         "boundary": """Do not allow the search for disconfirming evidence to induce analysis paralysis or hyper-cynicism. There is an infinite universe of contrarian opinions on every topic. If you demand 100% philosophical consensus and investigate every fringe grievance, you will never ship a product or make an investment. Confirmation bias mitigation is designed to protect you from existential blind spots on *load-bearing assumptions*, not to prevent decisive execution.""",
         "visual_diagram": """graph TD
-  subgraph BiasTrap["The Confirmation Bias Echo Chamber"]
-    A[Pre-Existing Conviction / Pet Theory] --> B[Actively Search Only for Affirming Data]
-    B -->|Dismiss or Explain Away Contradictions| C[Inflated Overconfidence & Hubris]
-    C --> D[Catastrophic Collision with Reality]
-  end
-  subgraph Falsification["Darwin / Popper Falsification Protocol"]
-    E[Hypothesis Formulated] --> F[Aggressive Search for Disconfirming Evidence]
-    F -->|Record Anomalies within 30 Minutes| G[Hypothesis Stressed, Refined or Discarded]
-    G --> H[Antifragile, Objective Truth Alignment]
-  end
-  style BiasTrap fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
-  style Falsification fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
+  Hypothesis["💡 Strong Pre-Existing Belief or Investment Thesis"]
+  Hypothesis --> Filter{"Evidence Processing Mechanism"}
+  
+  Filter -->|Confirmation Bias Filter| EchoChamber["🙈 Filter Bubble & Confirmation Search<br/>• Seek only affirming data<br/>• Rationalize or ignore contradictory anomalies"]
+  EchoChamber --> Hubris["💥 Blind Overconfidence & Hard Collision with Reality"]
+  
+  Filter -->|Darwin / Popper Falsification Protocol| Falsify["🔬 Aggressive Search for Counter-Evidence<br/>• Write down disconfirming facts within 30 mins<br/>• Actively invite red team critique"]
+  Falsify --> AntifragileTruth["🎯 Antifragile Calibration & Ground Truth Alignment"]
+
+  style Hypothesis fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style Filter fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style EchoChamber fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Hubris fill:#FFF1F2,stroke:#F43F5E,stroke-width:2px,color:#9F1239
+  style Falsify fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style AntifragileTruth fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B""",
         "quote": """What the human being is best at doing is interpreting all new information so that their prior conclusions remain intact. The human understanding when it has once adopted an opinion draws all things else to support and agree with it.""",
         "action_item": """Identify your strongest current business or life conviction. Find an article or interview by an intelligent thinker who completely disagrees with you, and summarize their top 3 arguments fairly.""",
         "author": "Peter Wason & Daniel Kahneman",
@@ -1679,17 +1883,21 @@ Gore instituted an absolute company policy: no single Gore manufacturing facilit
 Similarly, in military history, the basic independent tactical unit of armies across millennia—from Roman centuries to British infantry companies to modern US Marine rifle companies—has consistently hovered between 120 and 180 soldiers. Military planners discovered through blood and trial that in high-stress combat environments, soldiers fight with heroic commitment not for abstract national ideologies, but for the comrades they personally know and trust by name.""",
         "boundary": """Do not misinterpret Dunbar's Number as a barrier to global impact or mass societal coordination. As Yuval Noah Harari demonstrated in *Sapiens*, humanity coordinates across millions of individuals through shared fictions, legal contracts, religions, currencies, and corporate brands. Dunbar's Number governs *informal relational trust without hierarchy*; it does not limit the size of organizations that can coordinate via structured legal systems and standardized protocols.""",
         "visual_diagram": """graph TD
-  subgraph ConcentricRings["Dunbar's Concentric Intimacy Architecture"]
-    A["5 People: The Support Clique (Absolute Intimacy)"]
-    B["15 People: The Sympathy Cohort (Deep Trust)"]
-    C["50 People: The Band (Regular Interaction)"]
-    D["150 People: THE DUNBAR LIMIT (Informal Peer Accountability)"]
-    E["Beyond 150: Relational Trust Collapses -> Bureaucracy, Politics & Alienation"]
-    A --> B --> C --> D --> E
-  end
-  style A fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
-  style D fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
-  style E fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239""",
+  Social["👥 Human Social Matrix Scaling"]
+  Social --> Layer1["5 People: Support Clique<br/>Primary intimates, 80% emotional investment"]
+  Layer1 --> Layer2["15 People: Sympathy Cohort<br/>Deep mutual trust and vulnerability"]
+  Layer2 --> Layer3["50 People: Close Cohort<br/>Frequent active interaction"]
+  Layer3 --> DunbarLimit["150 People: THE DUNBAR LIMIT<br/>Neocortex calculation capacity ceiling"]
+  DunbarLimit -->|Expanding Beyond 150| Fracture["⚠️ Informal Trust & Peer Accountability Shatter"]
+  Fracture --> Bureaucracy["🏢 Demands Formal Bureaucracy, Hierarchy & HR"]
+
+  style Social fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
+  style Layer1 fill:#ECFDF5,stroke:#10B981,stroke-width:2px,color:#064E3B
+  style Layer2 fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style Layer3 fill:#EFF6FF,stroke:#3B82F6,stroke-width:1.5px,color:#1D4ED8
+  style DunbarLimit fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E
+  style Fracture fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Bureaucracy fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239""",
         "quote": """The number 150 seems to represent the maximum number of individuals with whom we can have a genuine social relationship. Beyond that, memory fails and intimacy dissolves into bureaucracy.""",
         "action_item": """Audit your core relationships. Identify the 5 people who form your primary support clique. Send a message of genuine gratitude or schedule quality time with one of them today.""",
         "author": "Robin Dunbar",
