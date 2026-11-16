@@ -402,7 +402,8 @@ html:not(.dark) .text-slate-400 {
 [id*="diagram"] [class*="flowchart-"] {
   cursor: pointer !important;
   pointer-events: all !important;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease !important;
+  transform: none !important;
+  transition: none !important;
 }
 
 .mermaid .node rect,
@@ -414,13 +415,25 @@ html:not(.dark) .text-slate-400 {
   rx: 12px !important;
   ry: 12px !important;
   stroke-width: 1.5px !important;
-  filter: drop-shadow(0 2px 6px rgba(15, 23, 42, 0.06)) !important;
+  filter: drop-shadow(0 2px 4px rgba(15, 23, 42, 0.05)) !important;
+  transition: stroke 0.15s ease, stroke-width 0.15s ease, filter 0.15s ease !important;
 }
 
+/* Rock-solid, flicker-free node hover: highlight border and glow without physical translation/movement */
 .mermaid .node:hover,
 [id*="diagram"] .node:hover {
-  filter: drop-shadow(0 6px 16px rgba(37, 99, 235, 0.22)) !important;
-  transform: translateY(-2px);
+  transform: none !important;
+}
+
+.mermaid .node:hover rect,
+.mermaid .node:hover circle,
+.mermaid .node:hover polygon,
+[id*="diagram"] .node:hover rect,
+[id*="diagram"] .node:hover circle,
+[id*="diagram"] .node:hover polygon {
+  stroke: #2563EB !important;
+  stroke-width: 2.5px !important;
+  filter: drop-shadow(0 4px 14px rgba(37, 99, 235, 0.30)) !important;
 }
 
 .mermaid .node .label,
