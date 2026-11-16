@@ -375,6 +375,31 @@ def init_db():
                 cursor.execute("UPDATE ideas SET visual_diagram = ? WHERE id = ?", (diag, row["id"]))
             conn.commit()
 
+        # Sanitize and upgrade all existing diagrams in the DB to soft pastels and quoted labels
+        cursor.execute("SELECT id, visual_diagram FROM ideas WHERE visual_diagram IS NOT NULL AND visual_diagram != ''")
+        all_diags = cursor.fetchall()
+        dark_hex_map = {
+            "fill:#064e3b": "fill:#ECFDF5",
+            "fill:#1e1b4b": "fill:#EEF2FF",
+            "fill:#312e81": "fill:#EEF2FF",
+            "fill:#881337": "fill:#FFF1F2",
+            "fill:#831843": "fill:#FFF1F2",
+            "fill:#78350f": "fill:#FFFBEB",
+            "fill:#0f766e": "fill:#F0FDFA",
+            "color:#fff": "color:#0F172A",
+            "color:#ffffff": "color:#0F172A"
+        }
+        for row in all_diags:
+            diag = row["visual_diagram"] or ""
+            updated = diag
+            for old_h, new_h in dark_hex_map.items():
+                updated = updated.replace(old_h, new_h)
+            # Wrap unquoted parentheses in node labels e.g. [Return on Capital O(N)]
+            updated = re.sub(r'\[([^\"\]\n]*\([^\)\]\n]+\)[^\"\]\n]*)\]', r'["\1"]', updated)
+            if updated != diag:
+                cursor.execute("UPDATE ideas SET visual_diagram = ? WHERE id = ?", (updated, row["id"]))
+        conn.commit()
+
         # Initialize Leitner review dates for cards with no review date
         today_iso = date.today().isoformat()
         cursor.execute("UPDATE ideas SET next_review_date = ? WHERE next_review_date IS NULL OR next_review_date = ''", (today_iso,))

@@ -318,6 +318,57 @@ function initMermaidIfNeeded() {
   }
 }
 
+function sanitizeAndElevateMermaid(diag, targetElId) {
+  if (!diag) return '';
+  let clean = diag.trim().replace(/^```mermaid\s*/i, '').replace(/```\s*$/, '').trim();
+
+  // If rendering inside a card or modal-full-diagram, or viewport is mobile, convert graph LR to graph TD
+  const isCard = targetElId.includes('card') || targetElId.includes('modal-full') || window.innerWidth < 768;
+  if (isCard) {
+    clean = clean.replace(/^graph\s+LR\b/m, 'graph TD');
+  }
+
+  // Wrap unquoted parentheses in node definitions like C[Linear Return on Capital O(N)] -> C["Linear Return on Capital O(N)"]
+  clean = clean.replace(/\[([^\"\]\n]*\([^\)\]\n]+\)[^\"\]\n]*)\]/g, '["$1"]');
+
+  // Map dark fill hex codes to light, high-contrast pastel colors
+  const darkToPastel = {
+    '#064e3b': '#ECFDF5',
+    '#065f46': '#ECFDF5',
+    '#047857': '#D1FAE5',
+    '#1e1b4b': '#EEF2FF',
+    '#312e81': '#EEF2FF',
+    '#1e3a8a': '#EFF6FF',
+    '#1e40af': '#DBEAFE',
+    '#0f172a': '#F8FAFC',
+    '#1e293b': '#F1F5F9',
+    '#334155': '#E2E8F0',
+    '#881337': '#FFF1F2',
+    '#831843': '#FFF1F2',
+    '#9f1239': '#FFE4E6',
+    '#be123c': '#FECDD3',
+    '#78350f': '#FFFBEB',
+    '#92400e': '#FEF3C7',
+    '#b45309': '#FDE68A',
+    '#581c87': '#FAF5FF',
+    '#3b0764': '#F3E8FF',
+    '#6b21a8': '#E9D5FF',
+    '#134e4a': '#F0FDFA',
+    '#115e59': '#CCFBF1',
+    '#0f766e': '#CCFBF1'
+  };
+
+  clean = clean.replace(/(fill:\s*)(#[0-9a-fA-F]{3,6})/gi, (m, p1, hex) => {
+    const l = hex.toLowerCase();
+    return p1 + (darkToPastel[l] || hex);
+  });
+
+  // Ensure text in styled nodes is dark slate
+  clean = clean.replace(/(color:\s*)(#fff\b|#ffffff\b|white\b)/gi, '$1#0F172A');
+
+  return clean;
+}
+
 async function renderIdeaVisualDiagram(idea, targetElId) {
   const container = document.getElementById(targetElId);
   if (!container || !idea) return;
@@ -338,7 +389,7 @@ async function renderIdeaVisualDiagram(idea, targetElId) {
     try {
       diagramRenderCounter++;
       const uniqueId = `mermaid-svg-${diagramRenderCounter}-${Date.now()}`;
-      const cleanDiag = rawDiagram.trim().replace(/^```mermaid\s*/i, '').replace(/```\s*$/, '').trim();
+      const cleanDiag = sanitizeAndElevateMermaid(rawDiagram, targetElId);
       const { svg } = await mermaid.render(uniqueId, cleanDiag);
       container.innerHTML = svg;
       
@@ -983,108 +1034,8 @@ async function playIdeaAudioById(id) {
   }
 }
 
-// --- Stashes Tab ---
-function renderStashesGrid() {
-  const container = document.getElementById("stashes-grid");
-  if (!container) return;
-
-  const stashes = window.state.stashes;
-  if (!stashes.length) {
-    container.innerHTML = `<div class="col-span-full py-12 text-center text-slate-500">No stashes created yet.</div>`;
-    return;
-  }
-
-  container.innerHTML = stashes.map(stash => `
-    <div onclick="viewStashDetail('${stash.id}')" class="cursor-pointer group bg-slate-900 border border-slate-800 hover:border-indigo-500/60 rounded-3xl p-6 shadow-xl transition-all duration-200 hover:-translate-y-1">
-      <div class="flex items-center justify-between mb-4">
-        <div class="w-12 h-12 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center text-lg">
-          <i data-lucide="${stash.icon || 'sparkles'}" class="w-6 h-6"></i>
-        </div>
-        <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-400 border border-slate-700">
-          ${stash.ideas_count} ideas
-        </span>
-      </div>
-
-      <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition">
-        ${stash.title}
-      </h3>
-      <p class="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-        ${stash.description}
-      </p>
-
-      <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-blue-600 font-semibold">
-        <span>Open Collection</span>
-        <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
-      </div>
-    </div>
-  `).join('');
-
-  if (window.lucide) lucide.createIcons();
-}
-
-async function viewStashDetail(stashId) {
-  try {
-    const res = await fetch(`/api/stashes/${stashId}`);
-    const stash = await res.json();
-
-    document.getElementById("stashes-grid").classList.add("hidden");
-    const detailView = document.getElementById("stash-detail-view");
-    const detailContent = document.getElementById("stash-detail-content");
-    detailView.classList.remove("hidden");
-
-    detailContent.innerHTML = `
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-6">
-        <div class="flex items-center space-x-3 mb-2">
-          <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
-            <i data-lucide="${stash.icon || 'bookmark'}" class="w-5 h-5"></i>
-          </div>
-          <div>
-            <h2 class="text-2xl font-bold text-slate-900">${stash.title}</h2>
-            <p class="text-xs text-slate-500">${stash.ideas_count} curated atomic ideas</p>
-          </div>
-        </div>
-        <p class="text-sm text-slate-700 mt-2">${stash.description}</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        ${(stash.ideas || []).map(idea => `
-          <div class="bg-white border border-slate-200 shadow-2xs rounded-2xl p-6 flex flex-col justify-between">
-            <div>
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
-                ${idea.topic}
-              </span>
-              <h4 class="text-base font-bold text-slate-900 mt-2">${idea.title}</h4>
-              <p class="text-xs text-blue-600 font-medium mb-2">${idea.one_liner}</p>
-              <p class="text-xs text-slate-700 leading-relaxed mb-4">${idea.summary}</p>
-            </div>
-            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-              <span class="text-slate-500 font-medium truncate max-w-[120px]">${idea.author}</span>
-              <div class="flex items-center space-x-1.5">
-                <button onclick="openDeepDiveModal('${idea.id}')" class="px-2.5 py-1 rounded-lg bg-indigo-500/10 hover:bg-indigo-600 text-indigo-300 hover:text-white text-xs font-semibold flex items-center space-x-1 transition" title="Detailed explanation and example">
-                  <i data-lucide="book-open" class="w-3 h-3"></i>
-                  <span>Detailed</span>
-                </button>
-                <button onclick="playIdeaAudioById('${idea.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-sky-400 hover:bg-slate-800 transition" title="Listen">
-                  <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
-                </button>
-                <button onclick="removeIdeaFromStash('${stash.id}', '${idea.id}')" class="text-rose-400 hover:text-rose-300 text-xs p-1">Remove</button>
-              </div>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    `;
-
-    if (window.lucide) lucide.createIcons();
-  } catch (err) {
-    console.error("Failed to load stash detail:", err);
-  }
-}
-
-function closeStashDetail() {
-  document.getElementById("stash-detail-view").classList.add("hidden");
-  document.getElementById("stashes-grid").classList.remove("hidden");
-}
+// --- Stashes Tab Delegated to social.js (Clean Bento Design) ---
+// renderStashesGrid, viewStashDetail, and closeStashDetail are powered by social.js
 
 async function removeIdeaFromStash(stashId, ideaId) {
   try {
@@ -1188,9 +1139,51 @@ function formatMarkdownInline(str) {
   let res = str.replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-900 font-bold">$1</strong>');
   // Italic *text* -> readable dark slate italic
   res = res.replace(/(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)/g, '<em class="text-slate-800 font-medium italic">$1</em>');
+  // Italic _text_ -> readable dark slate italic
+  res = res.replace(/(?<!_)_(?!_)(.*?)(?<!_)_(?!_)/g, '<em class="text-slate-800 font-medium italic">$1</em>');
   // Code `code` -> clean light slate pill
   res = res.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-slate-100 text-blue-700 font-mono text-[11px] border border-slate-200">$1</code>');
+  // Links [text](url) -> styled anchor
+  res = res.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline font-semibold hover:text-blue-800">$1</a>');
   return res;
+}
+
+function renderMarkdownTable(rows) {
+  if (!rows || !rows.length) return "";
+  const cleanRows = rows.map(r => r.trim()).filter(Boolean);
+  if (!cleanRows.length) return "";
+
+  const parseRow = (row) => {
+    return row.replace(/^\|/, '').replace(/\|$/, '').split('|').map(c => c.trim());
+  };
+
+  const headerCells = parseRow(cleanRows[0]);
+  let bodyStartIndex = 1;
+  if (cleanRows.length > 1 && /^[\s|:-]+$/.test(cleanRows[1])) {
+    bodyStartIndex = 2;
+  }
+
+  let tableHtml = `<div class="my-3.5 overflow-x-auto rounded-xl border border-slate-200 shadow-2xs">
+    <table class="w-full text-left text-xs border-collapse">
+      <thead class="bg-slate-100 text-slate-900 font-bold border-b border-slate-200">
+        <tr>`;
+  for (let cell of headerCells) {
+    tableHtml += `<th class="py-2.5 px-3.5 font-bold tracking-tight">${formatMarkdownInline(cell)}</th>`;
+  }
+  tableHtml += `</tr></thead><tbody class="divide-y divide-slate-100 bg-white">`;
+
+  for (let i = bodyStartIndex; i < cleanRows.length; i++) {
+    const cells = parseRow(cleanRows[i]);
+    tableHtml += `<tr class="hover:bg-slate-50/80 transition-colors">`;
+    for (let j = 0; j < cells.length; j++) {
+      const cell = cells[j];
+      const isFirstCol = (j === 0);
+      tableHtml += `<td class="py-2 px-3.5 text-slate-800 ${isFirstCol ? 'font-semibold text-slate-900' : ''}">${formatMarkdownInline(cell)}</td>`;
+    }
+    tableHtml += `</tr>`;
+  }
+  tableHtml += `</tbody></table></div>`;
+  return tableHtml;
 }
 
 function renderMarkdownDetailed(text) {
@@ -1198,10 +1191,19 @@ function renderMarkdownDetailed(text) {
   const lines = text.split("\n");
   let html = "";
   let inParagraph = false;
+  let tableRows = [];
+
+  const flushTable = () => {
+    if (tableRows.length > 0) {
+      html += renderMarkdownTable(tableRows);
+      tableRows = [];
+    }
+  };
 
   for (let line of lines) {
     const trimmed = line.trim();
     if (!trimmed) {
+      flushTable();
       if (inParagraph) {
         html += "</p>";
         inParagraph = false;
@@ -1209,7 +1211,19 @@ function renderMarkdownDetailed(text) {
       continue;
     }
 
-    if (trimmed.startsWith("### ") || trimmed.startsWith("## ")) {
+    // Markdown Table Row detection
+    if (trimmed.startsWith("|") && trimmed.endsWith("|")) {
+      if (inParagraph) {
+        html += "</p>";
+        inParagraph = false;
+      }
+      tableRows.push(trimmed);
+      continue;
+    } else {
+      flushTable();
+    }
+
+    if (trimmed.startsWith("#### ") || trimmed.startsWith("### ") || trimmed.startsWith("## ") || trimmed.startsWith("# ")) {
       if (inParagraph) {
         html += "</p>";
         inParagraph = false;
@@ -1219,6 +1233,12 @@ function renderMarkdownDetailed(text) {
         <span class="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0"></span>
         <span>${formatMarkdownInline(title)}</span>
       </h4>`;
+    } else if (/^[-*_]{3,}$/.test(trimmed)) {
+      if (inParagraph) {
+        html += "</p>";
+        inParagraph = false;
+      }
+      html += `<hr class="my-4 border-slate-200" />`;
     } else if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
       if (inParagraph) {
         html += "</p>";
@@ -1258,6 +1278,7 @@ function renderMarkdownDetailed(text) {
       html += formatMarkdownInline(trimmed);
     }
   }
+  flushTable();
   if (inParagraph) html += "</p>";
   return html;
 }

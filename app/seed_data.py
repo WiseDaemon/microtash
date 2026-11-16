@@ -1,4 +1,4 @@
-"""
+﻿"""
 Comprehensive seed knowledge base for Deepstash microlearning.
 Contains atomic insights, key takeaways, quotes, and action items from renowned books and thinkers.
 """
@@ -71,8 +71,8 @@ In software reliability engineering, Netflix implemented inversion through Chaos
   subgraph Inversion["Inversion Approach (Robust)"]
     D[Define Absolute Catastrophe] --> E[Systematically Eliminate Traps] --> F[Success as Default Residue]
   end
-  style Standard fill:#1e1b4b,stroke:#6366f1,color:#fff
-  style Inversion fill:#064e3b,stroke:#10b981,color:#fff""",
+  style Standard fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style Inversion fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": """Invert, always invert: Turn a situation or problem upside down. What happens if all our assumptions are wrong?""",
         "action_item": """Run a 30-Minute Pre-Mortem Protocol: Before signing off on your next major initiative, gather your core stakeholders. Announce: 'Imagine it is 12 months from now, and this initiative has failed catastrophically. What caused the disaster?' Write down every vulnerability and install 2 preventative guardrails today.""",
         "author": "Charlie Munger",
@@ -111,9 +111,9 @@ Similarly, in battery manufacturing, early electric vehicle skeptics claimed lit
         "visual_diagram": """graph TD
   A[Complex Problem / Convention] -->|Deconstruct Assumptions| B[Foundational Truths & Physics]
   B -->|Reason Upwards from Scratch| C[Original Step-Function Solution]
-  style A fill:#312e81,stroke:#6366f1,color:#fff
-  style B fill:#831843,stroke:#f43f5e,color:#fff
-  style C fill:#064e3b,stroke:#10b981,color:#fff""",
+  style A fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style B fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style C fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": """First principles is a physics way of looking at the world. You boil things down to the most fundamental truths and say, 'What are we sure is true?'""",
         "action_item": """Isolate the single most expensive recurring cost or operational bottleneck in your business. Deconstruct it into its raw fundamental materials, human hours, and compute costs. Calculate the true physical floor cost and evaluate the delta.""",
         "author": "Elon Musk & Aristotle",
@@ -157,9 +157,9 @@ In contrast, Long-Term Capital Management (LTCM)—a hedge fund founded by Nobel
     Outside["OUTSIDE PERIMETER<br/>Blind Spots & Noise<br/>(Pass / Delegate)"]
     Inside --> Perimeter --> Outside
   end
-  style Inside fill:#064e3b,stroke:#10b981,color:#fff
-  style Perimeter fill:#78350f,stroke:#f59e0b,color:#fff
-  style Outside fill:#881337,stroke:#f43f5e,color:#fff""",
+  style Inside fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style Perimeter fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style Outside fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239""",
         "quote": "It is not a competency if you don't know the edge of it.",
         "action_item": """Draw two concentric circles on paper. In the inner circle, write the 3 domains where you possess verifiable, differentiated judgment. In the outer circle, write 3 trending domains where you have opinions but zero operational track record. Vow to make zero high-stakes bets in the outer ring this quarter.""",
         "author": "Warren Buffett",
@@ -203,10 +203,10 @@ In monetary economics, zero-interest-rate policies (ZIRP) implemented after the 
   Decision[Decision / Policy] -->|Immediate| R1[1st Order: Direct Gratification]
   R1 -->|6-12 Months| R2[2nd Order: Systemic Adaptations & Feedback]
   R2 -->|2-5 Years| R3[3rd Order: Compounding Asymmetric Outcome]
-  style Decision fill:#312e81,stroke:#6366f1,color:#fff
-  style R1 fill:#78350f,stroke:#f59e0b,color:#fff
-  style R2 fill:#064e3b,stroke:#10b981,color:#fff
-  style R3 fill:#1e1b4b,stroke:#818cf8,color:#fff""",
+  style Decision fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style R1 fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style R2 fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style R3 fill:#EEF2FF,stroke:#818CF8,stroke-width:1.5px,color:#312E81""",
         "quote": """Failing to consider second- and third-order consequences is the cause of a great many painfully bad decisions.""",
         "action_item": """Before approving any policy change, price shift, or strategic pivot, draw 3 columns: 'Immediate Consequence (1-30 Days)', 'Stakeholder Adaptation (3-12 Months)', and 'Compounding Equilibrium (2-5 Years)'. Force your team to defend the proposal under the third column.""",
         "author": "Howard Marks & Ray Dalio",
@@ -254,8 +254,8 @@ Similarly, in elite athletic conditioning, Russian weightlifting methodology pio
     E -->|Bypasses Friction| F[Physical Initiation State]
     F -->|Zeigarnik Effect| G[Kinetic Momentum & Deep Flow]
   end
-  style Traditional fill:#1e1b4b,stroke:#ef4444,color:#fff
-  style Gateway fill:#064e3b,stroke:#10b981,color:#fff""",
+  style Traditional fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
+  style Gateway fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": """A habit must be established before it can be improved. If you can't learn the basic skill of showing up, you will never master the finer details.""",
         "action_item": """Select your single most procrastinated project today. Shrink its first step into a physical action that takes under 120 seconds (e.g., opening a terminal or creating a single slide). Execute it immediately.""",
         "author": "James Clear",
@@ -299,10 +299,10 @@ Theoretical physicist Peter Higgs, who predicted the existence of the Higgs boso
   TaskA[Deep Work Project A] -->|10-Second Inbox / Slack Glance| TaskB[Task B Interrupt]
   TaskB -->|Attempt to Return| Residue[Cognitive Residue Clogs Working Memory]
   Residue -->|20+ Minutes Cognitive Drag| Frag[Degraded Processing Speed & Surface Work]
-  style TaskA fill:#064e3b,stroke:#10b981,color:#fff
-  style TaskB fill:#78350f,stroke:#f59e0b,color:#fff
-  style Residue fill:#881337,stroke:#f43f5e,color:#fff
-  style Frag fill:#1e1b4b,stroke:#6366f1,color:#fff""",
+  style TaskA fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style TaskB fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style Residue fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Frag fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A""",
         "quote": """To produce at your peak level you need to work for extended periods with full concentration on a single task free from distraction.""",
         "action_item": """Institute a 'Bunker Block' Tomorrow Morning: Set your phone in another room on airplane mode. Block out 90 minutes on your calendar from 9:00 AM to 10:30 AM. Work on your single highest-leverage strategic problem with zero browser tabs open except the active document.""",
         "author": "Cal Newport",
@@ -350,8 +350,8 @@ Similarly, in investment management, Warren Buffett and Charlie Munger operate B
     F --> H[Preserves Pristine Whitespace & Optionality]
     H --> G
   end
-  style Conventional fill:#1e1b4b,stroke:#ef4444,color:#fff
-  style Bimodal fill:#064e3b,stroke:#10b981,color:#fff""",
+  style Conventional fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
+  style Bimodal fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": """If you're not saying 'HELL YEAH!' about something, say no. When you say no to most things, you leave room in your life to really throw yourself completely into that rare thing that makes you say 'HELL YEAH!'""",
         "action_item": """Audit your commitments for the coming 14 days. Identify the single obligation you agreed to out of guilt or mild interest. Cancel or delegate it gracefully today.""",
         "author": "Derek Sivers",
@@ -407,8 +407,8 @@ In technology product engineering, Amazon leveraged identity-based mechanics to 
     F -->|Bayesian Evidence Compounds| G[Subconscious Internalizes Identity]
     G -->|Automated Congruence| H[Lifelong Sustained Mastery]
   end
-  style Backward fill:#1e1b4b,stroke:#ef4444,color:#fff
-  style Enduring fill:#064e3b,stroke:#10b981,color:#fff""",
+  style Backward fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
+  style Enduring fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": """Every action you take is a vote for the type of person you wish to become. No single instance will transform your beliefs, but as the votes build up, so does the evidence of your new identity.""",
         "action_item": """Complete this prompt: 'I am the type of person who...'. Identify one small, 60-second action today that casts an undeniable vote for that identity.""",
         "author": "James Clear",
@@ -465,9 +465,9 @@ In financial trading, George Soros demonstrated the dichotomy of control by deta
   end
   In_Control -.->|100% Emotional Investment| Peace[Inner Freedom & Ataraxia]
   Not_In_Control -.->|Radical Acceptance & Detachment| Peace
-  style In_Control fill:#064e3b,stroke:#10b981,color:#fff
-  style Not_In_Control fill:#881337,stroke:#f43f5e,color:#fff
-  style Peace fill:#1e1b4b,stroke:#818cf8,color:#fff""",
+  style In_Control fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style Not_In_Control fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Peace fill:#EEF2FF,stroke:#818CF8,stroke-width:1.5px,color:#312E81""",
         "quote": "Make the best use of what is in your power, and take the rest as it happens.",
         "action_item": """The Two-Column Anxiety Triage: Take your biggest active worry right now. Divide a sheet into 'Things I Can Directly Influence Today' and 'Things Governed by External Circumstances'. Cross out the second column completely and execute the first item on the left.""",
         "author": "Epictetus & Marcus Aurelius",
@@ -507,10 +507,10 @@ In modern business, Steve Jobs's humiliating public firing from Apple in 1985 se
   Path[Intended Journey Path] -->|Unforeseen Roadblock| Block[Severe Crisis / Obstacle]
   Block -->|Stoic Mental Inversion| Catalyst[Catalyst: Demands Grit, Ingenuity & Virtue]
   Catalyst -->|Elevated Trajectory| Triumph[What Stood in the Way BECOMES The Way]
-  style Path fill:#312e81,stroke:#6366f1,color:#fff
-  style Block fill:#881337,stroke:#f43f5e,color:#fff
-  style Catalyst fill:#78350f,stroke:#f59e0b,color:#fff
-  style Triumph fill:#064e3b,stroke:#10b981,color:#fff""",
+  style Path fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style Block fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Catalyst fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style Triumph fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": "The mind adapts and converts to its own purposes the obstacle to our acting.",
         "action_item": """Perform Marcus's Reframing Drill: Write down your biggest current professional headache or roadblock. Cross out the complaint and write: 'This obstacle is giving me the rare chance to practice [Patience / Redundancy / First-Principles Engineering]. My next concrete move is...'""",
         "author": "Marcus Aurelius",
@@ -558,8 +558,8 @@ In Roman military history, whenever a triumphant general marched through the str
     F --> G[Deep Clarity on Authentic Priorities]
     G --> H[Radical Presence, Courage & Virtuous Action]
   end
-  style Distorted fill:#1e1b4b,stroke:#ef4444,color:#fff
-  style Stoic fill:#78350f,stroke:#f59e0b,color:#fff""",
+  style Distorted fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
+  style Stoic fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E""",
         "quote": """You could leave life right now. Let that determine what you do and say and think. Death smiles at us all; all a man can do is smile back.""",
         "action_item": """Identify the primary source of emotional anxiety currently weighing on your mind. Ask yourself: 'If this were my final week on Earth, would this issue deserve even five minutes of my attention?' Act accordingly.""",
         "author": "Seneca",
@@ -605,11 +605,11 @@ In aviation, following the catastrophic crash of United Airlines Flight 173 in 1
   S1 -->|Default Shortcuts| FastErr[Heuristic Reactions & Cognitive Biases]
   Input -->|Deliberate Reflection| S2[System 2: Slow, Deliberate, Effortful]
   S2 -->|Analytical Calculation| SoundJudg[Calibrated Strategic Judgment]
-  style Input fill:#312e81,stroke:#6366f1,color:#fff
-  style S1 fill:#78350f,stroke:#f59e0b,color:#fff
-  style S2 fill:#064e3b,stroke:#10b981,color:#fff
-  style FastErr fill:#881337,stroke:#f43f5e,color:#fff
-  style SoundJudg fill:#0f766e,stroke:#14b8a6,color:#fff""",
+  style Input fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style S1 fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style S2 fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style FastErr fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style SoundJudg fill:#F0FDFA,stroke:#14B8A6,stroke-width:1.5px,color:#0F766E""",
         "quote": "Thinking is to humans as swimming is to cats; they can do it, but they'd prefer not to.",
         "action_item": """Institute a 'Checklist Filter' on Major Decisions: Identify your top recurring decision (hiring a candidate, buying stock, committing to a vendor). Draft a 5-point non-negotiable checklist that must be scored numerically before any emotional 'gut feeling' is permitted to approve the deal.""",
         "author": "Daniel Kahneman",
@@ -658,8 +658,8 @@ Conversely, in 1985, Intel CEO Andy Grove and Gordon Moore demonstrated mastercl
     F -->|Acknowledge Sunk Costs Are Gone| G[Decisively Sever Losses]
     G --> H[Reallocate Capital to Asymmetric Opportunities]
   end
-  style SunkTrap fill:#1e1b4b,stroke:#ef4444,color:#fff
-  style CleanSlate fill:#064e3b,stroke:#10b981,color:#fff""",
+  style SunkTrap fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
+  style CleanSlate fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": """Losses loom larger than gains. The response to losses is stronger than the response to corresponding gains. The pain of losing is psychologically twice as powerful as the pleasure of gaining.""",
         "action_item": """Audit your current commitments for one 'zombie project' you are maintaining purely because you have already invested significant time or money into it. Apply Andy Grove's clean slate test and decide its fate today.""",
         "author": "Amos Tversky & Daniel Kahneman",
@@ -701,9 +701,9 @@ In open-source software, Linus Torvalds authored the initial Linux kernel in 199
         "visual_diagram": """graph TD
   L1[1. Labor: Human Headcount<br/>High Politics, Requires Permission] --> L2[2. Capital: Money / Debt<br/>Requires Gatekeepers & Investors]
   L2 --> L3[3. Code & Media: PERMISSIONLESS<br/>Zero Marginal Cost, Works Infinitely While You Sleep]
-  style L1 fill:#881337,stroke:#f43f5e,color:#fff
-  style L2 fill:#78350f,stroke:#f59e0b,color:#fff
-  style L3 fill:#064e3b,stroke:#10b981,color:#fff""",
+  style L1 fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style L2 fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style L3 fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": "Forget rich versus poor, white-collar versus blue-collar. It's now leveraged versus un-leveraged.",
         "action_item": """Audit your output: How much of your weekly labor is rented by the hour versus creating reusable code, content, or automated systems? Commit to creating one digital asset this month (a Python tool, guide, or template) that can be accessed by 1,000 people without requiring an extra second of your time.""",
         "author": "Naval Ravikant",
@@ -758,8 +758,8 @@ In corporate capital allocation, Berkshire Hathaway preserves a permanent \\$150
     F --> G[Invisible Liquidity & Massive Margin of Safety]
     G --> H[Absolute Temporal Sovereignty & Lifelong Freedom]
   end
-  style RichTrack fill:#1e1b4b,stroke:#ef4444,color:#fff
-  style WealthTrack fill:#064e3b,stroke:#10b981,color:#fff""",
+  style RichTrack fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
+  style WealthTrack fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": """Spending money to show people how much money you have is the fastest way to have less money. Wealth is what you don't see.""",
         "action_item": """Calculate your personal 'Freedom Runway': divide your liquid net worth by your monthly burn. Reflect on how increasing that number by 12 months would alter your strategic bravery and stress levels.""",
         "author": "Morgan Housel",
@@ -800,10 +800,10 @@ In modern internet culture, Marques Brownlee (MKBHD) started uploading YouTube v
   Curiosity[Authentic Childhood Curiosities & Obsessions] --> Moat[Specific Knowledge: Cannot Be Taught in a School]
   Moat --> Leverage[Permissionless Leverage: Code & Content]
   Leverage --> Asymmetry[Feels Like Play to You, Looks Like Hard Work to Others]
-  style Curiosity fill:#312e81,stroke:#6366f1,color:#fff
-  style Moat fill:#064e3b,stroke:#10b981,color:#fff
-  style Leverage fill:#78350f,stroke:#f59e0b,color:#fff
-  style Asymmetry fill:#0f766e,stroke:#14b8a6,color:#fff""",
+  style Curiosity fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style Moat fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style Leverage fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style Asymmetry fill:#F0FDFA,stroke:#14B8A6,stroke-width:1.5px,color:#0F766E""",
         "quote": """Specific knowledge cannot be taught, but it can be learned through apprenticeship and intense obsession.""",
         "action_item": """The Childhood Archaeology Exercise: Ask your parents or childhood friends: 'What was I obsessively doing between ages 10 and 16 that seemed strange or effortless to me?' Cross-reference that innate curiosity with modern technological leverage (Code, AI, Media).""",
         "author": "Naval Ravikant",
@@ -854,9 +854,9 @@ In software architecture, modern microservices platforms like Kubernetes utilize
     R["ROBUST (Granite)<br/>Resists Stress, Stays Equal"]
     A["ANTIFRAGILE (Immune System/Hydra)<br/>Thrives and Grows Stronger from Stress"]
   end
-  style F fill:#881337,stroke:#f43f5e,color:#fff
-  style R fill:#312e81,stroke:#6366f1,color:#fff
-  style A fill:#064e3b,stroke:#10b981,color:#fff""",
+  style F fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style R fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style A fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": "Wind extinguishes a candle and energizes fire. You want to be the fire and wish for the wind.",
         "action_item": """Conduct an Antifragile Audit: Identify one area where you are over-optimizing for comfort or stability (e.g. relying on a single employer or single marketing channel). Construct a Barbell: protect your core survival with 6 months of liquid runway, and allocate 5 hours weekly to an open-ended asymmetric side-project.""",
         "author": "Nassim Nicholas Taleb",
@@ -900,8 +900,8 @@ In open-source software and venture capitalism, early-stage founders demonstrate
   subgraph Real_Skin["SKIN IN THE GAME (Ethical Symmetry)"]
     S1[High Conviction Thesis] --> S2[Direct Downside Penalty if Wrong] --> S3[True Credibility & Tested Wisdom]
   end
-  style No_Skin fill:#881337,stroke:#f43f5e,color:#fff
-  style Real_Skin fill:#064e3b,stroke:#10b981,color:#fff""",
+  style No_Skin fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Real_Skin fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": "If you give an opinion, and someone follows it, you should share in the consequences.",
         "action_item": """Before accepting advice from any financial planner, consultant, or career coach, ask the Golden Question: 'Can you show me your personal portfolio/operating logs to verify you own this exact advice in your own life?' If they hold zero personal exposure, walk away.""",
         "author": "Nassim Nicholas Taleb",
@@ -954,8 +954,8 @@ In technology infrastructure, whenever an internal API fails or data pipeline co
     F -->|Assume Positive Intent / Blunder| G[Blameless Inquiry & System Clarification]
     G --> H[High-Trust Collaboration & Robust Guardrails]
   end
-  style Default fill:#1e1b4b,stroke:#ef4444,color:#fff
-  style Razor fill:#064e3b,stroke:#10b981,color:#fff""",
+  style Default fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
+  style Razor fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": """Never attribute to malice that which is adequately explained by stupidity. Misunderstandings and neglect create more confusion in this world than trickery and malice.""",
         "action_item": """Think of someone who recently frustrated or slighted you at work. Formulate two legitimate explanations based on miscommunication, fatigue, or stress, and re-engage them from a place of curiosity today.""",
         "author": "Robert J. Hanlon",
@@ -1006,8 +1006,8 @@ In modern medical diagnostics, physicians are trained on the clinical manifestat
     F --> G[Directly Testable & Statistically Dominant]
     G --> H[Fast, High-Leverage Resolution]
   end
-  style Baroque fill:#1e1b4b,stroke:#ef4444,color:#fff
-  style Parsimonious fill:#064e3b,stroke:#10b981,color:#fff""",
+  style Baroque fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
+  style Parsimonious fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": """Entities should not be multiplied without necessity. The simplest explanation that accounts for all the facts is usually the right one.""",
         "action_item": """Examine a complex problem currently stalling your team. Identify the three most baroque, multi-step explanations or plans being proposed. Ask: 'What is the most direct, boring, single-variable explanation?' Test that first.""",
         "author": "William of Ockham",
@@ -1048,8 +1048,8 @@ In software engineering, a newly hired senior architect at a major payment gatew
   A[Observed Legacy Rule / Fence] --> B{Do You Understand Its Origin?}
   B -->|No: Blind Removal| C[Hidden Catastrophic Regression]
   B -->|Yes: Discovered Latent Function| D[Address Root Need or Safely Refactor]
-  style C fill:#881337,stroke:#f43f5e,color:#fff
-  style D fill:#064e3b,stroke:#10b981,color:#fff""",
+  style C fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style D fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": "If you do not see the use of a fence, I certainly won't let you clear it away.",
         "action_item": """Run the Fence Audit: Identify one legacy procedure, bureaucratic sign-off, or code routine your team complains about. Forbid anyone from proposing its deletion until someone interviews its originators and produces a 1-page memo explaining its original necessity.""",
         "author": "G.K. Chesterton",
@@ -1093,8 +1093,8 @@ Similarly, in 1975, 19-year-old Bill Gates dropped out of Harvard University to 
   A --> C[Age-80 Horizon: Regret of Inaction]
   B --> D[Safe Conformity & Persistent Long-Term Regret]
   C --> E[Bold Agency & Maximum Asymmetric Trajectory]
-  style B fill:#881337,stroke:#f43f5e,color:#fff
-  style C fill:#064e3b,stroke:#10b981,color:#fff""",
+  style B fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style C fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": """I knew that when I was eighty I was not going to regret having tried this. I knew that I would always be haunted by a decision to not try at all.""",
         "action_item": """The Age-80 Letter Drill: Take the boldest, most frightening crossroad decision currently facing you. Write a 1-paragraph letter from your 80-year-old self advising your current self on what to do. Sign it and take the first concrete step within 24 hours.""",
         "author": "Jeff Bezos",
@@ -1139,8 +1139,8 @@ In algorithmic trading, high-frequency market makers execute OODA loops in micro
   Ori --> Dec[Decide: Formulate Hypothesis]
   Dec --> Act[Act: Execute Experiment]
   Act --> Obs
-  style Ori fill:#312e81,stroke:#6366f1,color:#fff
-  style Act fill:#064e3b,stroke:#10b981,color:#fff""",
+  style Ori fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style Act fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": "He who can handle the quickest rate of change is the one who survives.",
         "action_item": """Compress Your Feedback Loop: Identify the slowest phase in your team's current delivery cycle (e.g. waiting two weeks for customer feedback). Cut the cycle time in half this week by shipping a 48-hour prototype to 5 live users.""",
         "author": "John Boyd",
@@ -1184,8 +1184,8 @@ Similarly, Amazon Web Services (AWS) began in 2006 not as a complex multi-cloud 
   subgraph Robust["Gall's Evolutionary Path (Thrives)"]
     C[Simple Working Core] --> D[Survive Live Real-World Stress] --> E[Modular Incremental Evolution]
   end
-  style Fragile fill:#881337,stroke:#f43f5e,color:#fff
-  style Robust fill:#064e3b,stroke:#10b981,color:#fff""",
+  style Fragile fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Robust fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": "A complex system designed from scratch never works and cannot be patched up to make it work.",
         "action_item": """The Modular MVP Test: If your current project is slated to take 6 months before its first public release, stop. What is the stripped-down, 3-day version of the core loop that solves 80% of the customer's problem right now? Ship that first, verify survival, and iterate.""",
         "author": "John Gall",
@@ -1231,8 +1231,8 @@ During the Vietnam War, United States Secretary of Defense Robert McNamara appli
   A[Target Metric Defined] --> B[Incentives Tied to Metric]
   B --> C[Gamers Optimize Proxy Variable]
   C --> D[Underlying Core Goal Corrupted]
-  style A fill:#312e81,stroke:#6366f1,color:#fff
-  style D fill:#881337,stroke:#f43f5e,color:#fff""",
+  style A fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style D fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239""",
         "quote": """Any observed statistical regularity will tend to collapse once pressure is placed upon it for control purposes.""",
         "action_item": """Audit Your Primary KPI: Look at the #1 number your team is evaluated on. Ask: 'If a cynical actor wanted to double this number in 30 days without doing any actual good work, how would they game it?' Install a counter-metric immediately to neutralize that specific loophole.""",
         "author": "Charles Goodhart",
@@ -1273,8 +1273,8 @@ In consumer tools, physical knives, wooden spoons, glass cups, and wheels have r
   A[New Idea / Tool Born] --> B{Withstands Decades of Stress?}
   B -->|No: Fragile Fad| C[Extinct & Forgotten]
   B -->|Yes: Proved Durability| D[Lindy Dynamic: Expected Lifespan Grows with Age]
-  style C fill:#881337,stroke:#f43f5e,color:#fff
-  style D fill:#064e3b,stroke:#10b981,color:#fff""",
+  style C fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style D fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": "If a book has been in print for forty years, I can expect it to be in print for another forty years.",
         "action_item": """The Lindy Information Filter: Before opening your next book or adding a dependency to your technical stack, check its age. Vow that for every modern book published this year, you will read one classic that has remained continuously in print for at least 50 years.""",
         "author": "Benoit Mandelbrot & Nassim Taleb",
@@ -1326,8 +1326,8 @@ In digital business models, Amazon's foundational 'Virtuous Cycle' (sketched by 
     F -->|Time Delay Latency| G[System Realigns to Equilibrium]
     G -->|Resists Perturbation| E
   end
-  style Reinforcing fill:#064e3b,stroke:#10b981,color:#fff
-  style Balancing fill:#1e1b4b,stroke:#6366f1,color:#fff""",
+  style Reinforcing fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style Balancing fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A""",
         "quote": """A system is an interconnected set of elements coherently organized in a way that achieves something. You cannot do just one thing in a system; everything is connected, and feedback always returns.""",
         "action_item": """Draw the feedback loop governing your team's primary metric. Identify where the longest time delay exists between an action and its observable result, and find one way to cut that latency in half.""",
         "author": "Donella Meadows",
@@ -1377,10 +1377,10 @@ In modern enterprise execution, Steve Jobs practiced extreme Quadrant II ruthles
     Q4["Quadrant IV: NOT URGENT & NOT IMPORTANT<br/>Mindless Feeds, Escapism<br/>Action: DELETE MERCILESSLY"]
     Q2 -->|Drives 90% of Compounding Leverage| Success[Enduring Strategic Mastery]
   end
-  style Q1 fill:#831843,stroke:#f43f5e,color:#fff
-  style Q2 fill:#064e3b,stroke:#10b981,color:#fff
-  style Q3 fill:#78350f,stroke:#f59e0b,color:#fff
-  style Q4 fill:#1e1b4b,stroke:#64748b,color:#fff""",
+  style Q1 fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style Q2 fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style Q3 fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style Q4 fill:#F8FAFC,stroke:#64748B,stroke-width:1.5px,color:#0F172A""",
         "quote": """What is important is seldom urgent and what is urgent is seldom important. The key is not to prioritize what's on your schedule, but to schedule your priorities.""",
         "action_item": """Audit yesterday's calendar. Categorize every hour into Q1, Q2, Q3, or Q4. If your Q2 time was under 90 minutes, block out a non-negotiable 90-minute deep work block tomorrow morning.""",
         "author": "Dwight D. Eisenhower",
@@ -1422,8 +1422,8 @@ In everyday software development, engineering teams frequently spend six months 
   A[Past Sunk Investment: Gone Forever] --> B{Decision Gate}
   B -->|Fallacy: Honor Past Spend| C[Double Down on Value-Destroying Path]
   B -->|Rational: Focus Solely on Future ROI| D[Cut Losses & Reallocate Capital to Best Opportunity]
-  style C fill:#881337,stroke:#f43f5e,color:#fff
-  style D fill:#064e3b,stroke:#10b981,color:#fff""",
+  style C fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style D fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": """The cost of something is what you give up to get it. Sunk costs are already given up; do not let them hold your future hostage.""",
         "action_item": """The Clean Slate Audit: Review your current active project portfolio. Identify the single project that drains the most time and capital relative to its future expected return. Apply the Andy Grove Test: 'If I took over this role today with zero emotional attachment to past efforts, would I fund this project?' If the answer is no, kill it this week.""",
         "author": "Richard Thaler",
@@ -1472,9 +1472,9 @@ In competitive sports, the concept of the 'Zone'—where NBA players describe th
     F --> G[Transient Hypofrontality: Inner Critic Silenced]
     G --> H[500% Performance & Asymmetric Output]
   end
-  style A fill:#831843,stroke:#f43f5e,color:#fff
-  style C fill:#1e1b4b,stroke:#6366f1,color:#fff
-  style F fill:#064e3b,stroke:#10b981,color:#fff""",
+  style A fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239
+  style C fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style F fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": """The best moments in our lives are not the passive, receptive, relaxing times. The best moments usually occur if a person's body or mind is stretched to its limits in a voluntary effort to accomplish something difficult and worthwhile.""",
         "action_item": """Identify your most cognitively demanding task today. Eliminate all notifications, close all browser tabs except one, and set a timer for 60 uninterrupted minutes to enter the flow channel.""",
         "author": "Mihaly Csikszentmihalyi",
@@ -1517,16 +1517,16 @@ In decentralized financial systems, Bitcoin and Ethereum derive their multi-tril
         "visual_diagram": """graph TD
   subgraph Linear["Classical Industrial Scaling (Linear)"]
     A[1 Factory Unit] -->|Adds Linear Output| B[2 Factory Units: 2x Output]
-    B -->|Costs Scale Linearly| C[Linear Return on Capital O(N)]
+    B -->|Costs Scale Linearly| C["Linear Return on Capital O(N)"]
   end
   subgraph Metcalfe["Metcalfe Network Scaling (Quadratic)"]
     D[2 Nodes = 1 Connection] --> E[5 Nodes = 10 Connections]
     E --> F[12 Nodes = 66 Connections]
-    F --> G[100 Nodes = 4,950 Connections: Quadratic Value O(N^2)]
+    F --> G["100 Nodes = 4,950 Connections: Quadratic Value O(N^2)"]
     G --> H[Exponential Gravitational Moat & Winner-Take-Most]
   end
-  style Linear fill:#1e1b4b,stroke:#64748b,color:#fff
-  style Metcalfe fill:#064e3b,stroke:#10b981,color:#fff""",
+  style Linear fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style Metcalfe fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": """The value of a network is proportional to the square of the number of users connected to the system. Once a network reaches critical mass, its gravity becomes virtually inescapable.""",
         "action_item": """Analyze your business or project. Ask: 'Does our 1,000th user make the product significantly more valuable for our 1st user?' If not, how can you design a multiplayer feedback loop into the core workflow?""",
         "author": "Robert Metcalfe",
@@ -1578,8 +1578,8 @@ In modern cloud computing, Amazon’s transformation in 2002 via Jeff Bezos’s 
     D <-->|Unstable ETL Nightly Batch| F[Isolated Data Warehouse]
   end
   OrgStructure -->|Isomorphic Inevitability| CodeArchitecture
-  style OrgStructure fill:#1e1b4b,stroke:#6366f1,color:#fff
-  style CodeArchitecture fill:#831843,stroke:#f43f5e,color:#fff""",
+  style OrgStructure fill:#EEF2FF,stroke:#6366F1,stroke-width:1.5px,color:#1E3A8A
+  style CodeArchitecture fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239""",
         "quote": """Organizations which design systems are constrained to produce designs which are copies of the communication structures of these organizations. If you have four groups working on a compiler, you will get a 4-pass compiler.""",
         "action_item": """Examine the most brittle, bug-ridden integration in your current codebase or project workflow. Identify the two teams responsible for each side of that boundary and audit how they communicate.""",
         "author": "Melvin Conway",
@@ -1631,8 +1631,8 @@ In catastrophic contrast, the collapse of intelligence analysis prior to the 200
     F -->|Record Anomalies within 30 Minutes| G[Hypothesis Stressed, Refined or Discarded]
     G --> H[Antifragile, Objective Truth Alignment]
   end
-  style BiasTrap fill:#1e1b4b,stroke:#ef4444,color:#fff
-  style Falsification fill:#064e3b,stroke:#10b981,color:#fff""",
+  style BiasTrap fill:#FFF1F2,stroke:#EF4444,stroke-width:1.5px,color:#991B1B
+  style Falsification fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B""",
         "quote": """What the human being is best at doing is interpreting all new information so that their prior conclusions remain intact. The human understanding when it has once adopted an opinion draws all things else to support and agree with it.""",
         "action_item": """Identify your strongest current business or life conviction. Find an article or interview by an intelligent thinker who completely disagrees with you, and summarize their top 3 arguments fairly.""",
         "author": "Peter Wason & Daniel Kahneman",
@@ -1687,9 +1687,9 @@ Similarly, in military history, the basic independent tactical unit of armies ac
     E["Beyond 150: Relational Trust Collapses -> Bureaucracy, Politics & Alienation"]
     A --> B --> C --> D --> E
   end
-  style A fill:#064e3b,stroke:#10b981,color:#fff
-  style D fill:#78350f,stroke:#f59e0b,color:#fff
-  style E fill:#831843,stroke:#f43f5e,color:#fff""",
+  style A fill:#ECFDF5,stroke:#10B981,stroke-width:1.5px,color:#064E3B
+  style D fill:#FFFBEB,stroke:#F59E0B,stroke-width:1.5px,color:#92400E
+  style E fill:#FFF1F2,stroke:#F43F5E,stroke-width:1.5px,color:#9F1239""",
         "quote": """The number 150 seems to represent the maximum number of individuals with whom we can have a genuine social relationship. Beyond that, memory fails and intimacy dissolves into bureaucracy.""",
         "action_item": """Audit your core relationships. Identify the 5 people who form your primary support clique. Send a message of genuine gratitude or schedule quality time with one of them today.""",
         "author": "Robin Dunbar",

@@ -49,6 +49,25 @@ async function switchStashScope(scope) {
   }
 }
 
+function getMaterialIconForStash(icon) {
+  const map = {
+    'brain': 'psychology',
+    'zap': 'bolt',
+    'shield': 'shield',
+    'trending-up': 'trending_up',
+    'trending_up': 'trending_up',
+    'book-open': 'menu_book',
+    'bookmark': 'bookmark',
+    'sparkles': 'auto_awesome',
+    'layers': 'layers',
+    'cpu': 'memory',
+    'target': 'crisis_alert',
+    'award': 'trophy',
+    'feather': 'edit_note'
+  };
+  return map[icon] || 'bookmark';
+}
+
 // 2. Render Stashes Grid
 function renderStashesGrid(stashesList, isPublicView = false) {
   const container = document.getElementById('stashes-grid') || document.getElementById('stashes-grid-container');
@@ -75,8 +94,8 @@ function renderStashesGrid(stashesList, isPublicView = false) {
       <div onclick="viewStashDetail('${stash.id}')" class="cursor-pointer group bento-card bg-white hover:border-blue-400 border border-slate-200 rounded-2xl p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between mb-3">
-            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 border border-blue-200 flex items-center justify-center text-base font-bold">
-              <span class="material-symbols-outlined text-[20px]">${stash.icon === 'book-open' ? 'menu_book' : (stash.icon || 'bookmark')}</span>
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 border border-blue-200 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[20px] select-none leading-none">${getMaterialIconForStash(stash.icon)}</span>
             </div>
             <div class="flex items-center gap-1.5">
               ${isPublic ? `
