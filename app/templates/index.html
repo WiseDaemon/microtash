@@ -386,7 +386,7 @@
             </div>
 
             <div class="w-full p-4 rounded-xl bg-white border border-slate-200 shadow-2xs">
-              <div id="card-diagram-container" class="w-full min-h-[160px] flex items-center justify-center overflow-x-auto custom-scrollbar text-xs">
+              <div id="card-diagram-container" class="w-full min-h-[160px] overflow-x-auto custom-scrollbar text-xs text-center py-2">
               </div>
               <div id="card-diagram-box" class="hidden"></div>
               <div id="card-stepped-container" class="hidden w-full"></div>
@@ -634,7 +634,7 @@
               <option value="gemini">Gemini 2.5 Flash</option>
               <option value="nvidia">NVIDIA Nemotron 70B</option>
             </select>
-            <button onclick="runAiExtraction()" class="py-2.5 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-headline font-bold text-xs shadow-sm transition flex items-center gap-1.5">
+            <button id="btn-run-ai" onclick="runAiExtraction()" class="py-2.5 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-headline font-bold text-xs shadow-sm transition flex items-center gap-1.5 cursor-pointer">
               <span>⚡ Deconstruct into Cards</span>
             </button>
           </div>
@@ -643,7 +643,10 @@
 
       <!-- AI Extraction Results Container -->
       <div id="ai-results-container" class="space-y-4 hidden">
-        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Synthesized Mental Models</h3>
+        <div class="flex items-center justify-between pb-1">
+          <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Synthesized Mental Models</h3>
+          <div id="ai-results-actions" class="flex items-center gap-2"></div>
+        </div>
         <div id="ai-cards-list" class="space-y-3"></div>
       </div>
     </section>
@@ -805,7 +808,7 @@
             <div id="modal-detailed-explanation" class="text-slate-800 space-y-2 leading-relaxed font-normal"></div>
           </div>
           <div id="modal-diagram-container" class="p-4 rounded-2xl bg-white border border-slate-200 min-h-[140px] flex items-center justify-center relative overflow-hidden">
-            <div id="modal-diagram-render" class="w-full flex justify-center"></div>
+            <div id="modal-diagram-render" class="w-full text-center"></div>
           </div>
         </div>
 
@@ -849,7 +852,7 @@
           </div>
 
           <div class="p-4 rounded-2xl bg-white border border-slate-200 min-h-[140px] flex items-center justify-center">
-            <div id="modal-full-diagram" class="w-full flex items-center justify-center"></div>
+            <div id="modal-full-diagram" class="w-full text-center overflow-x-auto"></div>
           </div>
 
           <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">

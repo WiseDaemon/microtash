@@ -401,8 +401,25 @@ async function renderIdeaVisualDiagram(idea, targetElId) {
       
       const svgEl = container.querySelector('svg');
       if (svgEl) {
-        svgEl.style.maxWidth = '100%';
+        // Natural aspect ratio preservation:
+        // Do NOT overwrite Mermaid's intrinsic maxWidth with 100%!
+        const inlineMaxWidth = svgEl.style.maxWidth;
+        svgEl.style.width = '100%';
         svgEl.style.height = 'auto';
+        svgEl.style.display = 'block';
+        svgEl.style.margin = '0 auto';
+
+        // Keep intrinsic maxWidth or derive from viewBox width so TD diagrams don't blow up to 800px
+        if (inlineMaxWidth && inlineMaxWidth !== '100%' && !inlineMaxWidth.includes('100%')) {
+          svgEl.style.maxWidth = inlineMaxWidth;
+        } else {
+          const vb = svgEl.viewBox?.baseVal;
+          if (vb && vb.width > 0) {
+            svgEl.style.maxWidth = `${Math.min(vb.width, 560)}px`;
+          } else {
+            svgEl.style.maxWidth = '520px';
+          }
+        }
         svgEl.style.overflow = 'visible';
 
         // Make nodes and edges genuinely interactive!
@@ -1543,33 +1560,45 @@ function fillSampleAI(choice) {
   }
 }
 
-async function runAIExtraction() {
-  const text = document.getElementById("ai-input-text").value.trim();
+async function runAiExtraction() {
+  const inputEl = document.getElementById("ai-input-text");
+  const text = inputEl ? inputEl.value.trim() : "";
   if (!text) {
-    alert("Please provide some text, a URL, or a topic to extract ideas from.");
+    alert("Please provide an article URL, book excerpt, or topic to extract ideas from.");
     return;
   }
 
-  const sourceTitle = document.getElementById("ai-source-title").value.trim();
-  const author = document.getElementById("ai-author").value.trim();
-  const topic = document.getElementById("ai-topic").value;
-  const provider = document.querySelector('input[name="ai-engine"]:checked')?.value || 'gemini';
+  const sourceTitle = document.getElementById("ai-source-title")?.value?.trim() || "Extracted Wisdom";
+  const author = document.getElementById("ai-author")?.value?.trim() || "Curated Source";
+  const topic = document.getElementById("ai-topic")?.value || "Mental Models";
+  const providerSelect = document.getElementById("ai-provider-select");
+  const provider = providerSelect ? providerSelect.value : (document.querySelector('input[name="ai-engine"]:checked')?.value || 'gemini');
 
-  const btn = document.getElementById("btn-run-ai");
-  const resultsArea = document.getElementById("ai-results-area");
+  const btn = document.getElementById("btn-run-ai") || document.querySelector('button[onclick*="runAiExtraction"]');
+  const resultsContainer = document.getElementById("ai-results-container");
+  const cardsList = document.getElementById("ai-cards-list") || document.getElementById("ai-results-area");
 
-  btn.disabled = true;
-  btn.innerHTML = `<span class="animate-spin mr-2">⚙️</span> Synthesizing Microlearning Cards...`;
-  resultsArea.innerHTML = `
-    <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl text-center space-y-3">
-      <div class="inline-block p-4 rounded-2xl bg-indigo-500/10 text-indigo-400 animate-pulse">
-        <i data-lucide="sparkles" class="w-8 h-8"></i>
+  if (btn) {
+    btn.disabled = true;
+    btn.classList.add('opacity-75', 'cursor-not-allowed');
+    btn.innerHTML = `<span class="animate-spin inline-block mr-1">⚙️</span> Synthesizing Mental Models...`;
+  }
+
+  if (resultsContainer) {
+    resultsContainer.classList.remove('hidden');
+  }
+
+  if (cardsList) {
+    cardsList.innerHTML = `
+      <div class="bento-card p-8 bg-white border border-slate-200 rounded-2xl text-center space-y-3 shadow-sm">
+        <div class="inline-flex p-3 rounded-2xl bg-blue-50 text-blue-600 animate-pulse">
+          <span class="material-symbols-outlined text-[32px]">neurology</span>
+        </div>
+        <h3 class="text-sm font-bold text-slate-900">Distilling into High-Leverage Atomic Cards</h3>
+        <p class="text-xs text-slate-500 max-w-md mx-auto">Gemini & NVIDIA are deconstructing the source into first principles, behavioral mechanics, and causal diagrams...</p>
       </div>
-      <h3 class="text-base font-bold text-white">Extracting Core Mental Models & Action Steps</h3>
-      <p class="text-xs text-slate-400">Distilling noise into high-density atomic wisdom...</p>
-    </div>
-  `;
-  if (window.lucide) lucide.createIcons();
+    `;
+  }
 
   try {
     const res = await fetch('/api/ai/extract', {
@@ -1588,97 +1617,134 @@ async function runAIExtraction() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.detail || "Extraction failed");
 
-    lastExtractedIdeas = data.ideas;
-    renderAIExtractionResults(data.ideas);
+    lastExtractedIdeas = data.ideas || [];
+    renderAIExtractionResults(lastExtractedIdeas);
   } catch (err) {
-    resultsArea.innerHTML = `
-      <div class="p-6 rounded-2xl bg-rose-950/40 border border-rose-800 text-rose-200 text-sm">
-        <strong>Extraction Error:</strong> ${err.message}
-      </div>
-    `;
+    if (cardsList) {
+      cardsList.innerHTML = `
+        <div class="p-5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs space-y-1">
+          <div class="font-bold flex items-center gap-1.5 text-rose-900">
+            <span class="material-symbols-outlined text-[16px]">error</span>
+            <span>Extraction Failed</span>
+          </div>
+          <p>${err.message || 'An error occurred during extraction. Please check your connection or try again.'}</p>
+        </div>
+      `;
+    }
   } finally {
-    btn.disabled = false;
-    btn.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i><span>Generate from Custom Text</span>`;
-    if (window.lucide) lucide.createIcons();
+    if (btn) {
+      btn.disabled = false;
+      btn.classList.remove('opacity-75', 'cursor-not-allowed');
+      btn.innerHTML = `<span>⚡ Deconstruct into Cards</span>`;
+    }
   }
+}
+async function runAIExtraction() {
+  return runAiExtraction();
 }
 
 function renderAIExtractionResults(ideas) {
-  const container = document.getElementById("ai-results-area");
+  const container = document.getElementById("ai-cards-list") || document.getElementById("ai-results-area");
+  const resultsContainer = document.getElementById("ai-results-container");
+  if (resultsContainer) resultsContainer.classList.remove("hidden");
   if (!container) return;
 
-  const bookTitle = lastExtractedBookTitle || (ideas.length ? ideas[0].source : "Book");
-  const author = lastExtractedAuthor || (ideas.length ? ideas[0].author : "Author");
+  if (!ideas || !ideas.length) {
+    container.innerHTML = `
+      <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-center text-xs text-slate-500">
+        No mental models could be extracted from this text. Please try with more context or a different URL.
+      </div>
+    `;
+    return;
+  }
+
+  const bookTitle = lastExtractedBookTitle || (ideas.length ? ideas[0].source : "Source");
+  const author = lastExtractedAuthor || (ideas.length ? ideas[0].author : "Curator");
+
+  const actionsEl = document.getElementById("ai-results-actions");
+  if (actionsEl) {
+    actionsEl.innerHTML = `
+      <button onclick="saveAllExtractedCards()" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-headline font-bold text-xs shadow-xs transition flex items-center gap-1 cursor-pointer">
+        <span class="material-symbols-outlined text-[14px]">library_add</span>
+        <span>Save All to Feed</span>
+      </button>
+      <button onclick="saveAsDedicatedBookStash()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-headline font-bold text-xs border border-slate-200 transition flex items-center gap-1 cursor-pointer">
+        <span class="material-symbols-outlined text-[14px]">bookmark_add</span>
+        <span>Create Stash</span>
+      </button>
+    `;
+  }
 
   container.innerHTML = `
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
-      <div>
-        <h3 class="text-lg font-bold text-white flex items-center space-x-2">
-          <span>${ideas.length} Complete Ideas Generated</span>
-          <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Complete Breakdown</span>
-        </h3>
-        <p class="text-xs text-slate-400 mt-0.5">Covering core chapters and mental models from <strong>${bookTitle}</strong> by ${author}</p>
+    ${!actionsEl ? `
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <span>${ideas.length} Complete Ideas Generated</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">Ready to Learn</span>
+          </h3>
+          <p class="text-xs text-slate-500 mt-0.5">Synthesized from <strong>${bookTitle}</strong> by ${author}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="saveAllExtractedCards()" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-headline font-bold text-xs shadow-xs transition flex items-center gap-1 cursor-pointer">
+            <span class="material-symbols-outlined text-[14px]">library_add</span>
+            <span>Save All to Feed</span>
+          </button>
+          <button onclick="saveAsDedicatedBookStash()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-headline font-bold text-xs border border-slate-200 transition flex items-center gap-1 cursor-pointer">
+            <span class="material-symbols-outlined text-[14px]">bookmark_add</span>
+            <span>Create Stash</span>
+          </button>
+        </div>
       </div>
+    ` : ''}
 
-      <div class="flex items-center space-x-2">
-        <button onclick="saveAsDedicatedBookStash()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-white font-bold text-xs flex items-center space-x-1.5 shadow-lg shadow-rose-600/20 transition active:scale-95" title="Create a dedicated stash collection for this book">
-          <i data-lucide="bookmark-plus" class="w-4 h-4"></i>
-          <span>Create "${bookTitle.length > 18 ? bookTitle.slice(0, 16) + '...' : bookTitle}" Stash</span>
-        </button>
-        <button onclick="saveAllExtractedCards()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-semibold text-xs flex items-center space-x-1.5 border border-slate-700 transition" title="Add all cards to your general feed">
-          <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
-          <span>Add to Feed</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="space-y-4 pt-2">
+    <div class="space-y-4 pt-1">
       ${ideas.map((card, idx) => `
-        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-3">
+        <div class="bento-card bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs space-y-3">
           <div class="flex items-center justify-between">
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase bg-blue-50 text-blue-700 border border-blue-200">
-              #${idx+1} • ${card.topic}
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-blue-50 text-blue-700 border border-blue-200">
+              #${idx+1} • ${card.topic || 'Mental Model'}
             </span>
-            <span class="text-xs text-slate-500">${card.author} — ${card.source}</span>
+            <span class="text-xs text-slate-500 font-medium">${card.author || 'Curator'} — ${card.source || 'Knowledge'}</span>
           </div>
 
-          <h4 class="text-lg font-bold text-slate-900">${card.title}</h4>
-          <p class="text-xs text-blue-600 font-medium italic">"${card.one_liner}"</p>
-          <p class="text-xs text-slate-700 leading-relaxed">${card.summary}</p>
+          <h4 class="text-base sm:text-lg font-headline font-bold text-slate-900 leading-snug">${card.title}</h4>
+          <p class="text-xs text-blue-700 font-medium italic">"${card.one_liner || card.summary}"</p>
+          <p class="text-xs text-slate-700 leading-relaxed font-normal">${card.summary || ''}</p>
 
           ${card.detailed_explanation ? `
-            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-800 space-y-1.5">
-              <span class="font-bold text-blue-700 uppercase tracking-wider block">Detailed Concept Breakdown:</span>
-              <p class="leading-relaxed">${card.detailed_explanation}</p>
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs text-slate-800 space-y-1">
+              <span class="font-bold text-blue-700 uppercase tracking-wider block text-[10px]">First Principles Mechanism:</span>
+              <p class="leading-relaxed font-normal">${card.detailed_explanation}</p>
             </div>
           ` : ''}
 
           ${card.example ? `
-            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900 space-y-1">
-              <span class="font-bold text-amber-700 uppercase tracking-wider block">Real-World Case Study / Example:</span>
-              <p class="leading-relaxed">${card.example}</p>
+            <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-3.5 text-xs text-amber-900 space-y-1">
+              <span class="font-bold text-amber-800 uppercase tracking-wider block text-[10px]">Real-World Case Study:</span>
+              <p class="leading-relaxed font-normal">${card.example}</p>
             </div>
           ` : ''}
 
           ${card.quote ? `
-            <blockquote class="border-l-4 border-blue-600 bg-slate-50 pl-3.5 py-2 text-xs italic text-slate-800">
+            <blockquote class="border-l-3 border-blue-600 bg-slate-50 pl-3 py-1.5 text-xs italic text-slate-800">
               "${card.quote}"
             </blockquote>
           ` : ''}
 
           ${card.action_item ? `
-            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-900">
-              <span class="font-bold uppercase tracking-wider block mb-1 text-emerald-700">Try It Today:</span>
-              ${card.action_item}
+            <div class="bg-emerald-50/80 border border-emerald-200 rounded-xl p-3 text-xs text-emerald-900">
+              <span class="font-bold uppercase tracking-wider block mb-0.5 text-emerald-800 text-[10px]">Operational Protocol:</span>
+              <p class="font-normal leading-relaxed">${card.action_item}</p>
             </div>
           ` : ''}
 
-          <div class="pt-2 flex items-center justify-between border-t border-slate-800/60">
-            <button onclick="openDeepDiveModal(${idx})" class="text-xs font-semibold text-indigo-400 hover:text-white flex items-center space-x-1 transition px-3 py-1.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-600">
-              <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
-              <span>Open in Deep Dive Reader</span>
-            </button>
+          <div class="pt-2 flex items-center justify-between border-t border-slate-100">
             <span class="text-[11px] text-slate-500">Atomic Card #${idx+1}</span>
+            <button onclick="saveSingleExtractedCard(${idx})" id="btn-save-extracted-${idx}" class="text-xs font-semibold text-blue-700 hover:text-white flex items-center gap-1 transition px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-600 border border-blue-200 cursor-pointer">
+              <span class="material-symbols-outlined text-[15px]">add_circle</span>
+              <span>Save This Card</span>
+            </button>
           </div>
         </div>
       `).join('')}
@@ -1686,6 +1752,35 @@ function renderAIExtractionResults(ideas) {
   `;
 
   if (window.lucide) lucide.createIcons();
+}
+
+async function saveSingleExtractedCard(idx) {
+  if (!lastExtractedIdeas || !lastExtractedIdeas[idx]) return;
+  const card = lastExtractedIdeas[idx];
+  const btn = document.getElementById(`btn-save-extracted-${idx}`);
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<span class="material-symbols-outlined text-[15px] animate-spin">sync</span><span>Saving...</span>`;
+  }
+  try {
+    const res = await fetch('/api/ai/save-batch', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ideas: [card] })
+    });
+    if (!res.ok) throw new Error("Failed to save card");
+    if (btn) {
+      btn.className = "text-xs font-semibold text-emerald-700 flex items-center gap-1 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200";
+      btn.innerHTML = `<span class="material-symbols-outlined text-[15px] text-emerald-600">check</span><span>Saved to Feed!</span>`;
+    }
+    loadIdeas();
+  } catch (err) {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `<span class="material-symbols-outlined text-[15px]">error</span><span>Retry Save</span>`;
+    }
+    alert("Could not save card: " + err.message);
+  }
 }
 
 async function saveAsDedicatedBookStash() {
@@ -2065,6 +2160,8 @@ window.setAIMode = setAIMode;
 window.setQueryAndFetch = setQueryAndFetch;
 window.runAutoFetchAndGenerate = runAutoFetchAndGenerate;
 window.runAIExtraction = runAIExtraction;
+window.runAiExtraction = runAiExtraction;
+window.saveSingleExtractedCard = saveSingleExtractedCard;
 window.saveAllExtractedCards = saveAllExtractedCards;
 window.saveAsDedicatedBookStash = saveAsDedicatedBookStash;
 window.fillSampleAI = fillSampleAI;

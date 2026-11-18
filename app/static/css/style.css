@@ -387,7 +387,7 @@ html:not(.dark) .text-slate-400 {
 /* Nodes in Mermaid SVGs - Modern High-Polish Aesthetic */
 .mermaid svg,
 [id*="diagram"] svg {
-  max-width: 100% !important;
+  width: 100%;
   height: auto !important;
   font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif !important;
   display: block;
@@ -420,20 +420,24 @@ html:not(.dark) .text-slate-400 {
   pointer-events: none !important;
 }
 
+/* Apply rounded corners ONLY to rect elements - NEVER to polygon (diamonds) or circles to avoid distortion */
 .mermaid .node rect,
-.mermaid .node circle,
-.mermaid .node polygon,
-[id*="diagram"] .node rect,
-[id*="diagram"] .node circle,
-[id*="diagram"] .node polygon {
-  rx: 12px !important;
-  ry: 12px !important;
+[id*="diagram"] .node rect {
+  rx: 10px !important;
+  ry: 10px !important;
   stroke-width: 2px !important;
-  filter: drop-shadow(0 2px 4px rgba(15, 23, 42, 0.05)) !important;
   transition: stroke 0.15s ease !important;
 }
 
-/* Rock-solid, flicker-free node hover: highlight border and glow without physical translation/movement */
+.mermaid .node circle,
+.mermaid .node polygon,
+[id*="diagram"] .node circle,
+[id*="diagram"] .node polygon {
+  stroke-width: 2px !important;
+  transition: stroke 0.15s ease !important;
+}
+
+/* Rock-solid, flicker-free node hover: highlight border cleanly without filters or transforms that cause flicker */
 .mermaid .node:hover,
 [id*="diagram"] .node:hover {
   transform: none !important;
@@ -447,7 +451,6 @@ html:not(.dark) .text-slate-400 {
 [id*="diagram"] .node:hover polygon {
   stroke: #2563EB !important;
   stroke-width: 2px !important;
-  filter: drop-shadow(0 2px 8px rgba(37, 99, 235, 0.25)) !important;
 }
 
 .mermaid .node .label,
