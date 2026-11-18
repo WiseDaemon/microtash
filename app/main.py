@@ -49,6 +49,11 @@ app.include_router(substack.router)
 @app.on_event("startup")
 def on_startup():
     init_db()
+    try:
+        from app.daily_scheduler import start_daily_scheduler
+        start_daily_scheduler()
+    except Exception as e:
+        print(f"[Warning] Daily book scheduler startup warning: {e}")
 
 @app.get("/favicon.ico", include_in_schema=False)
 def favicon():

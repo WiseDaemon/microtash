@@ -33,6 +33,28 @@ def lookup_book(query: str = Query(..., description="Book title, author, or keyw
         "ideas_count": len(ideas)
     }
 
+@router.get("/daily/status")
+def get_daily_book_status():
+    """
+    Returns the status of the automated daily book drop engine.
+    """
+    from app import daily_scheduler
+    return daily_scheduler.get_daily_status()
+
+@router.post("/daily/trigger")
+def trigger_daily_book_drop(force: bool = False):
+    """
+    Manually triggers adding today's or next seminal book drop.
+    """
+    from app import daily_scheduler
+    added, msg, data = daily_scheduler.add_daily_book(force=force)
+    return {
+        "status": "ok" if added else "skipped",
+        "added": added,
+        "message": msg,
+        "details": data
+    }
+
 @router.get("/{book_slug}", response_model=BookDetail)
 def get_book_detail(book_slug: str):
     """

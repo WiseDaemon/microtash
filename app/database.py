@@ -299,6 +299,18 @@ def init_db(db_path: Optional[Union[str, Path]] = None):
     );
     """)
 
+    # 12. Daily Book Ingestion Log
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS daily_book_log (
+        date TEXT PRIMARY KEY,
+        book_id TEXT NOT NULL,
+        book_title TEXT NOT NULL,
+        author TEXT NOT NULL,
+        added_at TEXT NOT NULL,
+        ideas_count INTEGER DEFAULT 0
+    );
+    """)
+
     # Performance & Spaced Repetition Indices
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_ideas_topic ON ideas(topic);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_ideas_leitner ON ideas(next_review_date, leitner_box);")
