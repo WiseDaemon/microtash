@@ -35,6 +35,7 @@ class _FeedScreenState extends State<FeedScreen> {
   Future<void> _loadIdeas() async {
     setState(() => _isLoading = true);
     final data = await ApiService.fetchIdeas(topic: _selectedTopic);
+    if (!mounted) return;
     setState(() {
       _ideas = data;
       _isLoading = false;
@@ -68,7 +69,7 @@ class _FeedScreenState extends State<FeedScreen> {
               icon: const Icon(Icons.bolt, color: Color(0xFFF59E0B), size: 18),
               label: const Text('Workout', style: TextStyle(color: Color(0xFFF59E0B), fontWeight: FontWeight.bold, fontSize: 13)),
               style: TextButton.styleFrom(
-                backgroundColor: const Color(0xFF78350F).withOpacity(0.3),
+                backgroundColor: const Color(0xFF78350F).withValues(alpha: 0.3),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               ),
             ),
@@ -188,12 +189,12 @@ class _FeedScreenState extends State<FeedScreen> {
                                         icon: const Icon(Icons.bolt, size: 16, color: Color(0xFFF59E0B)),
                                         label: const Text('Stress-Test', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(0xFF78350F).withOpacity(0.3),
+                                          backgroundColor: const Color(0xFF78350F).withValues(alpha: 0.3),
                                           foregroundColor: const Color(0xFFF59E0B),
                                           elevation: 0,
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(10),
-                                            side: BorderSide(color: const Color(0xFFF59E0B).withOpacity(0.4)),
+                                            side: BorderSide(color: const Color(0xFFF59E0B).withValues(alpha: 0.4)),
                                           ),
                                         ),
                                       ),
@@ -203,7 +204,7 @@ class _FeedScreenState extends State<FeedScreen> {
                                   // Transformative Fair Use Educational Credit
                                   Text(
                                     idea.copyrightNotice,
-                                    style: TextStyle(color: Colors.white.withOpacity(0.35), fontSize: 9, fontStyle: FontStyle.italic),
+                                    style: TextStyle(color: Colors.white.withValues(alpha: 0.35), fontSize: 9, fontStyle: FontStyle.italic),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),

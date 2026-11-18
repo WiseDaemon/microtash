@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import List, Optional, Any, Union
 from datetime import datetime
 
@@ -164,6 +164,13 @@ class NoteCreateRequest(BaseModel):
     author_name: Optional[str] = Field("Anonymous Thinker", description="Display name")
     author_handle: Optional[str] = Field("thinker", description="User handle")
 
+    @field_validator("content")
+    @classmethod
+    def validate_content_not_empty(cls, v: str) -> str:
+        if not v or not v.strip():
+            raise ValueError("Note content cannot be empty or whitespace only.")
+        return v.strip()
+
 class IdeaRestackRequest(BaseModel):
     comment: str = Field("", description="Personal commentary accompanying the restack")
     author_name: Optional[str] = Field("Curated Thinker", description="Display name")
@@ -184,6 +191,13 @@ class CommentCreateRequest(BaseModel):
     comment_text: str = Field(..., description="High-signal commentary or practical takeaway")
     user_name: Optional[str] = Field("Curated Reader", description="User display name")
     parent_comment_id: Optional[str] = Field(None, description="Parent comment ID for threaded replies")
+
+    @field_validator("comment_text")
+    @classmethod
+    def validate_comment_not_empty(cls, v: str) -> str:
+        if not v or not v.strip():
+            raise ValueError("Comment text cannot be empty or whitespace only.")
+        return v.strip()
 
 class SubscriptionRequest(BaseModel):
     target_type: str = Field("author", description="'author' or 'publication'")

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models/book.dart';
 import '../models/idea.dart';
@@ -16,6 +17,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   bool _isLoading = true;
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
+  Timer? _debounceTimer;
 
   @override
   void initState() {
@@ -23,9 +25,17 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     _loadBooks();
   }
 
+  @override
+  void dispose() {
+    _debounceTimer?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
+
   Future<void> _loadBooks([String? query]) async {
     setState(() => _isLoading = true);
     final books = await ApiService.fetchBooks(search: query);
+    if (!mounted) return;
     setState(() {
       _books = books;
       _isLoading = false;
@@ -71,9 +81,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF10B981).withOpacity(0.15),
+                            color: const Color(0xFF10B981).withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: const Color(0xFF10B981).withOpacity(0.4)),
+                            border: Border.all(color: const Color(0xFF10B981).withValues(alpha: 0.4)),
                           ),
                           child: Text(
                             fullBook.topic.toUpperCase(),
@@ -88,7 +98,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.08),
+                            color: Colors.white.withValues(alpha: 0.08),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Row(
@@ -239,7 +249,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               controller: _searchController,
               onChanged: (val) {
                 _searchQuery = val;
-                _loadBooks(val);
+                _debounceTimer?.cancel();
+                _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+                  _loadBooks(val);
+                });
               },
               style: const TextStyle(color: Colors.white, fontSize: 13),
               decoration: InputDecoration(
@@ -251,6 +264,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                         icon: const Icon(Icons.clear, color: Colors.white54, size: 18),
                         onPressed: () {
                           _searchController.clear();
+                          _searchQuery = '';
+                          _debounceTimer?.cancel();
                           _loadBooks('');
                         },
                       )
@@ -291,7 +306,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       const SizedBox(height: 4),
                       Text(
                         'Request any book and it will be indexed for all users.',
-                        style: TextStyle(color: Colors.white.withOpacity(0.4), fontSize: 12),
+                        style: TextStyle(color: Colors.white.withValues(alpha: 0.4), fontSize: 12),
                       ),
                     ],
                   ),
@@ -318,9 +333,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                               width: 44,
                               height: 56,
                               decoration: BoxDecoration(
-                                color: const Color(0xFF10B981).withOpacity(0.15),
+                                color: const Color(0xFF10B981).withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: const Color(0xFF10B981).withOpacity(0.3)),
+                                border: Border.all(color: const Color(0xFF10B981).withValues(alpha: 0.3)),
                               ),
                               child: const Icon(Icons.book, color: Color(0xFF10B981), size: 24),
                             ),
@@ -334,7 +349,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                       Container(
                                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                         decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(0.06),
+                                          color: Colors.white.withValues(alpha: 0.06),
                                           borderRadius: BorderRadius.circular(6),
                                         ),
                                         child: Text(
@@ -363,7 +378,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                   const SizedBox(height: 3),
                                   Text(
                                     '${book.author} • ${book.publisher}',
-                                    style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 11),
+                                    style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 11),
                                   ),
                                 ],
                               ),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationService {
@@ -6,9 +7,16 @@ class NotificationService {
   static const String _keyReminderHour = 'microstash_reminder_hour';
   static const String _keyReminderMinute = 'microstash_reminder_minute';
   static const String _keyLastNotifiedDate = 'microstash_last_notified_date';
+  static const String _keyLastAlertTitle = 'microstash_last_alert_title';
+  static const String _keyLastAlertBody = 'microstash_last_alert_body';
 
   static bool _isInitialized = false;
   static Timer? _scheduleTimer;
+  static Map<String, dynamic>? lastAlert;
+
+  /// Stream controller for in-app alert subscriptions and test listeners
+  static final StreamController<Map<String, dynamic>> alertStreamController =
+      StreamController<Map<String, dynamic>>.broadcast();
 
   /// Initializes daily notification reminders for Leitner spaced repetition.
   static Future<void> initialize() async {
@@ -61,7 +69,7 @@ class NotificationService {
       final prefs = await SharedPreferences.getInstance();
       final lastNotified = prefs.getString(_keyLastNotifiedDate);
 
-      // Prevent nagging with duplicate notifications on the same day
+      // Prevent duplicate notifications on the same day
       if (lastNotified == todayStr) return;
 
       await triggerInstantRecallAlert(
@@ -79,6 +87,22 @@ class NotificationService {
     required String body,
   }) async {
     // Android Channel: microstash_recall_channel (Daily Mental Model Recall)
+    final alertData = {
+      'title': title,
+      'body': body,
+      'channel': 'microstash_recall_channel',
+      'timestamp': DateTime.now().toIso8601String(),
+    };
+    lastAlert = alertData;
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_keyLastAlertTitle, title);
+      await prefs.setString(_keyLastAlertBody, body);
+    } catch (_) {}
+
+    alertStreamController.add(alertData);
+    debugPrint('[NotificationService] [microstash_recall_channel] $title: $body');
   }
 
   /// Cancels all scheduled active recall notifications
@@ -90,27 +114,41 @@ class NotificationService {
   static void _startBackgroundCheckLoop() {
     _scheduleTimer?.cancel();
     _scheduleTimer = Timer.periodic(const Duration(hours: 1), (timer) async {
-      try {
-        final now = DateTime.now();
-        final prefs = await SharedPreferences.getInstance();
-        final enabled = prefs.getBool(_keyReminderEnabled) ?? true;
-        if (!enabled) return;
-
-        final targetHour = prefs.getInt(_keyReminderHour) ?? 9;
-        final targetMinute = prefs.getInt(_keyReminderMinute) ?? 0;
-
-        if (now.hour == targetHour && (now.minute - targetMinute).abs() < 30) {
-          final todayStr = now.toIso8601String().substring(0, 10);
-          final lastNotified = prefs.getString(_keyLastNotifiedDate);
-          if (lastNotified != todayStr) {
-            await triggerInstantRecallAlert(
-              title: '🧠 Daily Mental Model Workout',
-              body: 'Your spaced repetition review is ready. Solidify your models in 3 mins!',
-            );
-            await prefs.setString(_keyLastNotifiedDate, todayStr);
-          }
-        }
-      } catch (_) {}
+      await evaluateScheduledReminder();
     });
+  }
+
+  /// Evaluates whether the daily reminder window is active and dispatches if due today.
+  /// An optional [testDateTime] parameter allows deterministic testing.
+  static Future<bool> evaluateScheduledReminder([DateTime? testDateTime]) async {
+    try {
+      final now = testDateTime ?? DateTime.now();
+      final prefs = await SharedPreferences.getInstance();
+      final enabled = prefs.getBool(_keyReminderEnabled) ?? true;
+      if (!enabled) return false;
+
+      final targetHour = prefs.getInt(_keyReminderHour) ?? 9;
+      final targetMinute = prefs.getInt(_keyReminderMinute) ?? 0;
+
+      // Fixed hourly timer window calculation:
+      // When evaluated, trigger if the target time for today has arrived or passed,
+      // provided a notification has not already been sent today.
+      final isTimeOrPast = (now.hour > targetHour) ||
+          (now.hour == targetHour && now.minute >= targetMinute);
+
+      if (isTimeOrPast) {
+        final todayStr = now.toIso8601String().substring(0, 10);
+        final lastNotified = prefs.getString(_keyLastNotifiedDate);
+        if (lastNotified != todayStr) {
+          await triggerInstantRecallAlert(
+            title: '🧠 Daily Mental Model Workout',
+            body: 'Your spaced repetition review is ready. Solidify your models in 3 mins!',
+          );
+          await prefs.setString(_keyLastNotifiedDate, todayStr);
+          return true;
+        }
+      }
+    } catch (_) {}
+    return false;
   }
 }

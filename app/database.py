@@ -4,7 +4,8 @@ import json
 import uuid
 import re
 from datetime import datetime, date, timedelta
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Union
+from pathlib import Path
 from app.config import settings
 from app.models import Idea, Stash, UserProgress, Book, SubstackNote, SubstackComment, Subscription
 from app.seed_data import DEFAULT_IDEAS, DEFAULT_STASHES
@@ -43,17 +44,27 @@ def slugify(text: str) -> str:
     s = re.sub(r'[^a-z0-9]+', '-', primary.lower()).strip('-')
     return s or re.sub(r'[^a-z0-9]+', '-', text.lower()).strip('-') or "untitled"
 
-def get_connection():
-    os.makedirs(os.path.dirname(settings.DB_PATH), exist_ok=True)
-    conn = sqlite3.connect(settings.DB_PATH, timeout=10.0)
+def get_connection(db_path: Optional[Union[str, Path]] = None) -> sqlite3.Connection:
+    """
+    Returns an active SQLite connection with WAL mode, foreign keys, and dictionary row factory.
+    Accepts an optional db_path parameter; defaults to settings.DB_PATH.
+    """
+    target_path = Path(db_path) if db_path is not None else settings.DB_PATH
+    os.makedirs(os.path.dirname(target_path), exist_ok=True)
+    conn = sqlite3.connect(target_path, timeout=10.0)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL;")
     conn.execute("PRAGMA synchronous=NORMAL;")
     conn.execute("PRAGMA busy_timeout=5000;")
+    conn.execute("PRAGMA foreign_keys = ON;")
     return conn
 
-def init_db():
-    conn = get_connection()
+def init_db(db_path: Optional[Union[str, Path]] = None):
+    """
+    Initializes database schema, runs auto-migrations, and seeds baseline data.
+    Accepts an optional db_path parameter; defaults to settings.DB_PATH.
+    """
+    conn = get_connection(db_path=db_path)
     cursor = conn.cursor()
     
     # 1. Ideas table
@@ -537,19 +548,34 @@ def create_idea(data: Dict[str, Any]) -> Idea:
     publisher = data.get("publisher") or "Original Publication"
     c_notice = data.get("copyright_notice") or generate_copyright_attribution(data["source"], data["author"], publisher)
     dilemma_cache = data.get("dilemma_cache")
+    boundary = data.get("boundary", "")
+    next_review_date = data.get("next_review_date") or date.today().isoformat()
     
+    visual_diagram = data.get("visual_diagram", "").strip() if data.get("visual_diagram") else ""
+    if not visual_diagram:
+        try:
+            from app.ai_service import generate_default_mermaid_diagram
+            visual_diagram = generate_default_mermaid_diagram(
+                title=data.get("title", "Concept"),
+                summary=data.get("summary", ""),
+                topic=data.get("topic", "General")
+            )
+        except Exception:
+            clean_title = re.sub(r'["\']', '', data.get("title", "Concept"))
+            visual_diagram = f"graph TD\n  A[\"{clean_title}\"] --> B[\"First Principles\"]\n  B --> C[\"Execution & Action\"]"
+
     cursor.execute("""
         INSERT INTO ideas (
-            id, title, one_liner, summary, detailed_explanation, example, visual_diagram, quote, action_item, author, source, source_slug, publisher, copyright_notice, topic,
-            tags, read_time_mins, color_theme, likes, saved_count, is_liked, is_saved, dilemma_cache, created_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, ?, ?)
+            id, title, one_liner, summary, detailed_explanation, example, visual_diagram, boundary, quote, action_item, author, source, source_slug, publisher, copyright_notice, topic,
+            tags, read_time_mins, color_theme, likes, saved_count, is_liked, is_saved, leitner_box, next_review_date, dilemma_cache, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, 1, ?, ?, ?)
     """, (
         idea_id, data["title"], data["one_liner"], data["summary"],
-        data.get("detailed_explanation", ""), data.get("example", ""), data.get("visual_diagram", ""),
+        data.get("detailed_explanation", ""), data.get("example", ""), visual_diagram, boundary,
         data.get("quote"), data.get("action_item"), data["author"], data["source"], source_slug,
         publisher, c_notice, data.get("topic", "General"),
         tags_json, data.get("read_time_mins", 1), data.get("color_theme", "indigo"),
-        dilemma_cache, created_at
+        next_review_date, dilemma_cache, created_at
     ))
     conn.commit()
     conn.close()
@@ -1205,7 +1231,13 @@ def register_scanned_book(
 
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("UPDATE books SET ideas_count = ? WHERE id = ?", (len(created_or_found_ideas), book_id))
+    cursor.execute("""
+        SELECT COUNT(*) as count FROM ideas 
+        WHERE source_slug = ? OR LOWER(source) = LOWER(?)
+    """, (slug, clean_title))
+    count_row = cursor.fetchone()
+    actual_count = count_row["count"] if count_row else len(created_or_found_ideas)
+    cursor.execute("UPDATE books SET ideas_count = ? WHERE id = ?", (actual_count, book_id))
     conn.commit()
 
     cursor.execute("SELECT * FROM books WHERE id = ?", (book_id,))
@@ -1356,6 +1388,15 @@ def delete_all_user_sessions(user_id: str) -> bool:
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM user_sessions WHERE user_id = ?", (user_id,))
+    conn.commit()
+    conn.close()
+    return True
+
+def delete_user(user_id: str) -> bool:
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM user_sessions WHERE user_id = ?", (user_id,))
+    cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
     conn.commit()
     conn.close()
     return True

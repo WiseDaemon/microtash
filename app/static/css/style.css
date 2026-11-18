@@ -406,6 +406,20 @@ html:not(.dark) .text-slate-400 {
   transition: none !important;
 }
 
+/* Transparent hit-testing on text elements inside nodes to prevent enter/leave cycling */
+.mermaid .node .label,
+.mermaid .node foreignObject,
+.mermaid .node foreignObject *,
+.mermaid .node .nodeLabel,
+.mermaid .node text,
+[id*="diagram"] .node .label,
+[id*="diagram"] .node foreignObject,
+[id*="diagram"] .node foreignObject *,
+[id*="diagram"] .node .nodeLabel,
+[id*="diagram"] .node text {
+  pointer-events: none !important;
+}
+
 .mermaid .node rect,
 .mermaid .node circle,
 .mermaid .node polygon,
@@ -414,9 +428,9 @@ html:not(.dark) .text-slate-400 {
 [id*="diagram"] .node polygon {
   rx: 12px !important;
   ry: 12px !important;
-  stroke-width: 1.5px !important;
+  stroke-width: 2px !important;
   filter: drop-shadow(0 2px 4px rgba(15, 23, 42, 0.05)) !important;
-  transition: stroke 0.15s ease, stroke-width 0.15s ease, filter 0.15s ease !important;
+  transition: stroke 0.15s ease !important;
 }
 
 /* Rock-solid, flicker-free node hover: highlight border and glow without physical translation/movement */
@@ -432,8 +446,8 @@ html:not(.dark) .text-slate-400 {
 [id*="diagram"] .node:hover circle,
 [id*="diagram"] .node:hover polygon {
   stroke: #2563EB !important;
-  stroke-width: 2.5px !important;
-  filter: drop-shadow(0 4px 14px rgba(37, 99, 235, 0.30)) !important;
+  stroke-width: 2px !important;
+  filter: drop-shadow(0 2px 8px rgba(37, 99, 235, 0.25)) !important;
 }
 
 .mermaid .node .label,

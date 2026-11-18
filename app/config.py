@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import Optional, Union
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -36,7 +37,33 @@ class Settings:
     BASE_DIR: Path = BASE_DIR
     DATA_DIR: Path = BASE_DIR / "data"
     AUDIO_DIR: Path = DATA_DIR / "audio"
-    DB_PATH: Path = DATA_DIR / "microstash.db"
+    _db_path: Optional[Path] = None
+
+    @property
+    def DB_PATH(self) -> Path:
+        """
+        Dynamically resolves the active SQLite database path with strict priority:
+        1. Explicit programmatic override on settings instance (e.g. settings.DB_PATH = ...)
+        2. Environment variables: MICROSTASH_DB_PATH or TEST_DATABASE_PATH
+        3. DATABASE_URL (if formatted as sqlite:///path/to/db)
+        4. Default production database: data/microstash.db
+        """
+        if self._db_path is not None:
+            return Path(self._db_path)
+
+        env_override = os.getenv("MICROSTASH_DB_PATH") or os.getenv("TEST_DATABASE_PATH")
+        if env_override:
+            return Path(env_override)
+
+        if self.DATABASE_URL and self.DATABASE_URL.startswith("sqlite:///"):
+            return Path(self.DATABASE_URL.replace("sqlite:///", ""))
+
+        return self.DATA_DIR / "microstash.db"
+
+    @DB_PATH.setter
+    def DB_PATH(self, value: Optional[Union[str, Path]]) -> None:
+        """Allows test fixtures and CLI runners to dynamically switch database targets."""
+        self._db_path = Path(value) if value is not None else None
 
 settings = Settings()
 settings.DATA_DIR.mkdir(parents=True, exist_ok=True)

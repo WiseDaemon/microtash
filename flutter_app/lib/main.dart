@@ -55,15 +55,20 @@ class MainNavigationShell extends StatefulWidget {
 class _MainNavigationShellState extends State<MainNavigationShell> with WidgetsBindingObserver {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = const [
-    FeedScreen(),
-    DiscoverScreen(),
-    WorkoutScreen(),
-  ];
+  late final List<Widget> _screens;
 
   @override
   void initState() {
     super.initState();
+    _screens = [
+      const FeedScreen(),
+      const DiscoverScreen(),
+      WorkoutScreen(
+        onReturnToFeed: () {
+          setState(() => _currentIndex = 0);
+        },
+      ),
+    ];
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkSharedIntent();
@@ -130,7 +135,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> with WidgetsB
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF10B981).withOpacity(0.15),
+                          color: const Color(0xFF10B981).withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Icon(Icons.share, color: Color(0xFF10B981), size: 18),
@@ -175,18 +180,19 @@ class _MainNavigationShellState extends State<MainNavigationShell> with WidgetsB
                           final res = await ApiService.deconstructSharedContent(text);
                           if (dialogCtx.mounted) {
                             Navigator.pop(dialogCtx);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: const Color(0xFF10B981),
-                                content: Text(
-                                  res != null
-                                      ? '⚡ Deconstructed ${res['count'] ?? 0} models and saved globally!'
-                                      : 'Added to your library.',
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            );
                           }
+                          if (!mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: const Color(0xFF10B981),
+                              content: Text(
+                                res != null
+                                    ? '⚡ Deconstructed ${res['count'] ?? 0} models and saved globally!'
+                                    : 'Added to your library.',
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          );
                         },
                         icon: const Icon(Icons.bolt, color: Colors.black, size: 18),
                         label: const Text(
@@ -222,7 +228,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> with WidgetsB
           setState(() => _currentIndex = index);
         },
         backgroundColor: const Color(0xFF1E293B),
-        indicatorColor: const Color(0xFF10B981).withOpacity(0.2),
+        indicatorColor: const Color(0xFF10B981).withValues(alpha: 0.2),
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.explore_outlined),

@@ -1,12 +1,14 @@
-from fastapi import APIRouter, HTTPException, Response
+from fastapi import APIRouter, HTTPException, Response, Depends
 from fastapi.responses import HTMLResponse
+from typing import Optional, Dict, Any
 from app import database
+from app.auth import get_optional_user
 
 router = APIRouter(tags=["Google Play Compliance & Privacy"])
 
 @router.delete("/api/user/account")
 @router.post("/api/user/delete-account")
-def delete_user_account():
+async def delete_user_account(user: Optional[Dict[str, Any]] = Depends(get_optional_user)):
     """
     Google Play Policy Mandatory Endpoint:
     Allows user to request complete deletion of their account, learning history,
@@ -19,8 +21,13 @@ def delete_user_account():
         cursor.execute("UPDATE user_progress SET streak_days = 0, ideas_read_count = 0, doomscroll_mins_saved = 0 WHERE id = 1;")
         # Clear read history
         cursor.execute("DELETE FROM read_history;")
-        # Reset local likes and saves
-        cursor.execute("UPDATE ideas SET is_liked = 0, is_saved = 0, leitner_box = 1, next_review_date = NULL;")
+        # Remove user from users and session tokens from user_sessions if authenticated
+        if user and user.get("id"):
+            user_id = user["id"]
+            cursor.execute("DELETE FROM user_sessions WHERE user_id = ?;", (user_id,))
+            cursor.execute("DELETE FROM users WHERE id = ?;", (user_id,))
+        # Reset local likes and saves without wiping shared educational review dates
+        cursor.execute("UPDATE ideas SET is_liked = 0, is_saved = 0;")
         conn.commit()
         conn.close()
         return {

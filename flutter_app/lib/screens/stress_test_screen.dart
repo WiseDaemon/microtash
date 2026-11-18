@@ -29,6 +29,7 @@ class _StressTestScreenState extends State<StressTestScreen> {
     });
 
     final res = await ApiService.fetchStressTest(widget.idea.id);
+    if (!mounted) return;
     setState(() {
       _dilemma = res ?? {
         'scenario': 'Your team is facing critical execution bottlenecks with ambiguous trade-offs. Stakeholders are panicking.',
@@ -138,10 +139,10 @@ class _StressTestScreenState extends State<StressTestScreen> {
                     if (_selectedOption != null) {
                       if (isCorrect) {
                         borderColor = const Color(0xFF10B981);
-                        bgColor = const Color(0xFF064E3B).withOpacity(0.4);
+                        bgColor = const Color(0xFF064E3B).withValues(alpha: 0.4);
                       } else if (isSelected && !isCorrect) {
                         borderColor = const Color(0xFFEF4444);
-                        bgColor = const Color(0xFF7F1D1D).withOpacity(0.4);
+                        bgColor = const Color(0xFF7F1D1D).withValues(alpha: 0.4);
                       }
                     }
 
@@ -188,8 +189,8 @@ class _StressTestScreenState extends State<StressTestScreen> {
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
                         color: _selectedOption!['is_correct'] == true
-                            ? const Color(0xFF064E3B).withOpacity(0.5)
-                            : const Color(0xFF7F1D1D).withOpacity(0.5),
+                            ? const Color(0xFF064E3B).withValues(alpha: 0.5)
+                            : const Color(0xFF7F1D1D).withValues(alpha: 0.5),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: _selectedOption!['is_correct'] == true ? const Color(0xFF10B981) : const Color(0xFFEF4444),
@@ -232,9 +233,9 @@ class _StressTestScreenState extends State<StressTestScreen> {
                     Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF0F766E).withOpacity(0.2),
+                        color: const Color(0xFF0F766E).withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFF14B8A6).withOpacity(0.4)),
+                        border: Border.all(color: const Color(0xFF14B8A6).withValues(alpha: 0.4)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../models/idea.dart';
 import '../models/book.dart';
@@ -7,6 +8,9 @@ import 'offline_storage_service.dart';
 class ApiService {
   // 10.0.2.2 maps to localhost from the Android Emulator; configure your live server domain for release
   static const String baseUrl = 'http://10.0.2.2:8000';
+
+  /// HTTP client instance used for requests. May be overridden in unit tests with a MockClient.
+  static http.Client client = http.Client();
 
   /// Helper to get request headers with optional Bearer JWT token
   static Future<Map<String, String>> _getHeaders([Map<String, String>? extra]) async {
@@ -25,7 +29,7 @@ class ApiService {
 
   static Future<Map<String, dynamic>?> login(String usernameOrEmail, String password) async {
     try {
-      final res = await http.post(
+      final res = await client.post(
         Uri.parse('$baseUrl/api/auth/login'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
@@ -41,7 +45,9 @@ class ApiService {
         }
         return data;
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('ApiService.login error: $e');
+    }
     return null;
   }
 
@@ -52,7 +58,7 @@ class ApiService {
     String? fullName,
   }) async {
     try {
-      final res = await http.post(
+      final res = await client.post(
         Uri.parse('$baseUrl/api/auth/register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
@@ -70,14 +76,16 @@ class ApiService {
         }
         return data;
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('ApiService.register error: $e');
+    }
     return null;
   }
 
   static Future<Map<String, dynamic>?> getCurrentUser() async {
     try {
       final headers = await _getHeaders();
-      final res = await http.get(
+      final res = await client.get(
         Uri.parse('$baseUrl/api/auth/me'),
         headers: headers,
       ).timeout(const Duration(seconds: 4));
@@ -85,18 +93,22 @@ class ApiService {
       if (res.statusCode == 200) {
         return jsonDecode(res.body);
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('ApiService.getCurrentUser error: $e');
+    }
     return null;
   }
 
   static Future<void> logout() async {
     try {
       final headers = await _getHeaders();
-      await http.post(
+      await client.post(
         Uri.parse('$baseUrl/api/auth/logout'),
         headers: headers,
       ).timeout(const Duration(seconds: 3));
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('ApiService.logout error: $e');
+    }
     await OfflineStorageService.clearAuthToken();
   }
 
@@ -110,7 +122,7 @@ class ApiService {
       });
 
       final headers = await _getHeaders();
-      final res = await http.get(uri, headers: headers).timeout(const Duration(seconds: 4));
+      final res = await client.get(uri, headers: headers).timeout(const Duration(seconds: 4));
       if (res.statusCode == 200) {
         final List data = jsonDecode(res.body);
         final ideas = data.map((e) => Idea.fromJson(e)).toList();
@@ -122,7 +134,9 @@ class ApiService {
         syncPendingReviews();
         return ideas;
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('ApiService.fetchIdeas network error (falling back to offline): $e');
+    }
 
     // Fallback to disk storage when offline
     final offlineIdeas = await OfflineStorageService.loadIdeas();
@@ -140,7 +154,7 @@ class ApiService {
       });
 
       final headers = await _getHeaders();
-      final res = await http.get(uri, headers: headers).timeout(const Duration(seconds: 4));
+      final res = await client.get(uri, headers: headers).timeout(const Duration(seconds: 4));
       if (res.statusCode == 200) {
         final List data = jsonDecode(res.body);
         final books = data.map((e) => Book.fromJson(e)).toList();
@@ -149,7 +163,9 @@ class ApiService {
         }
         return books;
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('ApiService.fetchBooks network error (falling back to offline): $e');
+    }
 
     return await OfflineStorageService.loadBooks();
   }
@@ -157,14 +173,16 @@ class ApiService {
   static Future<Book?> fetchBookDetail(String slug) async {
     try {
       final headers = await _getHeaders();
-      final res = await http.get(
+      final res = await client.get(
         Uri.parse('$baseUrl/api/books/$slug'),
         headers: headers,
       ).timeout(const Duration(seconds: 4));
       if (res.statusCode == 200) {
         return Book.fromJson(jsonDecode(res.body));
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('ApiService.fetchBookDetail error: $e');
+    }
     return null;
   }
 
@@ -172,18 +190,20 @@ class ApiService {
     try {
       final uri = Uri.parse('$baseUrl/api/books/lookup').replace(queryParameters: {'query': query});
       final headers = await _getHeaders();
-      final res = await http.get(uri, headers: headers).timeout(const Duration(seconds: 4));
+      final res = await client.get(uri, headers: headers).timeout(const Duration(seconds: 4));
       if (res.statusCode == 200) {
         return jsonDecode(res.body);
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('ApiService.lookupBook error: $e');
+    }
     return null;
   }
 
   static Future<List<Idea>> fetchDueLeitner() async {
     try {
       final headers = await _getHeaders();
-      final res = await http.get(
+      final res = await client.get(
         Uri.parse('$baseUrl/api/ideas/leitner/due'),
         headers: headers,
       ).timeout(const Duration(seconds: 4));
@@ -193,7 +213,9 @@ class ApiService {
         await OfflineStorageService.saveDueLeitner(due);
         return due;
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('ApiService.fetchDueLeitner network error (falling back to offline): $e');
+    }
 
     return await OfflineStorageService.loadDueLeitner();
   }
@@ -201,21 +223,23 @@ class ApiService {
   static Future<Map<String, dynamic>?> fetchStressTest(String ideaId) async {
     try {
       final headers = await _getHeaders();
-      final res = await http.get(
+      final res = await client.get(
         Uri.parse('$baseUrl/api/ai/stress-test/$ideaId'),
         headers: headers,
       ).timeout(const Duration(seconds: 5));
       if (res.statusCode == 200) {
         return jsonDecode(res.body)['stress_test'];
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('ApiService.fetchStressTest error: $e');
+    }
     return null;
   }
 
   static Future<bool> submitLeitnerReview(String ideaId, int grade) async {
     try {
       final headers = await _getHeaders();
-      final res = await http.post(
+      final res = await client.post(
         Uri.parse('$baseUrl/api/ideas/$ideaId/leitner-review'),
         headers: headers,
         body: jsonEncode({'grade': grade}),
@@ -223,7 +247,9 @@ class ApiService {
       if (res.statusCode == 200) {
         return true;
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('ApiService.submitLeitnerReview network error (queuing offline): $e');
+    }
 
     // Queue offline review to persist user progress on device
     await OfflineStorageService.queueOfflineReview(ideaId, grade);
@@ -239,13 +265,14 @@ class ApiService {
     bool allSynced = true;
     for (final review in pending) {
       try {
-        final res = await http.post(
+        final res = await client.post(
           Uri.parse('$baseUrl/api/ideas/${review['idea_id']}/leitner-review'),
           headers: headers,
           body: jsonEncode({'grade': review['grade']}),
         ).timeout(const Duration(seconds: 3));
         if (res.statusCode != 200) allSynced = false;
-      } catch (_) {
+      } catch (e) {
+        debugPrint('ApiService.syncPendingReviews item error: $e');
         allSynced = false;
         break;
       }
@@ -260,7 +287,7 @@ class ApiService {
   static Future<Map<String, dynamic>?> deconstructSharedContent(String text) async {
     try {
       final headers = await _getHeaders();
-      final res = await http.post(
+      final res = await client.post(
         Uri.parse('$baseUrl/api/ai/auto-fetch-and-generate'),
         headers: headers,
         body: jsonEncode({
@@ -273,19 +300,22 @@ class ApiService {
       if (res.statusCode == 200) {
         return jsonDecode(res.body);
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('ApiService.deconstructSharedContent error: $e');
+    }
     return null;
   }
 
   static Future<bool> toggleLike(String ideaId) async {
     try {
       final headers = await _getHeaders();
-      final res = await http.post(
+      final res = await client.post(
         Uri.parse('$baseUrl/api/ideas/$ideaId/like'),
         headers: headers,
       );
       return res.statusCode == 200;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('ApiService.toggleLike error: $e');
       return false;
     }
   }
@@ -293,12 +323,13 @@ class ApiService {
   static Future<bool> toggleSave(String ideaId) async {
     try {
       final headers = await _getHeaders();
-      final res = await http.post(
+      final res = await client.post(
         Uri.parse('$baseUrl/api/ideas/$ideaId/save'),
         headers: headers,
       );
       return res.statusCode == 200;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('ApiService.toggleSave error: $e');
       return false;
     }
   }
@@ -311,39 +342,44 @@ class ApiService {
         if (search != null && search.isNotEmpty) 'search': search,
       });
       final headers = await _getHeaders();
-      final res = await http.get(uri, headers: headers).timeout(const Duration(seconds: 4));
+      final res = await client.get(uri, headers: headers).timeout(const Duration(seconds: 4));
       if (res.statusCode == 200) {
         final List list = jsonDecode(res.body);
         return list.map((e) => Map<String, dynamic>.from(e)).toList();
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('ApiService.fetchPublicStashes error: $e');
+    }
     return [];
   }
 
   static Future<Map<String, dynamic>?> fetchSharedStash(String shareSlugOrId) async {
     try {
       final headers = await _getHeaders();
-      final res = await http.get(
+      final res = await client.get(
         Uri.parse('$baseUrl/api/stashes/share/$shareSlugOrId'),
         headers: headers,
       ).timeout(const Duration(seconds: 4));
       if (res.statusCode == 200) {
         return jsonDecode(res.body);
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('ApiService.fetchSharedStash error: $e');
+    }
     return null;
   }
 
   static Future<bool> publishStash(String stashId, {bool isPublic = true}) async {
     try {
       final headers = await _getHeaders();
-      final res = await http.post(
+      final res = await client.post(
         Uri.parse('$baseUrl/api/stashes/$stashId/publish'),
         headers: headers,
         body: jsonEncode({'is_public': isPublic}),
       ).timeout(const Duration(seconds: 4));
       return res.statusCode == 200;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('ApiService.publishStash error: $e');
       return false;
     }
   }
@@ -351,14 +387,16 @@ class ApiService {
   static Future<Map<String, dynamic>?> cloneStash(String stashId) async {
     try {
       final headers = await _getHeaders();
-      final res = await http.post(
+      final res = await client.post(
         Uri.parse('$baseUrl/api/stashes/$stashId/clone'),
         headers: headers,
       ).timeout(const Duration(seconds: 4));
       if (res.statusCode == 200) {
         return jsonDecode(res.body);
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('ApiService.cloneStash error: $e');
+    }
     return null;
   }
 }

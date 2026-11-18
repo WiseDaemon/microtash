@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 from app import database
-from app.tts_service import generate_audio_for_idea
+from app.tts_service import generate_audio_for_idea, get_fallback_audio
 
 router = APIRouter(prefix="/api/audio", tags=["Audio"])
 
@@ -20,6 +20,10 @@ async def get_audio_narration(idea_id: str):
 
     try:
         audio_file = await generate_audio_for_idea(idea_id, text_to_speak)
-        return FileResponse(path=str(audio_file), media_type="audio/wav", filename=f"{idea_id}.wav")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"TTS error: {str(e)}")
+        if audio_file and audio_file.exists() and audio_file.stat().st_size > 100:
+            return FileResponse(path=str(audio_file), media_type="audio/wav", filename=f"{idea_id}.wav")
+        fallback_file = get_fallback_audio(idea_id)
+        return FileResponse(path=str(fallback_file), media_type="audio/wav", filename=f"{idea_id}.wav")
+    except Exception:
+        fallback_file = get_fallback_audio(idea_id)
+        return FileResponse(path=str(fallback_file), media_type="audio/wav", filename=f"{idea_id}.wav")

@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS ideas (
     detailed_explanation TEXT,                      -- In-depth first-principles & theoretical mechanics (markdown)
     example TEXT,                                   -- Concrete real-world / operational case study
     visual_diagram TEXT,                            -- Native Mermaid.js flowchart or graph syntax
+    boundary TEXT,                                  -- Failure boundary / when NOT to apply the mental model
     quote TEXT,                                     -- Key verbatim quote from author or source
     action_item TEXT,                               -- Actionable rule or asymmetric behavior change
     author TEXT NOT NULL,                           -- Thinker / Creator / Author name
@@ -139,3 +140,54 @@ CREATE TABLE IF NOT EXISTS user_sessions (
 );
 
 CREATE INDEX IF NOT EXISTS idx_sessions_user ON user_sessions(user_id);
+
+
+-- 9. SUBSTACK_NOTES (Short-form Thought Stream & Restacks)
+CREATE TABLE IF NOT EXISTS substack_notes (
+    id TEXT PRIMARY KEY,                             -- Unique note ID (e.g. 'note_1')
+    author_name TEXT NOT NULL,                       -- Author display name
+    author_handle TEXT NOT NULL,                     -- Handle / username slug
+    author_avatar TEXT,                              -- Avatar URL
+    content TEXT NOT NULL,                           -- Substack short-form note content
+    referenced_idea_id TEXT,                         -- Optional foreign key / reference to ideas(id)
+    referenced_idea_title TEXT,                      -- Quoted idea title
+    referenced_idea_quote TEXT,                      -- Quoted excerpt from mental model
+    referenced_idea_author TEXT,                     -- Quoted idea author
+    restack_comment TEXT,                            -- Curator commentary accompanying restack
+    likes_count INTEGER DEFAULT 0,                   -- Upvotes / likes
+    restacks_count INTEGER DEFAULT 0,                -- Restacks / shares
+    created_at TEXT NOT NULL,                        -- ISO 8601 creation timestamp
+    is_liked INTEGER DEFAULT 0                       -- Local user like status
+);
+
+CREATE INDEX IF NOT EXISTS idx_notes_created ON substack_notes(created_at DESC);
+
+
+-- 10. SUBSTACK_COMMENTS (Threaded Socratic Discussions & Takeaways)
+CREATE TABLE IF NOT EXISTS substack_comments (
+    id TEXT PRIMARY KEY,                             -- Unique comment UUID
+    idea_id TEXT NOT NULL,                           -- Reference to ideas(id)
+    user_id TEXT DEFAULT 'community',                -- User ID of commenter
+    user_name TEXT NOT NULL,                         -- Display name
+    user_avatar TEXT,                                -- Avatar URL
+    comment_text TEXT NOT NULL,                      -- Discussion text
+    likes_count INTEGER DEFAULT 0,                   -- Comment likes
+    created_at TEXT NOT NULL,                        -- ISO 8601 creation timestamp
+    parent_comment_id TEXT                           -- Parent comment UUID for nested replies
+);
+
+CREATE INDEX IF NOT EXISTS idx_comments_idea ON substack_comments(idea_id, created_at DESC);
+
+
+-- 11. SUBSTACK_SUBSCRIPTIONS (Author & Publication Subscriptions)
+CREATE TABLE IF NOT EXISTS substack_subscriptions (
+    id TEXT PRIMARY KEY,                             -- Unique subscription UUID
+    user_id TEXT NOT NULL,                           -- Subscribing user ID
+    target_type TEXT NOT NULL,                       -- 'author' or 'publication'
+    target_name TEXT NOT NULL,                       -- Name of creator or publication
+    target_handle TEXT,                              -- Handle or publication slug
+    created_at TEXT NOT NULL,                        -- ISO 8601 creation timestamp
+    UNIQUE(user_id, target_name)
+);
+
+CREATE INDEX IF NOT EXISTS idx_subs_user ON substack_subscriptions(user_id);

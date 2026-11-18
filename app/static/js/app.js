@@ -330,6 +330,13 @@ function sanitizeAndElevateMermaid(diag, targetElId) {
   // Auto-quote unquoted diamond questions: id{Some Question?} -> id{"Some Question?"}
   clean = clean.replace(/([a-zA-Z0-9_]+)\{([^"\}\n][^\}\n]*)\}/g, '$1{"$2"}');
 
+  // Strip parentheses and quotes inside edge labels: -->|Label (Detail)| -> -->|Label - Detail|
+  clean = clean.replace(/(-->|-.->|==>|---|--)\s*\|([^|\n]+)\|/g, (match, arrow, label) => {
+    let safe = label.replace(/[()]/g, '-').replace(/['"]/g, '').replace(/\s*-\s*-+\s*/g, ' - ').trim();
+    safe = safe.replace(/^[-\s]+|[-\s]+$/g, '').trim();
+    return `${arrow}|${safe}|`;
+  });
+
   // Map dark fill hex codes to light, high-contrast pastel colors
   const darkToPastel = {
     '#064e3b': '#ECFDF5',
@@ -397,7 +404,6 @@ async function renderIdeaVisualDiagram(idea, targetElId) {
         svgEl.style.maxWidth = '100%';
         svgEl.style.height = 'auto';
         svgEl.style.overflow = 'visible';
-        svgEl.classList.add('transition-all', 'duration-300');
 
         // Make nodes and edges genuinely interactive!
         if (targetElId === 'modal-diagram-render') {
@@ -445,10 +451,6 @@ function setupModalInteractiveDiagram(svgEl, idea) {
     node.addEventListener('click', (e) => {
       e.stopPropagation();
       selectDiagramNode(node, index, uniqueNodes.length, idea);
-    });
-
-    node.addEventListener('mouseenter', () => {
-      node.style.cursor = 'pointer';
     });
   });
 
@@ -667,8 +669,8 @@ function renderStyledStepFlow(idea) {
       </div>
 
       <!-- Arrow Down Connector -->
-      <div class="flex items-center justify-center text-slate-400 -my-1">
-        <i data-lucide="arrow-down" class="w-4 h-4 text-slate-400"></i>
+      <div class="flex items-center justify-center text-slate-600 -my-1">
+        <i data-lucide="arrow-down" class="w-4 h-4 text-slate-600"></i>
       </div>
 
       <!-- Step 2: Mental Model Filter -->
@@ -687,8 +689,8 @@ function renderStyledStepFlow(idea) {
       </div>
 
       <!-- Arrow Down Connector -->
-      <div class="flex items-center justify-center text-slate-400 -my-1">
-        <i data-lucide="arrow-down" class="w-4 h-4 text-slate-400"></i>
+      <div class="flex items-center justify-center text-slate-600 -my-1">
+        <i data-lucide="arrow-down" class="w-4 h-4 text-slate-600"></i>
       </div>
 
       <!-- Step 3: High-Leverage Payoff -->
@@ -981,21 +983,21 @@ function renderFeedGrid() {
         </div>
 
         <div class="flex items-center space-x-1">
-          <button onclick="openStressTestModal('${idea.id}')" class="px-2.5 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-600 text-amber-300 hover:text-white border border-amber-500/20 text-xs font-semibold flex items-center space-x-1 transition shadow-sm" title="Socratic Dilemma Stress-Test">
-            <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i>
+          <button onclick="openStressTestModal('${idea.id}')" class="px-2.5 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-600 text-amber-700 hover:text-white border border-amber-500/30 text-xs font-semibold flex items-center space-x-1 transition shadow-sm" title="Socratic Dilemma Stress-Test">
+            <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-600"></i>
             <span class="hidden sm:inline">Stress Test</span>
           </button>
-          <button onclick="openDeepDiveModal('${idea.id}')" class="px-2.5 py-1.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/20 text-xs font-semibold flex items-center space-x-1 transition shadow-sm" title="Detailed explanation and example">
+          <button onclick="openDeepDiveModal('${idea.id}')" class="px-2.5 py-1.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-500/30 text-xs font-semibold flex items-center space-x-1 transition shadow-sm" title="Detailed explanation and example">
             <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
             <span>Detailed</span>
           </button>
-          <button onclick="playIdeaAudioById('${idea.id}')" class="p-2 rounded-xl text-slate-400 hover:text-sky-400 hover:bg-slate-800 transition" title="Listen">
+          <button onclick="playIdeaAudioById('${idea.id}')" class="p-2 rounded-xl text-slate-600 hover:text-sky-600 hover:bg-slate-100 transition" title="Listen">
             <i data-lucide="volume-2" class="w-4 h-4"></i>
           </button>
-          <button onclick="openStashModal('${idea.id}')" class="p-2 rounded-xl text-slate-400 hover:text-indigo-400 hover:bg-slate-800 transition" title="Save to Stash">
-            <i data-lucide="bookmark" class="w-4 h-4 ${idea.is_saved ? 'fill-indigo-400 text-indigo-400' : ''}"></i>
+          <button onclick="openStashModal('${idea.id}')" class="p-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition" title="Save to Stash">
+            <i data-lucide="bookmark" class="w-4 h-4 ${idea.is_saved ? 'fill-indigo-600 text-indigo-600' : ''}"></i>
           </button>
-          <button onclick="jumpToSwipeCard(${index})" class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-indigo-600 text-slate-300 hover:text-white text-xs font-semibold flex items-center space-x-1 transition" title="Open in Swipe Deck">
+          <button onclick="jumpToSwipeCard(${index})" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-indigo-600 text-slate-700 hover:text-white border border-slate-200 text-xs font-semibold flex items-center space-x-1 transition" title="Open in Swipe Deck">
             <span>Swipe</span>
             <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
           </button>
@@ -1282,161 +1284,7 @@ function renderMarkdownDetailed(text) {
   return html;
 }
 
-// --- Deep Dive / Detailed Concept Modal ---
-async function openDeepDiveModal(ideaId = null) {
-  let idea = null;
-  if (ideaId !== null && ideaId !== undefined) {
-    idea = (window.state.ideas || []).find(i => String(i.id) === String(ideaId));
-    if (!idea && lastExtractedIdeas && lastExtractedIdeas.length) {
-      if (typeof ideaId === 'number' || (!isNaN(Number(ideaId)) && Number(ideaId) < lastExtractedIdeas.length)) {
-        idea = lastExtractedIdeas[Number(ideaId)];
-      } else {
-        idea = lastExtractedIdeas.find(i => String(i.id) === String(ideaId));
-      }
-    }
-    if (!idea) {
-      try {
-        const res = await fetch(`/api/ideas/${ideaId}`);
-        if (res.ok) idea = await res.json();
-      } catch (e) {
-        console.warn("Could not fetch idea detail:", e);
-      }
-    }
-  }
-
-  if (!idea) {
-    idea = (window.state.ideas || [])[window.state.currentIdeaIndex];
-  }
-
-  if (!idea) return;
-  currentDeepDiveIdea = idea;
-
-  const modal = document.getElementById("deep-dive-modal");
-  if (!modal) return;
-  modal.dataset.ideaId = idea.id || '';
-
-  const topicEl = document.getElementById("modal-topic");
-  if (topicEl) {
-    topicEl.textContent = idea.topic || "Mental Model";
-    topicEl.className = `px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${getTopicBadgeClass(idea.topic)}`;
-  }
-
-  const authorEl = document.getElementById("modal-author");
-  if (authorEl) authorEl.textContent = idea.author || "Curated Thinker";
-
-  const sourceEl = document.getElementById("modal-source");
-  if (sourceEl) sourceEl.textContent = idea.source || "Insight";
-
-  const titleEl = document.getElementById("modal-title");
-  if (titleEl) titleEl.textContent = idea.title;
-
-  const oneLinerEl = document.getElementById("modal-one-liner");
-  if (oneLinerEl) oneLinerEl.textContent = idea.one_liner;
-
-  // Section 1: The Core Mental Model (Bite-sized microlearning summary)
-  const summaryEl = document.getElementById("modal-summary");
-  if (summaryEl) summaryEl.textContent = idea.summary;
-
-  // Section: Visual Architecture Diagram Flow
-  renderIdeaVisualDiagram(idea, 'modal-diagram-render');
-
-  // Section 2: In-Depth Explanation & Theoretical Mechanics
-  const detailedEl = document.getElementById("modal-detailed");
-  const exampleEl = document.getElementById("modal-example");
-
-  const hasGenuineDeepDive = idea.detailed_explanation && 
-                             idea.detailed_explanation.trim().length >= 120 && 
-                             idea.detailed_explanation.trim() !== idea.summary.trim();
-
-  if (hasGenuineDeepDive) {
-    if (detailedEl) detailedEl.innerHTML = renderMarkdownDetailed(idea.detailed_explanation);
-    if (exampleEl) exampleEl.textContent = idea.example || "Historical and operational practitioners apply this model to reduce systematic failure modes.";
-  } else {
-    // Show active synthesis skeleton
-    if (detailedEl) {
-      detailedEl.innerHTML = `
-        <div class="space-y-3 py-2 animate-pulse" id="deep-dive-loader">
-          <div class="flex items-center space-x-2 text-indigo-400 font-semibold text-xs">
-            <span class="animate-spin text-base">⚙️</span>
-            <span>Synthesizing authentic in-depth theoretical mechanics & first principles...</span>
-          </div>
-          <div class="h-3 bg-slate-800 rounded w-full"></div>
-          <div class="h-3 bg-slate-800 rounded w-5/6"></div>
-          <div class="h-3 bg-slate-800 rounded w-4/6"></div>
-        </div>
-      `;
-    }
-    if (exampleEl) {
-      exampleEl.innerHTML = `<span class="text-amber-300/70 text-xs italic">Retrieving verified case study...</span>`;
-    }
-
-    // Trigger on-demand synthesis from backend
-    if (idea.id) {
-      fetch(`/api/ideas/${idea.id}/deep-dive`, { method: 'POST' })
-        .then(res => res.json())
-        .then(updated => {
-          if (updated && updated.detailed_explanation && updated.detailed_explanation.trim() !== idea.summary.trim()) {
-            idea.detailed_explanation = updated.detailed_explanation;
-            idea.example = updated.example || idea.example;
-            
-            // Update in window.state.ideas cache
-            const cachedItem = (window.state.ideas || []).find(i => String(i.id) === String(idea.id));
-            if (cachedItem) {
-              cachedItem.detailed_explanation = updated.detailed_explanation;
-              cachedItem.example = updated.example;
-            }
-
-            if (currentDeepDiveIdea && currentDeepDiveIdea.id === idea.id) {
-              if (detailedEl) detailedEl.innerHTML = renderMarkdownDetailed(updated.detailed_explanation);
-              if (exampleEl) exampleEl.textContent = updated.example || "Case study synthesized.";
-              if (updated.visual_diagram) {
-                idea.visual_diagram = updated.visual_diagram;
-                renderIdeaVisualDiagram(updated, 'modal-diagram-render');
-              }
-              if (window.lucide) lucide.createIcons();
-            }
-          }
-        })
-        .catch(err => {
-          console.warn("[Deep Dive] Auto-synthesis error:", err);
-          if (detailedEl) {
-            detailedEl.innerHTML = `
-              <div class="text-xs text-slate-300 space-y-2">
-                <p><strong>First Principles Breakdown:</strong> ${idea.title} addresses the fundamental divergence between short-term intuition and systemic reality.</p>
-                <p><strong>System Dynamics:</strong> Human psychology defaults to immediate feedback loops. This mental model establishes counter-intuitive guardrails to preserve long-term asymmetric advantage.</p>
-              </div>
-            `;
-          }
-        });
-    }
-  }
-
-  const actionEl = document.getElementById("modal-action");
-  if (actionEl) {
-    actionEl.textContent = idea.action_item || "Apply this principle to one critical decision today.";
-  }
-
-  const quoteEl = document.getElementById("modal-quote");
-  const quoteContainer = document.getElementById("modal-quote-container");
-  if (quoteEl && quoteContainer) {
-    if (idea.quote) {
-      quoteEl.textContent = `“${idea.quote.replace(/^["“”]|["“”]$/g, '')}”`;
-      quoteContainer.classList.remove("hidden");
-    } else {
-      quoteContainer.classList.add("hidden");
-    }
-  }
-
-  const tagsEl = document.getElementById("modal-tags");
-  if (tagsEl) {
-    tagsEl.innerHTML = (idea.tags || []).map(t => `
-      <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-xs font-medium text-slate-300 border border-slate-700/80">#${t}</span>
-    `).join('');
-  }
-
-  modal.classList.remove("hidden");
-  if (window.lucide) lucide.createIcons();
-}
+// (Legacy openDeepDiveModal consolidated into canonical definition below)
 
 async function regenerateCurrentDeepDive() {
   if (!currentDeepDiveIdea || !currentDeepDiveIdea.id) return;
@@ -3119,7 +2967,7 @@ async function openDeepDiveModal(ideaId = null) {
   const topicEl = document.getElementById("modal-topic");
   if (topicEl) {
     topicEl.textContent = (idea.topic || "Mental Model").toUpperCase();
-    topicEl.className = "px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/15 text-primary border border-primary/30";
+    topicEl.className = "px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200";
   }
 
   const authorSourceEl = document.getElementById("modal-author-source");
@@ -3136,26 +2984,72 @@ async function openDeepDiveModal(ideaId = null) {
 
   // Slide 1: Mechanism & Detailed Explanation
   const detailedEl = document.getElementById("modal-detailed-explanation") || document.getElementById("modal-detailed");
-  if (detailedEl) {
-    if (idea.detailed_explanation && idea.detailed_explanation.trim().length > 0) {
-      detailedEl.innerHTML = renderMarkdownDetailed(idea.detailed_explanation);
-    } else {
-      detailedEl.innerHTML = `<p class="leading-relaxed text-on-surface/90">${idea.summary}</p>`;
+  const exampleEl = document.getElementById("modal-example");
+
+  const hasGenuineDeepDive = idea.detailed_explanation && 
+                             idea.detailed_explanation.trim().length >= 80 && 
+                             idea.detailed_explanation.trim() !== (idea.summary || '').trim();
+
+  if (hasGenuineDeepDive) {
+    if (detailedEl) detailedEl.innerHTML = renderMarkdownDetailed(idea.detailed_explanation);
+    if (exampleEl) {
+      if (idea.example && idea.example.trim().length > 0) {
+        exampleEl.innerHTML = renderMarkdownDetailed(idea.example);
+      } else {
+        exampleEl.innerHTML = "<p class='leading-relaxed text-slate-800'>Practitioners apply this mental model systematically to navigate uncertainty and avoid irreversible failure modes.</p>";
+      }
+    }
+  } else {
+    // High-contrast, light-modal compatible skeleton shimmer loader
+    if (detailedEl) {
+      detailedEl.innerHTML = `
+        <div class="space-y-3 py-2 animate-pulse" id="deep-dive-loader">
+          <div class="flex items-center space-x-2 text-indigo-700 font-semibold text-xs">
+            <span class="animate-spin text-base">⚙️</span>
+            <span>Synthesizing authentic in-depth theoretical mechanics & first principles...</span>
+          </div>
+          <div class="h-3 bg-slate-200 rounded w-full"></div>
+          <div class="h-3 bg-slate-200 rounded w-5/6"></div>
+          <div class="h-3 bg-slate-200 rounded w-4/6"></div>
+        </div>
+      `;
+    }
+    if (exampleEl) {
+      exampleEl.innerHTML = `<span class="text-amber-800 text-xs italic font-medium">Retrieving verified case study...</span>`;
+    }
+
+    if (idea.id) {
+      fetch(`/api/ideas/${idea.id}/deep-dive`, { method: 'POST' })
+        .then(res => res.json())
+        .then(updated => {
+          if (updated && updated.detailed_explanation) {
+            idea.detailed_explanation = updated.detailed_explanation;
+            idea.example = updated.example || idea.example;
+            const cachedItem = (window.state.ideas || []).find(i => String(i.id) === String(idea.id));
+            if (cachedItem) {
+              cachedItem.detailed_explanation = updated.detailed_explanation;
+              cachedItem.example = updated.example;
+            }
+            if (detailedEl) detailedEl.innerHTML = renderMarkdownDetailed(updated.detailed_explanation);
+            if (exampleEl) exampleEl.innerHTML = renderMarkdownDetailed(updated.example || "Case study synthesized.");
+            if (updated.visual_diagram) {
+              idea.visual_diagram = updated.visual_diagram;
+              renderIdeaVisualDiagram(updated, document.getElementById('modal-diagram-render') ? 'modal-diagram-render' : 'modal-diagram-container');
+            }
+            if (window.lucide) lucide.createIcons();
+          }
+        })
+        .catch(err => {
+          console.warn("[Deep Dive] Auto-synthesis error:", err);
+          if (detailedEl) {
+            detailedEl.innerHTML = `<p class="leading-relaxed text-slate-800">${idea.summary}</p>`;
+          }
+        });
     }
   }
 
   // Diagram rendering into modal Slide 1
-  renderIdeaVisualDiagram(idea, 'modal-diagram-container');
-
-  // Slide 2: Case Study
-  const exampleEl = document.getElementById("modal-example");
-  if (exampleEl) {
-    if (idea.example && idea.example.trim().length > 0) {
-      exampleEl.innerHTML = renderMarkdownDetailed(idea.example);
-    } else {
-      exampleEl.innerHTML = "<p class='leading-relaxed text-on-surface/90'>Practitioners apply this mental model systematically to navigate uncertainty and avoid irreversible failure modes.</p>";
-    }
-  }
+  renderIdeaVisualDiagram(idea, document.getElementById('modal-diagram-render') ? 'modal-diagram-render' : 'modal-diagram-container');
 
   // Slide 3: Action & Bounds
   const boundaryEl = document.getElementById("modal-boundary-text");
@@ -3168,7 +3062,7 @@ async function openDeepDiveModal(ideaId = null) {
     if (idea.action_item && idea.action_item.trim().length > 0) {
       actionEl.innerHTML = renderMarkdownDetailed(idea.action_item);
     } else {
-      actionEl.innerHTML = "<p class='leading-relaxed text-primary'>Apply this model to one difficult decision today.</p>";
+      actionEl.innerHTML = "<p class='leading-relaxed text-blue-700 font-medium'>Apply this model to one difficult decision today.</p>";
     }
   }
 
@@ -3234,6 +3128,7 @@ async function openDeepDiveModal(ideaId = null) {
 
   modal.classList.remove("hidden");
   modal.classList.add("flex");
+  if (window.lucide) lucide.createIcons();
 }
 
 // 2. Socratic Dilemma Stress-Test Modal
@@ -3276,6 +3171,7 @@ async function openStressTestModal(ideaId = null) {
 
   modal.classList.remove("hidden");
   modal.classList.add("flex");
+  if (window.lucide) lucide.createIcons();
 
   try {
     const res = await fetch(`/api/ai/stress-test/${encodeURIComponent(idea.id)}`);

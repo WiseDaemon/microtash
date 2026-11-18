@@ -228,7 +228,7 @@ In monetary economics, zero-interest-rate policies (ZIRP) implemented after the 
   Intervention["⚡ Initial Decision, Policy or Strategy Shift"]
   Intervention --> TimeHorizon{"Evaluation Horizon"}
   
-  TimeHorizon -->|Immediate Intuition (1-30 Days)| FirstOrder["1️⃣ First-Order Effect<br/>• Fast gratification & obvious metric boost<br/>• Zero consideration of feedback loops"]
+  TimeHorizon -->|Immediate Intuition - 1-30 Days| FirstOrder["1️⃣ First-Order Effect<br/>• Fast gratification & obvious metric boost<br/>• Zero consideration of feedback loops"]
   FirstOrder --> FragilePayoff["⚠️ Unintended Catastrophic Systemic Backlash"]
   
   TimeHorizon -->|Second & Third-Order Systems Thinking| HighOrder["2️⃣ Second & Third-Order Modeling (1-5 Years)<br/>• How will competitors, users & markets adapt?<br/>• Anticipate dynamic counter-moves"]
@@ -335,7 +335,7 @@ Theoretical physicist Peter Higgs, who predicted the existence of the Higgs boso
   DeepFocus["🧠 Deep High-Leverage Strategic Work"]
   DeepFocus --> Impulse{"Incoming Distraction Stimulus"}
   
-  Impulse -->|Check Phone / Slack ('Just 10 seconds')| Switch["📱 Rapid Context Switch<br/>• Attention residue fragments working memory<br/>• Brain remains half-processing the message"]
+  Impulse -->|Check Phone or Slack - Just 10 seconds| Switch["📱 Rapid Context Switch<br/>• Attention residue fragments working memory<br/>• Brain remains half-processing the message"]
   Switch --> Tax["⏳ 23-Minute Cognitive Refocus Tax<br/>• Surface-level thinking & severe cognitive exhaustion"]
   
   Impulse -->|Monastic Attention Barrier| Shield["🛡️ Full Environmental Shielding<br/>• Zero notifications & asynchronous communication<br/>• Continuous immersion in flow"]
@@ -446,8 +446,8 @@ In technology product engineering, Amazon leveraged identity-based mechanics to 
         "boundary": """Beware the shadow side of rigid identity: cognitive ossification. When an identity becomes overly dogmatic or fragile ('I am an uncompromising purist coder who only writes C++', or 'I am a solo founder who never takes outside capital'), it blinds you to evolutionary market shifts and technological paradigms. When foundational conditions change, you must possess the epistemic flexibility to upgrade your identity without experiencing an existential identity crisis.""",
         "visual_diagram": """graph TD
   Ambition["🎯 Personal Transformation Goal"]
-  Ambition -->|Outcome-Based (Fragile)| Outcome["🏁 'I want to lose 20 lbs'<br/>• Requires constant conscious willpower<br/>• Reverts to baseline upon completion"]
-  Ambition -->|Identity-Based (Enduring)| Identity["🧬 'I am an athlete / writer'<br/>• Cast daily atomic micro-votes<br/>• Bayesian self-evidence accumulation"]
+  Ambition -->|Outcome-Based - Fragile| Outcome["🏁 'I want to lose 20 lbs'<br/>• Requires constant conscious willpower<br/>• Reverts to baseline upon completion"]
+  Ambition -->|Identity-Based - Enduring| Identity["🧬 'I am an athlete / writer'<br/>• Cast daily atomic micro-votes<br/>• Bayesian self-evidence accumulation"]
   
   Outcome --> Relapse["🔄 Yo-Yo Effect & Willpower Burnout"]
   Identity --> Internalized["🧠 Subconscious Internalizes New Self-Concept"]
@@ -717,7 +717,7 @@ Conversely, in 1985, Intel CEO Andy Grove and Gordon Moore demonstrated mastercl
   FailingProject["📉 Failing Initiative or Investment (Capital Sunk)"]
   FailingProject --> Dilemma{"Evaluation Protocol"}
   
-  Dilemma -->|Loss Aversion Trap (-2.5x Pain)| DoubleDown["🛑 Refuse Loss & Double Down<br/>• Emotional attachment to past costs<br/>• Pour good capital after bad"]
+  Dilemma -->|Loss Aversion Trap - 2.5x Pain Vector| DoubleDown["🛑 Refuse Loss & Double Down<br/>• Emotional attachment to past costs<br/>• Pour good capital after bad"]
   DoubleDown --> Destruction["💥 Compounding Wealth & Bandwidth Destruction"]
   
   Dilemma -->|Grove Clean Slate Protocol| NewCEO["🧼 New CEO Reset: 'If We Were Hired Today?'<br/>• Acknowledge sunk capital is gone forever<br/>• Evaluate forward expected value only"]
@@ -1170,7 +1170,7 @@ In software engineering, a newly hired senior architect at a major payment gatew
   Encounter["🚧 Encounter Obsolete-Looking Legacy Rule or Code"]
   Encounter --> Investigation{"Chesterton Understanding Gate"}
   
-  Investigation -->|No: Blind Removal ('This is pointless')| BlindRemoval["💥 Tear Down Fence Prematurely<br/>• Re-open ancient resolved edge case<br/>• Hidden catastrophic regression in production"]
+  Investigation -->|No: Blind Removal - This is pointless| BlindRemoval["💥 Tear Down Fence Prematurely<br/>• Re-open ancient resolved edge case<br/>• Hidden catastrophic regression in production"]
   BlindRemoval --> Catastrophe["🚨 Outage, Legal Exposure or System Failure"]
   
   Investigation -->|Yes: Discovered Latent Defensive Purpose| DecisiveRefactor["🛡️ Understand Why It Was Built<br/>• Identify original threat model or bug<br/>• Formulate modern equivalent architecture"]
@@ -1224,8 +1224,8 @@ Similarly, in 1975, 19-year-old Bill Gates dropped out of Harvard University to 
   Dilemma["⚡ High-Stakes Career / Life Pivot Opportunity"]
   Dilemma --> HorizonFilter{"Jeff Bezos Time-Horizon Shift"}
   
-  HorizonFilter -->|Short-Term Perspective (Age 30)| ShortTerm["😰 Social Friction & Near-Term Fear<br/>• Leaving a lucrative Wall Street bonus<br/>• Fear of immediate peer embarrassment"]
-  HorizonFilter -->|Projected Perspective (Age 80)| LongTerm["👴 Projected to Age 80 in Quiet Reflection<br/>• 'Will I regret trying and failing?' (No)<br/>• 'Will I regret never trying at all?' (YES)"]
+  HorizonFilter -->|Short-Term Perspective - Age 30| ShortTerm["😰 Social Friction & Near-Term Fear<br/>• Leaving a lucrative Wall Street bonus<br/>• Fear of immediate peer embarrassment"]
+  HorizonFilter -->|Projected Perspective - Age 80| LongTerm["👴 Projected to Age 80 in Quiet Reflection<br/>• 'Will I regret trying and failing?' (No)<br/>• 'Will I regret never trying at all?' (YES)"]
   
   ShortTerm --> Inertia["🛑 Inaction & Safe Conventional Path"]
   LongTerm --> BoldLeap["🚀 Bold Leap into High-Asymmetry Future"]
@@ -1488,10 +1488,10 @@ In digital business models, Amazon's foundational 'Virtuous Cycle' (sketched by 
   Stimulus["⚡ System Input or Policy Change"]
   Stimulus --> LoopType{"Feedback Architecture"}
   
-  LoopType -->|Reinforcing Loop (Flywheel)| Reinforce["🌀 Exponential Compounding<br/>• Lower prices -> more users -> more scale<br/>• Runaway growth or death spiral"]
+  LoopType -->|Reinforcing Loop - Flywheel| Reinforce["🌀 Exponential Compounding<br/>• Lower prices -> more users -> more scale<br/>• Runaway growth or death spiral"]
   Reinforce --> FlywheelPayoff["🚀 Exponential Scale & Unassailable Moats"]
   
-  LoopType -->|Balancing Loop (Thermostat)| Balance["⚖️ Homeostatic Stabilization<br/>• Deviation detected -> corrective force applied<br/>• Dampens volatility back to equilibrium"]
+  LoopType -->|Balancing Loop - Thermostat| Balance["⚖️ Homeostatic Stabilization<br/>• Deviation detected -> corrective force applied<br/>• Dampens volatility back to equilibrium"]
   Balance --> StabilityPayoff["🛡️ Antifragile Resilience & Predictable Health"]
 
   style Stimulus fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A
@@ -1712,10 +1712,10 @@ In decentralized financial systems, Bitcoin and Ethereum derive their multi-tril
   ScalingModel["📈 Business Growth & Network Strategy"]
   ScalingModel --> ArchChoice{"Architecture Choice"}
   
-  ArchChoice -->|Linear Industrial Scaling O(N)| Linear["🏭 Add Factory Units Linearly<br/>• Costs scale 1:1 with output<br/>• Vulnerable to commodity pricing"]
+  ArchChoice -->|Linear Industrial Scaling - Order N| Linear["🏭 Add Factory Units Linearly<br/>• Costs scale 1:1 with output<br/>• Vulnerable to commodity pricing"]
   Linear --> ThinMargins["⚠️ Linear Margins & Low Defensibility"]
   
-  ArchChoice -->|Network Density Scaling O(N^2)| Metcalfe["🌐 Metcalfe Quadratic Expansion<br/>• Value = N*(N-1)/2 interconnectivity<br/>• Each new user multiplies utility for all"]
+  ArchChoice -->|Network Density Scaling - Order N squared| Metcalfe["🌐 Metcalfe Quadratic Expansion<br/>• Value = N*(N-1)/2 interconnectivity<br/>• Each new user multiplies utility for all"]
   Metcalfe --> Dominance["🏰 Gravitational Winner-Take-Most Monopoly"]
 
   style ScalingModel fill:#EEF2FF,stroke:#6366F1,stroke-width:2px,color:#1E3A8A

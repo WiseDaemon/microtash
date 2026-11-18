@@ -7,8 +7,12 @@ let startY = 0;
 let currentX = 0;
 let currentY = 0;
 
+function getSwipeCardElement() {
+  return document.getElementById("swipe-card") || document.getElementById("stitch-hero-card");
+}
+
 function initSwipeEngine() {
-  const card = document.getElementById("swipe-card");
+  const card = getSwipeCardElement();
   if (!card) return;
 
   // Touch Events
@@ -83,7 +87,7 @@ function initSwipeEngine() {
 }
 
 function evaluateSwipe(distanceX) {
-  const card = document.getElementById("swipe-card");
+  const card = getSwipeCardElement();
   if (!card) return;
 
   const threshold = 110;
@@ -103,7 +107,7 @@ function evaluateSwipe(distanceX) {
 }
 
 function handleSwipe(direction) {
-  const card = document.getElementById("swipe-card");
+  const card = getSwipeCardElement();
   if (!card) return;
 
   // Unflip if flipped
@@ -140,7 +144,7 @@ function handleSwipe(direction) {
 }
 
 function flipCard() {
-  const card = document.getElementById("swipe-card");
+  const card = getSwipeCardElement();
   if (card) {
     card.classList.toggle("flipped");
   }
