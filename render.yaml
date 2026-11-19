@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: microstash-backend
+    name: microstash
     env: python
     plan: free
     region: oregon
@@ -16,4 +16,4 @@ services:
       - key: NVIDIA_API_KEY
         sync: false
       - key: DATABASE_URL
-        sync: false # Set to Supabase / Neon PostgreSQL connection string or leave blank for SQLite
+        sync: false
