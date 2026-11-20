@@ -194,7 +194,8 @@ CURATED_DAILY_BOOKS = [
 ]
 
 def init_daily_log_table():
-    """Initializes the daily book log table if it doesn't already exist."""
+    """Initializes the database schema and daily book log table if it doesn't already exist."""
+    database.init_db()
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
