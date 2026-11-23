@@ -402,8 +402,6 @@ html:not(.dark) .text-slate-400 {
 [id*="diagram"] [class*="flowchart-"] {
   cursor: pointer !important;
   pointer-events: all !important;
-  transform: none !important;
-  transition: none !important;
 }
 
 /* Transparent hit-testing on text elements inside nodes to prevent enter/leave cycling */
@@ -437,12 +435,7 @@ html:not(.dark) .text-slate-400 {
   transition: stroke 0.15s ease !important;
 }
 
-/* Rock-solid, flicker-free node hover: highlight border cleanly without filters or transforms that cause flicker */
-.mermaid .node:hover,
-[id*="diagram"] .node:hover {
-  transform: none !important;
-}
-
+/* Rock-solid, flicker-free node hover: highlight border cleanly without filters or movement */
 .mermaid .node:hover rect,
 .mermaid .node:hover circle,
 .mermaid .node:hover polygon,
