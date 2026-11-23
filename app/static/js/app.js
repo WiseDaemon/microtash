@@ -36,6 +36,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (typeof initSwipeEngine === 'function') {
     initSwipeEngine();
   }
+  if (typeof checkOnboardingStatus === 'function') {
+    checkOnboardingStatus();
+  }
+  if (typeof initTouchSwipe === 'function') {
+    initTouchSwipe();
+  }
 
   // Auto-Fetch enter key & button listeners
   const queryInput = document.getElementById("autofetch-query");
@@ -66,7 +72,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Keyboard navigation shortcuts
   document.addEventListener("keydown", (e) => {
-    if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+    if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+      if (e.key === "Escape") {
+        document.activeElement.blur();
+        const searchDropdown = document.getElementById("global-search-autocomplete");
+        if (searchDropdown) searchDropdown.classList.add("hidden");
+      }
+      return;
+    }
 
     // Daily Recall Gym specific shortcuts
     if (window.state.activeTab === 'leitner') {
@@ -93,15 +106,70 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
 
-    if (e.key === "ArrowRight") {
+    // Perspective Views switching: 1=Detailed, 2=Summary, 3=Diagram
+    if (window.state.activeTab === 'swipe') {
+      if (e.key === "1") {
+        e.preventDefault();
+        switchCardView('detailed');
+        return;
+      } else if (e.key === "2") {
+        e.preventDefault();
+        switchCardView('summary');
+        return;
+      } else if (e.key === "3") {
+        e.preventDefault();
+        switchCardView('diagram');
+        return;
+      }
+    }
+
+    // Global Search trigger
+    if (e.key === "/") {
+      const searchInput = document.getElementById("global-book-search-input");
+      if (searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+        return;
+      }
+    }
+
+    // Keyboard Shortcuts Cheat Sheet toggle
+    if (e.key === "?") {
       e.preventDefault();
-      if (typeof handleSwipe === 'function') handleSwipe('right');
-    } else if (e.key === "ArrowLeft" || (e.key === " " && window.state.activeTab === 'swipe')) {
+      const kModal = document.getElementById("keyboard-shortcuts-modal");
+      if (kModal && !kModal.classList.contains("hidden")) {
+        closeKeyboardShortcutsModal();
+      } else {
+        openKeyboardShortcutsModal();
+      }
+      return;
+    }
+
+    // Model Navigation: ArrowRight / J = Next, ArrowLeft / K = Prev
+    if (e.key === "ArrowRight" || e.key === "j" || e.key === "J") {
       e.preventDefault();
-      if (typeof handleSwipe === 'function') handleSwipe('left');
+      nextCard();
+    } else if (e.key === "ArrowLeft" || e.key === "k" || e.key === "K") {
+      e.preventDefault();
+      prevCard();
+    } else if (e.key === " " && window.state.activeTab === 'swipe') {
+      e.preventDefault();
+      nextCard();
     } else if (e.key === "f" || e.key === "F") {
       e.preventDefault();
-      if (typeof flipCard === 'function') flipCard();
+      if (window.state.cardActiveView === 'diagram') {
+        openDiagramFullscreenModal();
+      } else if (typeof flipCard === 'function') {
+        flipCard();
+      }
+    } else if (e.key === "t" || e.key === "T") {
+      e.preventDefault();
+      if (typeof openStressTestModal === 'function') {
+        const ideas = window.state.ideas || [];
+        const idea = ideas[window.state.currentIdeaIndex] || ideas[0];
+        if (idea) openStressTestModal(idea.id);
+      }
     } else if (e.key === "l" || e.key === "L") {
       e.preventDefault();
       toggleLikeCurrentCard();
@@ -115,10 +183,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       e.preventDefault();
       openDeepDiveModal();
     } else if (e.key === "Escape") {
+      closeDiagramFullscreenModal();
+      closeKeyboardShortcutsModal();
       closeDeepDiveModal();
       closeStashModal();
       closeCreateStashModal();
       if (typeof closeShareModal === 'function') closeShareModal();
+      const searchDropdown = document.getElementById("global-search-autocomplete");
+      if (searchDropdown) searchDropdown.classList.add("hidden");
     }
   });
 });
@@ -1901,6 +1973,9 @@ function renderLeitnerCard() {
   const currIdx = window.state.currentLeitnerIndex || 0;
 
   if (dueList.length === 0 || currIdx >= dueList.length) {
+    if (dueList.length > 0 && currIdx >= dueList.length && typeof triggerCelebrationConfetti === 'function') {
+      triggerCelebrationConfetti();
+    }
     // Session Complete or All caught up screen
     container.innerHTML = `
       <div class="bg-gradient-to-b from-slate-900 to-slate-950 border border-emerald-500/30 rounded-3xl p-8 sm:p-10 text-center shadow-2xl space-y-6 max-w-xl mx-auto">
@@ -2474,6 +2549,23 @@ function updateStitchHeroCard() {
   const sourceCitation = document.getElementById("card-source-citation");
   if (sourceCitation) sourceCitation.textContent = idea.source ? `• ${idea.source}` : "";
 
+  // Update card progress bar and mobile counter
+  const currentNum = (window.state.currentIdeaIndex || 0) + 1;
+  const totalNum = ideas.length;
+  const currentNumEl = document.getElementById("card-current-num");
+  if (currentNumEl) currentNumEl.textContent = currentNum;
+  const totalNumEl = document.getElementById("card-total-num");
+  if (totalNumEl) totalNumEl.textContent = totalNum;
+  const progressFill = document.getElementById("card-progress-fill");
+  if (progressFill) {
+    const pct = Math.min(100, Math.max(0, Math.round((currentNum / totalNum) * 100)));
+    progressFill.style.width = `${pct}%`;
+  }
+  const mobileNavCounter = document.getElementById("mobile-nav-counter");
+  if (mobileNavCounter) {
+    mobileNavCounter.textContent = `${currentNum}/${totalNum}`;
+  }
+
   // Render diagram if diagram pane is open or container exists
   const activeView = window.state.cardActiveView || 'detailed';
   if (activeView === 'diagram') {
@@ -2784,6 +2876,13 @@ function renderGlobalBooksShelf(books) {
   }).join('');
 }
 
+function highlightSearchMatch(text, query) {
+  if (!text || !query) return text || '';
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`(${escaped})`, 'gi');
+  return text.replace(regex, '<mark class="search-highlight">$1</mark>');
+}
+
 function handleGlobalBookSearch(val) {
   const query = (val || "").trim();
   const clearBtn = document.getElementById("global-search-clear");
@@ -2831,8 +2930,8 @@ function handleGlobalBookSearch(val) {
             <div class="flex items-center gap-2.5 min-w-0">
               <span class="material-symbols-outlined text-blue-600 text-[18px]">menu_book</span>
               <div class="truncate">
-                <p class="text-xs font-bold text-slate-900 truncate">${b.title}</p>
-                <p class="text-[10px] text-slate-500 truncate">${b.author} • ${b.publisher || 'Original Publication'}</p>
+                <p class="text-xs font-bold text-slate-900 truncate">${highlightSearchMatch(b.title, query)}</p>
+                <p class="text-[10px] text-slate-500 truncate">${highlightSearchMatch(b.author, query)} • ${b.publisher || 'Original Publication'}</p>
               </div>
             </div>
             <span class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-[9px] font-bold flex-shrink-0">
@@ -2849,8 +2948,8 @@ function handleGlobalBookSearch(val) {
             <div class="flex items-center gap-2.5 min-w-0">
               <span class="material-symbols-outlined text-amber-600 text-[18px]">psychology</span>
               <div class="truncate">
-                <p class="text-xs font-bold text-slate-900 truncate">${m.title}</p>
-                <p class="text-[10px] text-slate-500 truncate">${m.author} • ${m.source}</p>
+                <p class="text-xs font-bold text-slate-900 truncate">${highlightSearchMatch(m.title, query)}</p>
+                <p class="text-[10px] text-slate-500 truncate">${highlightSearchMatch(m.author, query)} • ${m.source}</p>
               </div>
             </div>
             <span class="text-[10px] text-blue-600 font-bold">Study →</span>
@@ -3534,3 +3633,205 @@ window.prevCard = prevCard;
 window.jumpToSwipeCard = jumpToSwipeCard;
 window.filterByTopic = filterByTopic;
 window.renderFeedGrid = renderFeedGrid;
+
+// =========================================================================
+// USER-FRIENDLY UX CONTROLLERS & INTERACTION SYSTEM
+// =========================================================================
+
+// 1. Onboarding Banner System
+function dismissOnboardingBanner() {
+  const banner = document.getElementById("welcome-onboarding-banner");
+  if (banner) banner.classList.add("hidden");
+  try {
+    localStorage.setItem("microstash_onboarding_dismissed", "true");
+  } catch (e) {
+    console.warn("Could not save onboarding status", e);
+  }
+}
+
+function checkOnboardingStatus() {
+  try {
+    if (localStorage.getItem("microstash_onboarding_dismissed") === "true") {
+      const banner = document.getElementById("welcome-onboarding-banner");
+      if (banner) banner.classList.add("hidden");
+    }
+  } catch (e) {
+    console.warn("Could not read onboarding status", e);
+  }
+}
+
+// 2. Progressive Disclosure Accordions
+function toggleCardAccordion(sectionId) {
+  const body = document.getElementById(`accordion-body-${sectionId}`);
+  const icon = document.getElementById(`accordion-icon-${sectionId}`);
+  if (!body) return;
+  const isHidden = body.classList.contains("hidden");
+  if (isHidden) {
+    body.classList.remove("hidden");
+    if (icon) icon.textContent = "expand_less";
+  } else {
+    body.classList.add("hidden");
+    if (icon) icon.textContent = "expand_more";
+  }
+}
+
+function toggleAllCardAccordions() {
+  const sections = ['case-study', 'boundary', 'action'];
+  const btn = document.getElementById("btn-toggle-all-accordions");
+  const anyHidden = sections.some(s => {
+    const el = document.getElementById(`accordion-body-${s}`);
+    return el && el.classList.contains("hidden");
+  });
+
+  sections.forEach(s => {
+    const body = document.getElementById(`accordion-body-${s}`);
+    const icon = document.getElementById(`accordion-icon-${s}`);
+    if (!body) return;
+    if (anyHidden) {
+      body.classList.remove("hidden");
+      if (icon) icon.textContent = "expand_less";
+    } else {
+      body.classList.add("hidden");
+      if (icon) icon.textContent = "expand_more";
+    }
+  });
+
+  if (btn) {
+    btn.textContent = anyHidden ? "Collapse All" : "Expand All";
+  }
+}
+
+// 3. Diagram Fullscreen Modal & Zoom
+let diagramFullscreenZoom = 1.0;
+
+function openDiagramFullscreenModal() {
+  const modal = document.getElementById("diagram-fullscreen-modal");
+  if (!modal) return;
+  const ideas = window.state.ideas || [];
+  const idea = ideas[window.state.currentIdeaIndex] || ideas[0];
+  if (!idea) return;
+
+  const titleEl = document.getElementById("diagram-fullscreen-title");
+  if (titleEl) titleEl.textContent = `${idea.title} — System Flowchart`;
+  const subEl = document.getElementById("diagram-fullscreen-subtitle");
+  if (subEl) subEl.textContent = `${idea.author} • ${idea.source || 'Causal System Architecture'}`;
+
+  const contentEl = document.getElementById("diagram-fullscreen-content");
+  if (contentEl) {
+    contentEl.innerHTML = "";
+    diagramFullscreenZoom = 1.0;
+    contentEl.style.transform = "scale(1)";
+    const zoomLvl = document.getElementById("diagram-fullscreen-zoom-level");
+    if (zoomLvl) zoomLvl.textContent = "100%";
+
+    const diagType = window.state.diagramType || 'graph';
+    if (diagType === 'stepped') {
+      contentEl.innerHTML = renderStyledStepFlow(idea);
+      if (window.lucide) lucide.createIcons();
+    } else {
+      renderIdeaVisualDiagram(idea, 'diagram-fullscreen-content');
+    }
+  }
+
+  modal.classList.remove("hidden");
+}
+
+function closeDiagramFullscreenModal() {
+  const modal = document.getElementById("diagram-fullscreen-modal");
+  if (modal) modal.classList.add("hidden");
+}
+
+function zoomFullscreenDiagram(delta) {
+  const contentEl = document.getElementById("diagram-fullscreen-content");
+  const zoomLvl = document.getElementById("diagram-fullscreen-zoom-level");
+  if (!contentEl) return;
+
+  if (delta === 0) {
+    diagramFullscreenZoom = 1.0;
+  } else {
+    diagramFullscreenZoom = Math.max(0.4, Math.min(3.0, parseFloat((diagramFullscreenZoom + delta).toFixed(2))));
+  }
+
+  contentEl.style.transform = `scale(${diagramFullscreenZoom})`;
+  if (zoomLvl) zoomLvl.textContent = `${Math.round(diagramFullscreenZoom * 100)}%`;
+}
+
+// 4. Keyboard Shortcuts Modal
+function openKeyboardShortcutsModal() {
+  const modal = document.getElementById("keyboard-shortcuts-modal");
+  if (modal) modal.classList.remove("hidden");
+}
+
+function closeKeyboardShortcutsModal() {
+  const modal = document.getElementById("keyboard-shortcuts-modal");
+  if (modal) modal.classList.add("hidden");
+}
+
+// 5. Touch Swipe Navigation Gestures
+function initTouchSwipe() {
+  const card = document.getElementById("stitch-hero-card");
+  if (!card) return;
+  let startX = 0;
+  let startY = 0;
+
+  card.addEventListener("touchstart", (e) => {
+    if (!e.touches || e.touches.length !== 1) return;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+
+  card.addEventListener("touchend", (e) => {
+    if (!e.changedTouches || e.changedTouches.length !== 1) return;
+    const deltaX = e.changedTouches[0].clientX - startX;
+    const deltaY = e.changedTouches[0].clientY - startY;
+
+    if (Math.abs(deltaX) > 60 && Math.abs(deltaX) > 1.5 * Math.abs(deltaY)) {
+      if (deltaX < 0) {
+        nextCard();
+      } else {
+        prevCard();
+      }
+    }
+  }, { passive: true });
+}
+
+// 6. Gamification Confetti Celebration
+function triggerCelebrationConfetti() {
+  const existing = document.querySelector(".confetti-container");
+  if (existing) existing.remove();
+
+  const container = document.createElement("div");
+  container.className = "confetti-container";
+  document.body.appendChild(container);
+  const colors = ["#2563eb", "#f59e0b", "#10b981", "#8b5cf6", "#ec4899", "#06b6d4"];
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement("div");
+    p.className = "confetti-particle";
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    p.style.animationDuration = (Math.random() * 1.5 + 1.2) + "s";
+    p.style.animationDelay = (Math.random() * 0.3) + "s";
+    p.style.width = (Math.random() * 8 + 6) + "px";
+    p.style.height = (Math.random() * 8 + 6) + "px";
+    p.style.transform = `rotate(${Math.random() * 360}deg)`;
+    container.appendChild(p);
+  }
+  setTimeout(() => {
+    container.remove();
+  }, 2600);
+}
+
+// Global window registrations
+window.dismissOnboardingBanner = dismissOnboardingBanner;
+window.checkOnboardingStatus = checkOnboardingStatus;
+window.toggleCardAccordion = toggleCardAccordion;
+window.toggleAllCardAccordions = toggleAllCardAccordions;
+window.openDiagramFullscreenModal = openDiagramFullscreenModal;
+window.closeDiagramFullscreenModal = closeDiagramFullscreenModal;
+window.zoomFullscreenDiagram = zoomFullscreenDiagram;
+window.openKeyboardShortcutsModal = openKeyboardShortcutsModal;
+window.closeKeyboardShortcutsModal = closeKeyboardShortcutsModal;
+window.initTouchSwipe = initTouchSwipe;
+window.triggerCelebrationConfetti = triggerCelebrationConfetti;
+window.highlightSearchMatch = highlightSearchMatch;
+

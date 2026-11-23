@@ -547,3 +547,48 @@ html:not(.dark) .text-slate-400 {
 .grade-btn-easy:hover {
   box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
 }
+
+/* ==========================================================================
+   User-Friendly UX Enhancements: Search Highlights & Confetti
+   ========================================================================== */
+mark.search-highlight {
+  background-color: #fef08a;
+  color: #854d0e;
+  font-weight: 700;
+  padding: 1px 3px;
+  border-radius: 4px;
+}
+
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.confetti-particle {
+  position: absolute;
+  top: -20px;
+  border-radius: 2px;
+  opacity: 0.9;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(105vh) rotate(720deg) scale(0.6);
+    opacity: 0;
+  }
+}
+

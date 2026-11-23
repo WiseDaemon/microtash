@@ -257,6 +257,61 @@
     <main id="tab-swipe-content" class="flex-1 flex flex-col items-center">
       <div class="max-w-2xl w-full mx-auto space-y-4">
         
+        <!-- WELCOME & FIRST-TIME ONBOARDING BANNER (DISMISSIBLE) -->
+        <div id="welcome-onboarding-banner" class="bento-card p-4 sm:p-5 bg-gradient-to-r from-blue-50/90 via-indigo-50/80 to-purple-50/90 border border-blue-200/80 rounded-2xl shadow-xs transition-all duration-300 relative">
+          <button onclick="dismissOnboardingBanner()" class="absolute top-3.5 right-3.5 w-6 h-6 rounded-full bg-white/80 hover:bg-white border border-slate-200 text-slate-400 hover:text-slate-700 flex items-center justify-center transition cursor-pointer text-xs" title="Dismiss Guide">
+            <span class="material-symbols-outlined text-[14px]">close</span>
+          </button>
+
+          <div class="flex items-center gap-2 mb-2">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-600 text-white shadow-2xs">Quick Guide</span>
+            <span class="text-xs font-bold text-slate-900">How to Master Mental Models in Microstash</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1 text-xs">
+            <div class="flex items-start gap-2 bg-white/80 p-2.5 rounded-xl border border-blue-100">
+              <span class="w-6 h-6 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs shrink-0">1</span>
+              <div>
+                <p class="font-bold text-slate-900">Swipe & Absorb</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Flip cards with ← / → arrows to read atomic models & causal flowcharts.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2 bg-white/80 p-2.5 rounded-xl border border-indigo-100">
+              <span class="w-6 h-6 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs shrink-0">2</span>
+              <div>
+                <p class="font-bold text-slate-900">Stress-Test</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Use the Socratic Arena to test dilemmas and expose cognitive blindspots.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-2 bg-white/80 p-2.5 rounded-xl border border-purple-100">
+              <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs shrink-0">3</span>
+              <div>
+                <p class="font-bold text-slate-900">Workout Gym</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Practice with Leitner spaced repetition to wire frameworks into permanent memory.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD PROGRESS & POWER SHORTCUTS BAR -->
+        <div id="card-progress-bar-container" class="flex items-center justify-between text-xs select-none px-1">
+          <div class="flex items-center gap-2.5">
+            <span class="font-semibold text-slate-700 text-xs">
+              Model <strong id="card-current-num" class="text-blue-700 font-bold">1</strong> of <span id="card-total-num" class="text-slate-500">35</span>
+            </span>
+            <div class="w-24 sm:w-32 h-1.5 bg-slate-100 border border-slate-200/60 rounded-full overflow-hidden">
+              <div id="card-progress-fill" class="h-full bg-blue-600 transition-all duration-300" style="width: 3%"></div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="openKeyboardShortcutsModal()" class="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-[11px] font-semibold transition border border-slate-200/60 cursor-pointer" title="View Keyboard Shortcuts">
+              <kbd class="px-1 py-0.2 text-[10px] font-mono bg-white border border-slate-200 rounded">?</kbd>
+              <span>Shortcuts</span>
+            </button>
+          </div>
+        </div>
+        
         <!-- MAIN CLEAN CARD -->
         <article id="stitch-hero-card" class="bg-white border border-slate-200/90 rounded-2xl p-7 sm:p-9 shadow-xs transition hover:shadow-md relative">
           
@@ -332,31 +387,51 @@
               </div>
             </div>
 
-            <!-- Real-World Case Study -->
-            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
-              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                <span class="material-symbols-outlined text-[15px] text-emerald-600">verified</span>
-                <span>Real-World Case Study</span>
-              </h4>
-              <div id="card-example-content" class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+            <!-- Accordion Controls Row -->
+            <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1 pb-0.5 select-none">
+              <span class="font-bold uppercase tracking-wider text-slate-400 text-[10px]">Deep Dive Modules</span>
+              <button type="button" onclick="toggleAllCardAccordions()" id="btn-toggle-all-accordions" class="text-blue-600 hover:text-blue-800 font-semibold transition cursor-pointer">Expand All</button>
+            </div>
+
+            <!-- Real-World Case Study (Collapsible Accordion) -->
+            <div class="rounded-xl bg-slate-50 border border-slate-200/80 overflow-hidden transition-all duration-200">
+              <button type="button" onclick="toggleCardAccordion('case-study')" class="w-full p-3.5 flex items-center justify-between text-left hover:bg-slate-100/60 transition cursor-pointer select-none">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-emerald-600">verified</span>
+                  <span class="text-xs font-bold uppercase tracking-wider text-slate-800">Real-World Case Study</span>
+                </div>
+                <span id="accordion-icon-case-study" class="material-symbols-outlined text-[18px] text-slate-400 transition-transform duration-200">expand_more</span>
+              </button>
+              <div id="accordion-body-case-study" class="px-4 pb-3.5 text-xs sm:text-sm text-slate-700 leading-relaxed hidden">
+                <div id="card-example-content"></div>
               </div>
             </div>
 
-            <!-- Boundary Conditions -->
-            <div class="p-3.5 rounded-xl bg-amber-50/60 border border-amber-200/80 flex items-start gap-2.5">
-              <span class="material-symbols-outlined text-[16px] text-amber-600 shrink-0 mt-0.5">warning</span>
-              <div>
-                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-800 block mb-0.5">Boundary Condition (When NOT to apply)</span>
-                <p id="card-boundary-content" class="text-xs text-amber-950 leading-relaxed"></p>
+            <!-- Boundary Conditions (Collapsible Accordion) -->
+            <div class="rounded-xl bg-amber-50/60 border border-amber-200/80 overflow-hidden transition-all duration-200">
+              <button type="button" onclick="toggleCardAccordion('boundary')" class="w-full p-3.5 flex items-center justify-between text-left hover:bg-amber-100/40 transition cursor-pointer select-none">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-amber-600">warning</span>
+                  <span class="text-xs font-bold uppercase tracking-wider text-amber-900">Boundary Condition (When NOT to apply)</span>
+                </div>
+                <span id="accordion-icon-boundary" class="material-symbols-outlined text-[18px] text-amber-600 transition-transform duration-200">expand_more</span>
+              </button>
+              <div id="accordion-body-boundary" class="px-4 pb-3.5 text-xs text-amber-950 leading-relaxed hidden">
+                <p id="card-boundary-content"></p>
               </div>
             </div>
 
-            <!-- Action Item Heuristic -->
-            <div class="p-3.5 rounded-xl bg-blue-50/60 border border-blue-200/80 flex items-start gap-2.5">
-              <span class="material-symbols-outlined text-[16px] text-blue-600 shrink-0 mt-0.5">bolt</span>
-              <div>
-                <span class="text-[10px] font-bold uppercase tracking-wider text-blue-800 block mb-0.5">Action Rule (Try It Today)</span>
-                <div id="card-action-content" class="text-xs text-blue-950 leading-relaxed font-medium"></div>
+            <!-- Action Item Heuristic (Collapsible Accordion) -->
+            <div class="rounded-xl bg-blue-50/60 border border-blue-200/80 overflow-hidden transition-all duration-200">
+              <button type="button" onclick="toggleCardAccordion('action')" class="w-full p-3.5 flex items-center justify-between text-left hover:bg-blue-100/40 transition cursor-pointer select-none">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[16px] text-blue-600">bolt</span>
+                  <span class="text-xs font-bold uppercase tracking-wider text-blue-900">Action Rule (Try It Today)</span>
+                </div>
+                <span id="accordion-icon-action" class="material-symbols-outlined text-[18px] text-blue-600 transition-transform duration-200">expand_more</span>
+              </button>
+              <div id="accordion-body-action" class="px-4 pb-3.5 text-xs text-blue-950 leading-relaxed font-medium hidden">
+                <div id="card-action-content"></div>
               </div>
             </div>
           </div>
@@ -378,10 +453,16 @@
                 <span class="material-symbols-outlined text-[15px] text-indigo-600">account_tree</span>
                 <span>Visual System Architecture</span>
               </h3>
-              <!-- Diagram Type Toggle -->
-              <div class="flex items-center gap-1 p-0.5 rounded-lg bg-slate-100 border border-slate-200 text-[11px] font-semibold">
-                <button id="btn-flow-graph" onclick="setDiagramViewType('graph')" class="px-2 py-0.5 rounded bg-white text-slate-900 shadow-2xs font-bold">Graph</button>
-                <button id="btn-flow-stepped" onclick="setDiagramViewType('stepped')" class="px-2 py-0.5 rounded text-slate-600 hover:text-slate-900">Step Flow</button>
+              <!-- Diagram Controls -->
+              <div class="flex items-center gap-1.5">
+                <div class="flex items-center gap-1 p-0.5 rounded-lg bg-slate-100 border border-slate-200 text-[11px] font-semibold">
+                  <button id="btn-flow-graph" onclick="setDiagramViewType('graph')" class="px-2 py-0.5 rounded bg-white text-slate-900 shadow-2xs font-bold">Graph</button>
+                  <button id="btn-flow-stepped" onclick="setDiagramViewType('stepped')" class="px-2 py-0.5 rounded text-slate-600 hover:text-slate-900">Step Flow</button>
+                </div>
+                <button type="button" onclick="openDiagramFullscreenModal()" class="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold transition border border-slate-200/80 cursor-pointer" title="View Diagram Fullscreen">
+                  <span class="material-symbols-outlined text-[15px]">fullscreen</span>
+                  <span>Fullscreen</span>
+                </button>
               </div>
             </div>
 
@@ -425,13 +506,32 @@
 
         <!-- Card Switcher & Keyboard Shortcut Bar -->
         <div class="flex items-center justify-between text-xs text-slate-500 px-2 py-1 select-none">
-          <button onclick="prevCard()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 font-semibold text-slate-700 transition">
+          <button onclick="prevCard()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 font-semibold text-slate-700 transition cursor-pointer">
             <span class="material-symbols-outlined text-[16px]">arrow_back</span>
             <span>Previous</span>
           </button>
-          <span class="text-[11px] text-slate-600 font-mono">Use ← / → arrow keys</span>
-          <button onclick="nextCard()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 font-semibold text-blue-600 hover:text-blue-700 transition">
+          <div class="flex items-center gap-2">
+            <span class="hidden sm:inline-block text-[11px] text-slate-400 font-mono">Use ← / → keys</span>
+            <button onclick="openKeyboardShortcutsModal()" class="flex items-center gap-1 text-[11px] font-semibold text-slate-500 hover:text-blue-600 transition px-2 py-1 rounded-md hover:bg-slate-100 cursor-pointer" title="Keyboard Shortcuts Cheat Sheet">
+              <kbd class="px-1 py-0.5 text-[10px] font-mono bg-white border border-slate-200 rounded">?</kbd>
+              <span>Shortcuts</span>
+            </button>
+          </div>
+          <button onclick="nextCard()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 font-semibold text-blue-600 hover:text-blue-700 transition cursor-pointer">
             <span>Next Model</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </button>
+        </div>
+
+        <!-- Floating Mobile Next / Previous Bar (Visible on mobile screens) -->
+        <div id="mobile-floating-nav" class="sm:hidden fixed bottom-16 left-3 right-3 z-30 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-2 shadow-lg flex items-center justify-between gap-2 select-none">
+          <button onclick="prevCard()" class="flex-1 py-2 px-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-xs font-bold text-slate-700 flex items-center justify-center gap-1 cursor-pointer">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            <span>Previous</span>
+          </button>
+          <span id="mobile-nav-counter" class="text-[11px] font-bold text-slate-500 font-mono px-1">1/35</span>
+          <button onclick="nextCard()" class="flex-1 py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-xs font-bold text-white flex items-center justify-center gap-1 shadow-sm cursor-pointer">
+            <span>Next</span>
             <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
           </button>
         </div>
@@ -1399,6 +1499,150 @@
             <span>Restack Note</span>
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: SYSTEM FLOWCHART FULLSCREEN VIEWER                                 -->
+  <!-- ========================================================================= -->
+  <div id="diagram-fullscreen-modal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex flex-col justify-between p-3 sm:p-6 animate-in fade-in duration-200">
+    <!-- Fullscreen Header -->
+    <div class="flex items-center justify-between bg-slate-900/90 border border-slate-800 rounded-2xl px-4 py-3 shadow-xl shrink-0">
+      <div class="flex items-center gap-2.5">
+        <span class="material-symbols-outlined text-[20px] text-indigo-400">account_tree</span>
+        <div>
+          <h3 id="diagram-fullscreen-title" class="text-sm font-headline font-bold text-white tracking-tight">System Flowchart</h3>
+          <p id="diagram-fullscreen-subtitle" class="text-[11px] text-slate-400">Visual System Architecture & Causal Graph</p>
+        </div>
+      </div>
+      <!-- Zoom and Action Toolbar -->
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <div class="flex items-center bg-slate-800/80 rounded-xl p-1 border border-slate-700">
+          <button type="button" onclick="zoomFullscreenDiagram(-0.2)" class="w-8 h-8 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/60 flex items-center justify-center transition cursor-pointer" title="Zoom Out">
+            <span class="material-symbols-outlined text-[18px]">zoom_out</span>
+          </button>
+          <span id="diagram-fullscreen-zoom-level" class="px-2 text-[11px] font-mono font-bold text-slate-300 min-w-[42px] text-center select-none">100%</span>
+          <button type="button" onclick="zoomFullscreenDiagram(0.2)" class="w-8 h-8 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/60 flex items-center justify-center transition cursor-pointer" title="Zoom In">
+            <span class="material-symbols-outlined text-[18px]">zoom_in</span>
+          </button>
+          <button type="button" onclick="zoomFullscreenDiagram(0)" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-700/60 flex items-center justify-center transition cursor-pointer ml-1" title="Reset Zoom">
+            <span class="material-symbols-outlined text-[16px]">restart_alt</span>
+          </button>
+        </div>
+        <button type="button" onclick="closeDiagramFullscreenModal()" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-rose-900/40 text-slate-400 hover:text-rose-300 border border-slate-700 flex items-center justify-center transition cursor-pointer" title="Exit Fullscreen (Esc)">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Fullscreen Content Viewport -->
+    <div id="diagram-fullscreen-viewport" class="flex-1 my-3 sm:my-4 bg-slate-900/60 border border-slate-800/80 rounded-2xl flex items-center justify-center p-4 overflow-auto custom-scrollbar relative select-none">
+      <div id="diagram-fullscreen-content" class="transition-transform duration-150 ease-out flex items-center justify-center min-w-full min-h-full">
+        <!-- SVG diagram cloned dynamically from card-diagram-container -->
+      </div>
+    </div>
+
+    <!-- Fullscreen Footer -->
+    <div class="flex items-center justify-between text-xs text-slate-400 px-2 shrink-0">
+      <span class="text-[11px] font-mono">Use mouse wheel or buttons to zoom • Drag or scroll to pan</span>
+      <span class="hidden sm:inline-block text-[11px] bg-slate-800/80 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-700">Press <kbd class="font-mono text-indigo-300">Esc</kbd> to exit</span>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: KEYBOARD SHORTCUTS CHEAT SHEET                                     -->
+  <!-- ========================================================================= -->
+  <div id="keyboard-shortcuts-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative">
+      <button onclick="closeKeyboardShortcutsModal()" class="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+
+      <div class="flex items-center gap-2 mb-1">
+        <span class="material-symbols-outlined text-[22px] text-blue-600">keyboard</span>
+        <h3 class="text-lg font-headline font-bold text-slate-900">Keyboard Shortcuts</h3>
+      </div>
+      <p class="text-xs text-slate-500 mb-5">Speed-read and navigate mental models without touching your mouse.</p>
+
+      <div class="space-y-4">
+        <!-- Navigation Section -->
+        <div>
+          <h4 class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Card Navigation</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/80">
+              <span class="text-slate-700 font-medium">Next Model</span>
+              <div class="flex items-center gap-1">
+                <kbd class="px-1.5 py-0.5 text-[11px] font-mono bg-white border border-slate-200 rounded shadow-2xs font-semibold">J</kbd>
+                <span class="text-slate-400 text-[10px]">or</span>
+                <kbd class="px-1.5 py-0.5 text-[11px] font-mono bg-white border border-slate-200 rounded shadow-2xs font-semibold">→</kbd>
+              </div>
+            </div>
+            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/80">
+              <span class="text-slate-700 font-medium">Previous Model</span>
+              <div class="flex items-center gap-1">
+                <kbd class="px-1.5 py-0.5 text-[11px] font-mono bg-white border border-slate-200 rounded shadow-2xs font-semibold">K</kbd>
+                <span class="text-slate-400 text-[10px]">or</span>
+                <kbd class="px-1.5 py-0.5 text-[11px] font-mono bg-white border border-slate-200 rounded shadow-2xs font-semibold">←</kbd>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- View Switching Section -->
+        <div>
+          <h4 class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Perspective Views</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/80">
+              <span class="text-slate-700 font-medium">Detailed</span>
+              <kbd class="px-1.5 py-0.5 text-[11px] font-mono bg-white border border-slate-200 rounded shadow-2xs font-semibold">1</kbd>
+            </div>
+            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/80">
+              <span class="text-slate-700 font-medium">Summary</span>
+              <kbd class="px-1.5 py-0.5 text-[11px] font-mono bg-white border border-slate-200 rounded shadow-2xs font-semibold">2</kbd>
+            </div>
+            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/80">
+              <span class="text-slate-700 font-medium">Flowchart</span>
+              <kbd class="px-1.5 py-0.5 text-[11px] font-mono bg-white border border-slate-200 rounded shadow-2xs font-semibold">3</kbd>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions Section -->
+        <div>
+          <h4 class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Actions & Learning</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/80">
+              <span class="text-slate-700 font-medium">Bookmark / Save</span>
+              <kbd class="px-1.5 py-0.5 text-[11px] font-mono bg-white border border-slate-200 rounded shadow-2xs font-semibold">S</kbd>
+            </div>
+            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/80">
+              <span class="text-slate-700 font-medium">Play / Pause Audio</span>
+              <kbd class="px-1.5 py-0.5 text-[11px] font-mono bg-white border border-slate-200 rounded shadow-2xs font-semibold">A</kbd>
+            </div>
+            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/80">
+              <span class="text-slate-700 font-medium">Stress-Test AI</span>
+              <kbd class="px-1.5 py-0.5 text-[11px] font-mono bg-white border border-slate-200 rounded shadow-2xs font-semibold">T</kbd>
+            </div>
+            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/80">
+              <span class="text-slate-700 font-medium">Fullscreen Diagram</span>
+              <kbd class="px-1.5 py-0.5 text-[11px] font-mono bg-white border border-slate-200 rounded shadow-2xs font-semibold">F</kbd>
+            </div>
+            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/80">
+              <span class="text-slate-700 font-medium">Global Search</span>
+              <kbd class="px-1.5 py-0.5 text-[11px] font-mono bg-white border border-slate-200 rounded shadow-2xs font-semibold">/</kbd>
+            </div>
+            <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/80">
+              <span class="text-slate-700 font-medium">Close / Dismiss</span>
+              <kbd class="px-1.5 py-0.5 text-[11px] font-mono bg-white border border-slate-200 rounded shadow-2xs font-semibold">Esc</kbd>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+        <span>Press <kbd class="px-1 py-0.5 font-mono bg-slate-100 border border-slate-200 rounded font-semibold text-slate-700">?</kbd> anywhere to open this sheet</span>
+        <button onclick="closeKeyboardShortcutsModal()" class="px-4 py-1.5 rounded-xl bg-slate-900 text-white font-bold hover:bg-slate-800 transition">Got it</button>
       </div>
     </div>
   </div>
