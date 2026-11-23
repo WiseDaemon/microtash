@@ -64,7 +64,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF10B981).withValues(alpha: 0.15),
+                          color: const Color(0xFF10B981).withOpacity(0.15),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: const Icon(Icons.notifications_active, color: Color(0xFF10B981), size: 24),
@@ -202,9 +202,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF3B82F6).withValues(alpha: 0.2),
+                  color: const Color(0xFF3B82F6).withOpacity(0.2),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: const Color(0xFF60A5FA).withValues(alpha: 0.4)),
+                  border: Border.all(color: const Color(0xFF60A5FA).withOpacity(0.4)),
                 ),
                 child: Text('Box ${idea.leitnerBox}', style: const TextStyle(color: Color(0xFF93C5FD), fontSize: 11, fontWeight: FontWeight.bold)),
               ),
@@ -227,7 +227,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: _isFlipped ? const Color(0xFF10B981) : const Color(0xFF334155), width: 1.5),
                     boxShadow: [
-                      BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 6)),
+                      BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 12, offset: const Offset(0, 6)),
                     ],
                   ),
                   child: Column(

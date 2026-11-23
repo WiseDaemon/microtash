@@ -81,9 +81,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF10B981).withValues(alpha: 0.15),
+                            color: const Color(0xFF10B981).withOpacity(0.15),
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: const Color(0xFF10B981).withValues(alpha: 0.4)),
+                            border: Border.all(color: const Color(0xFF10B981).withOpacity(0.4)),
                           ),
                           child: Text(
                             fullBook.topic.toUpperCase(),
@@ -98,7 +98,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.08),
+                            color: Colors.white.withOpacity(0.08),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Row(
@@ -306,7 +306,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       const SizedBox(height: 4),
                       Text(
                         'Request any book and it will be indexed for all users.',
-                        style: TextStyle(color: Colors.white.withValues(alpha: 0.4), fontSize: 12),
+                        style: TextStyle(color: Colors.white.withOpacity(0.4), fontSize: 12),
                       ),
                     ],
                   ),
@@ -333,9 +333,9 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                               width: 44,
                               height: 56,
                               decoration: BoxDecoration(
-                                color: const Color(0xFF10B981).withValues(alpha: 0.15),
+                                color: const Color(0xFF10B981).withOpacity(0.15),
                                 borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: const Color(0xFF10B981).withValues(alpha: 0.3)),
+                                border: Border.all(color: const Color(0xFF10B981).withOpacity(0.3)),
                               ),
                               child: const Icon(Icons.book, color: Color(0xFF10B981), size: 24),
                             ),
@@ -349,7 +349,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                       Container(
                                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                         decoration: BoxDecoration(
-                                          color: Colors.white.withValues(alpha: 0.06),
+                                          color: Colors.white.withOpacity(0.06),
                                           borderRadius: BorderRadius.circular(6),
                                         ),
                                         child: Text(
@@ -378,7 +378,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                   const SizedBox(height: 3),
                                   Text(
                                     '${book.author} • ${book.publisher}',
-                                    style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 11),
+                                    style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 11),
                                   ),
                                 ],
                               ),

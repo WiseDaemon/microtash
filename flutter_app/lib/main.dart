@@ -135,7 +135,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> with WidgetsB
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF10B981).withValues(alpha: 0.15),
+                          color: const Color(0xFF10B981).withOpacity(0.15),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Icon(Icons.share, color: Color(0xFF10B981), size: 18),
@@ -228,7 +228,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> with WidgetsB
           setState(() => _currentIndex = index);
         },
         backgroundColor: const Color(0xFF1E293B),
-        indicatorColor: const Color(0xFF10B981).withValues(alpha: 0.2),
+        indicatorColor: const Color(0xFF10B981).withOpacity(0.2),
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.explore_outlined),
