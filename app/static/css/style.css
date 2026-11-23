@@ -498,6 +498,11 @@ html:not(.dark) .text-slate-400 {
   stroke: none !important;
 }
 
+.mermaid foreignObject,
+[id*="diagram"] foreignObject {
+  overflow: visible !important;
+}
+
 .mermaid .edgeLabel,
 [id*="diagram"] .edgeLabel {
   background-color: #FFFFFF !important;
@@ -505,10 +510,12 @@ html:not(.dark) .text-slate-400 {
   font-size: 11px !important;
   font-weight: 600 !important;
   font-family: 'Inter', sans-serif !important;
-  padding: 3px 8px !important;
-  border-radius: 8px !important;
-  border: 1px solid #E2E8F0 !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  padding: 2px 7px !important;
+  border-radius: 6px !important;
+  border: 1px solid #CBD5E1 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
 }
 
 /* ==========================================================================

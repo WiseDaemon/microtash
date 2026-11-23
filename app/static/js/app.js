@@ -397,10 +397,13 @@ function sanitizeAndElevateMermaid(diag, targetElId) {
   // Always normalize diagrams to top-down graph TD so flowcharts fit cards, modals, and mobile screens without squashing
   clean = clean.replace(/^(graph|flowchart)\s+LR\b/m, '$1 TD');
 
+  // Convert diamonds id{Some Question} and id{"Some Question"} into stadium pills id(["Some Question"])
+  // This completely eliminates oversized diamond distortions while preserving clear decision semantics
+  clean = clean.replace(/([a-zA-Z0-9_]+)\{\s*"([^"\n]+)"\s*\}/g, '$1(["$2"])');
+  clean = clean.replace(/([a-zA-Z0-9_]+)\{([^"\}\n][^\}\n]*)\}/g, '$1(["$2"])');
+
   // Auto-quote unquoted node definitions: id[Some Text] -> id["Some Text"]
   clean = clean.replace(/([a-zA-Z0-9_]+)\[([^"\]\n][^\]\n]*)\]/g, '$1["$2"]');
-  // Auto-quote unquoted diamond questions: id{Some Question?} -> id{"Some Question?"}
-  clean = clean.replace(/([a-zA-Z0-9_]+)\{([^"\}\n][^\}\n]*)\}/g, '$1{"$2"}');
 
   // Strip parentheses and quotes inside edge labels: -->|Label (Detail)| -> -->|Label - Detail|
   clean = clean.replace(/(-->|-.->|==>|---|--)\s*\|([^|\n]+)\|/g, (match, arrow, label) => {
@@ -474,24 +477,15 @@ async function renderIdeaVisualDiagram(idea, targetElId) {
       const svgEl = container.querySelector('svg');
       if (svgEl) {
         // Natural aspect ratio preservation:
-        // Do NOT overwrite Mermaid's intrinsic maxWidth with 100%!
-        const inlineMaxWidth = svgEl.style.maxWidth;
         svgEl.style.width = '100%';
         svgEl.style.height = 'auto';
         svgEl.style.display = 'block';
         svgEl.style.margin = '0 auto';
 
-        // Keep intrinsic maxWidth or derive from viewBox width so TD diagrams don't blow up to 800px
-        if (inlineMaxWidth && inlineMaxWidth !== '100%' && !inlineMaxWidth.includes('100%')) {
-          svgEl.style.maxWidth = inlineMaxWidth;
-        } else {
-          const vb = svgEl.viewBox?.baseVal;
-          if (vb && vb.width > 0) {
-            svgEl.style.maxWidth = `${Math.min(vb.width, 560)}px`;
-          } else {
-            svgEl.style.maxWidth = '520px';
-          }
-        }
+        // Ensure diagrams have comfortable width (between 380px and 560px) so nodes and labels breathe
+        const vb = svgEl.viewBox?.baseVal;
+        const naturalWidth = (vb && vb.width > 0) ? vb.width : 450;
+        svgEl.style.maxWidth = `${Math.min(Math.max(naturalWidth, 380), 560)}px`;
         svgEl.style.overflow = 'visible';
 
         // Make nodes and edges genuinely interactive!
