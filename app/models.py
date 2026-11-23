@@ -93,7 +93,7 @@ class ExtractionRequest(BaseModel):
     author: Optional[str] = Field("Unknown Author", description="Author or speaker")
     publisher: Optional[str] = Field(None, description="Book publisher or original publication")
     topic: Optional[str] = Field("Mental Models", description="Category tag")
-    provider: Optional[str] = Field("gemini", description="'gemini' or 'nvidia'")
+    provider: Optional[str] = Field("nvidia", description="'nvidia' or 'gemini'")
     num_ideas: Optional[int] = Field(0, description="0 for all ideas in book, or specific count")
 
 class UserProgress(BaseModel):

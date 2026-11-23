@@ -10,12 +10,12 @@ def extract_ideas_from_content(
     source_title: str = "Unknown Source",
     author: str = "Unknown Author",
     topic: str = "Mental Models",
-    provider: str = "gemini",
+    provider: str = "nvidia",
     num_ideas: int = 3
 ) -> List[Dict[str, Any]]:
     """
     Deconstructs raw text, article content, or a book chapter into structured Deepstash-style idea cards.
-    Tries requested provider first (NVIDIA or Gemini), falling back seamlessly if necessary.
+    Defaults to NVIDIA Nemotron 70B, falling back seamlessly to Gemini or rule-based synthesis.
     """
     # If input looks like an HTTP URL, attempt to scrape the main text
     cleaned_input = input_text.strip()
@@ -76,23 +76,35 @@ def extract_ideas_from_content(
         "Output strictly a valid JSON array of idea cards with no markdown backticks and no conversational filler."
     )
 
-    # Execution order based on provider preference
-    if provider.lower() == "nvidia":
+    # Execution order based on provider preference & available keys
+    # NVIDIA Nemotron is the primary AI engine
+    prefer_nvidia = (provider.lower() == "nvidia") or (not settings.GEMINI_API_KEY and bool(settings.NVIDIA_API_KEY))
+
+    if prefer_nvidia:
         try:
             return call_nvidia_api(system_prompt, user_prompt)
         except Exception as e:
-            print(f"[AI Service] NVIDIA API call failed ({e}). Falling back to Gemini...")
-            return call_gemini_api(system_prompt, user_prompt)
+            print(f"[AI Service] NVIDIA API call failed ({e}). Falling back to Gemini or rules...")
+            if settings.GEMINI_API_KEY:
+                try:
+                    return call_gemini_api(system_prompt, user_prompt)
+                except Exception as e_gemini:
+                    print(f"[AI Service] Gemini fallback also failed ({e_gemini}).")
+            return fallback_rule_based_extraction(cleaned_input, source_title, author, topic, num_ideas)
     else:
         try:
-            return call_gemini_api(system_prompt, user_prompt)
-        except Exception as e:
-            print(f"[AI Service] Gemini API call failed ({e}). Falling back to NVIDIA...")
-            try:
+            if settings.GEMINI_API_KEY:
+                return call_gemini_api(system_prompt, user_prompt)
+            else:
                 return call_nvidia_api(system_prompt, user_prompt)
+        except Exception as e:
+            print(f"[AI Service] Primary AI call failed ({e}). Falling back to NVIDIA...")
+            try:
+                if settings.NVIDIA_API_KEY:
+                    return call_nvidia_api(system_prompt, user_prompt)
             except Exception as e2:
                 print(f"[AI Service] Both AI providers failed: {e2}. Generating rule-based extraction.")
-                return fallback_rule_based_extraction(cleaned_input, source_title, author, topic, num_ideas)
+            return fallback_rule_based_extraction(cleaned_input, source_title, author, topic, num_ideas)
 
 def call_gemini_api(system_prompt: str, user_prompt: str) -> List[Dict[str, Any]]:
     from google import genai
@@ -292,12 +304,36 @@ def generate_concept_deep_dive(title: str, author: str, source: str, one_liner: 
         "Generate the deep theoretical explanation, case study, and Mermaid.js visual diagram now."
     )
 
-    try:
-        from google import genai
-        from google.genai import types
-        api_key = settings.GEMINI_API_KEY
-        if api_key:
-            client = genai.Client(api_key=api_key)
+    # 1. Try NVIDIA Nemotron 70B (primary engine)
+    if settings.NVIDIA_API_KEY:
+        try:
+            from openai import OpenAI
+            client = OpenAI(base_url=settings.NVIDIA_BASE_URL, api_key=settings.NVIDIA_API_KEY, timeout=15.0)
+            res = client.chat.completions.create(
+                model=settings.NVIDIA_MODEL,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ],
+                response_format={"type": "json_object"}
+            )
+            parsed = json.loads(res.choices[0].message.content.strip())
+            if parsed.get("detailed_explanation") and len(parsed["detailed_explanation"]) > 100:
+                diag = parsed.get("visual_diagram") or generate_default_mermaid_diagram(title, summary)
+                return {
+                    "detailed_explanation": parsed["detailed_explanation"],
+                    "example": parsed.get("example") or "",
+                    "visual_diagram": diag
+                }
+        except Exception as e_nv:
+            print(f"[Deep Dive] NVIDIA call failed ({e_nv}). Attempting Gemini fallback...")
+
+    # 2. Try Gemini fallback if configured
+    if settings.GEMINI_API_KEY:
+        try:
+            from google import genai
+            from google.genai import types
+            client = genai.Client(api_key=settings.GEMINI_API_KEY)
             response = client.models.generate_content(
                 model=settings.GEMINI_MODEL,
                 contents=user_prompt,
@@ -309,40 +345,15 @@ def generate_concept_deep_dive(title: str, author: str, source: str, one_liner: 
                 )
             )
             parsed = json.loads(response.text.strip())
-            if parsed.get("detailed_explanation") and len(parsed["detailed_explanation"]) > 150:
+            if parsed.get("detailed_explanation") and len(parsed["detailed_explanation"]) > 100:
                 diag = parsed.get("visual_diagram") or generate_default_mermaid_diagram(title, summary)
                 return {
                     "detailed_explanation": parsed["detailed_explanation"],
                     "example": parsed.get("example") or "",
                     "visual_diagram": diag
                 }
-    except Exception as e:
-        print(f"[Deep Dive] Gemini call failed ({e}). Attempting NVIDIA fallback...")
-
-    # NVIDIA NIM fallback
-    try:
-        from openai import OpenAI
-        api_key = settings.NVIDIA_API_KEY
-        if api_key:
-            client = OpenAI(base_url=settings.NVIDIA_BASE_URL, api_key=api_key, timeout=15.0)
-            res = client.chat.completions.create(
-                model=settings.NVIDIA_MODEL,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt}
-                ],
-                response_format={"type": "json_object"}
-            )
-            parsed = json.loads(res.choices[0].message.content.strip())
-            if parsed.get("detailed_explanation"):
-                diag = parsed.get("visual_diagram") or generate_default_mermaid_diagram(title, summary)
-                return {
-                    "detailed_explanation": parsed["detailed_explanation"],
-                    "example": parsed.get("example") or "",
-                    "visual_diagram": diag
-                }
-    except Exception as e2:
-        print(f"[Deep Dive] NVIDIA NIM fallback failed: {e2}")
+        except Exception as e:
+            print(f"[Deep Dive] Gemini call failed ({e}).")
 
     # High-quality contextual fallback
     return {
@@ -455,6 +466,34 @@ def generate_socratic_stress_test(title: str, summary: str, detailed_explanation
         f"}}"
     )
 
+    # 1. Primary Engine: NVIDIA Nemotron 70B
+    if settings.NVIDIA_API_KEY:
+        try:
+            from openai import OpenAI
+            client = OpenAI(
+                base_url=settings.NVIDIA_BASE_URL,
+                api_key=settings.NVIDIA_API_KEY,
+                timeout=15.0
+            )
+            completion = client.chat.completions.create(
+                model=settings.NVIDIA_MODEL,
+                messages=[
+                    {"role": "system", "content": "You are a cognitive psychologist and Socratic trainer. Output strictly valid JSON."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.35,
+                max_tokens=1500
+            )
+            text_resp = completion.choices[0].message.content.strip()
+            parsed = parse_json_safely(text_resp)
+            if isinstance(parsed, list) and len(parsed) > 0:
+                return parsed[0]
+            elif isinstance(parsed, dict) and "scenario" in parsed:
+                return parsed
+        except Exception as e_nv:
+            print(f"[Socratic] NVIDIA Nemotron call failed ({e_nv}). Attempting fallback...")
+
+    # 2. Secondary fallback: Gemini
     if settings.GEMINI_API_KEY:
         try:
             url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={settings.GEMINI_API_KEY}"

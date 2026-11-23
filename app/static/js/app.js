@@ -1509,7 +1509,7 @@ async function runAutoFetchAndGenerate() {
 
   const topic = document.getElementById("autofetch-topic")?.value || "Mental Models";
   const count = parseInt(document.getElementById("autofetch-count")?.value || "3", 10);
-  const provider = document.querySelector('input[name="autofetch-engine"]:checked')?.value || 'gemini';
+  const provider = document.querySelector('input[name="autofetch-engine"]:checked')?.value || 'nvidia';
 
   const btn = document.getElementById("btn-run-autofetch");
   const resultsArea = document.getElementById("ai-results-area");
@@ -1638,7 +1638,7 @@ async function runAiExtraction() {
   const author = document.getElementById("ai-author")?.value?.trim() || "Curated Source";
   const topic = document.getElementById("ai-topic")?.value || "Mental Models";
   const providerSelect = document.getElementById("ai-provider-select");
-  const provider = providerSelect ? providerSelect.value : (document.querySelector('input[name="ai-engine"]:checked')?.value || 'gemini');
+  const provider = providerSelect ? providerSelect.value : (document.querySelector('input[name="ai-engine"]:checked')?.value || 'nvidia');
 
   const btn = document.getElementById("btn-run-ai") || document.querySelector('button[onclick*="runAiExtraction"]');
   const resultsContainer = document.getElementById("ai-results-container");
@@ -3632,6 +3632,17 @@ window.renderFeedGrid = renderFeedGrid;
 // USER-FRIENDLY UX CONTROLLERS & INTERACTION SYSTEM
 // =========================================================================
 
+// 0. Cloud Automation Banner System
+function dismissCloudAutomationBanner() {
+  const banner = document.getElementById("cloud-automation-banner");
+  if (banner) {
+    banner.classList.add("opacity-0", "-translate-y-2");
+    setTimeout(() => {
+      banner.classList.add("hidden");
+    }, 200);
+  }
+}
+
 // 1. Onboarding Banner System
 function dismissOnboardingBanner() {
   const banner = document.getElementById("welcome-onboarding-banner");
@@ -3816,6 +3827,7 @@ function triggerCelebrationConfetti() {
 }
 
 // Global window registrations
+window.dismissCloudAutomationBanner = dismissCloudAutomationBanner;
 window.dismissOnboardingBanner = dismissOnboardingBanner;
 window.checkOnboardingStatus = checkOnboardingStatus;
 window.toggleCardAccordion = toggleCardAccordion;

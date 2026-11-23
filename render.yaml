@@ -10,7 +10,7 @@ services:
       - key: PYTHON_VERSION
         value: 3.11.9
       - key: DEFAULT_AI_PROVIDER
-        value: gemini
+        value: nvidia
       - key: GEMINI_API_KEY
         sync: false
       - key: NVIDIA_API_KEY

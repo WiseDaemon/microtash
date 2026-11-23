@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-  <link rel="stylesheet" href="/static/css/style.css?v=6.0">
+  <link rel="stylesheet" href="/static/css/style.css?v=7.0">
 
   <!-- Tailwind CSS, Mermaid.js & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -257,6 +257,30 @@
     <main id="tab-swipe-content" class="flex-1 flex flex-col items-center">
       <div class="max-w-2xl w-full mx-auto space-y-4">
         
+        <!-- CLOUD AUTOMATION STATUS NOTIFICATION BANNER -->
+        <div id="cloud-automation-banner" class="p-3 sm:px-4 bg-emerald-50/95 border border-emerald-200 rounded-2xl shadow-xs flex items-center justify-between gap-3 text-xs transition-all duration-300">
+          <div class="flex items-center gap-3 min-w-0">
+            <span class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+              <span class="material-symbols-outlined text-[18px]">cloud_sync</span>
+            </span>
+            <div class="min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-bold text-emerald-950">Cloud Automation Active</span>
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  1 Seminal Book / Day
+                </span>
+              </div>
+              <p class="text-[11px] text-emerald-800 font-medium mt-0.5 leading-snug">
+                Yes, the daily 1-book update is 100% working and actively running in the cloud via GitHub Actions.
+              </p>
+            </div>
+          </div>
+          <button onclick="dismissCloudAutomationBanner()" class="w-7 h-7 rounded-full hover:bg-emerald-100 text-emerald-700 hover:text-emerald-900 flex items-center justify-center shrink-0 transition cursor-pointer" title="Dismiss Notification">
+            <span class="material-symbols-outlined text-[16px]">close</span>
+          </button>
+        </div>
+
         <!-- WELCOME & FIRST-TIME ONBOARDING BANNER (DISMISSIBLE) -->
         <div id="welcome-onboarding-banner" class="bento-card p-4 sm:p-5 bg-gradient-to-r from-blue-50/90 via-indigo-50/80 to-purple-50/90 border border-blue-200/80 rounded-2xl shadow-xs transition-all duration-300 relative">
           <button onclick="dismissOnboardingBanner()" class="absolute top-3.5 right-3.5 w-6 h-6 rounded-full bg-white/80 hover:bg-white border border-slate-200 text-slate-400 hover:text-slate-700 flex items-center justify-center transition cursor-pointer text-xs" title="Dismiss Guide">
@@ -730,9 +754,9 @@
           <textarea id="ai-input-text" rows="4" class="w-full rounded-xl bg-slate-50 border border-slate-200 p-3.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-100 transition leading-relaxed" placeholder="Paste article URL (e.g. https://...) or raw book notes here..."></textarea>
           
           <div class="flex items-center justify-between">
-            <select id="ai-provider-select" class="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-600">
+            <select id="ai-provider-select" class="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 focus:outline-none focus:border-blue-600 font-medium">
+              <option value="nvidia" selected>NVIDIA Nemotron 70B (Primary)</option>
               <option value="gemini">Gemini 2.5 Flash</option>
-              <option value="nvidia">NVIDIA Nemotron 70B</option>
             </select>
             <button id="btn-run-ai" onclick="runAiExtraction()" class="py-2.5 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-headline font-bold text-xs shadow-sm transition flex items-center gap-1.5 cursor-pointer">
               <span>⚡ Deconstruct into Cards</span>
@@ -1707,7 +1731,7 @@
   <script src="/static/js/auth.js?v=2.0"></script>
   <script src="/static/js/social.js?v=2.0"></script>
   <script src="/static/js/substack.js?v=2.0"></script>
-  <script src="/static/js/app.js?v=6.0"></script>
+  <script src="/static/js/app.js?v=7.0"></script>
   <script src="/static/js/swipe.js?v=5.0"></script>
   <script src="/static/js/audio.js?v=5.0"></script>
   <script src="/static/js/share.js?v=5.0"></script>
