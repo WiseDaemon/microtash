@@ -1219,8 +1219,19 @@ async function submitNewStash() {
 
 function formatMarkdownInline(str) {
   if (!str) return "";
+  // Inline Math $formula$ -> styled mathematical notation
+  let res = str.replace(/\$([^$\n]+)\$/g, (m, math) => {
+    let formatted = math
+      .replace(/\\propto/g, '∝')
+      .replace(/\\approx/g, '≈')
+      .replace(/\\times/g, '×')
+      .replace(/\\le/g, '≤')
+      .replace(/\\ge/g, '≥')
+      .replace(/\^([a-zA-Z0-9]+)/g, '<sup>$1</sup>');
+    return `<span class="font-mono text-blue-700 bg-blue-50 px-1 py-0.5 rounded text-[11px] border border-blue-200 font-semibold">${formatted}</span>`;
+  });
   // Bold **text** -> high-contrast dark slate
-  let res = str.replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-900 font-bold">$1</strong>');
+  res = res.replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-900 font-bold">$1</strong>');
   // Italic *text* -> readable dark slate italic
   res = res.replace(/(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)/g, '<em class="text-slate-800 font-medium italic">$1</em>');
   // Italic _text_ -> readable dark slate italic
@@ -1428,7 +1439,11 @@ async function regenerateCurrentDeepDive() {
 
 function closeDeepDiveModal() {
   const modal = document.getElementById("deep-dive-modal");
-  if (modal) modal.classList.add("hidden");
+  if (modal) {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    modal.style.display = "none";
+  }
 }
 
 function copyCurrentDeepDive() {
@@ -2531,7 +2546,7 @@ function updateStitchHeroCard() {
   // Boundary condition on card
   const boundaryEl = document.getElementById("card-boundary-content");
   if (boundaryEl) {
-    boundaryEl.textContent = idea.boundary || "Avoid dogmatic application when foundational axioms or systemic constraints are altered by sudden environmental shifts.";
+    boundaryEl.innerHTML = renderMarkdownDetailed(idea.boundary || "Avoid dogmatic application when foundational axioms or systemic constraints are altered by sudden environmental shifts.");
   }
 
   // Action item on card
@@ -3119,6 +3134,7 @@ function closeDeepDiveModal() {
   if (modal) {
     modal.classList.add("hidden");
     modal.classList.remove("flex");
+    modal.style.display = "none";
   }
 }
 
@@ -3244,7 +3260,7 @@ async function openDeepDiveModal(ideaId = null) {
   // Slide 3: Action & Bounds
   const boundaryEl = document.getElementById("modal-boundary-text");
   if (boundaryEl) {
-    boundaryEl.textContent = idea.boundary || "Avoid dogmatic application when foundational axioms or systemic constraints are altered by sudden environmental shifts.";
+    boundaryEl.innerHTML = renderMarkdownDetailed(idea.boundary || "Avoid dogmatic application when foundational axioms or systemic constraints are altered by sudden environmental shifts.");
   }
 
   const actionEl = document.getElementById("modal-action-item") || document.getElementById("modal-action");
@@ -3270,7 +3286,7 @@ async function openDeepDiveModal(ideaId = null) {
 
   const fullBoundEl = document.getElementById("modal-full-boundary");
   if (fullBoundEl) {
-    fullBoundEl.textContent = idea.boundary || "Avoid dogmatic application when foundational axioms or systemic constraints are altered by sudden environmental shifts.";
+    fullBoundEl.innerHTML = renderMarkdownDetailed(idea.boundary || "Avoid dogmatic application when foundational axioms or systemic constraints are altered by sudden environmental shifts.");
   }
 
   const fullActEl = document.getElementById("modal-full-action");
@@ -3301,7 +3317,7 @@ async function openDeepDiveModal(ideaId = null) {
   if (readerExampleEl) readerExampleEl.innerHTML = renderMarkdownDetailed(idea.example || "Empirical case analysis.");
 
   const readerBoundaryEl = document.getElementById("reader-boundary");
-  if (readerBoundaryEl) readerBoundaryEl.textContent = idea.boundary || "Apply with critical discernment.";
+  if (readerBoundaryEl) readerBoundaryEl.innerHTML = renderMarkdownDetailed(idea.boundary || "Apply with critical discernment.");
 
   // Load Substack Community Discussions for this Idea
   if (window.loadIdeaComments) {
@@ -3316,6 +3332,7 @@ async function openDeepDiveModal(ideaId = null) {
   // Reset to Slide 1
   setDeepDiveSlide(1);
 
+  modal.style.display = "flex";
   modal.classList.remove("hidden");
   modal.classList.add("flex");
   if (window.lucide) lucide.createIcons();
@@ -3366,27 +3383,37 @@ async function openStressTestModal(ideaId = null) {
   try {
     const res = await fetch(`/api/ai/stress-test/${encodeURIComponent(idea.id)}`);
     if (!res.ok) throw new Error("Stress test synthesis failed");
-    const testData = await res.json();
+    const data = await res.json();
+    const testData = data.stress_test || data;
 
-    if (scenarioEl) scenarioEl.textContent = testData.dilemma || idea.summary;
-    if (questionEl) questionEl.textContent = testData.question || "Which response correctly applies the model?";
+    const dilemmaText = testData.scenario || testData.dilemma || idea.summary;
+    const questionText = testData.question || "Which response correctly applies the model?";
+    const options = testData.options || [];
 
-    if (optionsEl && testData.options && testData.options.length) {
-      optionsEl.innerHTML = testData.options.map((opt, idx) => {
-        const escapedExp = (opt.explanation || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
-        const escapedHeuristic = (testData.first_principles_heuristic || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    if (scenarioEl) scenarioEl.textContent = dilemmaText;
+    if (questionEl) questionEl.textContent = questionText;
+
+    if (optionsEl && options.length) {
+      optionsEl.innerHTML = options.map((opt, idx) => {
+        const feedback = opt.feedback || opt.explanation || '';
+        const escapedFeedback = feedback.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        const heuristic = testData.first_principles_takeaway || testData.first_principles_heuristic || idea.one_liner || '';
+        const escapedHeuristic = heuristic.replace(/'/g, "\\'").replace(/"/g, '&quot;');
         return `
           <button 
-            onclick="handleStressChoice(${idx}, ${opt.is_correct ? 'true' : 'false'}, '${escapedExp}', '${escapedHeuristic}')"
-            class="stress-option-btn w-full text-left p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-blue-300 text-xs text-slate-900 font-medium leading-relaxed transition flex items-start gap-2.5 shadow-2xs"
+            type="button"
+            onclick="handleStressChoice(${idx}, ${opt.is_correct ? 'true' : 'false'}, '${escapedFeedback}', '${escapedHeuristic}')"
+            class="stress-option-btn w-full text-left p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-blue-300 text-xs text-slate-900 font-medium leading-relaxed transition flex items-start gap-2.5 shadow-2xs cursor-pointer"
           >
             <span class="w-5 h-5 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[10px] font-bold text-blue-600 flex-shrink-0 mt-0.5">
-              ${String.fromCharCode(65 + idx)}
+              ${opt.id || String.fromCharCode(65 + idx)}
             </span>
             <span class="flex-1 text-slate-800">${opt.text}</span>
           </button>
         `;
       }).join('');
+    } else {
+      throw new Error("No options returned from stress test API");
     }
   } catch (err) {
     console.error("Stress test load error:", err);
@@ -3731,7 +3758,7 @@ function openDiagramFullscreenModal() {
 
     const diagType = window.state.diagramType || 'graph';
     if (diagType === 'stepped') {
-      contentEl.innerHTML = renderStyledStepFlow(idea);
+      contentEl.innerHTML = `<div class="bg-white rounded-2xl p-6 sm:p-8 shadow-2xl max-w-2xl w-full text-slate-900 border border-slate-200 my-auto text-left">${renderStyledStepFlow(idea)}</div>`;
       if (window.lucide) lucide.createIcons();
     } else {
       renderIdeaVisualDiagram(idea, 'diagram-fullscreen-content');

@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-  <link rel="stylesheet" href="/static/css/style.css?v=7.0">
+  <link rel="stylesheet" href="/static/css/style.css?v=8.0">
 
   <!-- Tailwind CSS, Mermaid.js & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -151,7 +151,7 @@
             </div>
           </div>
           <!-- Autocomplete Dropdown -->
-          <div id="global-search-autocomplete" class="hidden absolute left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-xl p-2 z-50 max-h-80 overflow-y-auto custom-scrollbar">
+          <div id="global-search-autocomplete" class="hidden absolute left-0 mt-2 min-w-[320px] sm:min-w-[420px] w-full max-w-[500px] bg-white border border-slate-200 rounded-2xl shadow-xl p-2 z-50 max-h-80 overflow-y-auto custom-scrollbar">
             <!-- Autocomplete items populated via JS -->
           </div>
         </div>
@@ -512,11 +512,19 @@
               </button>
             </div>
 
-            <!-- Read Full Treatise Drawer Button -->
-            <button onclick="openDeepDiveModal()" class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs">
-              <span>Read Full Treatise</span>
-              <span class="material-symbols-outlined text-[15px]">arrow_forward</span>
-            </button>
+            <div class="flex items-center gap-2">
+              <!-- Socratic Stress-Test Arena Button -->
+              <button onclick="openStressTestModal()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition shadow-2xs cursor-pointer" title="Socratic Dilemma Arena (T)">
+                <span class="material-symbols-outlined text-[15px] text-amber-600">bolt</span>
+                <span>Stress-Test</span>
+              </button>
+
+              <!-- Read Full Treatise Drawer Button -->
+              <button onclick="openDeepDiveModal()" class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs cursor-pointer">
+                <span>Read Full Treatise</span>
+                <span class="material-symbols-outlined text-[15px]">arrow_forward</span>
+              </button>
+            </div>
           </div>
 
           <!-- Hidden elements for test and JS compatibility -->
@@ -873,7 +881,7 @@
   <!-- ========================================================================= -->
   <!-- MODAL: SWISS SLIDE-OVER DRAWER (PROGRESSIVE 5-TAB DEEP DIVE)              -->
   <!-- ========================================================================= -->
-  <div id="deep-dive-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+  <div id="deep-dive-modal" onclick="if(event.target === this) closeDeepDiveModal()" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
     <div class="bg-white border border-slate-200 rounded-3xl max-w-3xl w-full shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-in fade-in duration-200">
       
       <!-- Drawer Header -->
@@ -885,10 +893,10 @@
           <span id="modal-author-source" class="text-xs text-slate-500">Charlie Munger • Poor Charlie's Almanack</span>
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="exportCurrentCardMarkdown()" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 transition" title="Export Markdown">
+          <button onclick="exportCurrentCardMarkdown()" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 transition cursor-pointer" title="Export Markdown">
             <span class="material-symbols-outlined text-[16px]">download</span>
           </button>
-          <button onclick="closeDeepDiveModal()" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 transition">
+          <button id="btn-close-deep-dive" onclick="closeDeepDiveModal()" aria-label="Close Deep Dive" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 transition cursor-pointer" title="Close (Esc)">
             <span class="material-symbols-outlined text-[18px]">close</span>
           </button>
         </div>
@@ -1561,8 +1569,8 @@
     </div>
 
     <!-- Fullscreen Content Viewport -->
-    <div id="diagram-fullscreen-viewport" class="flex-1 my-3 sm:my-4 bg-slate-900/60 border border-slate-800/80 rounded-2xl flex items-center justify-center p-4 overflow-auto custom-scrollbar relative select-none">
-      <div id="diagram-fullscreen-content" class="transition-transform duration-150 ease-out flex items-center justify-center min-w-full min-h-full">
+    <div id="diagram-fullscreen-viewport" class="flex-1 my-3 sm:my-4 bg-slate-900/60 border border-slate-800/80 rounded-2xl flex items-start sm:items-center justify-center p-4 overflow-auto custom-scrollbar relative select-none">
+      <div id="diagram-fullscreen-content" class="transition-transform duration-150 ease-out flex items-center justify-center min-w-full my-auto">
         <!-- SVG diagram cloned dynamically from card-diagram-container -->
       </div>
     </div>
@@ -1731,7 +1739,7 @@
   <script src="/static/js/auth.js?v=2.0"></script>
   <script src="/static/js/social.js?v=2.0"></script>
   <script src="/static/js/substack.js?v=2.0"></script>
-  <script src="/static/js/app.js?v=7.0"></script>
+  <script src="/static/js/app.js?v=8.0"></script>
   <script src="/static/js/swipe.js?v=5.0"></script>
   <script src="/static/js/audio.js?v=5.0"></script>
   <script src="/static/js/share.js?v=5.0"></script>
