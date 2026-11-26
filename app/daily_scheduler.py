@@ -292,22 +292,22 @@ def add_daily_book(force: bool = False) -> Tuple[bool, str, Optional[Dict[str, A
     if not selected_book:
         # Fallback if all curated books are already in DB: generate a dynamic companion classic
         selected_book = {
-            "title": f"The Almanack of Mental Models ({today_str})",
+            "title": f"The Almanack of Clear Thinking ({today_str})",
             "author": "Universal Knowledge Collective",
             "publisher": "Microstash Press",
             "topic": "Mental Models",
-            "description": "Daily synthesized strategic frameworks for high-leverage decision making and systems resilience.",
+            "description": "Daily practical ideas for sharper decisions and clearer thinking.",
             "ideas": [
                 {
-                    "title": f"Daily Epistemic Hygiene ({today_str})",
-                    "one_liner": "Audit your core operating assumptions daily against disconfirming reality.",
-                    "summary": "Knowledge depreciates without continuous falsification. Running daily micro-audits preserves cognitive edge.",
-                    "detailed_explanation": "Epistemological resilience requires active refactoring of mental heuristics. When operating under uncertainty, systematically seek out contradictory data points rather than hoarding confirming signals.",
-                    "example": "Charles Darwin kept a special notebook to immediately write down any observation or thought that contradicted his theories within thirty minutes, knowing that the human brain naturally forgets disconfirming evidence.",
-                    "boundary": "Do not discard proven foundational principles over single noisy outliers without statistical significance.",
-                    "action_item": "Identify one strong belief you held this morning and write down what evidence would completely refute it.",
+                    "title": f"Daily Reality Check ({today_str})",
+                    "one_liner": "Test your strongest beliefs against facts that could prove you wrong.",
+                    "summary": "Good thinking goes stale if you never challenge it. Checking your assumptions against real-world feedback keeps your judgment sharp.",
+                    "detailed_explanation": "### How It Works\nStaying sharp means testing your own ideas instead of just defending them. When things are uncertain, actively look for clues that you might be wrong rather than only collecting proof that makes you feel right.\n\n### Why We Get It Wrong\nOur brains naturally remember facts that back us up and quietly forget facts that challenge us.\n\n### When Not to Use It\nDon't throw away a solid, proven rule just because of one weird fluke—look for a real pattern first.",
+                    "example": "Charles Darwin kept a special notebook just for observations that seemed to disprove his own theories. He wrote them down within 30 minutes because he knew how easily the human brain forgets facts it dislikes.",
+                    "boundary": "Don't abandon a proven principle over a single noisy outlier—look for a real pattern first.",
+                    "action_item": "Pick one strong opinion you held this morning and write down what real-world fact would change your mind.",
                     "quote": "Whenever you find yourself on the side of the majority, it is time to pause and reflect.",
-                    "visual_diagram": "graph TD\n  Belief[\"Active Mental Model\"] --> Test{\"Expose to Disconfirming Data\"}\n  Test -->|Falsified| Adapt[\"Upgrade Model\"]\n  Test -->|Validated| Retain[\"Fortified Edge\"]"
+                    "visual_diagram": "graph TD\n  Belief[\"Your Current Belief\"] --> Test{\"Test Against Real Facts\"}\n  Test -->|Proven Wrong| Adapt[\"Update Your Thinking\"]\n  Test -->|Holds Up| Retain[\"Stronger Confidence\"]"
                 }
             ]
         }

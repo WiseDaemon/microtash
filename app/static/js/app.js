@@ -683,7 +683,7 @@ function selectDiagramNode(node, index, total, idea) {
   const textLower = cleanTitle.toLowerCase();
   if (textLower.includes("problem") || textLower.includes("context") || textLower.includes("standard") || textLower.includes("cue") || index === 0) {
     roleDesc = `Initiating Condition: Captures the raw intuitive default, environmental trigger, or status quo assumptions before applying ${idea ? idea.title : 'the mental model'}.`;
-    ruleText = "Notice the cognitive trap or immediate shortcut your brain wants to take here.";
+    ruleText = "Notice the quick mental shortcut your brain wants to take here.";
   } else if (textLower.includes("invert") || textLower.includes("principles") || textLower.includes("filter") || textLower.includes("action") || textLower.includes("routine")) {
     roleDesc = `The Transformative Operator: This is where ${idea ? idea.title : 'the model'} actively intervenes. By imposing counter-intuitive constraints, you filter signal from noise and isolate fundamental physics.`;
     ruleText = idea && idea.action_item ? idea.action_item : "Eliminate failure modes and reason upwards from immutable axioms.";
@@ -2546,7 +2546,7 @@ function updateStitchHeroCard() {
   // Boundary condition on card
   const boundaryEl = document.getElementById("card-boundary-content");
   if (boundaryEl) {
-    boundaryEl.innerHTML = renderMarkdownDetailed(idea.boundary || "Avoid dogmatic application when foundational axioms or systemic constraints are altered by sudden environmental shifts.");
+    boundaryEl.innerHTML = renderMarkdownDetailed(idea.boundary || "Don't apply this rule blindly if the core situation has completely changed.");
   }
 
   // Action item on card
@@ -3260,7 +3260,7 @@ async function openDeepDiveModal(ideaId = null) {
   // Slide 3: Action & Bounds
   const boundaryEl = document.getElementById("modal-boundary-text");
   if (boundaryEl) {
-    boundaryEl.innerHTML = renderMarkdownDetailed(idea.boundary || "Avoid dogmatic application when foundational axioms or systemic constraints are altered by sudden environmental shifts.");
+    boundaryEl.innerHTML = renderMarkdownDetailed(idea.boundary || "Don't apply this rule blindly if the core situation has completely changed.");
   }
 
   const actionEl = document.getElementById("modal-action-item") || document.getElementById("modal-action");
@@ -3286,7 +3286,7 @@ async function openDeepDiveModal(ideaId = null) {
 
   const fullBoundEl = document.getElementById("modal-full-boundary");
   if (fullBoundEl) {
-    fullBoundEl.innerHTML = renderMarkdownDetailed(idea.boundary || "Avoid dogmatic application when foundational axioms or systemic constraints are altered by sudden environmental shifts.");
+    fullBoundEl.innerHTML = renderMarkdownDetailed(idea.boundary || "Don't apply this rule blindly if the core situation has completely changed.");
   }
 
   const fullActEl = document.getElementById("modal-full-action");
@@ -3372,9 +3372,9 @@ async function openStressTestModal(ideaId = null) {
   const feedbackBox = document.getElementById("stress-feedback-box");
 
   if (feedbackBox) feedbackBox.classList.add("hidden");
-  if (scenarioEl) scenarioEl.textContent = `Synthesizing high-stakes dilemma for '${idea.title}'...`;
-  if (questionEl) questionEl.textContent = "Which response correctly applies the model?";
-  if (optionsEl) optionsEl.innerHTML = `<div class="py-4 text-center text-xs text-on-surface-variant animate-pulse">Generating scenario choices...</div>`;
+  if (scenarioEl) scenarioEl.textContent = `Creating a real-life scenario for '${idea.title}'...`;
+  if (questionEl) questionEl.textContent = "Which choice best applies this idea?";
+  if (optionsEl) optionsEl.innerHTML = `<div class="py-4 text-center text-xs text-on-surface-variant animate-pulse">Loading answer choices...</div>`;
 
   modal.classList.remove("hidden");
   modal.classList.add("flex");
@@ -3452,15 +3452,15 @@ function handleStressChoice(idx, isCorrect, explanation, heuristic) {
 
   if (isCorrect) {
     feedbackBox.className = "p-4 rounded-2xl border border-primary/40 bg-primary/10 leading-relaxed";
-    if (titleEl) titleEl.innerHTML = `<span class="material-symbols-outlined text-primary text-[20px]">check_circle</span> <span class="text-primary font-bold">First-Principles Mastered (+10 XP)</span>`;
+    if (titleEl) titleEl.innerHTML = `<span class="material-symbols-outlined text-primary text-[20px]">check_circle</span> <span class="text-primary font-bold">Spot On! (+10 XP)</span>`;
   } else {
     feedbackBox.className = "p-4 rounded-2xl border border-error/40 bg-error/10 leading-relaxed";
-    if (titleEl) titleEl.innerHTML = `<span class="material-symbols-outlined text-error text-[20px]">cancel</span> <span class="text-error font-bold">Cognitive Trap Detected</span>`;
+    if (titleEl) titleEl.innerHTML = `<span class="material-symbols-outlined text-error text-[20px]">cancel</span> <span class="text-error font-bold">Watch Out — Common Trap</span>`;
   }
 
   if (expEl) expEl.textContent = explanation;
   if (heuristicEl) {
-    heuristicEl.textContent = heuristic ? `💡 Key Heuristic: ${heuristic}` : '';
+    heuristicEl.textContent = heuristic ? `💡 Key Takeaway: ${heuristic}` : '';
   }
 
   feedbackBox.classList.remove("hidden");

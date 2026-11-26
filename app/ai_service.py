@@ -24,28 +24,29 @@ def extract_ideas_from_content(
 
     # Prompt design for atomic microlearning cards
     system_prompt = (
-        "You are an expert cognitive architect for Microstash, the active Mental Model Gym designed to help users retain, stress-test, and apply high-leverage decision frameworks. "
-        "Your mission is to comprehensively extract atomic, high-leverage ideas from the provided book or material. "
-        "Each idea MUST be distinct, actionable, memorable, and self-contained.\n\n"
-        "CRITICAL CONTENT SEPARATION RULE:\n"
-        "- 'summary' is the bite-sized microlearning overview (50-80 words, 1-2 punchy paragraphs for rapid swiping).\n"
-        "- 'detailed_explanation' MUST be an authentic, comprehensive masterclass breakdown of the underlying concept (250-400 words, structured in 3 distinct parts). "
-        "DO NOT repeat or paraphrase the summary! Explain:\n"
-        "  1. The Core Mechanism & First Principles (how it works mechanically beneath the surface)\n"
-        "  2. Cognitive & System Dynamics (why human instinct or organizations systematically fail here)\n"
-        "  3. Nuance & Boundary Conditions (where this model fails or must not be applied).\n"
-        "- 'example' MUST be a concrete, real-world case study or historical story (100-180 words) featuring specific people, companies, or events with measurable outcomes.\n\n"
+        "You are an expert editor and clear communicator for Microstash, a microlearning app that helps everyday readers learn and apply powerful ideas. "
+        "Your mission is to pull out clear, practical, memorable ideas from the provided book or material.\n\n"
+        "PLAIN-ENGLISH STYLE RULE:\n"
+        "- Write in clear, natural, everyday English (8th-10th grade reading level). Avoid academic jargon, buzzwords, and overly formal phrasing.\n"
+        "- Keep sentences punchy, direct, and vivid—explain big ideas simply without losing their depth or impact.\n\n"
+        "CONTENT SEPARATION RULE:\n"
+        "- 'summary' is a quick, punchy overview (50-80 words, 1-2 short paragraphs for fast reading).\n"
+        "- 'detailed_explanation' MUST be a clear, practical deep dive (220-350 words, in 3 short sections) that does NOT repeat the summary:\n"
+        "  1. How It Works (the core idea explained simply)\n"
+        "  2. Why People Miss This (common mistakes our brains or teams naturally make)\n"
+        "  3. When Not to Use It (the limits and exceptions to watch out for)\n"
+        "- 'example' MUST be a concrete, real-world story (100-160 words) with specific people, companies, or events and clear results.\n\n"
         "Return ONLY a valid JSON array of objects with the exact following schema:\n"
         "[\n"
         "  {\n"
         "    \"title\": \"Punchy Headline Concept (e.g. The Two-Minute Rule)\",\n"
-        "    \"one_liner\": \"Bold, memorable 1-sentence hook\",\n"
-        "    \"summary\": \"Concise microlearning summary (50-80 words).\",\n"
-        "    \"detailed_explanation\": \"Authentic in-depth analysis (250-400 words) structured across First Principles, Dynamics, and Boundary Conditions. MUST NOT BE THE SAME AS THE SUMMARY.\",\n"
-        "    \"example\": \"Concrete real-world case study (100-180 words) with verifiable entities and outcomes.\",\n"
-        "    \"visual_diagram\": \"Valid Mermaid.js graph code (e.g. graph TD or graph LR with 3-4 nodes and styles) visually explaining the conceptual mechanism or flow.\",\n"
-        "    \"quote\": \"Inspiring quote or key statement attributed to the author.\",\n"
-        "    \"action_item\": \"Concrete 'Try it today' actionable step the reader can execute right away.\",\n"
+        "    \"one_liner\": \"Bold, memorable 1-sentence hook in plain English\",\n"
+        "    \"summary\": \"Quick, clear overview (50-80 words).\",\n"
+        "    \"detailed_explanation\": \"Clear, practical deep dive (220-350 words) across How It Works, Why People Miss This, and When Not to Use It. MUST NOT REPEAT THE SUMMARY.\",\n"
+        "    \"example\": \"Concrete real-world story (100-160 words) with real people/companies and clear results.\",\n"
+        "    \"visual_diagram\": \"Valid Mermaid.js graph code (e.g. graph TD or graph LR with 3-4 short, clear nodes) showing how the idea works.\",\n"
+        "    \"quote\": \"Memorable quote or key line from the author.\",\n"
+        "    \"action_item\": \"Simple 'Try it today' step the reader can do right away.\",\n"
         "    \"author\": \"Author or primary thinker\",\n"
         "    \"source\": \"Book, paper, or source title\",\n"
         "    \"topic\": \"Category (e.g. Mental Models, Productivity, Stoicism, Wealth, Psychology, Tech, Health)\",\n"
@@ -162,10 +163,10 @@ def call_nvidia_api(system_prompt: str, user_prompt: str) -> List[Dict[str, Any]
             {"role": "user", "content": user_prompt}
         ],
         temperature=0.3,
-        max_tokens=2048
+        max_tokens=4096
     )
 
-    text = completion.choices[0].message.content.strip()
+    text = (completion.choices[0].message.content or "").strip()
     return parse_json_safely(text)
 
 def parse_json_safely(text: str) -> List[Dict[str, Any]]:
@@ -276,17 +277,18 @@ def generate_concept_deep_dive(title: str, author: str, source: str, one_liner: 
     Enforces clear separation from the bite-sized summary.
     """
     system_prompt = (
-        "You are an elite cognitive scientist, systems theorist, and business school professor. "
-        "Your task is to write an authentic, high-density, rigorous masterclass breakdown of a mental model or concept.\n\n"
+        "You are a gifted teacher who explains complex ideas in crystal-clear, everyday English. "
+        "Your task is to write a helpful, engaging deep dive into a mental model so any reader can grasp it immediately without losing its full power.\n\n"
         "RULES:\n"
-        "1. DO NOT repeat, summarize, or restate the surface microlearning summary. The user has already read it!\n"
-        "2. 'detailed_explanation' MUST be structured with clear markdown headings and explore:\n"
-        "   - **Core Mechanism & First Principles**: The mechanical, physical, psychological, or mathematical laws governing the phenomenon.\n"
-        "   - **Cognitive & System Dynamics**: Why human instincts, evolutionary wiring, or organizational politics default to the exact opposite mistake.\n"
-        "   - **Nuances & Boundary Conditions**: When this mental model fails, where it should NOT be applied, and subtle second-order failure modes.\n"
-        "   Length: 250-400 words across 3 distinct paragraphs.\n"
-        "3. 'example' MUST be a concrete, historical, scientific, military, or business case study (100-180 words) with verifiable entities, dates, and measurable outcomes.\n"
-        "4. 'visual_diagram' MUST be a clean, valid Mermaid.js graph diagram (graph TD or graph LR) with 3 to 5 nodes, informative labels, and colored styling classes explaining the architectural flow of the concept.\n\n"
+        "1. Write in plain, conversational English (8th-10th grade reading level). Avoid academic jargon, buzzwords, and stiff wording.\n"
+        "2. DO NOT repeat or paraphrase the quick summary. Go deeper with fresh, concrete insight.\n"
+        "3. 'detailed_explanation' MUST use clear markdown headings across 3 short sections:\n"
+        "   - **How It Works**: The core logic explained simply and clearly.\n"
+        "   - **Why We Get It Wrong**: Why our natural instincts or habits lead us into the opposite mistake.\n"
+        "   - **When Not to Use It**: Real limits, exceptions, and when this rule can backfire.\n"
+        "   Length: 220-350 words.\n"
+        "4. 'example' MUST be a vivid, real-world story from history, business, or everyday life (100-160 words) with specific names and outcomes.\n"
+        "5. 'visual_diagram' MUST be clean, valid Mermaid.js graph code (graph TD) with 3 to 5 short nodes explaining how the idea works.\n\n"
         "Return ONLY a valid JSON object matching:\n"
         "{\n"
         "  \"detailed_explanation\": \"...\",\n"
@@ -358,22 +360,19 @@ def generate_concept_deep_dive(title: str, author: str, source: str, one_liner: 
     # High-quality contextual fallback
     return {
         "detailed_explanation": (
-            f"### Core Mechanism & First Principles\n"
-            f"{title} operates on foundational laws of decision architecture and systemic optimization. "
-            f"Rather than attempting to forecast unpredictable variables, this framework isolates immutable constraints "
-            f"and aligns incentives directly with structural realities.\n\n"
-            f"### Cognitive & System Dynamics\n"
-            f"Human cognitive architecture evolved for immediate physical survival under calorie scarcity, "
-            f"defaulting to first-order heuristics and emotional mood-repair. Consequently, when confronted with {title.lower()}, "
-            f"individuals reflexively fall into cognitive ease and linear extrapolation, ignoring non-linear feedback loops.\n\n"
-            f"### Nuances & Boundary Conditions\n"
-            f"This framework breaks down in chaotic environments with zero signal-to-noise ratios, or when applied dogmatically "
-            f"without calibrating for localized context. Master practitioners use {title} as an analytical filter, not an inflexible dogma."
+            f"### How It Works\n"
+            f"{title} works by focusing on what actually moves the needle instead of trying to predict every detail. "
+            f"Rather than guessing the future, it helps you spot the few real constraints that control the outcome.\n\n"
+            f"### Why We Get It Wrong\n"
+            f"Our brains are wired for quick survival, not careful long-term thinking. Under stress or time pressure, "
+            f"we naturally fall back on gut feelings, habit, and short-term comfort instead of stepping back to see the bigger picture.\n\n"
+            f"### When Not to Use It\n"
+            f"This approach can backfire in completely unpredictable situations or if followed like a rigid rule without "
+            f"paying attention to what is happening right in front of you. Use {title} as a helpful lens, not a strict dogma."
         ),
         "example": (
-            f"In high-stakes strategic environments, organizations that implemented the core mechanics of {title} "
-            f"systematically outperformed peer benchmarks. By formalizing guardrails and eliminating single points of failure, "
-            f"teams preserved asymmetric upside while strictly capping downside exposure."
+            f"In high-pressure situations, teams and leaders who applied {title} consistently outperformed those who relied on guesswork. "
+            f"By setting clear guardrails and fixing weak spots early, they protected their downside while leaving plenty of room for big wins."
         ),
         "visual_diagram": generate_default_mermaid_diagram(title, summary)
     }
@@ -434,35 +433,36 @@ def generate_socratic_stress_test(title: str, summary: str, detailed_explanation
     to correctly apply the mental model versus falling into a common cognitive trap.
     """
     prompt = (
-        f"You are a Socratic tutor at Microstash (The Mental Model Gym). "
-        f"Create a realistic, high-stakes decision dilemma to stress-test whether someone truly understands how to apply '{title}'.\n\n"
+        f"You are a friendly, practical coach at Microstash. "
+        f"Create a relatable, everyday work or life scenario to test whether someone knows how to apply '{title}' in plain English.\n\n"
         f"Summary of Concept: {summary}\n"
         f"Context/Details: {detailed_explanation[:300] if detailed_explanation else 'N/A'}\n\n"
+        f"STYLE RULE: Write in simple, clear, everyday English (no academic jargon or buzzwords).\n\n"
         f"Return ONLY a valid JSON object with this exact structure:\n"
         f"{{\n"
-        f"  \"scenario\": \"A crisp, realistic business/career/life dilemma (70-110 words) presenting a tough decision.\",\n"
-        f"  \"question\": \"According to {title}, what is the optimal first-principles move?\",\n"
+        f"  \"scenario\": \"A clear, relatable work or life situation (60-100 words) presenting a real choice.\",\n"
+        f"  \"question\": \"Using {title}, what is the smartest next move?\",\n"
         f"  \"options\": [\n"
         f"    {{\n"
         f"      \"id\": \"A\",\n"
-        f"      \"text\": \"Option representing a common intuitive mistake or cognitive bias.\",\n"
+        f"      \"text\": \"A common knee-jerk reaction or intuitive mistake.\",\n"
         f"      \"is_correct\": false,\n"
-        f"      \"feedback\": \"Why this option fails: explains the trap or superficial thinking.\"\n"
+        f"      \"feedback\": \"Why this backfires: explains the trap in simple terms.\"\n"
         f"    }},\n"
         f"    {{\n"
         f"      \"id\": \"B\",\n"
-        f"      \"text\": \"The counter-intuitive, highly leveraged choice applying {title}.\",\n"
+        f"      \"text\": \"The smart, practical choice that applies {title}.\",\n"
         f"      \"is_correct\": true,\n"
-        f"      \"feedback\": \"Exactly right! This demonstrates how {title} cuts through superficial noise.\"\n"
+        f"      \"feedback\": \"Spot on! Explains clearly why {title} works best here.\"\n"
         f"    }},\n"
         f"    {{\n"
         f"      \"id\": \"C\",\n"
-        f"      \"text\": \"A middle-of-the-road compromise that fails to achieve asymmetric upside.\",\n"
+        f"      \"text\": \"A middle-ground compromise that misses the point.\",\n"
         f"      \"is_correct\": false,\n"
-        f"      \"feedback\": \"Why compromise here leads to mediocre outcomes under this framework.\"\n"
+        f"      \"feedback\": \"Why splitting the difference leads to a weak result here.\"\n"
         f"    }}\n"
         f"  ],\n"
-        f"  \"first_principles_takeaway\": \"One memorable 1-sentence mental rule to apply whenever facing this dilemma.\"\n"
+        f"  \"first_principles_takeaway\": \"One punchy, memorable 1-sentence rule of thumb.\"\n"
         f"}}"
     )
 
@@ -482,9 +482,9 @@ def generate_socratic_stress_test(title: str, summary: str, detailed_explanation
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.35,
-                max_tokens=1500
+                max_tokens=3000
             )
-            text_resp = completion.choices[0].message.content.strip()
+            text_resp = (completion.choices[0].message.content or "").strip()
             parsed = parse_json_safely(text_resp)
             if isinstance(parsed, list) and len(parsed) > 0:
                 return parsed[0]
@@ -512,30 +512,30 @@ def generate_socratic_stress_test(title: str, summary: str, detailed_explanation
 
     return {
         "scenario": (
-            f"Your team is facing a high-stakes, ambiguous dilemma with competing priorities and tight deadlines. "
-            f"Stakeholders are pushing for immediate action based on intuition, while unexpected edge cases are surfacing. "
-            f"How do you leverage '{title}' to navigate the uncertainty?"
+            f"Your team is facing a tough, messy decision with competing priorities and a tight deadline. "
+            f"Everyone is pushing to move fast based on gut instinct, even though several warning signs are popping up. "
+            f"How do you use '{title}' to handle the uncertainty?"
         ),
-        "question": f"According to {title}, what is the most disciplined next step?",
+        "question": f"Using {title}, what is the smartest next step?",
         "options": [
             {
                 "id": "A",
-                "text": "Accelerate execution immediately to gather empirical feedback, ignoring edge cases for now.",
+                "text": "Rush forward right away to see what happens, ignoring the warning signs for now.",
                 "is_correct": False,
-                "feedback": f"Trap: Rushing into execution without clarifying underlying constraints violates the core discipline of {title}."
+                "feedback": f"Trap: Jumping into action without checking the real risks goes against the core lesson of {title}."
             },
             {
                 "id": "B",
-                "text": f"Deconstruct the situation to its immutable constraints, eliminate single points of failure, and focus effort on the 20% lever that controls 80% of the outcome.",
+                "text": f"Strip the problem down to the basic facts, fix the biggest weak spots first, and focus on the 20% of actions that drive 80% of the result.",
                 "is_correct": True,
-                "feedback": f"Spot on! This embodies the first-principles discipline of {title} by separating signal from emotional noise."
+                "feedback": f"Spot on! You're using {title} to cut through the noise and focus on what actually matters."
             },
             {
                 "id": "C",
-                "text": "Form a committee to compromise between both viewpoints and split resources evenly across all options.",
+                "text": "Call a meeting to split the budget and time evenly across everyone's favorite ideas.",
                 "is_correct": False,
-                "feedback": "Trap: Compromise often combines the flaws of both approaches without capturing the asymmetric benefits of either."
+                "feedback": "Trap: Trying to please everyone usually dilutes your focus and leads to weak results."
             }
         ],
-        "first_principles_takeaway": f"When uncertainty strikes, use {title} as an asymmetric filter: protect against ruin first, then maximize leverage."
+        "first_principles_takeaway": f"When things feel uncertain, use {title} to protect against big mistakes first, then focus on what works best."
     }
