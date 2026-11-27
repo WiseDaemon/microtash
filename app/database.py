@@ -97,6 +97,7 @@ def init_db(db_path: Optional[Union[str, Path]] = None):
         next_review_date TEXT,
         last_reviewed_date TEXT,
         dilemma_cache TEXT,
+        avid_content TEXT,
         created_at TEXT NOT NULL
     );
     """)
@@ -113,7 +114,8 @@ def init_db(db_path: Optional[Union[str, Path]] = None):
         ("leitner_box", "INTEGER DEFAULT 1"),
         ("next_review_date", "TEXT"),
         ("last_reviewed_date", "TEXT"),
-        ("dilemma_cache", "TEXT")
+        ("dilemma_cache", "TEXT"),
+        ("avid_content", "TEXT")
     ]:
         try:
             cursor.execute(f"ALTER TABLE ideas ADD COLUMN {col} {col_type};")
@@ -576,18 +578,20 @@ def create_idea(data: Dict[str, Any]) -> Idea:
             clean_title = re.sub(r'["\']', '', data.get("title", "Concept"))
             visual_diagram = f"graph TD\n  A[\"{clean_title}\"] --> B[\"First Principles\"]\n  B --> C[\"Execution & Action\"]"
 
+    avid_raw = data.get("avid_content")
+    avid_json = json.dumps(avid_raw) if isinstance(avid_raw, dict) else avid_raw
     cursor.execute("""
         INSERT INTO ideas (
             id, title, one_liner, summary, detailed_explanation, example, visual_diagram, boundary, quote, action_item, author, source, source_slug, publisher, copyright_notice, topic,
-            tags, read_time_mins, color_theme, likes, saved_count, is_liked, is_saved, leitner_box, next_review_date, dilemma_cache, created_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, 1, ?, ?, ?)
+            tags, read_time_mins, color_theme, likes, saved_count, is_liked, is_saved, leitner_box, next_review_date, dilemma_cache, avid_content, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, 1, ?, ?, ?, ?)
     """, (
         idea_id, data["title"], data["one_liner"], data["summary"],
         data.get("detailed_explanation", ""), data.get("example", ""), visual_diagram, boundary,
         data.get("quote"), data.get("action_item"), data["author"], data["source"], source_slug,
         publisher, c_notice, data.get("topic", "General"),
         tags_json, data.get("read_time_mins", 1), data.get("color_theme", "indigo"),
-        next_review_date, dilemma_cache, created_at
+        next_review_date, dilemma_cache, avid_json, created_at
     ))
     conn.commit()
     conn.close()
@@ -945,6 +949,13 @@ def row_to_idea(row) -> Idea:
         except Exception:
             tags = [t.strip() for t in row_dict["tags"].split(",") if t.strip()]
 
+    avid_content = None
+    if row_dict.get("avid_content"):
+        try:
+            avid_content = json.loads(row_dict["avid_content"])
+        except Exception:
+            avid_content = None
+
     return Idea(
         id=row_dict["id"],
         title=row_dict["title"],
@@ -973,7 +984,8 @@ def row_to_idea(row) -> Idea:
         next_review_date=row_dict.get("next_review_date"),
         last_reviewed_date=row_dict.get("last_reviewed_date"),
         created_at=row_dict["created_at"],
-        dilemma_cache=row_dict.get("dilemma_cache")
+        dilemma_cache=row_dict.get("dilemma_cache"),
+        avid_content=avid_content
     )
 
 # --- Leitner Spaced Repetition Engine ---

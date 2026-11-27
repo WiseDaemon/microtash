@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, field_validator
-from typing import List, Optional, Any, Union
+from typing import List, Optional, Any, Union, Dict
 from datetime import datetime
 
 class IdeaBase(BaseModel):
@@ -21,6 +21,7 @@ class IdeaBase(BaseModel):
     tags: List[str] = Field(default_factory=list, description="Sub-topics or keywords")
     read_time_mins: int = Field(1, description="Estimated microlearning read time in minutes")
     dilemma_cache: Optional[str] = Field(None, description="Pre-computed JSON string of Socratic dilemmas")
+    avid_content: Optional[Dict[str, Any]] = Field(None, description="Optional deep/rigorous version for avid readers")
 
 class IdeaCreate(IdeaBase):
     pass
@@ -95,6 +96,7 @@ class ExtractionRequest(BaseModel):
     topic: Optional[str] = Field("Mental Models", description="Category tag")
     provider: Optional[str] = Field("nvidia", description="'nvidia' or 'gemini'")
     num_ideas: Optional[int] = Field(0, description="0 for all ideas in book, or specific count")
+    reading_level: Optional[str] = Field("casual", description="'casual' or 'avid'")
 
 class UserProgress(BaseModel):
     streak_days: int = 1

@@ -11,7 +11,8 @@ def extract_ideas_from_content(
     author: str = "Unknown Author",
     topic: str = "Mental Models",
     provider: str = "nvidia",
-    num_ideas: int = 3
+    num_ideas: int = 3,
+    reading_level: str = "casual"
 ) -> List[Dict[str, Any]]:
     """
     Deconstructs raw text, article content, or a book chapter into structured Deepstash-style idea cards.
@@ -22,13 +23,18 @@ def extract_ideas_from_content(
     if cleaned_input.startswith("http://") or cleaned_input.startswith("https://"):
         cleaned_input = fetch_url_content(cleaned_input)
 
+    style_rule = (
+        "- Write in deep, rigorous, intellectually rich prose tailored for avid readers and serious thinkers. Use precise conceptual terminology and explore subtle system dynamics.\n"
+        if (reading_level or "casual").lower() == "avid"
+        else "- Write in clear, natural, everyday English (8th-10th grade reading level). Avoid academic jargon, buzzwords, and overly formal phrasing.\n"
+    )
     # Prompt design for atomic microlearning cards
     system_prompt = (
-        "You are an expert editor and clear communicator for Microstash, a microlearning app that helps everyday readers learn and apply powerful ideas. "
+        "You are an expert editor and clear communicator for Microstash, a microlearning app that helps readers learn and apply powerful ideas. "
         "Your mission is to pull out clear, practical, memorable ideas from the provided book or material.\n\n"
-        "PLAIN-ENGLISH STYLE RULE:\n"
-        "- Write in clear, natural, everyday English (8th-10th grade reading level). Avoid academic jargon, buzzwords, and overly formal phrasing.\n"
-        "- Keep sentences punchy, direct, and vivid—explain big ideas simply without losing their depth or impact.\n\n"
+        "READING STYLE RULE:\n"
+        f"{style_rule}"
+        "- Keep sentences punchy, direct, and vivid—explain big ideas without losing their depth or impact.\n\n"
         "CONTENT SEPARATION RULE:\n"
         "- 'summary' is a quick, punchy overview (50-80 words, 1-2 short paragraphs for fast reading).\n"
         "- 'detailed_explanation' MUST be a clear, practical deep dive (220-350 words, in 3 short sections) that does NOT repeat the summary:\n"

@@ -238,9 +238,19 @@
         <span class="hidden">Daily Workout</span>
       </nav>
 
-      <!-- Clean Library Indicator -->
+      <!-- Reading Level Toggle & Library Indicator -->
       <div class="flex items-center gap-2 select-none shrink-0">
-        <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-slate-700 text-xs font-semibold">
+        <!-- Reading Level Toggle: Casual vs Avid -->
+        <div class="flex items-center gap-0.5 p-0.5 rounded-full bg-slate-100 border border-slate-200/90 text-[11px] font-semibold shadow-2xs" title="Switch reading style: Casual (clear everyday English) or Avid (deep, rigorous prose)">
+          <button type="button" id="btn-level-casual" onclick="setReadingLevel('casual')" class="px-2.5 py-1 rounded-full bg-white text-slate-900 shadow-2xs font-bold transition cursor-pointer">
+            Casual
+          </button>
+          <button type="button" id="btn-level-avid" onclick="setReadingLevel('avid')" class="px-2.5 py-1 rounded-full text-slate-600 hover:text-slate-900 transition cursor-pointer">
+            Avid
+          </button>
+        </div>
+
+        <div class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-slate-700 text-xs font-semibold">
           <span class="material-symbols-outlined text-[15px] text-blue-600">auto_stories</span>
           <span>Curated Library</span>
           <span id="streak-counter" class="hidden">1 Day Streak</span>
@@ -404,7 +414,7 @@
             <div class="space-y-3">
               <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
                 <span class="material-symbols-outlined text-[15px] text-blue-600">psychology</span>
-                <span>How It Works</span>
+                <span id="card-hdr-mechanism">How It Works</span>
               </h3>
               <div id="card-detailed-content" class="text-xs sm:text-sm text-slate-800 leading-relaxed space-y-3 font-normal">
                 <!-- Rich markdown rendered via JS -->
@@ -436,7 +446,7 @@
               <button type="button" onclick="toggleCardAccordion('boundary')" class="w-full p-3.5 flex items-center justify-between text-left hover:bg-amber-100/40 transition cursor-pointer select-none">
                 <div class="flex items-center gap-2">
                   <span class="material-symbols-outlined text-[16px] text-amber-600">warning</span>
-                  <span class="text-xs font-bold uppercase tracking-wider text-amber-900">When Not to Use This</span>
+                  <span id="card-hdr-boundary" class="text-xs font-bold uppercase tracking-wider text-amber-900">When Not to Use This</span>
                 </div>
                 <span id="accordion-icon-boundary" class="material-symbols-outlined text-[18px] text-amber-600 transition-transform duration-200">expand_more</span>
               </button>
@@ -464,7 +474,7 @@
           <div id="card-view-summary" class="hidden mb-6 text-sm sm:text-[15px] text-slate-700 leading-relaxed space-y-3 p-4 rounded-xl bg-slate-50/60 border border-slate-200">
             <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
               <span class="material-symbols-outlined text-[15px] text-amber-600">bolt</span>
-              <span>Quick Summary</span>
+              <span id="card-hdr-summary">Quick Summary</span>
             </h3>
             <p id="card-summary" class="font-normal text-slate-800 leading-relaxed">
             </p>
@@ -475,7 +485,7 @@
             <div class="flex items-center justify-between">
               <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
                 <span class="material-symbols-outlined text-[15px] text-indigo-600">account_tree</span>
-                <span>Visual Flowchart</span>
+                <span id="card-hdr-diagram">Visual Flowchart</span>
               </h3>
               <!-- Diagram Controls -->
               <div class="flex items-center gap-1.5">
@@ -521,7 +531,7 @@
 
               <!-- Read Full Treatise Drawer Button -->
               <button onclick="openDeepDiveModal()" class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition shadow-xs cursor-pointer">
-                <span>Read Full Guide</span>
+                <span id="btn-label-full-guide">Read Full Guide</span>
                 <span class="material-symbols-outlined text-[15px]">arrow_forward</span>
               </button>
             </div>
@@ -1739,7 +1749,7 @@
   <script src="/static/js/auth.js?v=2.0"></script>
   <script src="/static/js/social.js?v=2.0"></script>
   <script src="/static/js/substack.js?v=2.0"></script>
-  <script src="/static/js/app.js?v=9.0"></script>
+  <script src="/static/js/app.js?v=10.0"></script>
   <script src="/static/js/swipe.js?v=5.0"></script>
   <script src="/static/js/audio.js?v=5.0"></script>
   <script src="/static/js/share.js?v=5.0"></script>

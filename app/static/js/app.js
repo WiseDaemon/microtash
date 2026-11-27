@@ -11,6 +11,7 @@ window.state = {
   currentLeitnerIndex: 0,
   isLeitnerRevealed: false,
   diagramViewMode: localStorage.getItem('microstash_diagram_mode') || 'canvas',
+  readingLevel: localStorage.getItem('microstash_reading_level') || 'casual',
   activeTab: 'swipe',
   selectedTopic: 'All',
   searchQuery: '',
@@ -29,6 +30,7 @@ let targetIdeaForStash = null;
 let currentDeepDiveIdea = null;
 
 document.addEventListener("DOMContentLoaded", async () => {
+  if (typeof applyReadingLevelUI === 'function') applyReadingLevelUI();
   await loadStats();
   await loadStashes();
   await loadIdeas();
@@ -1560,7 +1562,8 @@ async function runAutoFetchAndGenerate() {
         query: query,
         topic: topic,
         provider: provider,
-        num_ideas: count
+        num_ideas: count,
+        reading_level: window.state.readingLevel || 'casual'
       })
     });
 
@@ -1691,7 +1694,8 @@ async function runAiExtraction() {
         author: author,
         topic: topic,
         provider: provider,
-        num_ideas: 3
+        num_ideas: 3,
+        reading_level: window.state.readingLevel || 'casual'
       })
     });
 
@@ -2501,7 +2505,7 @@ function updateStitchHeroCard() {
   }
 
   const oneLinerEl = document.getElementById("card-one-liner");
-  if (oneLinerEl) oneLinerEl.textContent = `"${idea.one_liner}"`;
+  if (oneLinerEl) oneLinerEl.textContent = `"${getIdeaText(idea, 'one_liner')}"`;
 
   const leitnerText = document.getElementById("card-leitner-box-text");
   if (leitnerText) leitnerText.textContent = `Box ${idea.leitner_box || 1}`;
@@ -2520,39 +2524,44 @@ function updateStitchHeroCard() {
     saveBtn.innerHTML = `<span class="material-symbols-outlined text-[18px] ${idea.is_saved ? 'text-primary' : ''}">${idea.is_saved ? 'bookmark' : 'bookmark_border'}</span>`;
   }
 
+  const summaryText = getIdeaText(idea, 'summary');
   const summaryEl = document.getElementById("card-summary");
-  if (summaryEl) summaryEl.textContent = idea.summary || "";
+  if (summaryEl) summaryEl.textContent = summaryText || "";
 
   // Detailed Breakdown on card
+  const detailedText = getIdeaText(idea, 'detailed_explanation');
   const detailedEl = document.getElementById("card-detailed-content");
   if (detailedEl) {
-    if (idea.detailed_explanation && idea.detailed_explanation.trim().length > 0) {
-      detailedEl.innerHTML = renderMarkdownDetailed(idea.detailed_explanation);
+    if (detailedText && detailedText.trim().length > 0) {
+      detailedEl.innerHTML = renderMarkdownDetailed(detailedText);
     } else {
-      detailedEl.innerHTML = `<p class="leading-relaxed text-slate-800">${idea.summary}</p>`;
+      detailedEl.innerHTML = `<p class="leading-relaxed text-slate-800">${summaryText}</p>`;
     }
   }
 
   // Example / Case study on card
+  const exampleText = getIdeaText(idea, 'example');
   const exampleEl = document.getElementById("card-example-content");
   if (exampleEl) {
-    if (idea.example && idea.example.trim().length > 0) {
-      exampleEl.innerHTML = renderMarkdownDetailed(idea.example);
+    if (exampleText && exampleText.trim().length > 0) {
+      exampleEl.innerHTML = renderMarkdownDetailed(exampleText);
     } else {
       exampleEl.innerHTML = "<p class='leading-relaxed text-slate-700'>Historical case study context.</p>";
     }
   }
 
   // Boundary condition on card
+  const boundaryText = getIdeaText(idea, 'boundary');
   const boundaryEl = document.getElementById("card-boundary-content");
   if (boundaryEl) {
-    boundaryEl.innerHTML = renderMarkdownDetailed(idea.boundary || "Don't apply this rule blindly if the core situation has completely changed.");
+    boundaryEl.innerHTML = renderMarkdownDetailed(boundaryText || "Don't apply this rule blindly if the core situation has completely changed.");
   }
 
   // Action item on card
+  const actionText = getIdeaText(idea, 'action_item');
   const actionEl = document.getElementById("card-action-content");
   if (actionEl) {
-    actionEl.innerHTML = renderMarkdownDetailed(idea.action_item || "Identify one high-friction decision today and filter it through this framework.");
+    actionEl.innerHTML = renderMarkdownDetailed(actionText || "Identify one decision today and apply this idea.");
   }
 
   const sourceCitation = document.getElementById("card-source-citation");
@@ -3186,23 +3195,26 @@ async function openDeepDiveModal(ideaId = null) {
   if (titleEl) titleEl.textContent = idea.title;
 
   const oneLinerEl = document.getElementById("modal-one-liner");
-  if (oneLinerEl) oneLinerEl.textContent = `"${idea.one_liner}"`;
+  if (oneLinerEl) oneLinerEl.textContent = `"${getIdeaText(idea, 'one_liner')}"`;
 
   // Slide 1: Mechanism & Detailed Explanation
   const detailedEl = document.getElementById("modal-detailed-explanation") || document.getElementById("modal-detailed");
   const exampleEl = document.getElementById("modal-example");
+  const modalDetailedText = getIdeaText(idea, 'detailed_explanation');
+  const modalSummaryText = getIdeaText(idea, 'summary');
+  const modalExampleText = getIdeaText(idea, 'example');
 
-  const hasGenuineDeepDive = idea.detailed_explanation && 
-                             idea.detailed_explanation.trim().length >= 80 && 
-                             idea.detailed_explanation.trim() !== (idea.summary || '').trim();
+  const hasGenuineDeepDive = modalDetailedText && 
+                             modalDetailedText.trim().length >= 80 && 
+                             modalDetailedText.trim() !== (modalSummaryText || '').trim();
 
   if (hasGenuineDeepDive) {
-    if (detailedEl) detailedEl.innerHTML = renderMarkdownDetailed(idea.detailed_explanation);
+    if (detailedEl) detailedEl.innerHTML = renderMarkdownDetailed(modalDetailedText);
     if (exampleEl) {
-      if (idea.example && idea.example.trim().length > 0) {
-        exampleEl.innerHTML = renderMarkdownDetailed(idea.example);
+      if (modalExampleText && modalExampleText.trim().length > 0) {
+        exampleEl.innerHTML = renderMarkdownDetailed(modalExampleText);
       } else {
-        exampleEl.innerHTML = "<p class='leading-relaxed text-slate-800'>Practitioners apply this mental model systematically to navigate uncertainty and avoid irreversible failure modes.</p>";
+        exampleEl.innerHTML = "<p class='leading-relaxed text-slate-800'>Real-world example showing how this idea works in practice.</p>";
       }
     }
   } else {
@@ -3257,41 +3269,44 @@ async function openDeepDiveModal(ideaId = null) {
   // Diagram rendering into modal Slide 1
   renderIdeaVisualDiagram(idea, document.getElementById('modal-diagram-render') ? 'modal-diagram-render' : 'modal-diagram-container');
 
+  const modalBoundaryText = getIdeaText(idea, 'boundary');
+  const modalActionText = getIdeaText(idea, 'action_item');
+
   // Slide 3: Action & Bounds
   const boundaryEl = document.getElementById("modal-boundary-text");
   if (boundaryEl) {
-    boundaryEl.innerHTML = renderMarkdownDetailed(idea.boundary || "Don't apply this rule blindly if the core situation has completely changed.");
+    boundaryEl.innerHTML = renderMarkdownDetailed(modalBoundaryText || "Don't apply this rule blindly if the core situation has completely changed.");
   }
 
   const actionEl = document.getElementById("modal-action-item") || document.getElementById("modal-action");
   if (actionEl) {
-    if (idea.action_item && idea.action_item.trim().length > 0) {
-      actionEl.innerHTML = renderMarkdownDetailed(idea.action_item);
+    if (modalActionText && modalActionText.trim().length > 0) {
+      actionEl.innerHTML = renderMarkdownDetailed(modalActionText);
     } else {
-      actionEl.innerHTML = "<p class='leading-relaxed text-blue-700 font-medium'>Apply this model to one difficult decision today.</p>";
+      actionEl.innerHTML = "<p class='leading-relaxed text-blue-700 font-medium'>Apply this idea to one decision today.</p>";
     }
   }
 
   // Slide 4: Full Masterclass Treatise
   const fullMechEl = document.getElementById("modal-full-mechanism");
   if (fullMechEl) {
-    fullMechEl.innerHTML = renderMarkdownDetailed(idea.detailed_explanation || idea.summary);
+    fullMechEl.innerHTML = renderMarkdownDetailed(modalDetailedText || modalSummaryText);
   }
   renderIdeaVisualDiagram(idea, 'modal-full-diagram');
 
   const fullExEl = document.getElementById("modal-full-example");
   if (fullExEl) {
-    fullExEl.innerHTML = renderMarkdownDetailed(idea.example || "Historical case study context.");
+    fullExEl.innerHTML = renderMarkdownDetailed(modalExampleText || "Real-world case example.");
   }
 
   const fullBoundEl = document.getElementById("modal-full-boundary");
   if (fullBoundEl) {
-    fullBoundEl.innerHTML = renderMarkdownDetailed(idea.boundary || "Don't apply this rule blindly if the core situation has completely changed.");
+    fullBoundEl.innerHTML = renderMarkdownDetailed(modalBoundaryText || "Don't apply this rule blindly if the core situation has completely changed.");
   }
 
   const fullActEl = document.getElementById("modal-full-action");
   if (fullActEl) {
-    fullActEl.innerHTML = renderMarkdownDetailed(idea.action_item || "Apply this model to one difficult decision today.");
+    fullActEl.innerHTML = renderMarkdownDetailed(modalActionText || "Apply this idea to one decision today.");
   }
 
   // Slide 5: Substack Reader & Publication Mode Population
@@ -3308,16 +3323,16 @@ async function openDeepDiveModal(ideaId = null) {
   if (readerTimeEl) readerTimeEl.textContent = `${idea.read_time_mins || 3} min read`;
 
   const readerPullquoteEl = document.getElementById("reader-pullquote");
-  if (readerPullquoteEl) readerPullquoteEl.textContent = `“${(idea.quote || idea.one_liner).replace(/^[“"]|[”"]$/g, '')}”`;
+  if (readerPullquoteEl) readerPullquoteEl.textContent = `“${(idea.quote || getIdeaText(idea, 'one_liner')).replace(/^[“"]|[”"]$/g, '')}”`;
 
   const readerDetailedEl = document.getElementById("reader-detailed");
-  if (readerDetailedEl) readerDetailedEl.innerHTML = renderMarkdownDetailed(idea.detailed_explanation || idea.summary);
+  if (readerDetailedEl) readerDetailedEl.innerHTML = renderMarkdownDetailed(modalDetailedText || modalSummaryText);
 
   const readerExampleEl = document.getElementById("reader-example");
-  if (readerExampleEl) readerExampleEl.innerHTML = renderMarkdownDetailed(idea.example || "Empirical case analysis.");
+  if (readerExampleEl) readerExampleEl.innerHTML = renderMarkdownDetailed(modalExampleText || "Real-world example.");
 
   const readerBoundaryEl = document.getElementById("reader-boundary");
-  if (readerBoundaryEl) readerBoundaryEl.innerHTML = renderMarkdownDetailed(idea.boundary || "Apply with critical discernment.");
+  if (readerBoundaryEl) readerBoundaryEl.innerHTML = renderMarkdownDetailed(modalBoundaryText || "Apply with care.");
 
   // Load Substack Community Discussions for this Idea
   if (window.loadIdeaComments) {
@@ -3659,6 +3674,79 @@ window.renderFeedGrid = renderFeedGrid;
 // USER-FRIENDLY UX CONTROLLERS & INTERACTION SYSTEM
 // =========================================================================
 
+// =========================================================================
+// READING LEVEL CONTROLLER (CASUAL VS AVID READERS)
+// =========================================================================
+function getIdeaText(idea, field) {
+  if (!idea) return "";
+  if (window.state.readingLevel === "avid" && idea.avid_content && idea.avid_content[field]) {
+    return idea.avid_content[field];
+  }
+  return idea[field] || "";
+}
+
+function applyReadingLevelUI() {
+  const level = window.state.readingLevel || "casual";
+  const btnCasual = document.getElementById("btn-level-casual");
+  const btnAvid = document.getElementById("btn-level-avid");
+
+  if (btnCasual && btnAvid) {
+    if (level === "avid") {
+      btnAvid.className = "px-2.5 py-1 rounded-full bg-slate-900 text-white shadow-2xs font-bold transition cursor-pointer";
+      btnCasual.className = "px-2.5 py-1 rounded-full text-slate-600 hover:text-slate-900 transition cursor-pointer";
+    } else {
+      btnCasual.className = "px-2.5 py-1 rounded-full bg-white text-slate-900 shadow-2xs font-bold transition cursor-pointer";
+      btnAvid.className = "px-2.5 py-1 rounded-full text-slate-600 hover:text-slate-900 transition cursor-pointer";
+    }
+  }
+
+  const labels = level === "avid"
+    ? {
+        mech: "Foundational Mechanism & Principles",
+        bound: "Boundary Condition (When NOT to apply)",
+        summary: "Executive Summary",
+        diagram: "Visual System Architecture",
+        guide: "Read Full Treatise"
+      }
+    : {
+        mech: "How It Works",
+        bound: "When Not to Use This",
+        summary: "Quick Summary",
+        diagram: "Visual Flowchart",
+        guide: "Read Full Guide"
+      };
+
+  const mechEl = document.getElementById("card-hdr-mechanism");
+  if (mechEl) mechEl.textContent = labels.mech;
+  const boundEl = document.getElementById("card-hdr-boundary");
+  if (boundEl) boundEl.textContent = labels.bound;
+  const sumEl = document.getElementById("card-hdr-summary");
+  if (sumEl) sumEl.textContent = labels.summary;
+  const diagEl = document.getElementById("card-hdr-diagram");
+  if (diagEl) diagEl.textContent = labels.diagram;
+  const guideEl = document.getElementById("btn-label-full-guide");
+  if (guideEl) guideEl.textContent = labels.guide;
+}
+
+function setReadingLevel(level) {
+  const normalized = level === "avid" ? "avid" : "casual";
+  window.state.readingLevel = normalized;
+  try {
+    localStorage.setItem("microstash_reading_level", normalized);
+  } catch (e) {}
+
+  applyReadingLevelUI();
+  updateStitchHeroCard();
+
+  const modal = document.getElementById("deep-dive-modal");
+  if (modal && !modal.classList.contains("hidden") && currentDeepDiveIdea) {
+    openDeepDiveModal(currentDeepDiveIdea.id);
+  }
+  if (window.state.activeTab === "feed" && typeof renderFeedGrid === "function") {
+    renderFeedGrid();
+  }
+}
+
 // 0. Cloud Automation Banner System
 function dismissCloudAutomationBanner() {
   const banner = document.getElementById("cloud-automation-banner");
@@ -3854,6 +3942,8 @@ function triggerCelebrationConfetti() {
 }
 
 // Global window registrations
+window.setReadingLevel = setReadingLevel;
+window.getIdeaText = getIdeaText;
 window.dismissCloudAutomationBanner = dismissCloudAutomationBanner;
 window.dismissOnboardingBanner = dismissOnboardingBanner;
 window.checkOnboardingStatus = checkOnboardingStatus;

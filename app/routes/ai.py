@@ -21,6 +21,7 @@ class AutoFetchAndGenerateRequest(BaseModel):
     num_ideas: Optional[int] = Field(0, description="0 for ALL ideas in the book, or positive integer for specific count")
     topic: Optional[str] = Field("Mental Models", description="Preferred category/topic")
     publisher: Optional[str] = Field("Original Publication", description="Original book publisher or imprint")
+    reading_level: Optional[str] = Field("casual", description="'casual' or 'avid'")
 
 class SaveAsBookStashRequest(BaseModel):
     ideas: List[Dict[str, Any]]
@@ -99,7 +100,8 @@ def auto_fetch_and_generate(payload: AutoFetchAndGenerateRequest):
             author=resolved_author,
             topic=payload.topic or "Mental Models",
             provider=payload.provider or settings.DEFAULT_AI_PROVIDER,
-            num_ideas=payload.num_ideas if payload.num_ideas is not None else 0
+            num_ideas=payload.num_ideas if payload.num_ideas is not None else 0,
+            reading_level=payload.reading_level or "casual"
         )
 
         # Step 3: Register globally for all users so it never needs to be scanned twice
@@ -144,7 +146,8 @@ def extract_microlearning(request: ExtractionRequest):
             author=request.author or "Curated Author",
             topic=request.topic or "Mental Models",
             provider=request.provider or settings.DEFAULT_AI_PROVIDER,
-            num_ideas=request.num_ideas or 3
+            num_ideas=request.num_ideas or 3,
+            reading_level=request.reading_level or "casual"
         )
         return {"status": "ok", "count": len(ideas), "ideas": ideas}
     except Exception as e:
