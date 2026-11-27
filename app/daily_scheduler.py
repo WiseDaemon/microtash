@@ -190,6 +190,246 @@ CURATED_DAILY_BOOKS = [
   ForceMultiplier --> ExponentialOrgOutput["100x Compounded Organizational Output"]"""
             }
         ]
+    },
+    {
+        "title": "The Scout Mindset",
+        "author": "Julia Galef",
+        "publisher": "Portfolio / Penguin",
+        "topic": "Mental Models",
+        "description": "Why some people see things clearly and others don't. Learning to seek truth instead of defending your ego.",
+        "ideas": [
+            {
+                "title": "Soldier vs. Scout Mindset",
+                "one_liner": "Stop defending what you already believe and start mapping what is actually true.",
+                "summary": "Most of us think like soldiers: we attack facts that threaten our side and cheer for facts that support us. A scout's job isn't to win an argument—it's to draw an accurate map of the terrain.",
+                "detailed_explanation": "### How It Works\nIn Soldier Mindset, your goal is to protect your beliefs, reputation, or team from feeling wrong. In Scout Mindset, your goal is to see reality as clearly as possible, even when the truth is uncomfortable.\n\n### Why We Get It Wrong\nChanging your mind feels like losing. Our brains treat an attack on our opinion the same way they treat a physical threat, triggering defensiveness.\n\n### When Not to Use It\nDon't stay in endless research mode when you already have enough facts and need to rally people to act.",
+                "example": "In 1894, French officer Alfred Dreyfus was falsely convicted of treason. Colonel Georges Picquart initially believed Dreyfus was guilty too. When Picquart found evidence pointing to the real spy, he didn't bury it to protect the army's reputation—he fought to clear Dreyfus, showing true Scout Mindset.",
+                "boundary": "Once a clear decision is made and action is underway, focus on execution rather than second-guessing every detail.",
+                "action_item": "Pick one strong opinion you hold and ask: 'If I were wrong about this, what would be the clearest sign?'",
+                "quote": "Judgment calls aren't about proving yourself right; they're about making sure you're seeing clearly.",
+                "visual_diagram": "graph TD\n  Info[\"New Surprising Fact\"] --> Mode{\"Which Mindset?\"}\n  Mode -->|Soldier| Defend[\"Ignore or Attack Fact\"]\n  Mode -->|Scout| Map[\"Update Your Mental Map\"]\n  Defend --> Blind[\"Bigger Blindspots\"]\n  Map --> Clear[\"Better Decisions\"]"
+            }
+        ]
+    },
+    {
+        "title": "Good Strategy Bad Strategy",
+        "author": "Richard Rumelt",
+        "publisher": "Crown Business",
+        "topic": "Strategy",
+        "description": "The difference between real strategy—focused action on a core obstacle—and empty corporate fluff.",
+        "ideas": [
+            {
+                "title": "The Kernel of Good Strategy",
+                "one_liner": "Real strategy isn't a wish list of goals; it's a clear plan to overcome your biggest obstacle.",
+                "summary": "Bad strategy mistakes big goals ('grow revenue 20%') for a plan. Good strategy always has three parts: a clear diagnosis of the real problem, a guiding approach, and focused actions that work together.",
+                "detailed_explanation": "### How It Works\nGreat strategy concentrates your limited energy on one critical bottleneck instead of spreading effort across twenty priorities. First name the core challenge, choose one smart way around it, and align your actions.\n\n### Why We Get It Wrong\nLeaders avoid hard choices because saying 'no' upsets people. Instead, they write vague slogans that try to please everyone and solve nothing.\n\n### When Not to Use It\nDon't lock into a rigid multi-year plan when the market is brand new and you still need to experiment.",
+                "example": "When Steve Jobs returned to Apple in 1997, the company had dozens of confusing products and was weeks from bankruptcy. Instead of writing a 10-year vision statement, he diagnosed the bloat, cut 70% of the product line down to just four computers, and focused every engineer on those four.",
+                "boundary": "In early-stage discovery before you know what works, run small experiments rather than committing everything to one bet.",
+                "action_item": "Look at your top project today and write a 1-sentence diagnosis of the single biggest roadblock in its way.",
+                "quote": "A good strategy honestly acknowledges the challenges being faced and provides an approach to overcoming them.",
+                "visual_diagram": "graph TD\n  Problem[\"Complex Situation\"] --> Diag[\"1. Clear Diagnosis\"]\n  Diag --> Guide[\"2. Guiding Approach\"]\n  Guide --> Act[\"3. Focused Actions\"]\n  Act --> Win[\"Breakthrough Progress\"]"
+            }
+        ]
+    },
+    {
+        "title": "Zero to One",
+        "author": "Peter Thiel",
+        "publisher": "Crown Business",
+        "topic": "Strategy",
+        "description": "Notes on startups and how to build the future by creating something genuinely new instead of copying.",
+        "ideas": [
+            {
+                "title": "Competition Is for Losers",
+                "one_liner": "Copying what already works leads to cutthroat price wars; creating something unique builds lasting value.",
+                "summary": "Horizontal progress (1 to N) copies existing ideas and splits the same pie into smaller slices. Vertical progress (0 to 1) invents something new that gives customers no real substitute.",
+                "detailed_explanation": "### How It Works\nIn a crowded market, companies fight over tiny margins just to survive. When you solve a problem 10x better in a completely new way, you escape the race and earn the breathing room to think long-term.\n\n### Why We Get It Wrong\nCompetition feels comforting because if others are doing it, the market must be real. So founders crowd into the same trendy spaces.\n\n### When Not to Use It\nDon't invent something weird just to be different—customers only care if it solves a real problem far better.",
+                "example": "Restaurants in big cities compete fiercely on price and location, with most barely breaking even. Meanwhile, Google built a search algorithm 10x better than rivals, capturing massive profits without fighting endless price wars.",
+                "boundary": "Don't try to invent a brand-new category if a proven, underserved local need just needs reliable execution.",
+                "action_item": "Ask about your work: 'What valuable truth or problem am I solving that almost nobody else is looking at?'",
+                "quote": "All happy companies are different: each one earns a monopoly by solving a unique problem.",
+                "visual_diagram": "graph TD\n  Idea[\"New Venture\"] --> Path{\"1 to N or 0 to 1?\"}\n  Path -->|Copy Existing| Crowded[\"Price Wars & Thin Margins\"]\n  Path -->|Invent 10x Better| Unique[\"Unique Value & Lasting Edge\"]"
+            }
+        ]
+    },
+    {
+        "title": "Superforecasting",
+        "author": "Philip Tetlock",
+        "publisher": "Crown",
+        "topic": "Mental Models",
+        "description": "The art and science of predicting the future better than experts using small, steady updates.",
+        "ideas": [
+            {
+                "title": "Start with the Base Rate",
+                "one_liner": "Before guessing what will happen in your special case, check how often it happens in general.",
+                "summary": "We naturally zoom in on the details of our own story and forget the big picture. Starting with the outside statistical average ('base rate') keeps your predictions grounded in reality.",
+                "detailed_explanation": "### How It Works\nTo predict any outcome accurately, split it into two steps: first ask 'How often does something like this succeed normally?' (the outside view), then adjust slightly based on your specific details (the inside view).\n\n### Why We Get It Wrong\nEvery founder, investor, or planner feels their project is special, so they ignore the fact that most similar projects run late or over budget.\n\n### When Not to Use It\nWhen a truly unprecedented shift changes the underlying rules, past averages carry less weight.",
+                "example": "Nobel laureate Daniel Kahneman was writing a curriculum textbook with a team. Internally, they guessed it would take 2 years. When asked how long similar teams actually took, an expert said 7 to 10 years—and 40% never finished. It ended up taking Kahneman's team 8 years.",
+                "boundary": "Use base rates as your starting anchor, then adjust when you have strong, verifiable reasons why this case differs.",
+                "action_item": "For your next deadline or goal, look up how long similar projects actually took before setting your target date.",
+                "quote": "Foresight isn't a mysterious gift; it's the product of particular ways of thinking and updating.",
+                "visual_diagram": "graph TD\n  Guess[\"Need a Prediction\"] --> Outside[\"1. Check Base Rate\"]\n  Outside --> Inside[\"2. Adjust for Specifics\"]\n  Inside --> Update[\"3. Update with New Clues\"]\n  Update --> Sharp[\"Accurate Forecast\"]"
+            }
+        ]
+    },
+    {
+        "title": "Range",
+        "author": "David Epstein",
+        "publisher": "Riverhead Books",
+        "topic": "Productivity",
+        "description": "Why generalists triumph in a specialized world by connecting ideas across different fields.",
+        "ideas": [
+            {
+                "title": "The Sampling Period Advantage",
+                "one_liner": "Trying many different paths early on isn't wasted time—it's how you find your true fit.",
+                "summary": "Early specialization works in predictable games like chess or golf, but in messy real-world careers, people who explore widely first end up happier, more creative, and better at solving unfamiliar problems.",
+                "detailed_explanation": "### How It Works\nBroad experience gives you a bigger toolkit of mental models. When you face a new problem, you can borrow solutions from another field that specialists never even look at.\n\n### Why We Get It Wrong\nWe worship the '10,000-hour head start' myth and panic if we feel behind peers who picked one narrow lane at age 18.\n\n### When Not to Use It\nIn fields with strict rules and unchanging patterns (like classical violin or surgery), early focused practice is still essential.",
+                "example": "Roger Federer played soccer, basketball, skiing, and wrestling before focusing on tennis as a teenager. That broad athletic foundation gave him unmatched coordination and prevented early burnout compared to peers who played only tennis from age six.",
+                "boundary": "Exploration is valuable, but eventually you still need to commit deeply once you find strong match quality.",
+                "action_item": "Read one article or talk to someone completely outside your field this week and look for one idea you can borrow.",
+                "quote": "Compare yourself to yourself yesterday, not to younger people who aren't you.",
+                "visual_diagram": "graph TD\n  Start[\"Early Career\"] --> Path{\"Narrow Early vs Explore?\"}\n  Path -->|Narrow Too Soon| Stuck[\"Rigid Skills / Burnout\"]\n  Path -->|Sample Broadly| Range[\"Rich Toolkit & Better Fit\"]"
+            }
+        ]
+    },
+    {
+        "title": "The Innovator's Dilemma",
+        "author": "Clayton Christensen",
+        "publisher": "Harvard Business Review Press",
+        "topic": "Strategy",
+        "description": "Why great companies fail when they listen too closely to their best customers and miss simple, cheaper disruptors.",
+        "ideas": [
+            {
+                "title": "Disruption Starts at the Bottom",
+                "one_liner": "Big winners rarely lose to better products—they lose to simpler, cheaper ones they ignored.",
+                "summary": "Market leaders focus on serving their highest-paying customers with fancy features. That leaves the door open for newcomers to build simple, affordable tools for everyone else—and slowly climb upmarket.",
+                "detailed_explanation": "### How It Works\nEvery successful company naturally chases higher profits. Improving a simple, cheap product for overlooked users looks unattractive at first, until that simple product gets good enough to steal the main market.\n\n### Why We Get It Wrong\nListening to your best customers feels like smart business—until their demands blind you to a simpler wave coming from below.\n\n### When Not to Use It\nDon't ignore quality in mission-critical fields like aviation or medicine where 'good enough' is unsafe.",
+                "example": "Blockbuster ignored Netflix when it only mailed DVDs with limited selection to movie buffs. By the time streaming made Netflix fast and convenient, Blockbuster's store-based business couldn't pivot in time.",
+                "boundary": "Not every cheap product is disruptive; it has to steadily improve until it meets mainstream needs.",
+                "action_item": "Ask: 'What simple, clunky, or cheap tool are people using today that could replace our complex workflow in 5 years?'",
+                "quote": "The very practices that keep a company successful are often the ones that cause it to miss disruption.",
+                "visual_diagram": "graph TD\n  Leader[\"Market Leader\"] --> HighEnd[\"Chases High-Margin Customers\"]\n  Newcomer[\"Small Disruptor\"] --> LowEnd[\"Starts Simple & Affordable\"]\n  LowEnd --> Improves[\"Improves Rapidly\"]\n  Improves --> Wins[\"Captures Mainstream Market\"]"
+            }
+        ]
+    },
+    {
+        "title": "Four Thousand Weeks",
+        "author": "Oliver Burkeman",
+        "publisher": "Farrar, Straus and Giroux",
+        "topic": "Productivity",
+        "description": "Time management for mortals: embracing your limits instead of trying to get everything done.",
+        "ideas": [
+            {
+                "title": "Strategic Neglect",
+                "one_liner": "You will never finish your to-do list, so choose carefully what you are willing to leave undone.",
+                "summary": "Trying to squeeze more tasks into every day only creates an endless conveyor belt of new demands. Peace and real impact come from accepting your limits and deliberately ignoring low-value tasks.",
+                "detailed_explanation": "### How It Works\nThe faster you clear your inbox, the faster people send you more emails. Instead of optimizing everything, limit your active projects to a few that truly matter and let the rest wait.\n\n### Why We Get It Wrong\nWe treat time like an infinite bucket we can master with better apps, rather than a short, finite life of roughly 4,000 weeks.\n\n### When Not to Use It\nDon't neglect urgent safety, legal, or health responsibilities—be picky about optional commitments.",
+                "example": "Warren Buffett allegedly advised his pilot to list his top 25 career goals, circle the top 5, and treat the other 20 as an 'Avoid-At-All-Cost' list because those tempting #6–#25 goals steal time from the #1–#5 priorities.",
+                "boundary": "Accepting limits doesn't mean giving up on ambition—it means channeling energy into fewer, deeper things.",
+                "action_item": "Pick three non-essential tasks on your list today and consciously move them to a 'Not Doing This Week' list.",
+                "quote": "The real measure of any time management technique is whether or not it helps you neglect the right things.",
+                "visual_diagram": "graph TD\n  Tasks[\"Endless To-Do List\"] --> Choice{\"How Do You Handle It?\"}\n  Choice -->|Do Everything| Burnout[\"Busyness & Exhaustion\"]\n  Choice -->|Pick Top Few| Focus[\"Deep Work & Peace of Mind\"]"
+            }
+        ]
+    },
+    {
+        "title": "Noise: A Flaw in Human Judgment",
+        "author": "Daniel Kahneman",
+        "publisher": "Little, Brown Spark",
+        "topic": "Mental Models",
+        "description": "Why human decisions vary wildly based on mood, weather, or timing—and how to make judgment fairer.",
+        "ideas": [
+            {
+                "title": "Bias vs. Noise",
+                "one_liner": "Sometimes our judgment isn't consistently tilted one way—it's just randomly scattered.",
+                "summary": "Bias is when a scale is always off by 5 pounds in one direction. Noise is when the scale gives a different weight every time you step on it. Both ruin decisions, yet we rarely measure noise.",
+                "detailed_explanation": "### How It Works\nEven trained experts give wildly different answers to the exact same case depending on whether they are tired, hungry, or saw a different case right before. Simple checklists and scoring rules cut noise dramatically.\n\n### Why We Get It Wrong\nPeople love trusting their gut in the moment and assume colleagues would make the same call they did.\n\n### When Not to Use It\nIn creative arts or brainstorming, variety is a feature, not a bug—save noise reduction for repeatable judgments.",
+                "example": "Studies of judges and insurance underwriters found that two professionals looking at the exact same file often disagreed by over 50% on sentencing or pricing. Adding structured scoring checklists cut that random variation in half.",
+                "boundary": "Structured rules shouldn't remove human empathy in rare, extraordinary cases—they just set a fair baseline.",
+                "action_item": "Before your next hiring interview or review, write down 3 specific criteria and score each one independently before discussing.",
+                "quote": "Wherever there is judgment, there is noise—and more of it than you think.",
+                "visual_diagram": "graph TD\n  SameCase[\"Same Facts & Evidence\"] --> Unstructured[\"Gut Judgment Only\"]\n  SameCase --> Structured[\"Simple Scoring Checklist\"]\n  Unstructured --> Scattered[\"Wildly Different Outcomes\"]\n  Structured --> Fair[\"Consistent & Fair Decisions\"]"
+            }
+        ]
+    },
+    {
+        "title": "Same as Ever",
+        "author": "Morgan Housel",
+        "publisher": "Portfolio",
+        "topic": "Wealth",
+        "description": "A guide to what never changes in a fast-moving world—human greed, fear, incentives, and patience.",
+        "ideas": [
+            {
+                "title": "Bet on What Never Changes",
+                "one_liner": "Predicting what will be different in 10 years is hard; betting on what will stay the same is far smarter.",
+                "summary": "Technology and trends change every year, but human nature—fear, greed, status, and wanting things fast and easy—stays identical across centuries. Build around timeless human behaviors.",
+                "detailed_explanation": "### How It Works\nJeff Bezos famously noted that nobody ever says 'I wish prices were higher and delivery took longer.' Focusing on permanent human desires compounds over decades without needing lucky guesses.\n\n### Why We Get It Wrong\nNovelty gets all the headlines. People love forecasting dramatic changes while overlooking permanent truths.\n\n### When Not to Use It\nStill watch for genuine shifts in tools and costs—timeless needs stay the same, even when delivery methods evolve.",
+                "example": "Amazon built its entire empire around three things customers will always want in any decade: lower prices, wider selection, and faster delivery—letting the tools evolve while the core promise never changed.",
+                "boundary": "Don't confuse timeless human desires with outdated business habits; how you deliver value still has to adapt.",
+                "action_item": "List 2 things in your career or industry that customers will still want 10 years from now, and invest your energy there.",
+                "quote": "Spend less time trying to predict what will change, and more time understanding what never will.",
+                "visual_diagram": "graph TD\n  Future[\"Uncertain Future\"] --> Focus{\"Where to Build?\"}\n  Focus -->|Short-Lived Trends| Fragile[\"Fades Quickly\"]\n  Focus -->|Timeless Human Needs| Durable[\"Compounds Over Decades\"]"
+            }
+        ]
+    },
+    {
+        "title": "The Art of Doing Science and Engineering",
+        "author": "Richard Hamming",
+        "publisher": "Stripe Press",
+        "topic": "Productivity",
+        "description": "Timeless lessons from a Bell Labs legend on doing great work and thinking independently.",
+        "ideas": [
+            {
+                "title": "Work on the Important Problems",
+                "one_liner": "If you don't work on important problems, you'll almost never do important work.",
+                "summary": "Most talented people spend their whole lives solving small, safe puzzles instead of asking what truly matters in their field. Setting aside time each week for 'great thoughts' changes your trajectory.",
+                "detailed_explanation": "### How It Works\nBell Labs pioneer Richard Hamming used to ask colleagues at lunch: 'What are the most important problems in your field, and why aren't you working on them?' Courage and problem selection matter as much as raw intelligence.\n\n### Why We Get It Wrong\nSmall, urgent tasks feel productive and safe, while big problems feel scary and uncertain.\n\n### When Not to Use It\nDon't neglect learning the basics—master your craft while keeping an eye on the biggest questions.",
+                "example": "Hamming famously kept Friday afternoons free for 'Great Thoughts Time,' stepping back from daily coding tasks to ask big questions about error-correcting codes—work that later powered modern computing.",
+                "boundary": "Big questions still require daily, patient craft; dreaming without shipping achieves nothing.",
+                "action_item": "Block 30 minutes this Friday to ask: 'What is the most important problem in my work right now, and how can I take one step toward it?'",
+                "quote": "Great work requires the courage to believe you can tackle important problems.",
+                "visual_diagram": "graph TD\n  Week[\"Your Work Week\"] --> Choice{\"Problem Choice\"}\n  Choice -->|Only Small Safe Tasks| Average[\"Busy but Forgettable\"]\n  Choice -->|Important Questions| Great[\"Breakthrough Impact\"]"
+            }
+        ]
+    },
+    {
+        "title": "Slow Productivity",
+        "author": "Cal Newport",
+        "publisher": "Portfolio",
+        "topic": "Productivity",
+        "description": "The lost art of accomplishment without burnout: do fewer things, work at a natural pace, and obsess over quality.",
+        "ideas": [
+            {
+                "title": "Do Fewer Things",
+                "one_liner": "Busyness is not productivity; doing fewer things better produces far greater results.",
+                "summary": "Modern knowledge work mistakes constant Slack messages and packed calendars for real output. Cutting your active commitments in half frees up the focus needed to create work you're proud of.",
+                "detailed_explanation": "### How It Works\nEvery extra project adds hidden coordination overhead—meetings, emails, and context switching. By capping active projects, you finish each one faster and at a much higher standard.\n\n### Why We Get It Wrong\nWe use visible busyness as a shortcut to prove we're working hard, even when it ruins our actual output.\n\n### When Not to Use It\nIn true short-term emergencies, all-hands responsiveness is temporarily needed—just don't make it your permanent lifestyle.",
+                "example": "Jane Austen wrote her enduring novels in quiet morning bursts while living a calm, unhurried country life—producing masterpieces without constant meetings or frantic multitasking.",
+                "boundary": "Working at a natural pace still requires steady daily discipline, not endless procrastination.",
+                "action_item": "Put a hard cap on your active major projects today (max 2 or 3) and pause everything else until one finishes.",
+                "quote": "Do fewer things. Work at a natural pace. Obsess over quality.",
+                "visual_diagram": "graph TD\n  Load[\"Too Many Projects\"] --> Overhead[\"Meetings & Context Switching\"]\n  Overhead --> Burnout[\"Slow Progress & Burnout\"]\n  Cap[\"Cap at 2-3 Projects\"] --> Quality[\"Deep Focus & Great Work\"]"
+            }
+        ]
+    },
+    {
+        "title": "Fooled by Randomness",
+        "author": "Nassim Nicholas Taleb",
+        "publisher": "Random House",
+        "topic": "Wealth",
+        "description": "The hidden role of chance in life and markets—and why lucky winners often look like geniuses.",
+        "ideas": [
+            {
+                "title": "Beware Survivorship Bias",
+                "one_liner": "Looking only at the winners hides all the people who took the exact same risks and failed.",
+                "summary": "We hear endless stories from billionaires and hitmakers, but we rarely hear from the graveyard of thousands who followed the exact same playbook and lost everything. Always look at the silent graveyard.",
+                "detailed_explanation": "### How It Works\nIf 1,000 people flip a coin ten times in a row, someone is almost guaranteed to get 10 heads in a row—not from skill, just from luck. Studying only the winner gives you false lessons.\n\n### Why We Get It Wrong\nFailures are quiet and invisible, while winners write books and give interviews, tricking us into copying reckless bets.\n\n### When Not to Use It\nIn repeatable skills like surgery or engineering, consistent track records over long periods really do prove genuine skill.",
+                "example": "During WWII, engineers wanted to armor planes where returning planes had the most bullet holes. Statistician Abraham Wald realized they were looking at survivors—planes hit in the engines never made it back, so that's where the armor actually belonged.",
+                "boundary": "Success stories are still inspiring, as long as you also ask how many failed doing the same thing.",
+                "action_item": "Next time you read a 'how I succeeded' story, ask: 'How many people tried this exact move and failed quietly?'",
+                "quote": "Reality is far more vicious than Russian roulette; the loser doesn't get to tell their story.",
+                "visual_diagram": "graph TD\n  Many[\"1,000 Risk Takers\"] --> Luck[\"Random Luck & Skill\"]\n  Luck --> Winners[\"Few Visible Winners\"]\n  Luck --> Graveyard[\"Silent Failures\"]\n  Winners -->|Ignore Graveyard| Trap[\"False Confidence\"]"
+            }
+        ]
     }
 ]
 
