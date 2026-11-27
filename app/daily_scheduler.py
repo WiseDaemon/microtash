@@ -430,6 +430,406 @@ CURATED_DAILY_BOOKS = [
                 "visual_diagram": "graph TD\n  Many[\"1,000 Risk Takers\"] --> Luck[\"Random Luck & Skill\"]\n  Luck --> Winners[\"Few Visible Winners\"]\n  Luck --> Graveyard[\"Silent Failures\"]\n  Winners -->|Ignore Graveyard| Trap[\"False Confidence\"]"
             }
         ]
+    },
+    {
+        "title": "The Black Swan",
+        "author": "Nassim Nicholas Taleb",
+        "publisher": "Random House",
+        "topic": "Mental Models",
+        "description": "The impact of the highly improbable—why rare, unexpected events shape history and how to prepare for them.",
+        "ideas": [
+            {
+                "title": "Prepare for Rare Shocks, Don't Predict Them",
+                "one_liner": "The biggest events in history are almost impossible to predict—so build resilience instead of forecasts.",
+                "summary": "A Black Swan is a rare surprise with massive impact that everyone claims was obvious afterward. Instead of trying to guess the next crisis, build a life and portfolio that won't break when surprises hit.",
+                "detailed_explanation": "### How It Works\nTraditional forecasts assume tomorrow looks like yesterday. In reality, a handful of sudden shocks—pandemics, breakthroughs, crashes—drive most of the change.\n\n### Why We Get It Wrong\nHumans love tidy stories after the fact and mistake past stability for future safety.\n\n### When Not to Use It\nIn stable physical systems like bridge weight limits, normal averages still work reliably.",
+                "example": "Before 2008, major banks used models built on recent calm years that treated a nationwide housing crash as practically impossible—and went bankrupt when the rare shock arrived.",
+                "boundary": "Don't let fear of rare events stop you from taking small, smart risks with capped downside.",
+                "action_item": "Ask: 'If my biggest source of income or traffic disappeared for 3 months, what backup would keep me safe?'",
+                "quote": "Readiness beats prediction every single time.",
+                "visual_diagram": "graph TD\n  Event[\"Rare Shock\"] --> Fragile[\"Over-Leveraged Plan\"]\n  Event --> Robust[\"Built-In Cushion\"]\n  Fragile --> Crash[\"Breaks Completely\"]\n  Robust --> Survive[\"Survives & Adapts\"]"
+            }
+        ]
+    },
+    {
+        "title": "Essentialism",
+        "author": "Greg McKeown",
+        "publisher": "Crown Business",
+        "topic": "Productivity",
+        "description": "The disciplined pursuit of less—saying no to almost everything so you can give your best to what truly matters.",
+        "ideas": [
+            {
+                "title": "Less, But Better",
+                "one_liner": "If you don't prioritize your own life, someone else will gladly prioritize it for you.",
+                "summary": "Saying yes to every good opportunity leaves you stretched thin across twenty average projects. Essentialism means trading popularity for real progress on the vital few things.",
+                "detailed_explanation": "### How It Works\nImagine pushing 1 millimeter in 20 directions vs. pushing 20 millimeters in 1 direction. Focusing your energy creates real breakthroughs.\n\n### Why We Get It Wrong\nWe fear missing out and hate saying no, so we pack our calendars with polite obligations.\n\n### When Not to Use It\nEarly in your career when you're still discovering what you're great at, say yes more to explore.",
+                "example": "Steve Jobs famously cut Apple's messy product lineup down to just four products in 1997—and turned a dying company into the most valuable firm on earth.",
+                "boundary": "Saying no works best when you say it clearly and kindly, not by ghosting people.",
+                "action_item": "Say a polite 'no' to one non-essential meeting or favor this week to protect your deep focus time.",
+                "quote": "Remember that if you don't prioritize your life, someone else will.",
+                "visual_diagram": "graph TD\n  Energy[\"Your Energy\"] --> Spread[\"20 Average Tasks\"]\n  Energy --> Focus[\"1 Vital Goal\"]\n  Spread --> Thin[\"Tiny Progress\"]\n  Focus --> Big[\"Breakthrough Results\"]"
+            }
+        ]
+    },
+    {
+        "title": "The 7 Habits of Highly Effective People",
+        "author": "Stephen R. Covey",
+        "publisher": "Free Press",
+        "topic": "Productivity",
+        "description": "Timeless principles for personal effectiveness, responsibility, and working well with others.",
+        "ideas": [
+            {
+                "title": "Circle of Concern vs. Circle of Influence",
+                "one_liner": "Put your energy into what you can actually change, not what you can only worry about.",
+                "summary": "Everyone has things they care about (weather, politics, past mistakes) and things they can directly control (their attitude, skills, daily habits). Proactive people focus on their Circle of Influence—and watch it grow.",
+                "detailed_explanation": "### How It Works\nEvery hour spent complaining about things outside your control drains energy from the things you can actually improve today.\n\n### Why We Get It Wrong\nBlaming outside forces feels comforting in the moment because it removes responsibility.\n\n### When Not to Use It\nFocusing on what you can control doesn't mean ignoring real injustice—it means choosing effective action over helpless venting.",
+                "example": "During a severe industry downturn, one sales team spent hours complaining about the economy while another rebuilt their outreach script and landed 30% more demos.",
+                "boundary": "Still stay aware of major external trends so you can adapt early.",
+                "action_item": "Write down one problem bugging you today and circle only the part you can personally act on in the next 24 hours.",
+                "quote": "I am not a product of my circumstances. I am a product of my decisions.",
+                "visual_diagram": "graph TD\n  Worry[\"Worries & Problems\"] --> Split{\"Can You Control It?\"}\n  Split -->|No| Concern[\"Let It Go\"]\n  Split -->|Yes| Influence[\"Take Direct Action\"]\n  Influence --> Grow[\"Your Influence Grows\"]"
+            }
+        ]
+    },
+    {
+        "title": "Man's Search for Meaning",
+        "author": "Viktor E. Frankl",
+        "publisher": "Beacon Press",
+        "topic": "Stoicism",
+        "description": "A psychiatrist's lessons from surviving the Holocaust on finding purpose and choosing your response in any situation.",
+        "ideas": [
+            {
+                "title": "The Space Between Stimulus and Response",
+                "one_liner": "Between what happens to you and how you react, there is a pause—and in that pause lies your freedom.",
+                "summary": "You can't always control what happens to you, but you always own the gap between the event and your reaction. Even a two-second pause turns knee-jerk anger into deliberate choice.",
+                "detailed_explanation": "### How It Works\nMost people react automatically like a reflex—insult triggers anger, delay triggers panic. Training yourself to pause for one breath restores control over your next move.\n\n### Why We Get It Wrong\nStrong emotions hijack attention and make instant reaction feel urgent.\n\n### When Not to Use It\nIn immediate physical danger, trust fast reflexes first and reflect later.",
+                "example": "Viktor Frankl observed that even in brutal concentration camps, a few prisoners kept their dignity and helped others—proving that environment doesn't dictate character.",
+                "boundary": "Pausing doesn't mean suppressing feelings forever—it means choosing wise action instead of exploding.",
+                "action_item": "Next time an annoying email or comment hits, wait 60 seconds and take two slow breaths before replying.",
+                "quote": "Everything can be taken from a person but one thing: the freedom to choose one's attitude.",
+                "visual_diagram": "graph TD\n  Event[\"Triggering Event\"] --> Pause[\"1-Breath Pause\"]\n  Pause --> Choice[\"Choose Your Response\"]\n  Choice --> Peace[\"Strength & Self-Control\"]"
+            }
+        ]
+    },
+    {
+        "title": "Never Split the Difference",
+        "author": "Chris Voss",
+        "publisher": "HarperBusiness",
+        "topic": "Strategy",
+        "description": "Former FBI hostage negotiator shares practical tactics for high-stakes conversations and everyday deals.",
+        "ideas": [
+            {
+                "title": "Tactical Empathy & Mirroring",
+                "one_liner": "People don't agree with you until they feel you truly understand where they're coming from.",
+                "summary": "Pushing harder with logic rarely wins a tense negotiation. Simply repeating the other person's last few key words ('mirroring') and naming their emotion ('It sounds like...') lowers their guard and opens real dialogue.",
+                "detailed_explanation": "### How It Works\nWhen someone feels heard, their defensive brain calms down and they start volunteering helpful details you'd never get by arguing.\n\n### Why We Get It Wrong\nWe spend the whole time they're talking rehearsing our own counterargument.\n\n### When Not to Use It\nEmpathy must be genuine—fake robotic repeating feels manipulative.",
+                "example": "FBI negotiator Chris Voss used simple mirroring and calm labeling during bank hostage standoffs, getting armed suspects to release hostages peacefully without firing a shot.",
+                "boundary": "Understanding someone's feelings doesn't mean agreeing to an unfair deal.",
+                "action_item": "In your next tricky conversation, start a sentence with 'It seems like...' or 'It sounds like...' before pitching your point.",
+                "quote": "He who has learned to disagree without being disagreeable has discovered the most valuable secret of negotiation.",
+                "visual_diagram": "graph TD\n  Tense[\"Tense Disagreement\"] --> Listen[\"Mirror & Label Emotion\"]\n  Listen --> Safe[\"Other Side Feels Heard\"]\n  Safe --> Open[\"Better Deal Together\"]"
+            }
+        ]
+    },
+    {
+        "title": "The Checklist Manifesto",
+        "author": "Atul Gawande",
+        "publisher": "Metropolitan Books",
+        "topic": "Productivity",
+        "description": "How simple 5-step checklists prevent catastrophic errors even for world-class surgeons and pilots.",
+        "ideas": [
+            {
+                "title": "Checklists Beat Memory Under Pressure",
+                "one_liner": "Smart people still make silly mistakes under stress—a short checklist catches what memory drops.",
+                "summary": "Modern work is too complex to hold in your head when things get busy. A short, clear checklist of critical steps frees your brain to focus on hard judgment calls.",
+                "detailed_explanation": "### How It Works\nChecklists aren't about dumbing down experts; they handle the obvious routine checks automatically so experts have full brainpower for surprises.\n\n### Why We Get It Wrong\nExperienced pros often feel checklists are insulting—until a skipped basic step causes a disaster.\n\n### When Not to Use It\nDon't build 80-item bureaucratic checklists that nobody reads; keep them to 5–9 crucial items.",
+                "example": "When the World Health Organization introduced a 90-second surgical safety checklist across hospitals worldwide, major surgical complications dropped by over 35% and deaths fell nearly in half.",
+                "boundary": "Checklists verify the essentials, not every tiny detail.",
+                "action_item": "Write a 5-item pre-launch checklist for a task you repeat every week (like sending a report or deploying code).",
+                "quote": "Under conditions of complexity, not only are checklists a help, they are required for success.",
+                "visual_diagram": "graph TD\n  Stress[\"High-Pressure Task\"] --> Memory[\"Rely on Memory Only\"]\n  Stress --> List[\"5-Item Checklist\"]\n  Memory --> Miss[\"Avoidable Errors\"]\n  List --> Safe[\"Consistent Excellence\"]"
+            }
+        ]
+    },
+    {
+        "title": "7 Powers: The Foundations of Business Strategy",
+        "author": "Hamilton Helmer",
+        "publisher": "Deep Strategy",
+        "topic": "Strategy",
+        "description": "The seven durable advantages that let great businesses earn lasting profits without getting copied.",
+        "ideas": [
+            {
+                "title": "Scale Economies & Switching Costs",
+                "one_liner": "A real business moat makes it painful for rivals to copy you—not just nice to have.",
+                "summary": "Being slightly better isn't a strategy because competitors copy features quickly. Lasting business power comes from structural advantages like lower cost at scale, network effects, or high switching costs.",
+                "detailed_explanation": "### How It Works\nTrue business power has two parts: a clear benefit (higher prices or lower costs) and a real barrier stopping competitors from matching it.\n\n### Why We Get It Wrong\nTeams mistake 'working hard' or 'great customer service' for a moat when any funded rival can copy both.\n\n### When Not to Use It\nEarly startups need product-market fit before worrying about long-term moats.",
+                "example": "Netflix spent billions on original shows; because it had over 200 million subscribers, the cost per viewer was tiny compared to smaller streaming rivals.",
+                "boundary": "Moats protect existing value, but you still must keep delighting customers.",
+                "action_item": "Ask about your product or career: 'What gets stronger and harder to copy the bigger or more experienced I get?'",
+                "quote": "Strategy is the study of the fundamental determinants of potential business value.",
+                "visual_diagram": "graph TD\n  Growth[\"Company Grows\"] --> Moat{\"Real Barrier?\"}\n  Moat -->|No| Copy[\"Rivals Copy Fast\"]\n  Moat -->|Yes| Power[\"Lasting Advantage\"]"
+            }
+        ]
+    },
+    {
+        "title": "Seeking Wisdom: From Darwin to Munger",
+        "author": "Peter Bevelin",
+        "publisher": "PCA Publications",
+        "topic": "Mental Models",
+        "description": "A clear field guide to how human thinking goes wrong—and the mental tools that keep judgment sharp.",
+        "ideas": [
+            {
+                "title": "Incentives Drive Behavior",
+                "one_liner": "Show me the incentive, and I will show you the outcome.",
+                "summary": "People rarely act purely on what you ask them to do—they act on what gets rewarded. Before blaming someone's character, look at what the system pays or praises them for.",
+                "detailed_explanation": "### How It Works\nEven honest people bend their judgment without realizing it when their paycheck or status depends on a certain answer.\n\n### Why We Get It Wrong\nWe assume good intentions or training will override badly designed rewards.\n\n### When Not to Use It\nDon't become cynical—intrinsic pride and fairness matter too, just align rewards with them.",
+                "example": "FedEx used to pay night-shift cargo loaders by the hour, and planes constantly left late. The moment FedEx switched to paying a flat shift rate and letting crews go home once planes were loaded, delays vanished overnight.",
+                "boundary": "Money isn't the only incentive—status, autonomy, and pride often motivate even more.",
+                "action_item": "Look at a frustrating recurring problem at work and ask: 'How is our current setup accidentally rewarding this behavior?'",
+                "quote": "Never think about something else when you should be thinking about the power of incentives.",
+                "visual_diagram": "graph TD\n  System[\"Rules & Rewards\"] --> Behavior[\"What People Actually Do\"]\n  Behavior --> Result[\"Real Outcome\"]"
+            }
+        ]
+    },
+    {
+        "title": "The Mom Test",
+        "author": "Rob Fitzpatrick",
+        "publisher": "CreateSpace",
+        "topic": "Strategy",
+        "description": "How to talk to customers and learn if your idea is actually good when everyone is trying to be polite.",
+        "ideas": [
+            {
+                "title": "Ask About Past Behavior, Not Future Opinions",
+                "one_liner": "Never ask 'Would you use this?'—ask 'When was the last time you tried to solve this problem?'",
+                "summary": "People lie to be nice when you pitch your idea ('Sounds awesome!'). Ask specific questions about their actual past habits, frustrations, and what they've already paid for instead.",
+                "detailed_explanation": "### How It Works\nFacts about the past ('I spent 3 hours fixing this yesterday') are real; promises about the future ('Sure, I'd totally buy that!') are cheap.\n\n### Why We Get It Wrong\nWe want compliments and validation, so we pitch our idea first and trap people into being polite.\n\n### When Not to Use It\nOnce you're selling a finished product, clear pitching matters—during discovery, just listen.",
+                "example": "A founder building a digital cookbook app asked friends 'Do you like cooking?' and got enthusiastic yeses—then launched to zero sales because nobody actually paid for recipes when YouTube was free.",
+                "boundary": "For brand-new inventions people have never seen, watch how they struggle today rather than asking them to design your product.",
+                "action_item": "In your next user chat, go 10 minutes without mentioning your idea—only ask about how they handle the problem right now.",
+                "quote": "The measure of usefulness of an early customer conversation is whether it gives us concrete facts about our users' lives.",
+                "visual_diagram": "graph TD\n  Chat[\"Customer Chat\"] --> Ask{\"What Do You Ask?\"}\n  Ask -->|Future Opinion| Fluff[\"Polite Compliments\"]\n  Ask -->|Past Behavior| Truth[\"Real Problem & Proof\"]"
+            }
+        ]
+    },
+    {
+        "title": "Designing Your Life",
+        "author": "Bill Burnett & Dave Evans",
+        "publisher": "Knopf",
+        "topic": "Productivity",
+        "description": "Using Stanford design thinking to build a meaningful career through small, low-risk prototypes.",
+        "ideas": [
+            {
+                "title": "Prototype Your Next Chapter",
+                "one_liner": "Don't try to think your way to the perfect career—run small, cheap real-world experiments.",
+                "summary": "You can't figure out if you'll love a job by staring at a spreadsheet. Have two coffee chats, shadow someone for an afternoon, or try a tiny weekend project to test reality first.",
+                "detailed_explanation": "### How It Works\nDesigners never build a final product on the first try; they build quick, cheap prototypes to see what actually works.\n\n### Why We Get It Wrong\nWe wait until we're 100% certain before making a move, which keeps us stuck for years.\n\n### When Not to Use It\nDon't treat life like endless dabbling—once a test excites you, commit for real.",
+                "example": "An executive convinced she wanted to open a cafe spent two weekends working shifts at a friend's bakery—and quickly realized she loved baking at home, not 5 AM retail management, saving her life savings.",
+                "boundary": "Prototype to learn fast, not to procrastinate.",
+                "action_item": "Pick one career or creative idea you're curious about and message one person doing it today for a 15-minute chat.",
+                "quote": "You can't know where you're going until you start testing where you might want to be.",
+                "visual_diagram": "graph TD\n  Idea[\"Curious Idea\"] --> Test[\"Small 1-Week Prototype\"]\n  Test --> Learn[\"Real Experience & Feedback\"]\n  Learn --> Next[\"Smart Next Step\"]"
+            }
+        ]
+    },
+    {
+        "title": "How to Win Friends and Influence People",
+        "author": "Dale Carnegie",
+        "publisher": "Simon & Schuster",
+        "topic": "Psychology",
+        "description": "The timeless guide to genuine connection, persuasion, and getting people on your side without friction.",
+        "ideas": [
+            {
+                "title": "Be Genuinely Interested, Not Interesting",
+                "one_liner": "You make more friends in two months by being interested in others than in two years trying to impress them.",
+                "summary": "People care far more about their own goals, worries, and stories than yours. Asking thoughtful questions and remembering small details builds instant trust and goodwill.",
+                "detailed_explanation": "### How It Works\nTrue warmth comes from curiosity about the other person's world rather than performing to look smart.\n\n### Why We Get It Wrong\nNervousness makes us talk about ourselves to prove our worth.\n\n### When Not to Use It\nCuriosity only works when it's sincere; fake flattery is spotted instantly.",
+                "example": "Theodore Roosevelt stayed up late reading about whatever topic his next morning's guest loved—from ranching to botany—so every visitor left feeling deeply understood.",
+                "boundary": "Still share your own honest thoughts when asked; connection is a two-way street.",
+                "action_item": "In your next conversation, ask two follow-up questions about the other person before talking about yourself.",
+                "quote": "Talk to someone about themselves and they'll listen for hours.",
+                "visual_diagram": "graph TD\n  Meet[\"Meet Someone\"] --> Ask[\"Ask Thoughtful Questions\"]\n  Ask --> Trust[\"Genuine Warmth & Trust\"]"
+            }
+        ]
+    },
+    {
+        "title": "The Obstacle Is the Way",
+        "author": "Ryan Holiday",
+        "publisher": "Portfolio",
+        "topic": "Stoicism",
+        "description": "The ancient Stoic art of turning trials, setbacks, and frustration into your greatest advantage.",
+        "ideas": [
+            {
+                "title": "Flip Every Setback Into Fuel",
+                "one_liner": "What stands in the way becomes the way.",
+                "summary": "Every obstacle is an unasked-for training ground. When a plan breaks, you can either complain about how unfair it is or use the constraint to build strength, creativity, and grit.",
+                "detailed_explanation": "### How It Works\nMarcus Aurelius wrote that obstacles don't stop action—they become the new raw material for action. Separate what happened (objective fact) from the story you tell about it.\n\n### Why We Get It Wrong\nSetbacks bruise our ego and make us wish reality were easier.\n\n### When Not to Use It\nDon't ignore real burnout or genuine danger—rest and smart pivots are also forms of strength.",
+                "example": "When Thomas Edison's laboratory burned down in 1914, destroying years of prototypes, he told his son to fetch his mother because she'd never see a fire like this again—and used the fresh start to rebuild a better, stronger lab.",
+                "boundary": "Accepting what happened doesn't mean tolerating bad treatment; it means responding cleanly without self-pity.",
+                "action_item": "Take one annoying roadblock from today and write down one useful skill or backup plan it is forcing you to build.",
+                "quote": "The impediment to action advances action. What stands in the way becomes the way.",
+                "visual_diagram": "graph TD\n  Block[\"Unexpected Setback\"] --> Lens{\"How Do You View It?\"}\n  Lens -->|Victim| Stuck[\"Frustration & Quit\"]\n  Lens -->|Stoic| Fuel[\"Fuel for Growth\"]"
+            }
+        ]
+    },
+    {
+        "title": "Ego Is the Enemy",
+        "author": "Ryan Holiday",
+        "publisher": "Portfolio",
+        "topic": "Stoicism",
+        "description": "Why pride and needing to look smart quietly ruin ambition, success, and recovery.",
+        "ideas": [
+            {
+                "title": "Stay a Student, Even After Winning",
+                "one_liner": "Confidence is earned through real work; ego is needing to feel superior before or after.",
+                "summary": "Ego makes you ignore feedback when starting out, get sloppy after winning, and blame everyone else when you fail. Staying humble keeps you learning faster than everyone around you.",
+                "detailed_explanation": "### How It Works\nThe moment you think you've 'arrived,' you stop practicing the basics that got you there. Treating every room like a classroom keeps your edge sharp.\n\n### Why We Get It Wrong\nPraise feels good, and admitting you don't know feels vulnerable.\n\n### When Not to Use It\nHumility shouldn't turn into self-doubt—know your strengths while staying hungry to learn.",
+                "example": "After winning championship rings, basketball coach Bill Walsh still studied game film obsessively and welcomed harsh critiques from junior assistants, refusing to rest on past glory.",
+                "boundary": "Don't confuse humility with letting others walk over you.",
+                "action_item": "Ask one teammate or mentor today: 'What is one blindspot I'm missing right now?' and just listen without defending.",
+                "quote": "Impress yourself with your work, not others with your talk.",
+                "visual_diagram": "graph TD\n  Success[\"Early Win\"] --> Ego[\"Think You Know Everything\"]\n  Success --> Student[\"Stay Hungry & Humble\"]\n  Ego --> Decline[\"Sloppy Habits\"]\n  Student --> Mastery[\"Long-Term Mastery\"]"
+            }
+        ]
+    },
+    {
+        "title": "The Lean Startup",
+        "author": "Eric Ries",
+        "publisher": "Crown Business",
+        "topic": "Strategy",
+        "description": "How modern teams test risky ideas fast with minimal waste using Build-Measure-Learn loops.",
+        "ideas": [
+            {
+                "title": "Build-Measure-Learn Loop",
+                "one_liner": "Don't spend six months building something nobody wants—ship the simplest test this week.",
+                "summary": "The biggest risk for any new project isn't building it wrong; it's building something nobody actually cares about. Launch a Minimum Viable Product (MVP) fast to learn from real behavior.",
+                "detailed_explanation": "### How It Works\nTurn your biggest assumption into a quick experiment, put it in front of real users, measure what they actually do, and decide whether to pivot or double down.\n\n### Why We Get It Wrong\nPolishing features in secret feels safe because nobody can reject you yet.\n\n### When Not to Use It\nIn safety-critical fields like medical devices or aviation, never ship unfinished hardware.",
+                "example": "Dropbox founder Drew Houston didn't build full sync infrastructure first—he recorded a 3-minute demo video showing how it would work, and 75,000 people joined the waitlist overnight.",
+                "boundary": "MVP means minimum *viable*—it still has to solve one real problem cleanly.",
+                "action_item": "Take a project you're planning and ask: 'How could we test the core idea in 48 hours without building the full thing?'",
+                "quote": "The only way to win is to learn faster than anyone else.",
+                "visual_diagram": "graph TD\n  Idea[\"Core Assumption\"] --> Build[\"Smallest Possible Test\"]\n  Build --> Measure[\"Real User Behavior\"]\n  Measure --> Learn[\"Pivot or Double Down\"]"
+            }
+        ]
+    },
+    {
+        "title": "Hooked: How to Build Habit-Forming Products",
+        "author": "Nir Eyal",
+        "publisher": "Portfolio",
+        "topic": "Psychology",
+        "description": "The four-step loop behind products people return to naturally—and how to use it for good habits.",
+        "ideas": [
+            {
+                "title": "The Hook Model (Trigger-Action-Reward-Investment)",
+                "one_liner": "Habits form when a clear cue leads to an easy action, a surprising reward, and a small personal investment.",
+                "summary": "Products and personal habits stick when they follow four steps: a clear Trigger, a tiny Action, a Variable Reward that keeps things interesting, and an Investment that makes next time even better.",
+                "detailed_explanation": "### How It Works\nEvery cycle you complete—like saving a note or logging a workout—makes you slightly more invested in coming back tomorrow.\n\n### Why We Get It Wrong\nWe try to force habits through pure willpower instead of making the first action tiny and the reward immediate.\n\n### When Not to Use It\nUse habit design to help people live healthier, smarter lives—never to trap them in mindless scrolling.",
+                "example": "Duolingo sends a friendly daily reminder (Trigger), offers a 3-minute lesson (Action), celebrates with streaks and XP (Reward), and builds your word streak (Investment).",
+                "boundary": "Don't add gamified streaks if the core activity doesn't deliver real value.",
+                "action_item": "Design one good habit today by pairing a clear daily cue with a 2-minute version of the habit and a small reward.",
+                "quote": "Habits are formed by frequent, rewarding repetition—not by sheer willpower.",
+                "visual_diagram": "graph TD\n  Trigger[\"1. Trigger\"] --> Action[\"2. Easy Action\"]\n  Action --> Reward[\"3. Reward\"]\n  Reward --> Invest[\"4. Small Investment\"]\n  Invest --> Trigger"
+            }
+        ]
+    },
+    {
+        "title": "Made to Stick",
+        "author": "Chip Heath & Dan Heath",
+        "publisher": "Random House",
+        "topic": "Psychology",
+        "description": "Why some ideas survive and spread effortlessly while others are forgotten five minutes later.",
+        "ideas": [
+            {
+                "title": "Curse of Knowledge",
+                "one_liner": "Once you know something well, it's surprisingly hard to remember what it felt like not to know it.",
+                "summary": "Experts pack presentations with jargon and abstract stats because they forgot how confusing those words are to newcomers. Concrete stories, simple language, and vivid visuals make ideas stick.",
+                "detailed_explanation": "### How It Works\nOur brains remember concrete images ('a man on the moon by 1969') far better than vague slogans ('optimize aerospace leadership').\n\n### Why We Get It Wrong\nUsing complex buzzwords makes speakers feel smart, even when the audience tunes out.\n\n### When Not to Use It\nWhen talking solely with fellow specialists who need exact technical precision, shorthand is fine.",
+                "example": "In a famous Stanford study, 'tappers' tapped the rhythm of 'Happy Birthday' on a table and guessed listeners would recognize it 50% of the time—listeners guessed right only 2.5% of the time because the tappers heard the full tune in their heads.",
+                "boundary": "Simple doesn't mean dumbed-down—find the sharpest core truth.",
+                "action_item": "Read your last email or slide deck and replace two abstract buzzwords with one concrete real-world example.",
+                "quote": "The difference between a great idea and a forgotten one is how concretely it is told.",
+                "visual_diagram": "graph TD\n  Message[\"Your Idea\"] --> Style{\"How Is It Shared?\"}\n  Style -->|Abstract Jargon| Forget[\"Forgotten Fast\"]\n  Style -->|Simple & Concrete| Stick[\"Remembered & Shared\"]"
+            }
+        ]
+    },
+    {
+        "title": "The Creative Act: A Way of Being",
+        "author": "Rick Rubin",
+        "publisher": "Penguin Press",
+        "topic": "Productivity",
+        "description": "Legendary producer Rick Rubin's reflections on creativity, noticing details, and finishing meaningful work.",
+        "ideas": [
+            {
+                "title": "Separate Creating from Judging",
+                "one_liner": "Never edit while you create—let ideas flow freely first, and judge them tomorrow.",
+                "summary": "Your inner critic is essential for polishing good work, but if it shows up while you're brainstorming or drafting, it kills good ideas before they can breathe.",
+                "detailed_explanation": "### How It Works\nCreative flow requires playful experimentation. Put your editor in another room during the first draft, then bring the editor back with fresh eyes later.\n\n### Why We Get It Wrong\nFear of making something bad makes us critique every single sentence before finishing a page.\n\n### When Not to Use It\nDon't skip the editing phase entirely—great work needs both wild creation and sharp pruning.",
+                "example": "Rick Rubin encouraged bands like the Red Hot Chili Peppers and Johnny Cash to record raw, unfiltered acoustic takes in a living room before worrying about studio perfection.",
+                "boundary": "Finish and polish before shipping—freedom is for drafting, standards are for publishing.",
+                "action_item": "Set a 15-minute timer today to write or sketch freely without hitting backspace or judging quality.",
+                "quote": "The best work happens when you turn off the judge and just pay attention.",
+                "visual_diagram": "graph TD\n  Draft[\"1. Free Creation (No Judging)\"] --> Rest[\"2. Short Break\"]\n  Rest --> Edit[\"3. Sharp Editing\"]\n  Edit --> Ship[\"Original Work\"]"
+            }
+        ]
+    },
+    {
+        "title": "Start with Why",
+        "author": "Simon Sinek",
+        "publisher": "Portfolio",
+        "topic": "Strategy",
+        "description": "How great leaders inspire lasting loyalty by leading with purpose before features.",
+        "ideas": [
+            {
+                "title": "The Golden Circle (Why -> How -> What)",
+                "one_liner": "People don't buy what you do; they buy why you do it.",
+                "summary": "Most companies communicate from the outside in ('Here is our product and features'). Inspiring leaders communicate from the inside out: start with why it matters, then how you do it, then what you built.",
+                "detailed_explanation": "### How It Works\nFeatures attract bargain hunters; a clear, authentic purpose attracts loyal believers who stick with you through ups and downs.\n\n### Why We Get It Wrong\nListing specs and bullet points feels concrete and safe, while talking about purpose feels vulnerable.\n\n### When Not to Use It\nA strong 'Why' never excuses a broken product—your 'What' still has to work great.",
+                "example": "In 1903, Samuel Langley had huge government funding and press to build the first airplane, chasing fame and money. The Wright brothers had zero funding—just a deep belief in flight—and inspired their small bike-shop team to fly first.",
+                "boundary": "Purpose has to be backed by real action, not empty marketing posters.",
+                "action_item": "Write one clear sentence explaining *why* your current project should matter to the person using it.",
+                "quote": "Working hard for something we don't care about is called stress; working hard for something we love is called passion.",
+                "visual_diagram": "graph TD\n  Why[\"1. WHY (Purpose)\"] --> How[\"2. HOW (Process)\"]\n  How --> What[\"3. WHAT (Product)\"]\n  What --> Loyal[\"Deep Trust & Loyalty\"]"
+            }
+        ]
+    },
+    {
+        "title": "Grit",
+        "author": "Angela Duckworth",
+        "publisher": "Scribner",
+        "topic": "Productivity",
+        "description": "The power of passion and perseverance—why sticking with one craft beats raw talent over time.",
+        "ideas": [
+            {
+                "title": "Effort Counts Twice",
+                "one_liner": "Talent × Effort = Skill, and Skill × Effort = Achievement.",
+                "summary": "Raw talent gives you a head start, but consistent daily effort counts twice: first it turns talent into real skill, and then it turns skill into meaningful results over years.",
+                "detailed_explanation": "### How It Works\nTalent without practice stays an unrealized hint. Steady, deliberate effort compounds every month into mastery that natural talent alone can't touch.\n\n### Why We Get It Wrong\nWe worship effortless geniuses in movies and quit the moment something feels hard.\n\n### When Not to Use It\nGrit isn't stubbornly sticking with a dead-end job—keep adjusting your method while staying committed to your long-term goal.",
+                "example": "West Point cadets who survived the grueling first summer ('Beast Barracks') weren't the ones with the highest SAT scores or athletic rankings—they were the ones scoring highest on grit.",
+                "boundary": "Be gritty about your big direction, flexible about your daily tactics.",
+                "action_item": "Pick one skill you want to master this year and commit to 20 minutes of focused daily practice—no skipping two days in a row.",
+                "quote": "Enthusiasm is common. Endurance is rare.",
+                "visual_diagram": "graph TD\n  Talent[\"Starting Talent\"] --> Effort1[\"Daily Effort\"]\n  Effort1 --> Skill[\"Real Skill\"]\n  Skill --> Effort2[\"More Effort Over Time\"]\n  Effort2 --> Mastery[\"Lasting Achievement\"]"
+            }
+        ]
+    },
+    {
+        "title": "The War of Art",
+        "author": "Steven Pressfield",
+        "publisher": "Black Irish Entertainment",
+        "topic": "Productivity",
+        "description": "Winning the inner creative battle against procrastination, fear, and self-doubt.",
+        "ideas": [
+            {
+                "title": "Turn Pro & Beat Resistance",
+                "one_liner": "The amateur waits for inspiration; the professional sits down and works every day.",
+                "summary": "The closer you get to doing work you truly care about, the louder procrastination and distraction ('Resistance') scream. Showing up on a schedule defeats Resistance before it starts.",
+                "detailed_explanation": "### How It Works\nResistance is invisible fear disguised as 'let me clean my desk first' or 'I'll start Monday.' Treating your craft like a daily job removes the drama.\n\n### Why We Get It Wrong\nWe wait to feel motivated before starting, when in reality starting creates the motivation.\n\n### When Not to Use It\nShowing up daily doesn't mean ignoring real rest—professionals schedule recovery just like athletes do.",
+                "example": "Author Somerset Maugham was asked if he wrote on a schedule or only when inspired: 'I write only when inspiration strikes. Fortunately it strikes every morning at nine o'clock sharp.'",
+                "boundary": "Discipline works best on a sustainable daily rhythm, not frantic all-nighters.",
+                "action_item": "Set a specific start time tomorrow morning for your hardest task—and start even if you don't feel ready.",
+                "quote": "The professional shows up every day, no matter how they feel.",
+                "visual_diagram": "graph TD\n  Start[\"Want to Do Great Work\"] --> Fear[\"Procrastination / Resistance\"]\n  Fear --> Amateur[\"Wait for Mood\"]\n  Fear --> Pro[\"Start on Schedule\"]\n  Pro --> Flow[\"Momentum Follows\"]"
+            }
+        ]
     }
 ]
 
